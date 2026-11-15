@@ -703,7 +703,7 @@ tr.esc-salto-tr > td { padding: 0 !important; border: 0 !important; background: 
 <div id="toast" role="status" aria-live="polite"></div>
 <div id="print-root"></div>
 <div id="barra" class="barra" hidden></div>
-<script type="application/json" id="cel-config">{"versao": "1.7.0", "ano": "2026/2027", "chaveId": "1987a8c7", "verificador": "m+HQwwNueX1G3XlMCpRsYJOV0Tkds6FCJhmeHgobCN6OFobxkzA=", "dados": "dados.2460e27fab.bin", "contactos": {"whatsapp": "245955252417", "email": "cel.vf.gb@gmail.com"}, "diasSemLigacao": 30}</script>
+<script type="application/json" id="cel-config">{"versao": "1.8.0", "ano": "2026/2027", "chaveId": "1987a8c7", "verificador": "m+HQwwNueX1G3XlMCpRsYJOV0Tkds6FCJhmeHgobCN6OFobxkzA=", "dados": "dados.2460e27fab.bin", "contactos": {"whatsapp": "245955252417", "email": "cel.vf.gb@gmail.com"}, "diasSemLigacao": 30}</script>
 <script>/* Gerador mínimo de .docx (Word) no navegador — sem bibliotecas externas.
    Blocos: {t:'h', text, level} · {t:'p', text|runs, align, size, before, after, keep, border}
            {t:'list', items:[text|runs], ordered} · {t:'table', rows, widths, header, borders, minH}
@@ -1224,6 +1224,780 @@ const PAGINAS = (() => {
 })();
 if (typeof module !== 'undefined') module.exports = PAGINAS;
 </script>
+<script>/* Abrir ficheiros Word (.docx) em «Os meus documentos» (Portal CEL). Tudo neste aparelho, sem internet; o ficheiro original não muda.
+   Passa para o editor: títulos (também numerados), parágrafos, negrito, itálico, sublinhado, listas, tabelas, imagens, notas de rodapé,
+   índice, quebras de página e as definições do documento (letra, tamanho, espaços, recuo, margens, números de página, língua).
+   O que o editor não tem (caixas de texto, desenhos, comentários, cores…) fica num relatório, para o professor saber.
+   Uso: const r = await ABRIRWORD.ler(ficheiro) → { titulo, html, conf, relatorio: { passou: [...], avisos: [...] } }
+        (em caso de problema, lança um Error com uma mensagem para mostrar ao professor) */
+const ABRIRWORD = (() => {
+  'use strict';
+  const W = 'http://schemas.openxmlformats.org/wordprocessingml/2006/main', WS = 'http://purl.oclc.org/ooxml/wordprocessingml/main';
+  const R = 'http://schemas.openxmlformats.org/officeDocument/2006/relationships', RS = 'http://purl.oclc.org/ooxml/officeDocument/relationships';
+  const MC = 'http://schemas.openxmlformats.org/markup-compatibility/2006';
+  const CM = 96 / 2.54, TW_CM = 567, EMU_CM = 360000;
+  const falha = (m) => new Error(m);
+
+  /* ------------------------------------------------------------ ZIP (o .docx é um ZIP) */
+  const u16 = (d, o) => d[o] | (d[o + 1] << 8);
+  const u32 = (d, o) => (d[o] | (d[o + 1] << 8) | (d[o + 2] << 16) | (d[o + 3] << 24)) >>> 0;
+  function abreZip(b) {
+    let e = -1;
+    for (let i = b.length - 22; i >= Math.max(0, b.length - 65557); i--) if (u32(b, i) === 0x06054b50) { e = i; break; }
+    if (e < 0) throw falha('nao-zip');
+    const n = u16(b, e + 10), ini = u32(b, e + 16);
+    if (ini === 0xFFFFFFFF || n === 0xFFFF) throw falha('Este ficheiro é demasiado grande para abrir no telemóvel.');
+    const ents = new Map(), dec = new TextDecoder('utf-8');
+    let p = ini;
+    for (let k = 0; k < n && p + 46 <= b.length; k++) {
+      if (u32(b, p) !== 0x02014b50) throw falha('nao-zip');
+      const ln = u16(b, p + 28), le = u16(b, p + 30), lc = u16(b, p + 32);
+      const nome = dec.decode(b.subarray(p + 46, p + 46 + ln)).replace(/\\/g, '/');
+      ents.set(nome.toLowerCase(), { nome, flags: u16(b, p + 8), metodo: u16(b, p + 10), csize: u32(b, p + 20), usize: u32(b, p + 24), off: u32(b, p + 42) });
+      p += 46 + ln + le + lc;
+    }
+    return ents;
+  }
+  async function extrai(b, ent) {
+    if (ent.flags & 1) throw falha('Este ficheiro Word está protegido com palavra-passe. Abra-o no Word, tire a palavra-passe e guarde-o outra vez.');
+    const p = ent.off;
+    if (u32(b, p) !== 0x04034b50) throw falha('nao-zip');
+    const ini = p + 30 + u16(b, p + 26) + u16(b, p + 28), dados = b.subarray(ini, ini + ent.csize);
+    if (ent.metodo === 0) return dados;
+    if (ent.metodo !== 8) throw falha('Este ficheiro Word usa uma compressão que o Portal não conhece. Abra-o no Word e guarde-o outra vez.');
+    return inflate(dados, ent.usize);
+  }
+  async function inflate(dados, tam) {
+    if (typeof DecompressionStream === 'function') {
+      try {
+        const s = new Blob([dados]).stream().pipeThrough(new DecompressionStream('deflate-raw'));
+        return new Uint8Array(await new Response(s).arrayBuffer());
+      } catch (e) { /* navegador antigo: segue para a versão em JavaScript */ }
+    }
+    return inflateJs(dados, tam);
+  }
+  // DEFLATE (RFC 1951) em JavaScript, para navegadores sem DecompressionStream('deflate-raw')
+  const LBASE = [3, 4, 5, 6, 7, 8, 9, 10, 11, 13, 15, 17, 19, 23, 27, 31, 35, 43, 51, 59, 67, 83, 99, 115, 131, 163, 195, 227, 258];
+  const LEXTRA = [0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5, 0];
+  const DBASE = [1, 2, 3, 4, 5, 7, 9, 13, 17, 25, 33, 49, 65, 97, 129, 193, 257, 385, 513, 769, 1025, 1537, 2049, 3073, 4097, 6145, 8193, 12289, 16385, 24577];
+  const DEXTRA = [0, 0, 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10, 11, 11, 12, 12, 13, 13];
+  const ORDEM = [16, 17, 18, 0, 8, 7, 9, 6, 10, 5, 11, 4, 12, 3, 13, 2, 14, 1, 15];
+  function arvore(comp, ini, n) {
+    const cont = new Uint16Array(16), simb = new Uint16Array(n), offs = new Uint16Array(16);
+    for (let i = 0; i < n; i++) cont[comp[ini + i]]++;
+    cont[0] = 0;
+    for (let s = 0, i = 0; i < 16; i++) { offs[i] = s; s += cont[i]; }
+    for (let i = 0; i < n; i++) if (comp[ini + i]) simb[offs[comp[ini + i]]++] = i;
+    return { cont, simb };
+  }
+  function inflateJs(src, tam) {
+    let out = new Uint8Array(Math.max(tam || 0, 1024)), pos = 0, sp = 0, tag = 0, nb = 0;
+    const cresce = (n) => { if (pos + n <= out.length) return; const o = new Uint8Array(Math.max(out.length * 2, pos + n)); o.set(out); out = o; };
+    const bit = () => { if (!nb) { if (sp >= src.length) throw falha('O ficheiro Word está danificado.'); tag = src[sp++]; nb = 8; } nb--; const v = tag & 1; tag >>= 1; return v; };
+    const bits = (n, base) => { let v = 0; for (let i = 0; i < n; i++) v |= bit() << i; return v + base; };
+    const simbolo = (t) => { let base = 0, off = 0; for (let len = 1; len < 16; len++) { off = 2 * off + bit(); if (off < t.cont[len]) return t.simb[base + off]; base += t.cont[len]; off -= t.cont[len]; } throw falha('O ficheiro Word está danificado.'); };
+    const fixa = new Uint8Array(320);
+    for (let i = 0; i < 144; i++) fixa[i] = 8; for (let i = 144; i < 256; i++) fixa[i] = 9; for (let i = 256; i < 280; i++) fixa[i] = 7; for (let i = 280; i < 288; i++) fixa[i] = 8;
+    for (let i = 288; i < 318; i++) fixa[i] = 5;
+    const LF = arvore(fixa, 0, 288), DF = arvore(fixa, 288, 30);
+    let fim = 0;
+    do {
+      fim = bit(); const tipo = bits(2, 0);
+      if (tipo === 0) {
+        nb = 0;
+        const len = src[sp] | (src[sp + 1] << 8); sp += 4;
+        cresce(len); out.set(src.subarray(sp, sp + len), pos); pos += len; sp += len;
+        continue;
+      }
+      let lt = LF, dt = DF;
+      if (tipo === 2) {
+        const hlit = bits(5, 257), hdist = bits(5, 1), hclen = bits(4, 4), comp = new Uint8Array(320);
+        for (let i = 0; i < hclen; i++) comp[ORDEM[i]] = bits(3, 0);
+        const ct = arvore(comp, 0, 19), lens = new Uint8Array(320);
+        for (let num = 0; num < hlit + hdist;) {
+          const s = simbolo(ct);
+          if (s < 16) lens[num++] = s;
+          else { let rep = 0, v = 0; if (s === 16) { v = lens[num - 1]; rep = bits(2, 3); } else if (s === 17) rep = bits(3, 3); else rep = bits(7, 11); while (rep--) lens[num++] = v; }
+        }
+        lt = arvore(lens, 0, hlit); dt = arvore(lens, hlit, hdist);
+      } else if (tipo !== 1) throw falha('O ficheiro Word está danificado.');
+      for (;;) {
+        let s = simbolo(lt);
+        if (s === 256) break;
+        if (s < 256) { cresce(1); out[pos++] = s; continue; }
+        s -= 257; const len = bits(LEXTRA[s], LBASE[s]), d = simbolo(dt), dist = bits(DEXTRA[d], DBASE[d]);
+        cresce(len); for (let i = 0; i < len; i++, pos++) out[pos] = out[pos - dist];
+      }
+    } while (!fim);
+    return out.subarray(0, pos);
+  }
+
+  /* ------------------------------------------------------------ XML */
+  const ehW = (n, nome) => n && n.nodeType === 1 && (n.namespaceURI === W || n.namespaceURI === WS) && (!nome || n.localName === nome);
+  const filhos = (el, nome) => (el ? [...el.children].filter((c) => ehW(c, nome)) : []);
+  const filho = (el, nome) => (el ? [...el.children].find((c) => ehW(c, nome)) || null : null);
+  const aw = (el, nome) => (el ? el.getAttributeNS(W, nome) ?? el.getAttributeNS(WS, nome) : null);
+  const ar = (el, nome) => (el ? el.getAttributeNS(R, nome) || el.getAttributeNS(RS, nome) || '' : '');
+  const liga = (el) => { if (!el) return null; const v = aw(el, 'val'); return v == null || !/^(0|false|off|none)$/i.test(v); };
+  const desc = (el, ns, nome) => (el ? [...el.getElementsByTagNameNS(ns, nome)] : []);
+  function xml(t) {
+    const d = new DOMParser().parseFromString(t, 'application/xml');
+    if (d.getElementsByTagName('parsererror').length) throw falha('O ficheiro Word está danificado (o texto não se consegue ler).');
+    return d;
+  }
+
+  /* ------------------------------------------------------------ ler */
+  async function ler(ficheiro) {
+    const buf = new Uint8Array(ficheiro.arrayBuffer ? await ficheiro.arrayBuffer() : ficheiro);
+    const nomeF = (ficheiro.name || 'Documento.docx').replace(/\.[^.]+$/, '');
+    if (buf.length >= 8 && u32(buf, 0) === 0xE011CFD0 && u32(buf, 4) === 0xE11AB1A1)
+      throw falha('Este ficheiro é do Word antigo (.doc) ou está protegido com palavra-passe. No Word, escolha «Guardar como» e o formato «Documento do Word (.docx)»; depois abra esse ficheiro aqui.');
+    if (buf.length > 60 * 1024 * 1024) throw falha('Este ficheiro é demasiado grande (mais de 60 MB) para abrir no Portal.');
+    let zip;
+    try { zip = abreZip(buf); } catch (e) {
+      if (/^\s*\{\\rtf/.test(new TextDecoder().decode(buf.subarray(0, 16)))) throw falha('Este ficheiro é RTF. No Word, guarde-o como «Documento do Word (.docx)» e abra esse ficheiro aqui.');
+      throw falha(e.message === 'nao-zip' ? 'Este ficheiro não é um documento do Word (.docx).' : e.message);
+    }
+    const parte = async (nome) => { const e = zip.get(String(nome).replace(/^\/+/, '').toLowerCase()); return e ? extrai(buf, e) : null; };
+    const texto = async (nome) => { const b = await parte(nome); return b ? new TextDecoder('utf-8').decode(b) : null; };
+    if (zip.has('mimetype') && /opendocument/.test((await texto('mimetype')) || ''))
+      throw falha('Este ficheiro é do LibreOffice (.odt). No LibreOffice, escolha «Guardar como» e o formato «Word 2007-365 (.docx)»; depois abra esse ficheiro aqui.');
+    // o documento principal (normalmente word/document.xml)
+    let principal = 'word/document.xml';
+    const rr = await texto('_rels/.rels');
+    if (rr) { const m = [...xml(rr).getElementsByTagName('Relationship')].find((x) => /officeDocument$/.test(x.getAttribute('Type') || '')); if (m) principal = m.getAttribute('Target').replace(/^\/+/, ''); }
+    const docTxt = await texto(principal);
+    if (!docTxt) throw falha('Este ficheiro não é um documento do Word (.docx).');
+    const pasta = principal.includes('/') ? principal.slice(0, principal.lastIndexOf('/') + 1) : '';
+    const caminho = (alvo) => { if (!alvo) return ''; if (alvo.startsWith('/')) return alvo.slice(1); const p = (pasta + alvo).split('/'), o = []; for (const s of p) { if (s === '..') o.pop(); else if (s !== '.') o.push(s); } return o.join('/'); };
+    const rels = new Map();
+    const relTxt = await texto(pasta + '_rels/' + principal.slice(pasta.length) + '.rels');
+    if (relTxt) for (const x of xml(relTxt).getElementsByTagName('Relationship')) rels.set(x.getAttribute('Id'), { tipo: (x.getAttribute('Type') || '').split('/').pop(), alvo: x.getAttribute('Target') || '', externo: x.getAttribute('TargetMode') === 'External' });
+    const parteRel = async (tipo) => { for (const v of rels.values()) if (v.tipo === tipo && !v.externo) return texto(caminho(v.alvo)); return null; };
+
+    const C = { avisos: new Map(), conta: { paragrafos: 0, titulos: 0, tabelas: 0, imagens: 0, notas: 0, listas: 0 } };
+    const aviso = (k, n = 1) => C.avisos.set(k, (C.avisos.get(k) || 0) + n);
+    const doc = xml(docTxt), corpo = desc(doc, W, 'body')[0] || desc(doc, WS, 'body')[0];
+    if (!corpo) throw falha('Este ficheiro não é um documento do Word (.docx).');
+
+    /* --- tema (tipos de letra «do tema»), estilos, numeração, notas */
+    const fontesTema = { minor: '', major: '' };
+    const temaTxt = await parteRel('theme');
+    if (temaTxt) {
+      const t = xml(temaTxt), lat = (n) => { const f = t.getElementsByTagNameNS('*', n)[0]; const l = f && [...f.children].find((c) => c.localName === 'latin'); return l ? l.getAttribute('typeface') || '' : ''; };
+      fontesTema.minor = lat('minorFont'); fontesTema.major = lat('majorFont');
+    }
+    const estilos = new Map(); let defP = null, defR = null, normalId = 'Normal';
+    const estTxt = await parteRel('styles');
+    if (estTxt) {
+      const s = xml(estTxt);
+      const dd = desc(s, W, 'docDefaults')[0] || desc(s, WS, 'docDefaults')[0];
+      if (dd) { const rp = filho(dd, 'rPrDefault'), pp = filho(dd, 'pPrDefault'); defR = rp ? filho(rp, 'rPr') : null; defP = pp ? filho(pp, 'pPr') : null; }
+      for (const st of [...desc(s, W, 'style'), ...desc(s, WS, 'style')]) {
+        const id = aw(st, 'styleId'), nm = filho(st, 'name');
+        estilos.set(id, { id, tipo: aw(st, 'type'), nome: (nm ? aw(nm, 'val') : id) || '', base: filho(st, 'basedOn') ? aw(filho(st, 'basedOn'), 'val') : null, pPr: filho(st, 'pPr'), rPr: filho(st, 'rPr'), def: liga2(aw(st, 'default')) });
+        if (aw(st, 'type') === 'paragraph' && liga2(aw(st, 'default'))) normalId = id;
+      }
+    }
+    function liga2(v) { return v != null && !/^(0|false|off)$/i.test(v); }
+    // propriedade de um estilo, seguindo a cadeia «baseado em»
+    function doEstilo(id, qual, nome) {
+      for (let k = 0, e = estilos.get(id); e && k < 20; k++, e = estilos.get(e.base)) { const pr = e[qual], v = pr && filho(pr, nome); if (v) return v; }
+      return null;
+    }
+    const nomeEstilo = (id) => { const e = estilos.get(id); return ((e && e.nome) || id || '').toLowerCase(); };
+    // nível de título de um estilo de parágrafo: «heading 1», «Título 1», nível de estrutura 0–2
+    function nivelTitulo(id) {
+      if (!id) return 0;
+      for (let k = 0, e = estilos.get(id); e && k < 20; k++, e = estilos.get(e.base)) {
+        const n = (e.nome || '').toLowerCase(), m = /^(heading|t[ií]tulo|cabe[cç]alho)\s*([1-9])$/.exec(n) || /^(heading|ttulo|titulo)([1-9])$/i.exec(e.id || '');
+        if (m) return Math.min(3, +m[2]);
+        if (/^(toc heading|cabe[cç]alho do [ií]ndice|t[ií]tulo do [ií]ndice|title|t[ií]tulo|subtitle|subt[ií]tulo)$/.test(n)) return 0;
+        const ol = e.pPr && filho(e.pPr, 'outlineLvl'); if (ol) { const v = +aw(ol, 'val'); return v >= 0 && v < 9 ? Math.min(3, v + 1) : 0; }
+      }
+      return 0;
+    }
+    const numeracao = { nums: new Map(), abs: new Map() };
+    const numTxt = await parteRel('numbering');
+    if (numTxt) {
+      const n = xml(numTxt);
+      for (const a of [...desc(n, W, 'abstractNum'), ...desc(n, WS, 'abstractNum')]) {
+        const niveis = new Map();
+        for (const l of filhos(a, 'lvl')) niveis.set(+aw(l, 'ilvl'), { fmt: aw(filho(l, 'numFmt'), 'val') || 'decimal', texto: aw(filho(l, 'lvlText'), 'val') || '', inicio: +(aw(filho(l, 'start'), 'val') || 1), legal: !!filho(l, 'isLgl'), pStyle: aw(filho(l, 'pStyle'), 'val') });
+        const ligado = filho(a, 'numStyleLink') || filho(a, 'styleLink');
+        numeracao.abs.set(aw(a, 'abstractNumId'), { niveis, ligado: ligado ? aw(ligado, 'val') : null });
+      }
+      for (const x of [...desc(n, W, 'num'), ...desc(n, WS, 'num')]) {
+        const ov = new Map();
+        for (const o of filhos(x, 'lvlOverride')) { const s = filho(o, 'startOverride'); if (s) ov.set(+aw(o, 'ilvl'), +aw(s, 'val')); }
+        numeracao.nums.set(aw(x, 'numId'), { abs: aw(filho(x, 'abstractNumId'), 'val'), inicio: ov });
+      }
+    }
+    const nivelLista = (numId, ilvl) => {
+      const n = numeracao.nums.get(String(numId)); if (!n) return null;
+      const a = numeracao.abs.get(n.abs); if (!a) return null;
+      return a.niveis.get(ilvl) || a.niveis.get(0) || null;
+    };
+    async function notasDe(tipo, elNome) {
+      const m = new Map(), t = await parteRel(tipo); if (!t) return m;
+      for (const f of [...desc(xml(t), W, elNome), ...desc(xml(t), WS, elNome)]) {
+        const tp = aw(f, 'type'); if (tp && tp !== 'normal') continue;
+        const ps = filhos(f, 'p').map((p) => textoSimples(p).trim()).filter(Boolean);
+        m.set(aw(f, 'id'), ps.join(' '));
+      }
+      return m;
+    }
+    function textoSimples(el) {
+      let s = '';
+      const anda = (n) => { for (const c of n.children) {
+        if (!ehW(c)) { if (c.localName === 'AlternateContent') { const f = [...c.children].find((x) => x.localName === 'Choice') || [...c.children].find((x) => x.localName === 'Fallback'); if (f) anda(f); } continue; }
+        const l = c.localName;
+        if (l === 't') s += c.textContent; else if (l === 'tab') s += ' '; else if (l === 'br' || l === 'cr') s += ' '; else if (l === 'del' || l === 'instrText' || l === 'footnoteRef' || l === 'endnoteRef' || l === 'delText') continue; else anda(c);
+      } };
+      anda(el); return s.replace(/\s+/g, ' ');
+    }
+    const rodape = await notasDe('footnotes', 'footnote'), fim = await notasDe('endnotes', 'endnote');
+
+    /* --- medidas da folha (para a largura das imagens) */
+    const sectFinal = filho(corpo, 'sectPr');
+    const larguraTexto = (sp) => {
+      const sz = filho(sp, 'pgSz'), mg = filho(sp, 'pgMar');
+      const w = sz ? +aw(sz, 'w') || 11906 : 11906, l = mg ? +aw(mg, 'left') || 0 : 1418, r = mg ? +aw(mg, 'right') || 0 : 1418;
+      return Math.max(2000, w - l - r) / TW_CM * EMU_CM;      // em EMU
+    };
+    const larguraEmu = larguraTexto(sectFinal);
+
+    /* --- imagens: passam a JPEG leve (como as inseridas no Portal) */
+    const MIME = { png: 'image/png', jpg: 'image/jpeg', jpeg: 'image/jpeg', gif: 'image/gif', bmp: 'image/bmp', webp: 'image/webp', svg: 'image/svg+xml' };
+    const cacheImg = new Map();
+    async function imagem(rid, cx) {
+      const rel = rels.get(rid);
+      if (!rel || rel.externo) { aviso('imagem-ligada'); return null; }
+      const nome = caminho(rel.alvo), ext = (nome.split('.').pop() || '').toLowerCase();
+      if (!MIME[ext]) { aviso(ext === 'emf' || ext === 'wmf' ? 'imagem-emf' : 'imagem-formato'); return null; }
+      let src = cacheImg.get(nome);
+      if (src === undefined) {
+        const b = await parte(nome);
+        src = b ? await paraJpeg(new Blob([b], { type: MIME[ext] })) : null;
+        cacheImg.set(nome, src);
+      }
+      if (!src) { aviso('imagem-formato'); return null; }
+      const im = document.createElement('img'); im.className = 'esc-img'; im.setAttribute('src', src); im.setAttribute('alt', '');
+      const pct = cx ? Math.max(10, Math.min(100, Math.round(cx / larguraEmu * 100))) : 100;
+      im.setAttribute('data-l', String(pct)); im.style.width = pct + '%';
+      C.conta.imagens++;
+      return im;
+    }
+    function paraJpeg(blob) {
+      return new Promise((ok) => {
+        const url = URL.createObjectURL(blob), im = new Image();
+        im.onload = () => {
+          const max = 1400, k = Math.min(1, max / Math.max(im.naturalWidth || 1, im.naturalHeight || 1));
+          const w = Math.max(1, Math.round((im.naturalWidth || 1) * k)), h = Math.max(1, Math.round((im.naturalHeight || 1) * k));
+          const cv = document.createElement('canvas'); cv.width = w; cv.height = h;
+          const g = cv.getContext('2d'); g.fillStyle = '#fff'; g.fillRect(0, 0, w, h); g.drawImage(im, 0, 0, w, h);
+          URL.revokeObjectURL(url); ok(cv.toDataURL('image/jpeg', 0.82));
+        };
+        im.onerror = () => { URL.revokeObjectURL(url); ok(null); };
+        im.src = url;
+      });
+    }
+
+    const szBase = doEstilo(normalId, 'rPr', 'sz') || (defR && filho(defR, 'sz')), tamBase = szBase ? (+aw(szBase, 'val') || 20) / 2 : 10;
+
+    /* --- converter o corpo */
+    const saida = document.createElement('div');
+    let pilha = [];             // listas abertas: [{ el, ordenada, numId }]
+    const campos = [];          // campos do Word abertos (índice, número de página…): { instr, fase }
+    let indicePosto = false, pendenteIndice = false;
+    const cont = new Map(), vistosNum = new Set();     // contadores da numeração dos títulos (por lista do Word) e numIds já vistos
+    const seccoes = [];         // fim de cada secção: { sp, depois: elemento depois do qual acaba }
+    const corpoP = [];          // parágrafos de texto normal (para as definições: recuo, justificação)
+    const fechaListas = () => { pilha = []; };
+    const emCampoIndice = () => campos.some((f) => f.indice && f.fase === 'resultado');
+
+    function prPara(p) { return filho(p, 'pPr'); }
+    function estiloP(p) { const pp = prPara(p), s = pp && filho(pp, 'pStyle'); return s ? aw(s, 'val') : normalId; }
+    function propP(p, nome) { const pp = prPara(p), v = pp && filho(pp, nome); return v || doEstilo(estiloP(p), 'pPr', nome) || (defP && filho(defP, nome)); }
+    function alinhamento(p) {
+      const v = aw(propP(p, 'jc'), 'val');
+      return { center: 'center', right: 'right', end: 'right', both: 'justify', distribute: 'justify', justify: 'justify' }[v] || '';
+    }
+    // números dos títulos numerados (1, 1.1, 1.1.1…): o Word não os escreve no texto, gera-os
+    function formata(n, fmt) {
+      if (fmt === 'lowerRoman' || fmt === 'upperRoman') { const R2 = [[1000, 'm'], [900, 'cm'], [500, 'd'], [400, 'cd'], [100, 'c'], [90, 'xc'], [50, 'l'], [40, 'xl'], [10, 'x'], [9, 'ix'], [5, 'v'], [4, 'iv'], [1, 'i']]; let s = ''; for (const [v, r] of R2) while (n >= v) { s += r; n -= v; } return fmt === 'upperRoman' ? s.toUpperCase() : s; }
+      if (fmt === 'lowerLetter' || fmt === 'upperLetter') { let s = ''; let k = n; while (k > 0) { k--; s = String.fromCharCode(97 + (k % 26)) + s; k = Math.floor(k / 26); } return fmt === 'upperLetter' ? s.toUpperCase() : s; }
+      if (fmt === 'ordinal') return n + 'º';
+      return String(n);
+    }
+    function numeroTitulo(numId, ilvl) {
+      const n = numeracao.nums.get(String(numId)), a = n && numeracao.abs.get(n.abs); if (!a) return '';
+      const nv = a.niveis.get(ilvl); if (!nv || nv.fmt === 'none' || nv.fmt === 'bullet') return '';
+      let c = cont.get(String(n.abs)); if (!c) { c = []; cont.set(String(n.abs), c); }
+      if (!vistosNum.has(String(numId))) { vistosNum.add(String(numId)); for (const [i, v] of n.inicio) c[i] = v - 1; }      // «startOverride»: recomeça
+      for (let i = 0; i <= ilvl; i++) if (c[i] == null) { const ni = a.niveis.get(i); c[i] = (n.inicio.has(i) ? n.inicio.get(i) : ni ? ni.inicio : 1) - (i === ilvl ? 1 : 0); }
+      c[ilvl]++; c.length = ilvl + 1;
+      return nv.texto.replace(/%([1-9])/g, (_, d) => { const i = +d - 1, ni = a.niveis.get(i); return c[i] == null ? '' : formata(c[i], nv.legal ? 'decimal' : ni ? ni.fmt : 'decimal'); }).trim();
+    }
+    // numeração de um parágrafo (direta ou do estilo): { numId, ilvl } ou null
+    function numPr(p) {
+      const pp = prPara(p); let np = pp && filho(pp, 'numPr'), est = null;
+      if (!np) { est = doEstilo(estiloP(p), 'pPr', 'numPr'); np = est; }
+      if (!np) return null;
+      const id = aw(filho(np, 'numId'), 'val'); if (!id || id === '0') return null;
+      let ilvl = +(aw(filho(np, 'ilvl'), 'val') || 0);
+      if (est && !filho(np, 'ilvl')) {     // estilo ligado a um nível da lista (títulos numerados)
+        const n = numeracao.nums.get(id), a = n && numeracao.abs.get(n.abs);
+        if (a) for (const [k, v] of a.niveis) if (v.pStyle && v.pStyle === estiloP(p)) ilvl = k;
+      }
+      const nn = numeracao.nums.get(id);
+      return { numId: id, ilvl, abs: nn ? nn.abs : id, reinicia: !!(nn && nn.inicio.has(ilvl)) };
+    }
+
+    // formatação de um bocado de texto: estilo de carácter + formatação direta (a do estilo do parágrafo não conta)
+    function formatoRun(r) {
+      const rp = filho(r, 'rPr'), f = {}, cs = rp && filho(rp, 'rStyle') ? aw(filho(rp, 'rStyle'), 'val') : null;
+      const pega = (nome) => { const d = rp && filho(rp, nome); if (d) return d; return cs ? doEstilo(cs, 'rPr', nome) : null; };
+      for (const [k, n] of [['b', 'b'], ['i', 'i'], ['s', 'strike']]) { const v = pega(n); if (v) f[k] = liga(v); }
+      const u = pega('u'); if (u) f.u = !/^none$/i.test(aw(u, 'val') || 'single');
+      const va = pega('vertAlign'); if (va) { const v = aw(va, 'val'); f.sup = v === 'superscript'; f.sub = v === 'subscript'; }
+      if (rp) {
+        const c = filho(rp, 'color'), hl = filho(rp, 'highlight'), sh = filho(rp, 'shd');
+        if ((c && !/^(auto|000000)$/i.test(aw(c, 'val') || 'auto')) || (hl && !/^none$/i.test(aw(hl, 'val') || 'none')) || (sh && !/^(auto|ffffff)?$/i.test(aw(sh, 'fill') || ''))) aviso('cores');
+        const z = filho(rp, 'sz'); if (z && Math.abs(+aw(z, 'val') / 2 - tamBase) > 0.6) aviso('tamanhos');
+      }
+      if (rp && filho(rp, 'caps')) f.caps = liga(filho(rp, 'caps'));
+      return f;
+    }
+    function embrulha(no, f) {
+      let n = no;
+      for (const [k, tag] of [['sup', 'sup'], ['sub', 'sub'], ['s', 's'], ['u', 'u'], ['i', 'i'], ['b', 'b']]) if (f[k]) { const e = document.createElement(tag); e.append(n); n = e; }
+      return n;
+    }
+
+    // um parágrafo do Word → elementos do editor (pode partir-se em vários, por causa das quebras de página)
+    async function paragrafo(p, destino, ctxCel) {
+      const pp = prPara(p), sect = pp && !ctxCel ? filho(pp, 'sectPr') : null;
+      try { await paragrafo2(p, destino, ctxCel); } finally { if (sect) seccoes.push({ sp: sect, depois: destino.lastChild }); }
+    }
+    async function paragrafo2(p, destino, ctxCel) {
+      const pp = prPara(p), est = estiloP(p), nm = nomeEstilo(est), noIndice = emCampoIndice();
+      // parágrafos mínimos (1–2 pt) que o próprio Portal põe no Word: não são texto
+      const esp = propP(p, 'spacing');
+      if (esp && aw(esp, 'lineRule') === 'exact' && +aw(esp, 'line') <= 40 && !textoSimples(p).trim() && !desc(p, W, 'drawing').length && !desc(p, W, 'br').some((b) => aw(b, 'type') === 'page')) {
+        return;
+      }
+      let nivel = ctxCel ? 0 : nivelTitulo(est);
+      const np = numPr(p), nivelL = np ? nivelLista(np.numId, np.ilvl) : null;
+      let tag = nivel ? 'h' + nivel : 'p', prefixo = '', classe = '';
+      if (!nivel && /(^|\s)(quote|intense quote|cita[cç][aã]o|citacao)/.test(nm + ' ' + (est || '').toLowerCase())) tag = 'blockquote';
+      if (!nivel && /natureza/.test(nm + ' ' + (est || '').toLowerCase())) { tag = 'blockquote'; classe = 'esc-natureza'; }
+      const titulo = /^(title|t[ií]tulo)$/.test(nm), subt = /^(subtitle|subt[ií]tulo)$/.test(nm), cabInd = /^(toc heading|cabe[cç]alho do [ií]ndice|t[ií]tulo do [ií]ndice)$/.test(nm);
+      if (nivel && np && nivelL && nivelL.fmt !== 'bullet' && nivelL.fmt !== 'none') prefixo = numeroTitulo(np.numId, np.ilvl);
+      const emLista = !nivel && !ctxCel && np && nivelL && nivelL.fmt !== 'none';
+      const quebraAntes = pp && filho(pp, 'pageBreakBefore') ? liga(filho(pp, 'pageBreakBefore')) : false;
+      const alin = alinhamento(p);
+      // elementos que se vão enchendo
+      const partes = [];
+      let atual = null;
+      const novo = () => {
+        atual = document.createElement(tag); if (classe) atual.className = classe;
+        if (alin && alin !== 'justify' && (tag === 'p' || tag === 'blockquote' || /^h/.test(tag))) atual.style.textAlign = alin;
+        else if (alin === 'justify') atual.dataset.just = '1';
+        if (cabInd || titulo) atual.dataset.negrito = '1';
+        partes.push(atual);
+        return atual;
+      };
+      novo();
+      const depoisDoParagrafo = [];      // texto de caixas de texto (vai a seguir ao parágrafo)
+      let temIndice = false, suprimido = false;
+      // percorre o conteúdo do parágrafo
+      const anda = async (el, fmtPai) => {
+        for (const c of el.children) {
+          if (!ehW(c)) {
+            if (c.namespaceURI === MC && c.localName === 'AlternateContent') {
+              const ch = [...c.children].find((x) => x.localName === 'Choice'), fb = [...c.children].find((x) => x.localName === 'Fallback');
+              await anda(ch && /wps|wpg|wp14|w14/.test(ch.getAttribute('Requires') || 'wps') ? ch : (fb || ch || c), fmtPai);
+            } else if (c.localName === 'oMath' || c.localName === 'oMathPara') { aviso('equacoes'); const t = [...c.getElementsByTagNameNS('*', 't')].map((x) => x.textContent).join(''); if (t && !emCampoIndice()) atual.append(t); }
+            continue;
+          }
+          const l = c.localName;
+          if (l === 'pPr' || l === 'bookmarkStart' || l === 'bookmarkEnd' || l === 'proofErr' || l === 'permStart' || l === 'permEnd') continue;
+          if (l === 'commentRangeStart' || l === 'commentRangeEnd') { continue; }
+          if (l === 'del' || l === 'moveFrom') { aviso('revisoes'); continue; }
+          if (l === 'ins' || l === 'moveTo') { aviso('revisoes'); await anda(c, fmtPai); continue; }
+          if (l === 'hyperlink' || l === 'smartTag' || l === 'customXml' || l === 'dir' || l === 'bdo') { await anda(c, fmtPai); continue; }
+          if (l === 'sdt') { const sc = filho(c, 'sdtContent'); if (sc) await anda(sc, fmtPai); continue; }
+          if (l === 'fldSimple') {
+            const ins = aw(c, 'instr') || '';
+            if (/^\s*TOC\b/i.test(ins)) { temIndice = true; continue; }
+            if (/^\s*(PAGE|NUMPAGES|SECTIONPAGES)\b/i.test(ins)) continue;
+            await anda(c, fmtPai); continue;
+          }
+          if (l === 'r') { await run(c); continue; }
+        }
+      };
+      const run = async (r) => {
+        const f = formatoRun(r);
+        for (const c of r.children) {
+          if (!ehW(c)) {
+            if (c.namespaceURI === MC && c.localName === 'AlternateContent') {
+              const ch = [...c.children].find((x) => x.localName === 'Choice'), fb = [...c.children].find((x) => x.localName === 'Fallback');
+              await conteudoRun(ch && /wps|wpg|wp14|w14/.test(ch.getAttribute('Requires') || 'wps') ? ch : (fb || ch), f);
+            }
+            continue;
+          }
+          await conteudoRun({ children: [c] }, f);
+        }
+      };
+      const conteudoRun = async (cx, f) => {
+        if (!cx) return;
+        for (const c of cx.children) {
+          const l = c.localName;
+          if (ehW(c, 'fldChar')) {
+            const t = aw(c, 'fldCharType');
+            if (t === 'begin') campos.push({ instr: '', fase: 'instr', indice: false });
+            else if (t === 'separate' && campos.length) { const f2 = campos[campos.length - 1]; f2.fase = 'resultado'; if (/^\s*TOC\b/i.test(f2.instr)) { f2.indice = true; temIndice = true; } if (/^\s*(PAGE|NUMPAGES|SECTIONPAGES)\b/i.test(f2.instr)) f2.oculto = true; }
+            else if (t === 'end') campos.pop();
+            continue;
+          }
+          if (ehW(c, 'instrText')) { if (campos.length) campos[campos.length - 1].instr += c.textContent; continue; }
+          const dentroCampo = campos.length && (campos[campos.length - 1].fase === 'instr' || campos.some((x) => x.oculto));
+          if (emCampoIndice() || dentroCampo) { if (emCampoIndice()) suprimido = true; continue; }
+          if (ehW(c, 't')) { let t = c.textContent; if (f.caps) t = t.toUpperCase(); if (t) atual.append(embrulha(document.createTextNode(t), f)); }
+          else if (ehW(c, 'tab') || ehW(c, 'ptab')) atual.append(embrulha(document.createTextNode('    '), f));
+          else if (ehW(c, 'br') || ehW(c, 'cr')) {
+            if (aw(c, 'type') === 'page') { if (ctxCel) atual.append(document.createElement('br')); else { partes.push('quebra'); novo(); } }
+            else if (aw(c, 'type') === 'column') aviso('colunas');
+            else atual.append(document.createElement('br'));
+          }
+          else if (ehW(c, 'noBreakHyphen')) atual.append('-');
+          else if (ehW(c, 'sym')) { const ch = parseInt(aw(c, 'char') || '', 16); if (ch) { atual.append(String.fromCharCode(ch >= 0xF000 ? ch - 0xF000 : ch)); aviso('simbolos'); } }
+          else if (ehW(c, 'footnoteReference') || ehW(c, 'endnoteReference')) {
+            const ehFim = l === 'endnoteReference', txt = (ehFim ? fim : rodape).get(aw(c, 'id'));
+            if (ehFim) aviso('notas-fim');
+            const n = document.createElement('sup'); n.className = 'esc-nota'; n.setAttribute('contenteditable', 'false'); n.setAttribute('data-nota', txt || '(nota vazia)'); n.textContent = '#';
+            atual.append(n, '​'); C.conta.notas++;
+          }
+          else if (ehW(c, 'drawing')) await desenho(c);
+          else if (ehW(c, 'pict') || ehW(c, 'object')) await vml(c, ehW(c, 'object'));
+          else if (ehW(c, 'annotationRef') || ehW(c, 'commentReference')) aviso('comentarios');
+          else if (ehW(c, 'lastRenderedPageBreak') || ehW(c, 'rPr') || ehW(c, 'softHyphen') || ehW(c, 'footnoteRef') || ehW(c, 'endnoteRef') || ehW(c, 'separator') || ehW(c, 'continuationSeparator')) continue;
+          else if (ehW(c, 'delText')) continue;
+        }
+      };
+      const caixaTexto = async (tx) => {
+        const conteudo = [...tx.getElementsByTagNameNS(W, 'txbxContent'), ...tx.getElementsByTagNameNS(WS, 'txbxContent')][0];
+        if (!conteudo) return false;
+        aviso('caixas');
+        const tmp = document.createElement('div');
+        for (const q of filhos(conteudo)) { if (ehW(q, 'p')) await paragrafo(q, tmp, false); else if (ehW(q, 'tbl')) await tabela(q, tmp); }
+        depoisDoParagrafo.push(...tmp.childNodes);
+        return true;
+      };
+      const desenho = async (d) => {
+        const blip = [...d.getElementsByTagNameNS('*', 'blip')][0], ext = [...d.getElementsByTagNameNS('*', 'extent')][0];
+        if (d.getElementsByTagNameNS('*', 'anchor').length) aviso('flutuantes');
+        if (blip) { const im = await imagem(ar(blip, 'embed') || ar(blip, 'link'), ext ? +ext.getAttribute('cx') : 0); if (im) atual.append(im); return; }
+        if (await caixaTexto(d)) return;
+        if (d.getElementsByTagNameNS('*', 'chart').length) aviso('graficos'); else aviso('desenhos');
+      };
+      const vml = async (v, objeto) => {
+        const imd = [...v.getElementsByTagNameNS('*', 'imagedata')][0];
+        if (imd) { const im = await imagem(ar(imd, 'id'), 0); if (im) atual.append(im); else if (objeto) aviso('objetos'); return; }
+        if (await caixaTexto(v)) return;
+        aviso(objeto ? 'objetos' : 'desenhos');
+      };
+      await anda(p, {});
+      // fecha: tira partes vazias, junta a quebra de página
+      const vazio = (e) => !e.textContent.replace(/[\s ​]/g, '') && !e.querySelector('img, .esc-nota, br');
+      if (temIndice && !indicePosto) {
+        indicePosto = true; fechaListas();
+        const ind = document.createElement('div'); ind.className = 'esc-indice'; ind.setAttribute('contenteditable', 'false');
+        // o que veio antes do índice no mesmo parágrafo (raro) fica antes
+        const ant = partes.filter((x) => x !== 'quebra' && !vazio(x));
+        if (quebraAntes) destino.append(hrQuebra());
+        for (const x of ant) destino.append(x);
+        destino.append(ind);
+        return;
+      }
+      if ((suprimido || noIndice || emCampoIndice()) && partes.every((x) => x === 'quebra' || vazio(x))) return;      // entradas do índice do Word
+      if (quebraAntes && !(nivel === 1 && capNovaEstilo)) { fechaListas(); destino.append(hrQuebra()); }
+      // títulos: número gerado pelo Word à frente do texto
+      if (prefixo && partes[0] && partes[0] !== 'quebra') partes[0].prepend(prefixo + ' ');
+      let primeiro = true;
+      for (let i = 0; i < partes.length; i++) {
+        const x = partes[i];
+        if (x === 'quebra') { fechaListas(); destino.append(hrQuebra()); continue; }
+        const ultimoDeQuebra = i > 0 && partes[i - 1] === 'quebra';
+        if (vazio(x) && (ultimoDeQuebra || (partes.length > 1 && i === 0 && partes[1] === 'quebra'))) continue;     // sem parágrafos vazios à volta das quebras
+        if (vazio(x) && !x.querySelector('br')) x.append(document.createElement('br'));
+        if (x.dataset.negrito) { delete x.dataset.negrito; const b = document.createElement('b'); b.append(...x.childNodes); x.append(b); }
+        if (emLista && primeiro) { listaItem(x, np, nivelL, destino); }
+        else { if (!ctxCel) fechaListas(); destino.append(x); }
+        if (/^h[1-3]$/.test(x.tagName.toLowerCase())) C.conta.titulos++; else if (!ctxCel) C.conta.paragrafos++;
+        if (!nivel && !emLista && tag === 'p' && !ctxCel) corpoP.push({ el: x, p });
+        primeiro = false;
+      }
+      for (const n of depoisDoParagrafo) { fechaListas(); destino.append(n); }
+    }
+    const hrQuebra = () => { const h = document.createElement('hr'); h.className = 'esc-quebra'; return h; };
+    function listaItem(conteudoEl, np, nivelL, destino) {
+      const ordenada = nivelL.fmt !== 'bullet', nivel = Math.min(2, np.ilvl);
+      while (pilha.length > nivel + 1) pilha.pop();
+      if (pilha.length === nivel + 1 && (pilha[nivel].ordenada !== ordenada || (nivel === 0 && (pilha[0].abs !== np.abs || (np.reinicia && pilha[0].numId !== np.numId))))) pilha.pop();
+      while (pilha.length < nivel + 1) {
+        const l = document.createElement(ordenada ? 'ol' : 'ul');
+        if (!pilha.length) { destino.append(l); C.conta.listas++; }
+        else { const pai = pilha[pilha.length - 1].el; let li = pai.lastElementChild; if (!li) { li = document.createElement('li'); pai.append(li); } li.append(l); }
+        pilha.push({ el: l, ordenada, numId: np.numId, abs: np.abs });
+      }
+      const li = document.createElement('li');
+      if (conteudoEl.style.textAlign) li.style.textAlign = conteudoEl.style.textAlign;
+      li.append(...conteudoEl.childNodes);
+      pilha[nivel].el.append(li);
+    }
+    async function tabela(t, destino) {
+      fechaListas();
+      const tb = document.createElement('table'); tb.className = 'esc-tab'; const corpoT = document.createElement('tbody'); tb.append(corpoT);
+      let linhas = 0;
+      for (const tr of filhos(t, 'tr')) {
+        const trp = filho(tr, 'trPr'), cab = trp && filho(trp, 'tblHeader') ? liga(filho(trp, 'tblHeader')) : false;
+        const linha = document.createElement('tr');
+        for (const tc of [...filhos(tr, 'tc'), ...filhos(tr, 'sdt').flatMap((s) => filhos(filho(s, 'sdtContent'), 'tc'))]) {
+          const tcp = filho(tc, 'tcPr'), span = tcp && filho(tcp, 'gridSpan') ? +aw(filho(tcp, 'gridSpan'), 'val') || 1 : 1;
+          const vm = tcp && filho(tcp, 'vMerge');
+          if (vm && aw(vm, 'val') !== 'restart') aviso('celulas-unidas');
+          const td = document.createElement(cab ? 'th' : 'td'); if (span > 1) td.colSpan = span;
+          const tmp = document.createElement('div');
+          for (const q of filhos(tc)) {
+            if (ehW(q, 'p')) await paragrafo(q, tmp, true);
+            else if (ehW(q, 'tbl')) { aviso('tabela-dentro'); for (const r2 of filhos(q, 'tr')) { const pr = document.createElement('p'); pr.textContent = filhos(r2, 'tc').map((c) => textoSimples(c).trim()).join(' | '); tmp.append(pr); } }
+            else if (ehW(q, 'sdt')) { const sc = filho(q, 'sdtContent'); for (const q2 of filhos(sc, 'p')) await paragrafo(q2, tmp, true); }
+          }
+          pilha = [];
+          const blocos = [...tmp.children];
+          if (blocos.length === 1 && blocos[0].tagName === 'P') { const b = blocos[0]; if (b.style.textAlign) td.style.textAlign = b.style.textAlign; td.append(...b.childNodes); }
+          else td.append(...tmp.childNodes);
+          if (!td.childNodes.length) td.append(document.createElement('br'));
+          linha.append(td);
+        }
+        if (linha.cells.length) { corpoT.append(linha); linhas++; }
+      }
+      if (!linhas) return;
+      destino.append(tb); C.conta.tabelas++;
+    }
+    // estilo «Título 1» com quebra de página antes = capítulos em página nova
+    const pbH1 = (() => { for (const [id] of estilos) if (nivelTitulo(id) === 1 && /^(heading 1|t[ií]tulo 1)$/.test(nomeEstilo(id))) { const v = doEstilo(id, 'pPr', 'pageBreakBefore'); return v ? liga(v) : false; } return false; })();
+    const capNovaEstilo = pbH1;
+    async function blocos(pai, destino) {
+      for (const c of pai.children) {
+        if (ehW(c, 'p')) await paragrafo(c, destino, false);
+        else if (ehW(c, 'tbl')) await tabela(c, destino);
+        else if (ehW(c, 'sdt')) { const sc = filho(c, 'sdtContent'); if (sc) await blocos(sc, destino); }
+        else if (ehW(c, 'customXml') || ehW(c, 'ins') || ehW(c, 'moveTo')) await blocos(c, destino);
+        else if (ehW(c, 'del') || ehW(c, 'moveFrom')) aviso('revisoes');
+        else if (c.namespaceURI === MC && c.localName === 'AlternateContent') { const fb = [...c.children].find((x) => x.localName === 'Choice') || [...c.children].find((x) => x.localName === 'Fallback'); if (fb) await blocos(fb, destino); }
+      }
+    }
+    await blocos(corpo, saida);
+    if (!saida.childNodes.length) saida.innerHTML = '<p><br></p>';
+    if (await parteRel('comments')) aviso('comentarios');
+
+    /* --- definições do documento */
+    const conf = {};
+    const pt = (tw) => Math.round(+tw / 20 * 10) / 10;
+    const normalP = (nome) => doEstilo(normalId, 'pPr', nome) || (defP && filho(defP, nome));
+    const normalR = (nome) => doEstilo(normalId, 'rPr', nome) || (defR && filho(defR, nome));
+    // letra
+    const rf = normalR('rFonts');
+    let fonte = rf ? (aw(rf, 'ascii') || aw(rf, 'hAnsi') || '') : '';
+    if (!fonte && rf) { const tm = aw(rf, 'asciiTheme') || aw(rf, 'hAnsiTheme') || ''; fonte = /^major/.test(tm) ? fontesTema.major : fontesTema.minor; }
+    if (!fonte) fonte = fontesTema.minor || 'Times New Roman';
+    const f0 = fonte.toLowerCase();
+    if (/calibri|carlito|aptos|candara|corbel/.test(f0)) { conf.letra = 'calibri'; if (!/calibri|carlito/.test(f0)) aviso('letra:' + fonte); }
+    else if (/arial|helvetica|liberation sans|arimo|verdana|tahoma|segoe|trebuchet|century gothic|gill sans|open sans|roboto|lato|noto sans/.test(f0)) { conf.letra = 'sans'; if (!/arial|helvetica|liberation sans|arimo/.test(f0)) aviso('letra:' + fonte); }
+    else { conf.letra = 'serif'; if (!/times|liberation serif|tinos/.test(f0)) aviso('letra:' + fonte); }
+    // tamanho
+    const sz = normalR('sz'); conf.tam = sz ? Math.max(8, Math.min(28, (+aw(sz, 'val') || 24) / 2)) : 10;
+    // espaço entre linhas e depois dos parágrafos
+    const sp = normalP('spacing');
+    if (sp) {
+      const line = +aw(sp, 'line'), rule = aw(sp, 'lineRule') || 'auto';
+      if (line && rule === 'auto') conf.espaco = Math.round(line / 240 * 100) / 100;
+      else if (line) { conf.espaco = Math.max(1, Math.round(line / 20 / (conf.tam * 1.15) * 100) / 100); aviso('espaco-exato'); }
+      const dep = aw(sp, 'after'); if (dep != null) conf.depois = pt(dep);
+    }
+    if (!conf.espaco) conf.espaco = 1;
+    if (conf.depois == null) conf.depois = 0;
+    // recuo da primeira linha e justificação: do estilo Normal ou da maioria dos parágrafos de texto
+    const ind = normalP('ind'); let recuo = ind && aw(ind, 'firstLine') ? +aw(ind, 'firstLine') / TW_CM : 0;
+    let just = aw(normalP('jc'), 'val') === 'both';
+    if (corpoP.length >= 3) {
+      const comR = new Map(); let nJust = 0;
+      for (const { el, p } of corpoP) { const i2 = propP(p, 'ind'); const fl = i2 && aw(i2, 'firstLine') != null ? +aw(i2, 'firstLine') / TW_CM : recuo; const k = Math.round(fl * 100) / 100; comR.set(k, (comR.get(k) || 0) + 1); if (el.dataset.just) nJust++; }
+      const [kMais, nMais] = [...comR.entries()].sort((a, b) => b[1] - a[1])[0];
+      if (nMais / corpoP.length >= 0.6) recuo = kMais;
+      if (nJust / corpoP.length >= 0.6) just = true;
+    }
+    conf.recuo = Math.max(0, Math.min(5, Math.round(recuo * 100) / 100));
+    conf.justificar = !!just;
+    saida.querySelectorAll('[data-just]').forEach((e) => { if (!conf.justificar) e.style.textAlign = 'justify'; e.removeAttribute('data-just'); });
+    // títulos: do tamanho do texto (como na ABNT) ou maiores
+    const szH1 = doEstilo([...estilos.keys()].find((id) => nivelTitulo(id) === 1 && /^(heading 1|t[ií]tulo 1)$/.test(nomeEstilo(id))) || 'Heading1', 'rPr', 'sz');
+    conf.titulos = szH1 && Math.abs(+aw(szH1, 'val') / 2 - conf.tam) < 0.6 ? 'abnt' : 'normal';
+    conf.capNova = !!capNovaEstilo;
+    // margens (A4 vertical)
+    const sz2 = filho(sectFinal, 'pgSz'), mg = filho(sectFinal, 'pgMar');
+    if (sz2) {
+      const w = +aw(sz2, 'w'), h = +aw(sz2, 'h'), orient = aw(sz2, 'orient');
+      if (orient === 'landscape' || w > h) aviso('horizontal');
+      else if (Math.abs(w - 11906) > 120 || Math.abs(h - 16838) > 120) aviso('papel');
+    }
+    if (mg) {
+      const m = ['top', 'right', 'bottom', 'left'].map((k) => Math.round(Math.abs(+aw(mg, k) || 0) / TW_CM * 100) / 100);
+      const PRE = { normal: [2.5, 2.5, 2.5, 2.5], academico: [3, 2, 2, 3], estreitas: [1.5, 1.5, 1.5, 1.5] };
+      const igual = Object.entries(PRE).find(([, v]) => v.every((x, i) => Math.abs(x - m[i]) < 0.06));
+      if (igual) conf.margens = igual[0];
+      else { conf.margens = 'personalizadas'; conf.mgPers = m.map((x) => Math.max(0.5, Math.min(6, x))); }
+    }
+    // números de página: cabeçalho ou rodapé com o campo PAGE
+    // referências efetivas de cada secção: as suas ou, quando não as tem, as da secção anterior
+    const efetivas = new Map();
+    { let ant = new Map();
+      for (const sp2 of [...seccoes.map((x) => x.sp), sectFinal].filter(Boolean)) {
+        const m = new Map(ant);
+        for (const [onde, nome] of [['inicio', 'headerReference'], ['fim', 'footerReference']]) for (const el of filhos(sp2, nome)) m.set(onde + ':' + (aw(el, 'type') || 'default'), ar(el, 'id'));
+        efetivas.set(sp2, m); ant = m;
+      } }
+    const partesNum = async (sp2) => {
+      const r = { pagina: null, outroTexto: '', primeiraVazia: null };
+      if (!sp2) return r;
+      for (const [chave, id] of efetivas.get(sp2) || []) {
+        const [onde, tipo] = chave.split(':'), rel = rels.get(id);
+        if (!rel) continue;
+        const t = await texto(caminho(rel.alvo)); if (!t) continue;
+        const d = xml(t), ps = [...desc(d, W, 'p'), ...desc(d, WS, 'p')];
+        let achou = null, outro = '';
+        for (const p of ps) {
+          const instrs = [...desc(p, W, 'instrText'), ...desc(p, WS, 'instrText')].map((x) => x.textContent).join(' ') + ' ' + [...desc(p, W, 'fldSimple'), ...desc(p, WS, 'fldSimple')].map((x) => aw(x, 'instr')).join(' ');
+          if (/\bPAGE\b/i.test(instrs)) { achou = { onde, alin: alinhamento(p) || 'left' }; }
+          else outro += textoSimples(p).trim();
+        }
+        if (tipo === 'default') { if (achou) r.pagina = achou; if (outro.trim()) r.outroTexto += ' ' + outro.trim(); }
+        if (tipo === 'first') r.primeiraVazia = r.primeiraVazia === false ? false : !achou;      // (só conta com «titlePg»)
+        if (tipo === 'even' && paresImpares) aviso('pares');
+      }
+      return r;
+    };
+    const defTxt0 = await parteRel('settings'), paresImpares = !!(defTxt0 && /<w:evenAndOddHeaders(\s+w:val="(true|1|on)")?\s*\/>/.test(defTxt0));
+    // a numeração de cada secção: a primeira e a última dizem se há páginas iniciais em romanos ou sem número (ABNT)
+    const todas = [...seccoes.map((s) => s.sp), sectFinal].filter(Boolean);
+    const fimS = await partesNum(sectFinal);
+    if (fimS.outroTexto.trim()) aviso('cabecalho-texto:' + fimS.outroTexto.trim().slice(0, 60));
+    if (fimS.pagina) {
+      conf.numeros = true;
+      conf.numLugar = fimS.pagina.onde === 'inicio' ? 'inicio-direita' : fimS.pagina.alin === 'right' ? 'fim-direita' : 'fim-centro';
+      if (fimS.pagina.onde === 'inicio' && fimS.pagina.alin !== 'right') aviso('numero-lugar');
+      if (fimS.pagina.onde === 'fim' && fimS.pagina.alin === 'left') aviso('numero-lugar');
+    } else conf.numeros = false;
+    const tp = filho(sectFinal, 'titlePg');
+    conf.capa = !!(tp && liga(tp) && fimS.primeiraVazia !== false);
+    const pnFinal = filho(sectFinal, 'pgNumType'), inicioFinal = pnFinal && aw(pnFinal, 'start') != null ? +aw(pnFinal, 'start') : null;
+    conf.numInicio = inicioFinal != null && inicioFinal >= 0 ? inicioFinal : 1;
+    conf.numModo = 'simples';
+    if (todas.length > 1 && conf.numeros) {
+      const s1 = todas[0], pn1 = filho(s1, 'pgNumType'), fmt1 = pn1 ? aw(pn1, 'fmt') : '';
+      const ini1 = await partesNum(s1);
+      const quebra = seccoes[0] && seccoes[0].depois;
+      // o primeiro título 1 depois do fim da primeira secção começa a numeração 1, 2, 3
+      let cap = null;
+      if (quebra && quebra.parentNode === saida) { for (let n = quebra.nextSibling; n; n = n.nextSibling) if (n.nodeType === 1 && n.tagName === 'H1') { cap = n; break; } }
+      else if (!quebra) cap = saida.querySelector('h1');
+      if (cap) {
+        if (/roman/i.test(fmt1 || '')) { conf.numModo = 'romanas'; cap.setAttribute('data-arabe', '1'); }
+        else if (!ini1.pagina) { conf.numModo = 'abnt'; cap.setAttribute('data-arabe', '1'); if (!(pn1 && aw(pn1, 'start') === '0') || (inicioFinal != null && inicioFinal <= 1)) aviso('numeracao-adaptada'); }
+      }
+      if (conf.numModo === 'romanas') { const t1 = filho(s1, 'titlePg'); conf.capa = !!(t1 && liga(t1) && ini1.primeiraVazia !== false); }
+      if (conf.numModo === 'abnt') { conf.capa = true; conf.numInicio = 1; }      // na ABNT a capa nunca tem número
+    }
+    // quebras de secção que começam numa página nova: passam a quebra de página (menos antes do capítulo da numeração)
+    for (const s of seccoes) {
+      const tipo = aw(filho(s.sp, 'type'), 'val') || 'nextPage';
+      if (tipo === 'continuous' || !s.depois || s.depois.parentNode !== saida) continue;
+      const seg = s.depois.nextSibling;
+      if (!seg || (seg.nodeType === 1 && (seg.tagName === 'HR' || seg.hasAttribute('data-arabe') || (seg.tagName === 'H1' && conf.capNova)))) continue;
+      s.depois.after(hrQuebra());
+    }
+    // língua e verificação da ortografia
+    const lg = normalR('lang'), lv = lg ? (aw(lg, 'val') || '') : '';
+    let lingua = /^pt-br/i.test(lv) ? 'pt-BR' : 'pt-PT';
+    const defTxt = await parteRel('settings');
+    if (!lv && defTxt && /themeFontLang[^>]*w:val="pt-BR"/i.test(defTxt)) lingua = 'pt-BR';
+    conf.lingua = lingua;
+    if (lv && !/^pt/i.test(lv)) aviso('lingua:' + lv);
+    const np0 = normalR('noProof'); if (np0 && liga(np0)) conf.verificar = false;
+    if (defTxt && /<w:hideSpellingErrors(\s+w:val="(true|1|on)")?\s*\/>/.test(defTxt)) conf.verificar = false;
+    conf.norma = 'livre';
+
+    /* --- título e relatório */
+    let titulo = nomeF;
+    const core = await texto('docProps/core.xml');
+    if (core) { const t = (xml(core).getElementsByTagNameNS('http://purl.org/dc/elements/1.1/', 'title')[0] || {}).textContent; if (t && t.trim() && !/^(documento|document|microsoft word)/i.test(t.trim())) titulo = t.trim(); }
+    if (C.conta.imagens === 0 && saida.querySelectorAll('img').length) C.conta.imagens = saida.querySelectorAll('img').length;
+    return { titulo: titulo.slice(0, 140), html: saida.innerHTML, conf, relatorio: relatorio(C) };
+  }
+
+  /* ------------------------------------------------------------ relatório (em português, para o professor) */
+  const AVISOS = {
+    'imagem-emf': 'Algumas imagens estão num formato do Windows (EMF/WMF) que o telemóvel não mostra: não passaram. No Word, pode copiá-las e colá-las como imagem (PNG) antes de abrir aqui.',
+    'imagem-formato': 'Algumas imagens estão num formato que o navegador não abre: não passaram.',
+    'imagem-ligada': 'Algumas imagens estavam ligadas a ficheiros fora do documento: não passaram.',
+    flutuantes: 'As imagens que «flutuavam» à volta do texto passaram a ficar na linha do texto.',
+    caixas: 'O texto das caixas de texto passou para o corpo do documento, a seguir ao parágrafo onde estavam.',
+    desenhos: 'Formas e desenhos do Word (setas, retângulos, SmartArt) não passaram.',
+    graficos: 'Os gráficos não passaram. Pode copiá-los no Word como imagem e inseri-los aqui.',
+    objetos: 'Objetos incorporados (equações antigas, folhas de cálculo, etc.) não passaram.',
+    equacoes: 'As equações passaram só como texto simples.',
+    comentarios: 'Os comentários não passaram (o texto ficou igual).',
+    revisoes: 'As alterações controladas foram aceites: fica o texto como estaria depois de as aceitar.',
+    'notas-fim': 'As notas de fim passaram a notas de rodapé.',
+    cores: 'As cores e os realces do texto não passaram (o texto fica a preto).',
+    tamanhos: 'Os tamanhos de letra diferentes dentro do texto passaram para o tamanho normal do documento.',
+    simbolos: 'Alguns símbolos de tipos de letra especiais (Symbol, Wingdings) podem aparecer de outra forma.',
+    colunas: 'O texto em colunas passou a uma só coluna.',
+    'celulas-unidas': 'As células de tabela unidas na vertical ficaram separadas.',
+    'tabela-dentro': 'As tabelas dentro de tabelas passaram a linhas de texto.',
+    horizontal: 'A folha estava na horizontal: no Portal fica na vertical (A4).',
+    papel: 'O papel não era A4: no Portal fica em A4, por isso as páginas podem mudar.',
+    'espaco-exato': 'O espaço entre linhas era uma medida fixa: foi convertido no espaçamento mais parecido.',
+    'numero-lugar': 'O número de página foi para o lugar mais parecido que o Portal tem.',
+    'numeracao-adaptada': 'As páginas iniciais sem número passaram a contar-se como na ABNT (a capa é a página 0): os números podem ficar uma unidade abaixo dos do ficheiro original. Pode mudar em «Página».',
+    pares: 'Cabeçalhos diferentes nas páginas pares e ímpares passaram a ser iguais.'
+  };
+  function relatorio(C) {
+    const c = C.conta, passou = [];
+    const n = (v, um, varios) => `${v} ${v === 1 ? um : varios}`;
+    if (c.titulos) passou.push(n(c.titulos, 'título', 'títulos'));
+    if (c.paragrafos) passou.push(n(c.paragrafos, 'parágrafo', 'parágrafos'));
+    if (c.listas) passou.push(n(c.listas, 'lista', 'listas'));
+    if (c.tabelas) passou.push(n(c.tabelas, 'tabela', 'tabelas'));
+    if (c.imagens) passou.push(n(c.imagens, 'imagem', 'imagens'));
+    if (c.notas) passou.push(n(c.notas, 'nota de rodapé', 'notas de rodapé'));
+    const avisos = [];
+    for (const [k] of C.avisos) {
+      if (k.startsWith('letra:')) avisos.push(`O tipo de letra «${k.slice(6)}» não existe no Portal: usa-se o mais parecido. As páginas podem não coincidir exatamente com as do ficheiro original.`);
+      else if (k.startsWith('lingua:')) avisos.push(`O documento estava marcado noutra língua (${k.slice(7)}): passou a português. Pode mudar em «Página».`);
+      else if (k.startsWith('cabecalho-texto:')) avisos.push(`O texto do cabeçalho ou do rodapé («${k.slice(16)}») não passou: o Portal só põe os números de página.`);
+      else if (AVISOS[k]) avisos.push(AVISOS[k]);
+    }
+    return { passou, avisos };
+  }
+
+  return { ler, inflateJs, abreZip };
+})();
+if (typeof module !== 'undefined') module.exports = ABRIRWORD;
+</script>
 <script>/* Os meus documentos — escrever como no Word, mesmo sem internet (Portal CEL, Recursos do Professor).
    Os documentos ficam só neste aparelho (IndexedDB «cel-escrever»); nada vai para a internet.
    - Vista de páginas, como no Word: folhas A4 separadas, com margens, números de página e notas no fundo de cada folha;
@@ -1335,7 +2109,8 @@ const ESCREVER = (() => {
     const c = { ...CONF0, ...(conf || {}) };
     const ini = parseInt(c.numInicio, 10);
     const modo = ['simples', 'romanas', 'abnt'].includes(c.numModo) && !(c.numModo === 'simples' && c.romanas) ? c.numModo : (c.romanas ? 'romanas' : 'simples');
-    const n = { letra: LETRAS[c.letra] ? c.letra : 'serif', tam: +c.tam || 12, espaco: +c.espaco || 1.5, just: !!c.justificar, mg: (MARGENS[c.margens] || MARGENS.normal).m,
+    const mgP = c.margens === 'personalizadas' && Array.isArray(c.mgPers) && c.mgPers.length === 4 ? c.mgPers.map((v) => Math.max(0.5, Math.min(6, +v || 2.5))) : null;
+    const n = { letra: LETRAS[c.letra] ? c.letra : 'serif', tam: +c.tam || 12, espaco: +c.espaco || 1.5, just: !!c.justificar, mg: mgP || (MARGENS[c.margens] || MARGENS.normal).m,
       recuo: Math.max(0, Math.min(5, +c.recuo || 0)), depois: Number.isFinite(+c.depois) ? Math.max(0, Math.min(30, +c.depois)) : 6, capNova: !!c.capNova,
       norma: NORMAS[c.norma] ? c.norma : 'livre', lingua: LINGUAS[c.lingua] ? c.lingua : 'pt-PT', verificar: c.verificar !== false,
       num: { ativo: !!c.numeros, lugar: LUGARES[c.numLugar] ? c.numLugar : 'fim-centro', inicio: Number.isFinite(ini) ? Math.max(0, Math.min(9999, ini)) : 1, capa: !!c.capa,
@@ -1740,6 +2515,13 @@ const ESCREVER = (() => {
   }
 
   /* ============================================================ VISTAS */
+  const relatorios = new Map();       // id do documento → relatório da abertura de um ficheiro Word
+  function janela(h, titulo, ...corpo) {
+    const dlg = h('dialog', { class: 'esc-dlg esc-relatorio' }, h('h3', null, titulo), ...corpo,
+      h('div', { class: 'row end', style: 'margin-top:14px' }, h('button', { type: 'button', class: 'btn primary', onclick: () => dlg.close() }, 'Continuar')));
+    document.body.append(dlg); dlg.addEventListener('close', () => dlg.remove()); dlg.showModal();
+    return dlg;
+  }
   function vista(arg, ctx) {
     return arg ? editor(arg, ctx) : lista(ctx);
   }
@@ -1750,7 +2532,32 @@ const ESCREVER = (() => {
     const corpo = h('div', { class: 'esc-lista' }, h('p', { class: 'muted' }, 'A abrir…'));
     let todos = [], filtro = '';
     const nota = h('p', { class: 'muted' }, 'Escreva trabalhos, relatórios, cartas e a sua monografia, mesmo sem internet. Os documentos ficam só neste aparelho e ninguém mais os vê. ' +
-      'Enquanto escreve, vê as folhas como no Word. Descarregue em Word para entregar ou continuar noutro computador, ou em PDF para imprimir.');
+      'Enquanto escreve, vê as folhas como no Word. Também pode abrir os ficheiros Word que já tem. Descarregue em Word para entregar ou continuar noutro computador, ou em PDF para imprimir.');
+    // abrir um ficheiro Word (.docx) do computador, do telemóvel ou do tablet: o original não muda
+    const abrir = h('input', { type: 'file', style: 'display:none', 'aria-label': 'Escolher um ficheiro Word',
+      accept: '.docx,.doc,.odt,.rtf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/msword', onchange: (e) => abreWord(e.target.files[0]) });
+    async function abreWord(f) {
+      abrir.value = '';
+      if (!f) return;
+      const espera = h('dialog', { class: 'esc-dlg' }, h('h3', null, 'A abrir o ficheiro Word…'), h('p', { class: 'muted' }, `«${f.name}». Pode demorar um pouco se tiver muitas imagens.`));
+      document.body.append(espera); espera.addEventListener('cancel', (e) => e.preventDefault()); espera.showModal();
+      try {
+        if (typeof ABRIRWORD === 'undefined') throw new Error('O Portal não conseguiu preparar a leitura de ficheiros Word. Atualize o Portal e tente outra vez.');
+        const r = await ABRIRWORD.ler(f);
+        const pr = lePref(), extra = {};
+        if (typeof pr.verificar === 'boolean') extra.verificar = pr.verificar;
+        const d = { id: uid('doc'), titulo: r.titulo || 'Documento', html: r.html, texto: '', conf: { ...CONF0, ...extra, ...r.conf }, modelo: 'word', origem: f.name, criado: Date.now(), alterado: Date.now() };
+        await Docs.guarda(d);
+        relatorios.set(d.id, { ...r.relatorio, ficheiro: f.name });
+        espera.close(); espera.remove();
+        go('escrever', d.id);
+      } catch (e) {
+        espera.close(); espera.remove();
+        console.warn('Os meus documentos: abrir ficheiro Word', e);
+        const msg = e && e.message && !/^[a-z-]+$/.test(e.message) && !/is not|undefined|null|Cannot|Failed/i.test(e.message) ? e.message : 'Não foi possível abrir este ficheiro. Confirme que é um documento do Word (.docx) e tente outra vez.';
+        janela(h, 'Não foi possível abrir', h('p', null, msg));
+      }
+    }
     const procura = h('input', { type: 'search', class: 'inp', placeholder: 'Procurar nos meus documentos', 'aria-label': 'Procurar nos meus documentos', oninput: (e) => { filtro = e.target.value.trim().toLowerCase(); desenha(); } });
     const ficheiro = h('input', { type: 'file', accept: '.json,application/json', style: 'display:none', onchange: (e) => recupera(e.target.files[0]) });
 
@@ -1805,15 +2612,17 @@ const ESCREVER = (() => {
       ficheiro.value = '';
     }
 
-    const modelos = h('div', { class: 'esc-modelos' }, MODELOS.map((m) => h('button', { type: 'button', class: 'esc-modelo', onclick: () => novo(m) },
-      h('b', null, m.nome), h('span', null, m.desc))));
+    const modelos = h('div', { class: 'esc-modelos' },
+      h('button', { type: 'button', class: 'esc-modelo esc-abrir', onclick: () => abrir.click() }, h('b', null, 'Abrir ficheiro Word'),
+        h('span', null, 'Um documento .docx do computador, do telemóvel ou do tablet. O ficheiro original não muda.')),
+      MODELOS.map((m) => h('button', { type: 'button', class: 'esc-modelo', onclick: () => novo(m) }, h('b', null, m.nome), h('span', null, m.desc))));
     const el = h('div', { class: 'view' },
       h('div', { class: 'head' }, h('div', null, h('div', { class: 'eyebrow' }, 'Escrever'), h('h1', null, 'Os meus documentos'))),
       nota, aviso,
       h('div', { class: 'card' }, h('h2', null, 'Novo documento'), modelos),
       h('div', { class: 'card' }, h('div', { class: 'row', style: 'justify-content:space-between;margin-bottom:10px' }, h('h2', { style: 'margin:0' }, 'Os seus documentos'),
         h('div', { class: 'row' }, btn('Guardar cópia de segurança', { sm: true, onclick: copia }), btn('Recuperar cópia', { sm: true, kind: 'ghost', onclick: () => ficheiro.click() }))),
-        procura, corpo, ficheiro));
+        procura, corpo, ficheiro, abrir));
     carrega();
     return { el };
   }
@@ -2320,7 +3129,8 @@ const ESCREVER = (() => {
       const letra = sel([['serif', 'Times New Roman'], ['sans', 'Arial'], ['calibri', 'Calibri']], n0.letra);
       const tam = sel([10, 11, 12, 14].map((t) => [t, String(t)]), n0.tam); opcao(tam, n0.tam);
       const esp = sel([[1, 'Simples'], [1.15, '1,15'], [1.5, '1,5'], [2, 'Duplo']], n0.espaco); opcao(esp, n0.espaco);
-      const marg = sel(Object.entries(MARGENS).map(([k, v]) => [k, v.nome]), c.margens);
+      const cmTxt = (v) => String(Math.round(v * 100) / 100).replace('.', ',');
+      const marg = sel(Object.entries(MARGENS).map(([k, v]) => [k, v.nome]).concat(Array.isArray(c.mgPers) && c.mgPers.length === 4 ? [['personalizadas', `Do ficheiro Word (${c.mgPers.map(cmTxt).join(' / ')} cm)`]] : []), c.margens);
       const just = chk(n0.just);
       const recuo = sel([[0, 'Sem recuo'], [1.25, '1,25 cm'], [1.5, '1,5 cm']], n0.recuo); opcao(recuo, n0.recuo, String(n0.recuo).replace('.', ',') + ' cm');
       const depoisP = sel([[0, '0 pt (nenhum)'], [6, '6 pt'], [8, '8 pt'], [12, '12 pt']], n0.depois); opcao(depoisP, n0.depois, String(n0.depois).replace('.', ',') + ' pt');
@@ -2556,6 +3366,15 @@ const ESCREVER = (() => {
       aplicaConf(); renumera(); desenhaIndice(); contagem(); topo();
       estado.textContent = Docs.soMemoria() ? 'Só nesta sessão' : 'Guardado';
       agendaPaginas(0);
+      const rel = relatorios.get(id);
+      if (rel) {
+        relatorios.delete(id);
+        janela(h, 'Ficheiro Word aberto',
+          h('p', null, `«${rel.ficheiro}» abriu aqui como um documento novo, guardado neste aparelho. O ficheiro original não mudou.`),
+          rel.passou.length ? h('p', null, h('b', null, 'Passou: '), rel.passou.join(', ') + '.') : null,
+          rel.avisos.length ? h('div', null, h('p', { style: 'margin:10px 0 0' }, h('b', null, 'Atenção:')), h('ul', null, rel.avisos.map((a) => h('li', null, a)))) : h('p', null, 'Passou tudo o que o editor tem.'),
+          h('p', { class: 'muted', style: 'margin-top:10px' }, 'Veja as páginas com «Ver páginas» e, se for preciso, ajuste em «Página».'));
+      }
     })();
 
     return { el, cleanup: () => {
@@ -4016,6 +4835,7 @@ function toolRomanos() {
 
 /* ============================================================ CÓPIAS E ATUALIZAÇÕES */
 const NOVIDADES = [
+  { v: '1.8', d: '15/11/2026', itens: ['«Os meus documentos»: abra os ficheiros Word (.docx) que já tem, no computador, no telemóvel ou no tablet. Passam os títulos, parágrafos, listas, tabelas, imagens, notas de rodapé, índice, quebras de página, margens e números de página. O ficheiro original não muda, e um pequeno relatório diz o que não passou.'] },
   { v: '1.7', d: '15/11/2026', itens: ['«Os meus documentos» como no Word: o texto aparece em folhas A4 separadas, com as margens, os números de página e as notas no fundo de cada folha. No telemóvel, a vista contínua mostra uma faixa «Página N» onde começa cada folha. Mude de vista e de zoom na barra de baixo.',
     'Normas: livre, trabalho académico e ABNT (Brasil), com o modelo «Monografia (normas ABNT)». Recuo da primeira linha, espaço depois dos parágrafos e capítulos sempre numa página nova.',
     'Língua do documento: português de Portugal ou do Brasil, com o sublinhado dos erros de ortografia ligado ou desligado (também no ficheiro Word). Botões Desfazer e Refazer.'] },
