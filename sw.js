@@ -1,9 +1,10 @@
 /* Portal CEL — guarda a aplicação no telemóvel para funcionar sem internet.
    Os Recursos do Professor ficam guardados para todos; a gestão escolar (gestao.html) só nos aparelhos de quem a abre. */
-const VERSAO = '1.5.0-ceb5356c';
+const VERSAO = '1.6.0-681d7f12';
 const CACHE = 'cel-rp-' + VERSAO;
 const FICHEIROS = ["./", "./index.html", "./manifest.webmanifest", "./dados.2460e27fab.bin", "./fonts/Lora-Bold.woff", "./fonts/Figtree.woff", "./fonts/IBMPlexMono-Regular.woff", "./fonts/IBMPlexMono-Medium.woff", "./icons/icon-192.png", "./icons/icon-512.png", "./icons/maskable-512.png", "./icons/emblema.jpg"];
 const GEST = 'cel-portal-g-' + VERSAO;     // gestão escolar: só existe nos aparelhos de quem a usa
+const LETRAS = 'cel-letras-1';              // tipos de letra de «Os meus documentos» (nunca mudam com o mesmo nome; ficam entre versões)
 const BASE = new URL('./', self.location).pathname;
 const FIXO = /\/(dados\.[0-9a-f]+\.bin|fonts\/[^/]+)$/;   // ficheiros que nunca mudam com o mesmo nome
 self.addEventListener('install', (e) => {
@@ -86,6 +87,13 @@ self.addEventListener('fetch', (e) => {
   if (url.origin !== self.location.origin) return;
   if (url.pathname.endsWith('/acessos.json')) return;            // a lista de acessos vem sempre da internet
   if (url.pathname.includes('/formacoes/')) return;              // as formações: a aplicação guarda-as à parte, quando as descarrega
+  if (/\/fonts\/cel-letra-[^/]+\.woff$/.test(url.pathname)) {    // tipos de letra dos documentos: descarregados só da primeira vez que se usam
+    e.respondWith((async () => {
+      const c = await caches.open(LETRAS), r = await c.match(req, { ignoreSearch: true });
+      if (r) return r;
+      const n = await fetch(req); if (n.ok) await c.put(req, n.clone()); return n;
+    })()); return;
+  }
   if (url.pathname === BASE + 'gestao.html') {                  // a gestão: do aparelho; da internet só da primeira vez
     e.respondWith((async () => {
       const g = await caches.open(GEST), r = await g.match('./gestao.html');
