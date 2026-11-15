@@ -522,7 +522,7 @@ body:not(.ready) > .top, body:not(.ready) > .layout { display: none }
 .esc-aprox { color: var(--warn, #8a5a00) }
 
 /* a folha: papel branco, também no modo escuro */
-.esc-folha { --esc-tam: 12pt; --esc-simples: 1.15; --esc-espaco: 1.725; --esc-lh: 27.6px; --esc-lh-1: 18.4px; --esc-lh-t1: 24.53px; --esc-lh-t2: 22px; --esc-lh-cit: 15.33px; --esc-lh-nota: 15.33px;
+.esc-folha { --esc-tam: 12pt; --esc-simples: 1.15; --esc-espaco: 1.725; --esc-lh: 27.6px; --esc-lh-1: 18.4px; --esc-lh-t1: 24.53px; --esc-lh-t2: 22px; --esc-lh-t3: 18.4px; --esc-lh-cit: 15.33px; --esc-lh-nota: 15.33px; --esc-recuo: 0cm; --esc-depois: 6pt; --esc-num-tam: 12pt; --esc-lh-num: 18.4px;
   --esc-mt: 2.5cm; --esc-md: 2.5cm; --esc-mb: 2.5cm; --esc-me: 2.5cm; position: relative;
   background: #fff; color: #111; width: 100%; max-width: 21cm; margin: 0 auto; min-height: 29.7cm; padding: var(--esc-mt) var(--esc-md) var(--esc-mb) var(--esc-me);
   box-shadow: 0 2px 12px rgba(10, 34, 64, .12); border: 1px solid #d9dee7; border-radius: 4px; box-sizing: border-box; color-scheme: light }
@@ -536,14 +536,17 @@ body:not(.ready) > .top, body:not(.ready) > .layout { display: none }
    - no cimo de cada folha, menos da primeira, o espaço antes não conta (também como no Word). */
 :is(.esc-texto, .esc-pag) { font-size: var(--esc-tam); line-height: var(--esc-lh); color: #111; text-align: left; overflow-wrap: anywhere; word-wrap: break-word;
   font-kerning: none; font-variant-ligatures: none; font-feature-settings: "kern" 0, "liga" 0 }
-:is(.esc-texto, .esc-pag) p { margin: 0 0 6pt }
+:is(.esc-texto, .esc-pag) p { margin: 0 0 var(--esc-depois, 6pt); text-indent: var(--esc-recuo, 0cm) }
+:is(.esc-texto, .esc-pag) :is(p[style*="center"], p[style*="right"], td p, th p, li p, blockquote p) { text-indent: 0 }      /* recuo da 1.ª linha só no texto normal (como no Word) */
 .esc-just :is(.esc-texto, .esc-pag) :is(p, li) { text-align: justify }
 :is(.esc-texto, .esc-pag) :is(h1, h2, h3) { font-family: inherit; color: #111; letter-spacing: normal; text-wrap: wrap; font-weight: 700; line-height: var(--esc-lh-1); break-after: avoid; margin: 0; text-align: left }
-:is(.esc-texto, .esc-pag) h1 { font-size: calc(var(--esc-tam) + 4pt); line-height: var(--esc-lh-t1); margin: 18pt 0 8pt }
-:is(.esc-texto, .esc-pag) h2 { font-size: calc(var(--esc-tam) + 2pt); line-height: var(--esc-lh-t2); margin: 12pt 0 6pt }
-:is(.esc-texto, .esc-pag) h3 { font-size: var(--esc-tam); font-style: italic; margin: 10pt 0 5pt }
+:is(.esc-texto, .esc-pag) h1 { font-size: var(--esc-h1-tam, calc(var(--esc-tam) + 4pt)); line-height: var(--esc-lh-t1); margin: var(--esc-h1-antes, 18pt) 0 var(--esc-h1-depois, 8pt) }
+:is(.esc-texto, .esc-pag) h2 { font-size: var(--esc-h2-tam, calc(var(--esc-tam) + 2pt)); line-height: var(--esc-lh-t2); margin: var(--esc-h2-antes, 12pt) 0 var(--esc-h2-depois, 6pt) }
+:is(.esc-texto, .esc-pag) h3 { font-size: var(--esc-h3-tam, var(--esc-tam)); line-height: var(--esc-lh-t3, var(--esc-lh-1)); font-style: italic; margin: var(--esc-h3-antes, 10pt) 0 var(--esc-h3-depois, 5pt) }
 :is(.esc-texto, .esc-pag) blockquote { margin: 6pt 0 10pt 4cm; font-size: calc(var(--esc-tam) - 2pt); line-height: var(--esc-lh-cit); text-align: justify }
 :is(.esc-texto, .esc-pag) blockquote p { margin: 0 }
+/* ABNT (NBR 14724): natureza do trabalho na folha de rosto, do meio da mancha para a margem direita, em espaço simples e com o tamanho do texto */
+:is(.esc-texto, .esc-pag) blockquote.esc-natureza { margin: 0 0 0 50%; font-size: var(--esc-tam); line-height: var(--esc-lh-1) }
 :is(.esc-texto, .esc-pag) :is(ul, ol) { margin: 0 0 3pt; padding-left: 1.27cm }
 :is(.esc-texto, .esc-pag) :is(ul, ol):has(+ :is(ul, ol)) { margin-bottom: 0 }      /* duas listas seguidas: sem espaço (Word: «não adicionar espaço entre parágrafos do mesmo estilo») */
 .esc-medir-corpo, .esc-pg-corpo { display: flow-root }
@@ -553,7 +556,7 @@ body:not(.ready) > .top, body:not(.ready) > .layout { display: none }
 :is(.esc-texto, .esc-pag) ul ul { list-style-type: circle } :is(.esc-texto, .esc-pag) ul ul ul { list-style-type: square }
 :is(.esc-texto, .esc-pag) ol ol { list-style-type: lower-alpha } :is(.esc-texto, .esc-pag) ol ol ol { list-style-type: lower-roman }
 :is(.esc-texto, .esc-pag) img { max-width: 100%; max-height: var(--esc-hmax, none); height: auto; vertical-align: baseline; object-fit: contain }
-:is(.esc-texto, .esc-pag) p:has(> img) { line-height: var(--esc-lh-1) }
+:is(.esc-texto, .esc-pag) p:has(> img) { line-height: var(--esc-lh-1); text-indent: 0 }
 :is(.esc-texto, .esc-pag) table { border-collapse: collapse; width: 100%; margin: 0; table-layout: fixed }
 :is(.esc-texto, .esc-pag) :is(td, th) { border: .5pt solid #808080; padding: 2pt .176cm; vertical-align: top; line-height: var(--esc-lh-1); word-break: break-word; text-align: left }
 .esc-just :is(.esc-texto, .esc-pag) :is(td, th) p { text-align: left }
@@ -573,13 +576,13 @@ body:not(.ready) > .top, body:not(.ready) > .layout { display: none }
 .esc-pag .esc-cont { padding-top: 0 !important; margin-top: 0 !important; text-indent: 0 !important }
 .esc-pag li.esc-cont { list-style-type: none }
 .esc-just .esc-pag :is(p, li).esc-corta, .esc-pag :is(p, li).esc-corta[style*="justify"] { text-align-last: justify }
-.esc-pag hr.esc-quebra { border: 0; margin: 0; height: 0 }
+.esc-pag hr.esc-quebra { border: 0; margin: 0; height: 0; overflow: visible }      /* como no editor: as margens à volta juntam-se */
 .esc-pag .esc-indice-t, .esc-pag .esc-indice-n { display: none }
 
 /* só no editor */
 .esc-texto { outline: none; min-height: 18cm; caret-color: #0A2240 }
 .esc-texto img.esc-sel { outline: 3px solid #F2B705; outline-offset: 2px }
-.esc-texto .esc-nota { color: #1B4C9A; font-weight: 700; cursor: pointer; padding: 0 1px; user-select: none }
+.esc-texto .esc-nota { color: #1B4C9A; cursor: pointer; user-select: none }
 .esc-texto hr.esc-quebra { border: 0; border-top: 2px dashed #b9c2d0; margin: 1.4em 0; overflow: visible; height: 0; position: relative }
 .esc-texto hr.esc-quebra::after { content: "quebra de página"; position: absolute; left: 50%; top: -.8em; transform: translateX(-50%); background: #fff; color: #7a8597; font: 600 11px/1.4 system-ui, sans-serif; padding: 0 8px }
 .esc-texto .esc-indice { border: 1px dashed #b9c2d0; border-radius: 6px; padding: 10px 14px; margin: .5em 0 1em; background: #f7f9fc; user-select: none; cursor: default }
@@ -592,16 +595,11 @@ body:not(.ready) > .top, body:not(.ready) > .layout { display: none }
 .esc-notas-t { font: 700 11px/1.4 system-ui, sans-serif; text-transform: uppercase; letter-spacing: .06em; color: #7a8597; margin-bottom: 4px }
 .esc-notas ol { margin: 0; padding-left: 1.4em }
 .esc-link { background: none; border: 0; padding: 0; color: #1B4C9A; text-decoration: underline; cursor: pointer; font: 600 12px system-ui, sans-serif }
-/* onde começa cada página, enquanto se escreve (como as linhas tracejadas da vista «Rascunho» do Word) */
-.esc-marcas { position: absolute; inset: 0; pointer-events: none; overflow: hidden; z-index: 1 }
-.esc-marca { position: absolute; left: 0; right: 0; height: 0; border-top: 1.5px dashed #8fa6c8 }
-.esc-marca span { position: absolute; right: 8px; top: -10px; background: #fff; color: #44587a; font: 650 11px/1.5 system-ui, sans-serif; padding: 0 7px; border: 1px solid #c3d0e4; border-radius: 9px; white-space: nowrap }
 @media (max-width: 700px) {
-  .esc-folha { padding: 18px 14px 28px; min-height: 60vh; border-radius: 6px }
-  .esc-texto { min-height: 50vh }
-  .esc-texto blockquote { margin-left: 2em }
+  .esc-folha:not(.esc-vista-paginas) { padding: 18px 14px 28px; min-height: 60vh; border-radius: 6px }
+  .esc-folha:not(.esc-vista-paginas) .esc-texto { min-height: 50vh }
+  .esc-folha:not(.esc-vista-paginas) .esc-texto blockquote { margin-left: 2em }
   .esc-titulo { font-size: 19px }
-  .esc-marca span { right: 4px; font-size: 10px }
 }
 
 /* caixas (imagem, tabela, nota, página) */
@@ -626,7 +624,7 @@ body:not(.ready) > .top, body:not(.ready) > .layout { display: none }
 .esc-pg-notas::before { content: ""; position: absolute; left: 0; top: calc(var(--esc-lh-1) * .55); width: 5.08cm; border-top: .5pt solid #111 }
 .esc-pg-notas p { margin: 0; text-align: justify }
 .esc-pg-notas sup { font-size: .7em; line-height: 0; vertical-align: super }
-.esc-pg-num { position: absolute; font-size: var(--esc-tam); line-height: var(--esc-lh-1); color: #111 }
+.esc-pg-num { position: absolute; font-size: var(--esc-num-tam, var(--esc-tam)); line-height: var(--esc-lh-num, var(--esc-lh-1)); color: #111 }
 .esc-medir { position: absolute; left: -40000px; top: 0; visibility: hidden; pointer-events: none }
 .esc-medir-notas { position: static !important }
 
@@ -648,6 +646,54 @@ body:not(.ready) > .top, body:not(.ready) > .layout { display: none }
   #print-root .esc-pg { break-after: page; box-shadow: none; margin: 0 }
   #print-root .esc-pg:last-child { break-after: auto }
 }
+
+/* ---------- vista de páginas, como no Word: folhas brancas separadas (o texto passa de uma folha para a seguinte) */
+.esc-palco { width: 100%; overflow-x: auto; overflow-y: hidden; padding: 4px 0 14px }
+.esc-palco-in { position: relative; margin: 0 auto }
+.esc-folha.esc-vista-paginas { background: transparent; box-shadow: none; border: 0; border-radius: 0; min-height: 0; width: 21cm; max-width: none; margin: 0;
+  padding: var(--esc-mt) var(--esc-md) 0 var(--esc-me); isolation: isolate; transform-origin: 0 0 }
+.esc-vista-paginas .esc-texto { position: relative; z-index: 1; min-height: 0; display: flow-root }
+.esc-folha.esc-vista-paginas:not(.esc-com-folhas) { background: #fff; min-height: 29.7cm }      /* papel branco enquanto as folhas não estão contadas */
+/* o que no editor ocupava espaço e não vai para a folha: índice sem moldura, quebra de página sem altura, sem a etiqueta do capítulo */
+.esc-vista-paginas .esc-texto .esc-indice { border: 0; padding: 0; margin: 0; background: none; outline: 1px dashed #c3cfe3; outline-offset: 3px }
+.esc-vista-paginas .esc-texto :is(.esc-indice-t, .esc-indice-n) { display: none }
+.esc-vista-paginas .esc-texto hr.esc-quebra { border: 0; margin: 0; height: 0 }
+.esc-vista-paginas .esc-texto hr.esc-quebra::after { display: none }
+.esc-vista-paginas .esc-texto h1[data-arabe]::before { display: none }
+.esc-indice li.esc-salto { margin: 0 !important }
+.esc-vista-paginas .esc-notas { display: none }
+.esc-fundo { position: absolute; left: 0; top: 0; width: 100%; height: 0 }
+.esc-folha-pg { position: absolute; left: 0; width: 21cm; background: #fff; box-shadow: 0 2px 10px rgba(10, 34, 64, .16); outline: 1px solid #d5dbe5; z-index: 0 }
+.esc-fundo .esc-pg-num { z-index: 2 }
+.esc-fundo .esc-pg-notas { z-index: 2; position: absolute; right: auto; bottom: auto }
+.esc-fundo .esc-pg-notas p { cursor: pointer; border-radius: 3px }
+.esc-fundo .esc-pg-notas p:hover { background: #eef3fb }
+/* separadores: não são texto (o Portal tira-os ao guardar, ao copiar e ao descarregar) */
+.esc-salto { user-select: none; pointer-events: none }
+span.esc-salto { display: inline-block; width: 100%; vertical-align: top; line-height: 0; font-size: 0 }
+li.esc-salto { display: block; list-style: none; margin: 0; padding: 0 }
+tr.esc-salto-tr > td { padding: 0 !important; border: 0 !important; background: transparent !important }
+/* vista contínua (telemóvel): texto com o tamanho normal e uma faixa «Página N» de lado a lado onde começa cada folha
+   (--esc-banda-esq e --esc-banda-larg: o Portal mede-as para a faixa ir da margem esquerda à direita, mesmo dentro de listas) */
+.esc-vista-continuo span.esc-salto { display: block; width: auto; position: relative }      /* a linha antes da faixa não fica esticada (justificado) */
+.esc-vista-continuo [data-esc-salto] { position: relative }
+.esc-vista-continuo :where(span.esc-salto, [data-esc-salto])::after { position: absolute; z-index: 1; top: 6px; height: calc(var(--esc-salto, 40px) - 12px);
+  left: calc(-1 * var(--esc-banda-esq, 0px)); width: var(--esc-banda-larg, 100%); display: flex; align-items: center; justify-content: center; box-sizing: border-box;
+  background: #e6ebf3; border-radius: 4px; color: #3d5175; font: 650 11.5px/1 system-ui, sans-serif; font-style: normal; letter-spacing: .03em; text-indent: 0; text-align: center; white-space: nowrap }
+.esc-vista-continuo span.esc-salto::after { content: "Página " attr(data-pagina) }
+.esc-vista-continuo [data-esc-salto]::after { content: "Página " attr(data-esc-salto) }
+.esc-vista-continuo tr.esc-salto-tr > td { position: relative; background: transparent !important }
+.esc-vista-continuo tr.esc-salto-tr > td::after { content: "Página " attr(data-pagina); position: absolute; left: 0; right: 0; top: 6px; bottom: 6px; display: flex; align-items: center; justify-content: center;
+  background: #e6ebf3; border-radius: 4px; color: #3d5175; font: 650 11.5px/1 system-ui, sans-serif; letter-spacing: .03em; white-space: nowrap }
+/* barra de baixo: vista e zoom */
+.esc-vistas { display: flex; align-items: center; gap: 4px; margin-left: auto }
+.esc-vbtn { display: inline-flex; align-items: center; gap: 5px; border: 1px solid var(--line); background: var(--surface); color: var(--ink-2); border-radius: 7px; padding: 4px 8px; font: 600 12.5px/1.2 inherit; cursor: pointer }
+.esc-vbtn svg { width: 16px; height: 16px }
+.esc-vbtn[aria-pressed="true"] { background: var(--amber-soft); color: var(--ink); border-color: var(--amber-line) }
+.esc-zoom { border: 1px solid var(--line); background: var(--surface); color: var(--ink); border-radius: 7px; padding: 4px 6px; font: 600 12.5px/1.2 inherit }
+/* relatório ao abrir um ficheiro Word */
+.esc-relatorio ul { margin: 6px 0 0; padding-left: 20px } .esc-relatorio li { margin: 3px 0; font-size: 14px; line-height: 1.45 }
+.esc-modelo.esc-abrir { border-style: dashed; background: var(--surface-2) }
 </style>
 </head>
 <body>
@@ -657,7 +703,7 @@ body:not(.ready) > .top, body:not(.ready) > .layout { display: none }
 <div id="toast" role="status" aria-live="polite"></div>
 <div id="print-root"></div>
 <div id="barra" class="barra" hidden></div>
-<script type="application/json" id="cel-config">{"versao": "1.6.0", "ano": "2026/2027", "chaveId": "1987a8c7", "verificador": "m+HQwwNueX1G3XlMCpRsYJOV0Tkds6FCJhmeHgobCN6OFobxkzA=", "dados": "dados.2460e27fab.bin", "contactos": {"whatsapp": "245955252417", "email": "cel.vf.gb@gmail.com"}, "diasSemLigacao": 30}</script>
+<script type="application/json" id="cel-config">{"versao": "1.7.0", "ano": "2026/2027", "chaveId": "1987a8c7", "verificador": "m+HQwwNueX1G3XlMCpRsYJOV0Tkds6FCJhmeHgobCN6OFobxkzA=", "dados": "dados.2460e27fab.bin", "contactos": {"whatsapp": "245955252417", "email": "cel.vf.gb@gmail.com"}, "diasSemLigacao": 30}</script>
 <script>/* Gerador mínimo de .docx (Word) no navegador — sem bibliotecas externas.
    Blocos: {t:'h', text, level} · {t:'p', text|runs, align, size, before, after, keep, border}
            {t:'list', items:[text|runs], ordered} · {t:'table', rows, widths, header, borders, minH}
@@ -803,12 +849,33 @@ const PAGINAS = (() => {
   /* ------------------------------------------------------------ medidas da folha */
   // c: { letra, tam, espaco, just, mg: [cima, direita, baixo, esquerda] (cm), num: { ativo, lugar, inicio, capa, romanas }, marcas }
   function distancias(c) {      // distância do número de página à beira da folha (cm), sem entrar no texto
-    const alt = c.tam * (SIMPLES[c.letra] || 1.15) / 72 * 2.54 + 0.05;
-    return { fd: Math.max(0.3, Math.min(1.25, c.mg[2] - alt)), hd: Math.max(0.3, Math.min(1.25, c.mg[0] - alt)) };
+    const tn = (c.num && c.num.tam) || c.tam, alt = tn * (SIMPLES[c.letra] || 1.15) / 72 * 2.54 + 0.05;
+    const abnt = c.num && c.num.modo === 'abnt';     // ABNT (NBR 14724): número a 2 cm da borda superior
+    return { fd: Math.max(0.3, Math.min(1.25, c.mg[2] - alt)), hd: abnt ? Math.max(0.3, Math.min(2, c.mg[0] - alt)) : Math.max(0.3, Math.min(1.25, c.mg[0] - alt)) };
   }
   function geometria(c) {
     const [mt, mr, mb, ml] = c.mg, d = distancias(c);
     return { pw: 21 * CM, ph: 29.7 * CM, mt: mt * CM, mr: mr * CM, mb: mb * CM, ml: ml * CM, W: (21 - ml - mr) * CM, H: (29.7 - mt - mb) * CM, fd: d.fd * CM, hd: d.hd * CM };
+  }
+  // Títulos 1, 2 e 3: tamanho (pt) e espaço antes e depois (pt).
+  // ABNT (NBR 14724): títulos do tamanho do texto, separados do texto por um espaço de 1,5 (uma linha do texto).
+  function titulos(estilo, c) {
+    if (estilo === 'abnt') {
+      const um = Math.floor(Math.round(c.tam * (METRICA[c.letra] || METRICA.serif) * 20) * (c.espaco || 1.5) + 1e-6) / 20;
+      return { t1: { tam: c.tam, antes: 0, depois: um }, t2: { tam: c.tam, antes: um, depois: um }, t3: { tam: c.tam, antes: um, depois: um } };
+    }
+    return { t1: { tam: c.tam + 4, antes: 18, depois: 8 }, t2: { tam: c.tam + 2, antes: 12, depois: 6 }, t3: { tam: c.tam, antes: 10, depois: 5 } };
+  }
+  // Os separadores da vista de páginas (no editor) não fazem parte do texto: tiram-se das cópias (guardar, Word, PDF, copiar).
+  function tiraSaltos(raiz) {
+    const pais = new Set();
+    raiz.querySelectorAll('.esc-salto').forEach((s) => { pais.add(s.parentNode); s.remove(); });
+    raiz.querySelectorAll('[data-esc-salto]').forEach((e) => {
+      e.removeAttribute('data-esc-salto'); for (const q of ['padding-top', '--esc-salto', '--esc-banda-esq', '--esc-banda-larg']) e.style.removeProperty(q);
+      if (!e.getAttribute('style')) e.removeAttribute('style');
+    });
+    pais.forEach((p) => { if (p && p.normalize) p.normalize(); });
+    return raiz;
   }
   // Altura de cada linha, feita como no Word (e no LibreOffice quando abre um .docx): a linha «simples» do tipo de letra
   // (subida + descida + entrelinha da fonte) em vigésimos de ponto, arredondada; depois × espaçamento, sem as casas a mais.
@@ -824,8 +891,17 @@ const PAGINAS = (() => {
     el.dataset.letra = c.letra; el.classList.toggle('esc-just', !!c.just);
     el.style.setProperty('--esc-tam', c.tam + 'pt'); el.style.setProperty('--esc-simples', String(s)); el.style.setProperty('--esc-espaco', String(+(c.espaco * s).toFixed(4)));
     el.style.setProperty('--esc-lh', L(c.tam, c.espaco)); el.style.setProperty('--esc-lh-1', L(c.tam, 1));
-    el.style.setProperty('--esc-lh-t1', L(c.tam + 4, 1)); el.style.setProperty('--esc-lh-t2', L(c.tam + 2, 1)); el.style.setProperty('--esc-lh-cit', L(c.tam - 2, 1));
-    el.style.setProperty('--esc-lh-nota', L(10, 1));
+    el.style.setProperty('--esc-lh-cit', L(c.tam - 2, 1)); el.style.setProperty('--esc-lh-nota', L(10, 1));
+    // títulos: tamanho e espaços antes e depois (normal: 16/14/12 pt; ABNT: do tamanho do texto, com uma linha de 1,5 antes e depois)
+    const T = c.tit || titulos('normal', c);
+    for (const n of [1, 2, 3]) {
+      const t = T['t' + n];
+      el.style.setProperty(`--esc-h${n}-tam`, t.tam + 'pt'); el.style.setProperty(`--esc-lh-t${n}`, L(t.tam, 1));
+      el.style.setProperty(`--esc-h${n}-antes`, t.antes + 'pt'); el.style.setProperty(`--esc-h${n}-depois`, t.depois + 'pt');
+    }
+    const tn = (c.num && c.num.tam) || c.tam;
+    el.style.setProperty('--esc-num-tam', tn + 'pt'); el.style.setProperty('--esc-lh-num', L(tn, 1));
+    el.style.setProperty('--esc-recuo', (+c.recuo || 0) + 'cm'); el.style.setProperty('--esc-depois', (c.depois == null ? 6 : +c.depois) + 'pt');
     el.style.setProperty('--esc-hmax', Math.round((29.7 - c.mg[0] - c.mg[2]) * CM * 0.9) + 'px');
   }
 
@@ -940,7 +1016,11 @@ const PAGINAS = (() => {
         }
         if (t === 'UL' || t === 'OL') { visita(n); continue; }
         if ([...n.children].some(eBloco)) { if (t === 'LI' || [...n.childNodes].some((x) => x.nodeType === 3 && x.data.trim())) linhasDe(n, u, true); visita(n); continue; }
-        if (c.num.romanas && t === 'H1' && n.dataset.arabe && el === raiz) u.push({ tipo: 'quebra', el: n, secao: true, notas: [] });
+        if (t === 'H1' && el === raiz) {
+          // capítulo onde começa a numeração (romanos ou ABNT): numa página nova; com «capítulos em página nova», todos os Títulos 1
+          if ((c.num.modo === 'romanas' || c.num.modo === 'abnt') && n.dataset.arabe) u.push({ tipo: 'quebra', el: n, secao: true, notas: [] });
+          else if (c.capNova && u.length && u[u.length - 1].tipo !== 'quebra') u.push({ tipo: 'quebra', el: n, notas: [] });
+        }
         linhasDe(n, u, false);
       }
       fecha();
@@ -1023,9 +1103,14 @@ const PAGINAS = (() => {
   /* ------------------------------------------------------------ números das folhas */
   const ROM = [[1000, 'm'], [900, 'cm'], [500, 'd'], [400, 'cd'], [100, 'c'], [90, 'xc'], [50, 'l'], [40, 'xl'], [10, 'x'], [9, 'ix'], [5, 'v'], [4, 'iv'], [1, 'i']];
   const romano = (n) => { let s = ''; for (const [v, r] of ROM) while (n >= v) { s += r; n -= v; } return s; };
+  // simples: todas as páginas a partir do número inicial (capa sem número, se pedido);
+  // romanas: páginas iniciais i, ii, iii e, a partir do capítulo escolhido, 1, 2, 3;
+  // abnt (NBR 14724): contam-se desde a folha de rosto (a capa não conta) e o número só aparece a partir do capítulo escolhido.
   function rotulos(pags, num) {
-    const sec = num.romanas ? pags.findIndex((p, k) => k > 0 && p.secao) : -1;
+    const modo = num.modo || 'simples';
+    const sec = modo !== 'simples' ? pags.findIndex((p, k) => k > 0 && p.secao) : -1;
     return pags.map((p, k) => {
+      if (modo === 'abnt') return { texto: String(k), visivel: num.ativo && (sec > 0 ? k >= sec : k > 0) };
       if (sec > 0 && k < sec) return { texto: romano(k + 1), visivel: num.ativo && !(num.capa && k === 0) };
       const base = sec > 0 ? sec : 0;
       return { texto: String(num.inicio + (k - base)), visivel: num.ativo && !(sec <= 0 && num.capa && k === 0) };
@@ -1038,13 +1123,17 @@ const PAGINAS = (() => {
     const cx = caixa(c), g = geometria(c);
     const raiz = texto.cloneNode(true);
     raiz.removeAttribute('contenteditable'); raiz.removeAttribute('role'); raiz.className = 'esc-pag esc-medir-corpo'; raiz.removeAttribute('style');
+    // os separadores da vista de páginas não fazem parte do texto
+    tiraSaltos(raiz);
     // as imagens já têm tamanho antes de a cópia as carregar
-    const o = texto.querySelectorAll('img'), n = raiz.querySelectorAll('img');
+    const o = [...texto.querySelectorAll('img')].filter((y) => !y.closest('.esc-salto')), n = raiz.querySelectorAll('img');
     for (let i = 0; i < n.length; i++) if (o[i] && o[i].naturalWidth) { n[i].setAttribute('width', o[i].naturalWidth); n[i].setAttribute('height', o[i].naturalHeight); }
     cx.replaceChildren(raiz);
-    const u = unidades(raiz, c), notas = notasMedidas(raiz, cx);
-    const pags = enche(u, g.H, notas, raiz.getBoundingClientRect().top);
+    const u = unidades(raiz, c), notas = notasMedidas(raiz, cx), topoRaiz = raiz.getBoundingClientRect().top;
+    const pags = enche(u, g.H, notas, topoRaiz);
     const pontos = pags.map((p, k) => (k === 0 ? { no: raiz, off: 0 } : (p.de < u.length ? pontoDe(u[p.de]) : { no: raiz, off: raiz.childNodes.length })));
+    // onde começa cada folha no texto corrido (para a vista de páginas do editor pôr o texto na folha certa)
+    const inicios = pags.map((p, k) => { const x = u[p.de]; return k === 0 || !x ? { y: 0, tipo: 'raiz', cab: 0 } : { y: x.top - topoRaiz, tipo: x.tipo, cab: x.cab || 0 }; });
     // notas de cada folha e títulos de cada folha
     pags.forEach((p) => { p.notas = []; for (let k = p.de; k < p.ate; k++) p.notas.push(...u[k].notas); });
     const paginaDoEl = new Map();
@@ -1052,7 +1141,7 @@ const PAGINAS = (() => {
     const rot = rotulos(pags, c.num);
     const titulos = [...raiz.querySelectorAll('h1, h2, h3')].filter((x) => x.textContent.replace(/​/g, '').trim())
       .map((x) => { const k = paginaDoEl.has(x) ? paginaDoEl.get(x) : 0; return { pagina: k, rotulo: rot[k].texto }; });
-    return { u, total: pags.length, paginas: pags, rotulos: rot, titulos, pontos, caminhos: pontos.map((p) => caminho(raiz, p.no, p.off)), raiz, geo: g, letrasOk, unidades: u.length };
+    return { u, total: pags.length, paginas: pags, rotulos: rot, titulos, pontos, inicios, caminhos: pontos.map((p) => caminho(raiz, p.no, p.off)), raiz, geo: g, letrasOk, unidades: u.length };
   }
 
   /* ------------------------------------------------------------ desenhar as folhas (Ver páginas e PDF) */
@@ -1131,15 +1220,18 @@ const PAGINAS = (() => {
 
   function limpa() { if (medidor) { medidor.remove(); medidor = null; } }
 
-  return { calcula, folhas, resolve, caminho, geometria, distancias, aplicaTipo, letras, romano, limpa, linhaPx, SIMPLES, FAMILIA, CM, PT };
+  return { calcula, folhas, resolve, caminho, geometria, distancias, aplicaTipo, letras, romano, limpa, linhaPx, titulos, tiraSaltos, SIMPLES, FAMILIA, CM, PT };
 })();
 if (typeof module !== 'undefined') module.exports = PAGINAS;
 </script>
 <script>/* Os meus documentos — escrever como no Word, mesmo sem internet (Portal CEL, Recursos do Professor).
    Os documentos ficam só neste aparelho (IndexedDB «cel-escrever»); nada vai para a internet.
-   Páginas A4 contadas enquanto se escreve (PAGINAS), com números de página (também romanos nas páginas iniciais).
-   Exporta para Word (.docx: títulos, listas, tabelas, imagens, notas de rodapé, índice com páginas, secções e números de página)
-   e para PDF (as mesmas folhas do «Ver páginas», com as notas no fundo de cada folha).
+   - Vista de páginas, como no Word: folhas A4 separadas, com margens, números de página e notas no fundo de cada folha;
+     no telemóvel, vista contínua com uma faixa «Página N» onde começa cada folha. Zoom como no Word.
+   - Páginas contadas como no Word (PAGINAS), normas (livre, trabalho académico, ABNT), língua (Portugal ou Brasil) e
+     sublinhado dos erros de ortografia (ligado ou desligado), Desfazer e Refazer próprios.
+   - Exporta para Word (.docx: títulos, listas, tabelas, imagens, notas de rodapé, índice com páginas, secções e números)
+     e para PDF (as mesmas folhas do «Ver páginas»).
    Uso: ESCREVER.vista(arg, ctx) → { el, cleanup }, com ctx = { h, put, btn, toast, offerFile, go, uid, autor } da aplicação. */
 const ESCREVER = (() => {
   'use strict';
@@ -1188,6 +1280,10 @@ const ESCREVER = (() => {
   const palavras = (t) => (String(t || '').trim().match(/[^\s​]+/g) || []).length;
   const mil = (n) => Number(n || 0).toLocaleString('pt-PT');
   const nomeFicheiro = (t, ext) => (String(t || 'Documento').replace(/[\\/:*?"<>|\u0000-\u001F]+/g, '-').replace(/\s+/g, ' ').trim().slice(0, 80) || 'Documento') + ext;
+  // vista e zoom: ficam neste aparelho (não no documento)
+  const PREF = 'cel-esc-vista-v1';
+  const lePref = () => { try { return JSON.parse(localStorage.getItem(PREF)) || {}; } catch (e) { return {}; } };
+  const guardaPref = (p) => { try { localStorage.setItem(PREF, JSON.stringify({ ...lePref(), ...p })); } catch (e) { /* sem armazenamento: fica só nesta sessão */ } };
 
   // ícones da barra (traço, 24×24)
   const IC = {
@@ -1203,6 +1299,7 @@ const ESCREVER = (() => {
     desf: '<path d="M9 7L4 12l5 5"/><path d="M4 12h11a5 5 0 0 1 0 10h-2"/>', ref: '<path d="M15 7l5 5-5 5"/><path d="M20 12H9a5 5 0 0 0 0 10h2"/>',
     limpa: '<path d="M6 5h12M12 5l-3 14M4 21l16-16"/>', pagina: '<path d="M6 3h9l4 4v14H6z"/><path d="M15 3v4h4M9 12h7M9 16h5"/>',
     folhas: '<rect x="3.5" y="3" width="11" height="14.5" rx="1.2"/><path d="M8.5 21h10a2 2 0 0 0 2-2V7.5"/><path d="M6.5 7.5h5M6.5 10.5h5M6.5 13.5h3"/>',
+    continuo: '<path d="M5 3v18M19 3v18"/><path d="M8 6h8M8 9.5h8M8 13h5"/><path d="M5 17h14" stroke-dasharray="2 2"/>',
     word: '<path d="M6 2h9l5 5v15H6z"/><path d="M15 2v5h5"/><path d="M8.5 11.5l1.6 6 1.9-4.6 1.9 4.6 1.6-6"/>',
     pdf: '<path d="M6 9V3h12v6"/><rect x="3" y="9" width="18" height="8" rx="1.5"/><path d="M6 14h12v7H6z"/>',
     voltar: '<path d="M19 12H5M11 6l-6 6 6 6"/>', mais: '<circle cx="5" cy="12" r="1.5" fill="currentColor"/><circle cx="12" cy="12" r="1.5" fill="currentColor"/><circle cx="19" cy="12" r="1.5" fill="currentColor"/>'
@@ -1213,35 +1310,66 @@ const ESCREVER = (() => {
     s.innerHTML = IC[n] || ''; return s;
   }
 
-  /* ------------------------------------------------------------ definições e modelos */
-  const CONF0 = { letra: 'serif', tam: 12, espaco: 1.5, margens: 'normal', justificar: false,
-    numeros: true, numLugar: 'fim-centro', numInicio: 1, capa: false, romanas: false, marcas: true };
+  /* ------------------------------------------------------------ definições, normas e modelos */
+  const CONF0 = { norma: 'livre', letra: 'serif', tam: 12, espaco: 1.5, margens: 'normal', justificar: false, recuo: 0, depois: 6, titulos: 'normal', capNova: false,
+    numeros: true, numLugar: 'fim-centro', numInicio: 1, capa: false, numModo: 'simples', numTam: 0, lingua: 'pt-PT', verificar: true };
   const LETRAS = { serif: 'Times New Roman', sans: 'Arial', calibri: 'Calibri' };
   const LUGARES = { 'fim-centro': 'No fim da página, ao centro', 'fim-direita': 'No fim da página, à direita', 'inicio-direita': 'No início da página, à direita' };
+  const LINGUAS = { 'pt-PT': 'Português (Portugal)', 'pt-BR': 'Português (Brasil)' };
   const MARGENS = {   // cm: cima, direita, baixo, esquerda
     normal: { nome: 'Normais (2,5 cm)', m: [2.5, 2.5, 2.5, 2.5] },
-    academico: { nome: 'Trabalho académico (3 cm à esquerda e em cima, 2 cm à direita e em baixo)', m: [3, 2, 2, 3] },
+    academico: { nome: 'Académicas e ABNT (3 cm à esquerda e em cima, 2 cm nas outras)', m: [3, 2, 2, 3] },
     estreitas: { nome: 'Estreitas (1,5 cm), para poupar papel', m: [1.5, 1.5, 1.5, 1.5] }
   };
-  // definições prontas para as contas das páginas
+  // Normas: escolher uma muda as outras definições (que depois se podem ajustar)
+  const NORMAS = {
+    livre: { nome: 'Livre (escolho tudo)', conf: {} },
+    academico: { nome: 'Trabalho académico (páginas iniciais em i, ii, iii)',
+      conf: { margens: 'academico', tam: 12, espaco: 1.5, justificar: true, recuo: 0, depois: 6, titulos: 'normal', capNova: false, numeros: true, numLugar: 'fim-centro', capa: true, numModo: 'romanas', numTam: 0 } },
+    abnt: { nome: 'ABNT (Brasil, NBR 14724)',
+      conf: { margens: 'academico', tam: 12, espaco: 1.5, justificar: true, recuo: 1.25, depois: 0, titulos: 'abnt', capNova: true, numeros: true, numLugar: 'inicio-direita', capa: true, numModo: 'abnt', numTam: 10 } }
+  };
+  const ZOOMS = [['ajustar', 'Ajustar'], ['largura', 'Largura da página'], ['pagina', 'Página inteira'], ['50', '50%'], ['75', '75%'], ['100', '100%'], ['125', '125%'], ['150', '150%'], ['200', '200%']];
+  // definições prontas para as contas das páginas e para o ficheiro Word
   function confN(conf) {
     const c = { ...CONF0, ...(conf || {}) };
     const ini = parseInt(c.numInicio, 10);
-    return { letra: LETRAS[c.letra] ? c.letra : 'serif', tam: +c.tam || 12, espaco: +c.espaco || 1.5, just: !!c.justificar, mg: (MARGENS[c.margens] || MARGENS.normal).m,
-      num: { ativo: !!c.numeros, lugar: LUGARES[c.numLugar] ? c.numLugar : 'fim-centro', inicio: Number.isFinite(ini) ? Math.max(0, Math.min(9999, ini)) : 1, capa: !!c.capa, romanas: !!c.romanas },
-      marcas: c.marcas !== false };
+    const modo = ['simples', 'romanas', 'abnt'].includes(c.numModo) && !(c.numModo === 'simples' && c.romanas) ? c.numModo : (c.romanas ? 'romanas' : 'simples');
+    const n = { letra: LETRAS[c.letra] ? c.letra : 'serif', tam: +c.tam || 12, espaco: +c.espaco || 1.5, just: !!c.justificar, mg: (MARGENS[c.margens] || MARGENS.normal).m,
+      recuo: Math.max(0, Math.min(5, +c.recuo || 0)), depois: Number.isFinite(+c.depois) ? Math.max(0, Math.min(30, +c.depois)) : 6, capNova: !!c.capNova,
+      norma: NORMAS[c.norma] ? c.norma : 'livre', lingua: LINGUAS[c.lingua] ? c.lingua : 'pt-PT', verificar: c.verificar !== false,
+      num: { ativo: !!c.numeros, lugar: LUGARES[c.numLugar] ? c.numLugar : 'fim-centro', inicio: Number.isFinite(ini) ? Math.max(0, Math.min(9999, ini)) : 1, capa: !!c.capa,
+        modo, romanas: modo === 'romanas', tam: +c.numTam || 0 } };
+    if (!n.num.tam) n.num.tam = n.tam;
+    n.tit = PAGINAS.titulos(c.titulos === 'abnt' ? 'abnt' : 'normal', n);
+    return n;
   }
   const P0 = '<p><br></p>';
   const MODELOS = [
     { id: 'branco', nome: 'Documento em branco', desc: 'Uma folha vazia, para escrever o que quiser.', titulo: 'Documento sem título', conf: {}, html: () => P0 },
-    { id: 'trabalho', nome: 'Trabalho escolar ou monografia', desc: 'Capa, índice com páginas, capítulos e referências. Margens, letra, espaçamento e numeração como nos trabalhos académicos.',
-      titulo: 'Trabalho', conf: { margens: 'academico', espaco: 1.5, letra: 'serif', capa: true, justificar: true, romanas: true },
+    { id: 'trabalho', nome: 'Trabalho escolar ou monografia', desc: 'Capa, índice com páginas, capítulos e referências. Páginas iniciais em i, ii, iii e capítulos em 1, 2, 3.',
+      titulo: 'Trabalho', conf: { ...NORMAS.academico.conf, norma: 'academico', letra: 'serif' },
       html: () => {
         const c = (t, b) => `<p style="text-align: center;">${b ? `<b>${t}</b>` : t}</p>`;
         return c('[NOME DA INSTITUIÇÃO]', 1) + c('[Curso]') + P0 + P0 + c('[NOME DO AUTOR]', 1) + P0 + P0 + P0 + c('[TÍTULO DO TRABALHO]', 1) + c('[Subtítulo]') +
           P0 + P0 + P0 + c(`[Cidade], ${new Date().getFullYear()}`) + '<hr class="esc-quebra">' + c('ÍNDICE', 1) + '<div class="esc-indice" contenteditable="false"></div>' +
           '<h1 data-arabe="1">1 Introdução</h1><p>[Escreva aqui a introdução.]</p><h1>2 Desenvolvimento</h1><h2>2.1 [Primeira parte]</h2><p>[Texto.]</p>' +
           '<h1>3 Conclusão</h1><p>[Texto.]</p><h1>Referências</h1><p>[APELIDO, Nome. <i>Título da obra</i>. Cidade: Editora, ano.]</p>';
+      } },
+    { id: 'abnt', nome: 'Monografia (normas ABNT)', desc: 'Capa, folha de rosto, resumo, sumário e capítulos, com as margens, a letra, o recuo e a numeração da ABNT (Brasil).',
+      titulo: 'Monografia', conf: { ...NORMAS.abnt.conf, norma: 'abnt', letra: 'serif', lingua: 'pt-BR' },
+      html: () => {
+        const c = (t, b) => `<p style="text-align: center;">${b ? `<b>${t}</b>` : t}</p>`, Q = '<hr class="esc-quebra">', ano = String(new Date().getFullYear());
+        const v = (n) => P0.repeat(n);      // linhas em branco (como no Word, com Enter)
+        return c('[NOME DA INSTITUIÇÃO]', 1) + c('[NOME DO CURSO]', 1) + v(6) + c('[NOME DO AUTOR]', 1) + v(8) + c('[TÍTULO DO TRABALHO]: [subtítulo]', 1) +
+          v(11) + c('[Cidade]') + c(ano) + Q +
+          c('[NOME DO AUTOR]', 1) + v(8) + c('[TÍTULO DO TRABALHO]: [subtítulo]', 1) + v(4) +
+          '<blockquote class="esc-natureza">Trabalho de Conclusão de Curso apresentado ao Curso de [nome do curso] da [instituição], como requisito parcial para a obtenção do título de [grau].</blockquote>' +
+          P0 + '<blockquote class="esc-natureza">Orientador(a): Prof.(a) [nome].</blockquote>' + v(11) + c('[Cidade]') + c(ano) + Q +
+          c('RESUMO', 1) + '<p>[Escreva o resumo num só parágrafo, de 150 a 500 palavras.]</p><p><b>Palavras-chave:</b> [palavra]; [palavra]; [palavra].</p>' + Q +
+          c('SUMÁRIO', 1) + '<div class="esc-indice" contenteditable="false"></div>' +
+          '<h1 data-arabe="1">1 INTRODUÇÃO</h1><p>[Escreva aqui a introdução.]</p><h1>2 DESENVOLVIMENTO</h1><h2>2.1 [Primeira seção]</h2><p>[Texto.]</p>' +
+          '<h1>3 CONCLUSÃO</h1><p>[Texto.]</p><h1 style="text-align: center;">REFERÊNCIAS</h1><p>[SOBRENOME, Nome. <b>Título da obra</b>: subtítulo. Edição. Cidade: Editora, ano.]</p>';
       } },
     { id: 'relatorio', nome: 'Relatório', desc: 'Título, data e as partes habituais de um relatório.', titulo: 'Relatório', conf: {},
       html: () => `<h1>[Título do relatório]</h1><p>[Nome] · ${hoje()}</p><h2>1. Objetivo</h2>${P0}<h2>2. Atividades realizadas</h2>${P0}<h2>3. Resultados</h2>${P0}<h2>4. Observações</h2>${P0}` },
@@ -1259,6 +1387,7 @@ const ESCREVER = (() => {
         if (c.nodeType !== 1) continue;
         let t = c.tagName;
         if (['SCRIPT', 'STYLE', 'META', 'LINK', 'TITLE', 'IFRAME', 'OBJECT', 'NOSCRIPT', 'SVG', 'CANVAS', 'VIDEO', 'AUDIO'].includes(t)) { c.remove(); continue; }
+        if (c.classList.contains('esc-salto')) { c.remove(); continue; }          // separador da vista de páginas
         if (t === 'H4' || t === 'H5' || t === 'H6') { const n = document.createElement('h3'); n.append(...c.childNodes); c.replaceWith(n); anda(n); limpaAttr(n); continue; }
         if (!PERMITIDAS.has(t)) { anda(c); c.replaceWith(...c.childNodes); continue; }
         anda(c); limpaAttr(c);
@@ -1272,6 +1401,7 @@ const ESCREVER = (() => {
       if (el.tagName === 'HR' && el.classList.contains('esc-quebra')) keep.class = 'esc-quebra';
       if (el.tagName === 'DIV' && el.classList.contains('esc-indice')) { keep.class = 'esc-indice'; keep.contenteditable = 'false'; }
       if (el.tagName === 'TABLE') keep.class = 'esc-tab';
+      if (el.tagName === 'BLOCKQUOTE' && el.classList.contains('esc-natureza')) keep.class = 'esc-natureza';     // ABNT: natureza do trabalho (folha de rosto)
       if (el.tagName === 'H1' && el.getAttribute('data-arabe')) keep['data-arabe'] = '1';    // capítulo onde começa a numeração 1, 2, 3
       const al = (el.style && el.style.textAlign) || el.getAttribute('align');
       if (al && /^(left|center|right|justify)$/.test(al) && /^(P|H1|H2|H3|DIV|LI|TD|TH|BLOCKQUOTE)$/.test(el.tagName)) keep.style = `text-align: ${al};`;
@@ -1313,6 +1443,7 @@ const ESCREVER = (() => {
   const BLOCOS = new Set(['P', 'H1', 'H2', 'H3', 'BLOCKQUOTE', 'UL', 'OL', 'TABLE', 'HR', 'DIV', 'LI']);
   const b64bytes = (b64) => { const s = atob(b64), u = new Uint8Array(s.length); for (let i = 0; i < s.length; i++) u[i] = s.charCodeAt(i); return u; };
   const PARA_MINIMO = (dentro = '') => `<w:p><w:pPr><w:spacing w:before="0" w:after="0" w:line="20" w:lineRule="exact"/>${dentro}</w:pPr></w:p>`;   // 1 pt: não muda as páginas
+  const twp = (pt) => Math.round(pt * 20);
 
   function alinhamento(el) {
     const a = (el.style && el.style.textAlign) || '';
@@ -1376,9 +1507,13 @@ const ESCREVER = (() => {
     let ppr = '';
     if (op.estilo) ppr += `<w:pStyle w:val="${op.estilo}"/>`;
     if (E.quebra) { ppr += '<w:pageBreakBefore/>'; E.quebra = false; }      // a quebra de página feita à mão (sem parágrafo vazio a mais)
+    else if (E.semQuebra && op.estilo === 'Heading1') { ppr += '<w:pageBreakBefore w:val="0"/>'; }   // já começa numa secção nova
+    E.semQuebra = false;
     if (op.num) ppr += `<w:numPr><w:ilvl w:val="${op.num.nivel}"/><w:numId w:val="${op.num.id}"/></w:numPr>`;
     if (op.celula) ppr += '<w:spacing w:before="0" w:after="0" w:line="240" w:lineRule="auto"/>';
     else if (temImg) ppr += '<w:spacing w:line="240" w:lineRule="auto"/>';   // imagens com entrelinha simples (no Word a entrelinha multiplica a imagem)
+    if (op.ind) ppr += op.ind;
+    else if (E.recuo && (op.celula || temImg || op.alin === 'center' || op.alin === 'right')) ppr += '<w:ind w:firstLine="0"/>';   // recuo da 1.ª linha só no texto normal
     if (op.alin) ppr += `<w:jc w:val="${op.alin}"/>`;
     return `<w:p>${ppr ? `<w:pPr>${ppr}</w:pPr>` : ''}${runs}</w:p>`;
   }
@@ -1393,7 +1528,8 @@ const ESCREVER = (() => {
         else if (c.nodeType === 1 && (c.tagName === 'P' || c.tagName === 'DIV')) { if (inl.length) inl.push(document.createElement('br')); inl.push(...c.childNodes); }
         else inl.push(c);
       }
-      xml += paraXml(inl, { estilo: 'ListParagraph', num: { id, nivel: Math.min(nivel, 2) }, alin: alinhamento(li) }, E);
+      const nv = Math.min(nivel, 2);
+      xml += paraXml(inl, { estilo: 'ListParagraph', num: { id, nivel: nv }, alin: alinhamento(li), ind: E.recuo ? `<w:ind w:left="${720 + nv * 360}" w:hanging="360"/>` : '' }, E);
       for (const s of subs) xml += listaXml(s, E, nivel + 1);
     }
     return xml;
@@ -1433,7 +1569,7 @@ const ESCREVER = (() => {
         (i === ents.length - 1 ? '<w:r><w:fldChar w:fldCharType="end"/></w:r>' : '') + '</w:p>';
     }).join('');
   }
-  // fim da secção das páginas iniciais (números romanos): vai no último parágrafo antes do capítulo escolhido
+  // fim da secção das páginas iniciais (romanos ou ABNT): vai no último parágrafo antes do capítulo escolhido
   function fechaSeccao(xml, sect) {
     if (xml.endsWith('</w:p>')) {
       const i = xml.lastIndexOf('<w:p>'), resto = xml.slice(i + 5);
@@ -1448,7 +1584,7 @@ const ESCREVER = (() => {
     if (el.classList.contains('esc-indice')) return indiceXml(E);
     if (t === 'UL' || t === 'OL') return listaXml(el, E, 0);
     if (t === 'TABLE') return tabelaXml(el, E, ctx);
-    const estilo = { H1: 'Heading1', H2: 'Heading2', H3: 'Heading3', BLOCKQUOTE: 'Citacao' }[t] || null;
+    const estilo = { H1: 'Heading1', H2: 'Heading2', H3: 'Heading3', BLOCKQUOTE: el.classList.contains('esc-natureza') ? 'Natureza' : 'Citacao' }[t] || null;
     if ([...el.children].some((c) => BLOCOS.has(c.tagName))) return blocosXml(el, E, { celula: ctx.celula, alin: ctx.alin, estilo: estilo || ctx.estilo });   // blocos dentro (ex.: citação com parágrafos)
     return paraXml([...el.childNodes], { estilo: estilo || ctx.estilo || null, alin: alinhamento(el) || ctx.alin || null, celula: ctx.celula }, E);
   }
@@ -1464,29 +1600,36 @@ const ESCREVER = (() => {
     for (const n of filhos) {
       if (n.nodeType === 1 && (BLOCOS.has(n.tagName) || n.classList.contains('esc-indice'))) {
         fecha();
-        if (ctx.topo && E.seccao && n.tagName === 'H1' && n.getAttribute('data-arabe') && xml) { xml = fechaSeccao(xml, E.seccao); E.seccao = null; E.dividiu = true; E.quebra = false; }
+        if (ctx.topo && E.seccao && n.tagName === 'H1' && n.getAttribute('data-arabe') && xml) { xml = fechaSeccao(xml, E.seccao); E.seccao = null; E.dividiu = true; E.quebra = false; E.semQuebra = true; }
         xml += blocoXml(n, E, { celula: ctx.celula, alin: ctx.alin, estilo: ctx.estilo, ultimo: n === ultimo });
       } else if (n.nodeType === 1 || n.nodeType === 3) soltos.push(n);
     }
     fecha();
     return xml;
   }
-  function estilosXml(c, larguraTw) {
-    const fonte = LETRAS[c.letra] || 'Times New Roman', sz = Math.round(c.tam * 2), linha = Math.round(c.espaco * 240);
+  // estilos do ficheiro Word, com as mesmas medidas do Portal (n = confN)
+  function estilosXml(n, larguraTw) {
+    const fonte = LETRAS[n.letra] || 'Times New Roman', sz = Math.round(n.tam * 2), linha = Math.round(n.espaco * 240);
+    const r0 = n.recuo ? '<w:ind w:firstLine="0"/>' : '';
     const st = (id, nome, ppr, rpr, extra = '') => `<w:style w:type="paragraph" w:styleId="${id}"><w:name w:val="${nome}"/><w:basedOn w:val="Normal"/><w:next w:val="Normal"/>${extra}<w:qFormat/><w:pPr>${ppr}</w:pPr><w:rPr>${rpr}</w:rPr></w:style>`;
-    const tit = (antes, depois) => `<w:keepNext/><w:spacing w:before="${antes}" w:after="${depois}" w:line="240" w:lineRule="auto"/><w:jc w:val="left"/>`;
+    const tit = (t, nivel) => `<w:keepNext/>${nivel === 1 && n.capNova ? '<w:pageBreakBefore/>' : ''}<w:spacing w:before="${twp(t.antes)}" w:after="${twp(t.depois)}" w:line="240" w:lineRule="auto"/>${r0}<w:jc w:val="left"/><w:outlineLvl w:val="${nivel - 1}"/>`;
+    const szT = (t) => `<w:sz w:val="${Math.round(t.tam * 2)}"/><w:szCs w:val="${Math.round(t.tam * 2)}"/>`;
+    const normal = (n.recuo ? `<w:ind w:firstLine="${Math.round(n.recuo * TW)}"/>` : '') + (n.just ? '<w:jc w:val="both"/>' : '');
     return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><w:styles xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">` +
-      `<w:docDefaults><w:rPrDefault><w:rPr><w:rFonts w:ascii="${fonte}" w:hAnsi="${fonte}" w:eastAsia="${fonte}" w:cs="${fonte}"/><w:sz w:val="${sz}"/><w:szCs w:val="${sz}"/><w:lang w:val="pt-PT" w:eastAsia="pt-PT" w:bidi="ar-SA"/></w:rPr></w:rPrDefault>` +
-      `<w:pPrDefault><w:pPr><w:widowControl/><w:spacing w:after="120" w:line="${linha}" w:lineRule="auto"/></w:pPr></w:pPrDefault></w:docDefaults>` +
-      `<w:style w:type="paragraph" w:default="1" w:styleId="Normal"><w:name w:val="Normal"/><w:qFormat/>${c.justificar ? '<w:pPr><w:jc w:val="both"/></w:pPr>' : ''}</w:style>` +
-      st('Heading1', 'heading 1', tit(360, 160) + '<w:outlineLvl w:val="0"/>', `<w:b/><w:bCs/><w:sz w:val="${sz + 8}"/><w:szCs w:val="${sz + 8}"/>`) +
-      st('Heading2', 'heading 2', tit(240, 120) + '<w:outlineLvl w:val="1"/>', `<w:b/><w:bCs/><w:sz w:val="${sz + 4}"/><w:szCs w:val="${sz + 4}"/>`) +
-      st('Heading3', 'heading 3', tit(200, 100) + '<w:outlineLvl w:val="2"/>', `<w:b/><w:bCs/><w:i/><w:iCs/>`) +
-      st('Citacao', 'Quote', `<w:spacing w:before="120" w:after="200" w:line="240" w:lineRule="auto"/><w:ind w:left="${4 * TW}"/><w:jc w:val="both"/>`, `<w:sz w:val="${sz - 4}"/><w:szCs w:val="${sz - 4}"/>`) +
+      `<w:docDefaults><w:rPrDefault><w:rPr><w:rFonts w:ascii="${fonte}" w:hAnsi="${fonte}" w:eastAsia="${fonte}" w:cs="${fonte}"/>${n.verificar ? '' : '<w:noProof/>'}<w:sz w:val="${sz}"/><w:szCs w:val="${sz}"/>` +
+      `<w:lang w:val="${n.lingua}" w:eastAsia="${n.lingua}" w:bidi="ar-SA"/></w:rPr></w:rPrDefault>` +
+      `<w:pPrDefault><w:pPr><w:widowControl/><w:spacing w:after="${twp(n.depois)}" w:line="${linha}" w:lineRule="auto"/></w:pPr></w:pPrDefault></w:docDefaults>` +
+      `<w:style w:type="paragraph" w:default="1" w:styleId="Normal"><w:name w:val="Normal"/><w:qFormat/>${normal ? `<w:pPr>${normal}</w:pPr>` : ''}</w:style>` +
+      st('Heading1', 'heading 1', tit(n.tit.t1, 1), `<w:b/><w:bCs/>${szT(n.tit.t1)}`) +
+      st('Heading2', 'heading 2', tit(n.tit.t2, 2), `<w:b/><w:bCs/>${szT(n.tit.t2)}`) +
+      st('Heading3', 'heading 3', tit(n.tit.t3, 3), `<w:b/><w:bCs/><w:i/><w:iCs/>${szT(n.tit.t3)}`) +
+      st('Citacao', 'Quote', `<w:spacing w:before="120" w:after="200" w:line="240" w:lineRule="auto"/><w:ind w:left="${4 * TW}" w:firstLine="0"/><w:jc w:val="both"/>`, `<w:sz w:val="${sz - 4}"/><w:szCs w:val="${sz - 4}"/>`) +
+      // ABNT (NBR 14724): natureza do trabalho do meio da mancha para a margem direita, em espaço simples
+      st('Natureza', 'Natureza do trabalho', `<w:spacing w:before="0" w:after="0" w:line="240" w:lineRule="auto"/><w:ind w:left="${Math.round(larguraTw / 2)}" w:firstLine="0"/><w:jc w:val="both"/>`, '') +
       st('ListParagraph', 'List Paragraph', '<w:spacing w:after="60"/><w:contextualSpacing/>', '') +
-      st('FootnoteText', 'footnote text', '<w:spacing w:after="0" w:line="240" w:lineRule="auto"/><w:jc w:val="both"/>', '<w:sz w:val="20"/><w:szCs w:val="20"/>') +
+      st('FootnoteText', 'footnote text', `<w:spacing w:after="0" w:line="240" w:lineRule="auto"/>${r0}<w:jc w:val="both"/>`, '<w:sz w:val="20"/><w:szCs w:val="20"/>') +
       `<w:style w:type="character" w:styleId="FootnoteReference"><w:name w:val="footnote reference"/><w:rPr><w:vertAlign w:val="superscript"/></w:rPr></w:style>` +
-      [1, 2, 3].map((n) => st('TOC' + n, 'toc ' + n, `<w:tabs><w:tab w:val="right" w:leader="dot" w:pos="${larguraTw}"/></w:tabs><w:spacing w:after="60"/><w:ind w:left="${(n - 1) * 400}"/><w:jc w:val="left"/>`, n === 1 ? '<w:b/><w:bCs/>' : '')).join('') +
+      [1, 2, 3].map((k) => st('TOC' + k, 'toc ' + k, `<w:tabs><w:tab w:val="right" w:leader="dot" w:pos="${larguraTw}"/></w:tabs><w:spacing w:after="60"/><w:ind w:left="${(k - 1) * 400}"${n.recuo ? ' w:firstLine="0"' : ''}/><w:jc w:val="left"/>`, k === 1 ? '<w:b/><w:bCs/>' : '')).join('') +
       // estilo de tabela: pPr antes de tblPr (ordem do esquema do Word)
       `<w:style w:type="table" w:styleId="TabelaCEL"><w:name w:val="Table Grid"/><w:pPr><w:spacing w:after="0" w:line="240" w:lineRule="auto"/><w:jc w:val="left"/></w:pPr>` +
       `<w:tblPr><w:tblBorders>${['top', 'left', 'bottom', 'right', 'insideH', 'insideV'].map((s) => `<w:${s} w:val="single" w:sz="4" w:space="0" w:color="808080"/>`).join('')}</w:tblBorders>` +
@@ -1509,40 +1652,50 @@ const ESCREVER = (() => {
   // documento → bytes do .docx (raiz: o elemento com o texto, já desenhado no ecrã, para as imagens terem tamanho;
   // pag: as contas das páginas do Portal, para o índice já levar os números)
   async function paraWord(doc, raiz, autor, pag) {
-    const c = { ...CONF0, ...(doc.conf || {}) }, n = confN(doc.conf), mg = n.mg.map((v) => Math.round(v * TW));
+    const n = confN(doc.conf), mg = n.mg.map((v) => Math.round(v * TW));
     const larguraTw = 11906 - mg[1] - mg[3], alturaTw = 16838 - mg[0] - mg[2];
     const dist = PAGINAS.distancias(n), hd = Math.round(dist.hd * TW), fd = Math.round(dist.fd * TW);
-    const copia = raiz.cloneNode(true);
+    const copia = PAGINAS.tiraSaltos(raiz.cloneNode(true));
     // imagens que não sejam JPEG/PNG passam a JPEG; as dimensões vêm das imagens já carregadas no ecrã
-    const orig = [...raiz.querySelectorAll('img')], novas = [...copia.querySelectorAll('img')];
+    const orig = [...raiz.querySelectorAll('img')].filter((i) => !i.closest('.esc-salto')), novas = [...copia.querySelectorAll('img')];
     for (let i = 0; i < novas.length; i++) {
-      const s = novas[i].getAttribute('src') || '';
-      if (/^data:image\/(png|jpe?g|gif);/i.test(s)) { Object.defineProperty(novas[i], 'naturalWidth', { value: orig[i].naturalWidth }); Object.defineProperty(novas[i], 'naturalHeight', { value: orig[i].naturalHeight }); continue; }
+      const s = novas[i].getAttribute('src') || '', o = orig[i] || {};
+      if (/^data:image\/(png|jpe?g|gif);/i.test(s)) { Object.defineProperty(novas[i], 'naturalWidth', { value: o.naturalWidth }); Object.defineProperty(novas[i], 'naturalHeight', { value: o.naturalHeight }); continue; }
       const j = /^data:image\//i.test(s) ? await paraJpeg(s) : null;
-      if (j) { novas[i].setAttribute('src', j); Object.defineProperty(novas[i], 'naturalWidth', { value: orig[i].naturalWidth }); Object.defineProperty(novas[i], 'naturalHeight', { value: orig[i].naturalHeight }); } else novas[i].remove();
+      if (j) { novas[i].setAttribute('src', j); Object.defineProperty(novas[i], 'naturalWidth', { value: o.naturalWidth }); Object.defineProperty(novas[i], 'naturalHeight', { value: o.naturalHeight }); } else novas[i].remove();
     }
     const tits = [...copia.querySelectorAll('h1, h2, h3')].map((hh) => ({ nivel: +hh.tagName[1], texto: hh.textContent.replace(/​/g, '').trim() })).filter((t) => t.texto)
       .map((t, i) => ({ ...t, rotulo: pag && pag.titulos && pag.titulos[i] ? pag.titulos[i].rotulo : '' }));
-    // números de página: no fim (rodapé) ou no início (cabeçalho) da página; capa sem número; romanos até ao capítulo escolhido
-    const parte = n.num.lugar === 'inicio-direita' ? 'header' : 'footer';
-    const sectXml = (fmt, inicio, capa) => `<w:sectPr>${n.num.ativo ? `<w:${parte}Reference w:type="default" r:id="rIdNum"/>${capa ? `<w:${parte}Reference w:type="first" r:id="rIdNum1"/>` : ''}` : ''}` +
-      `<w:footnotePr><w:numFmt w:val="decimal"/></w:footnotePr><w:pgSz w:w="11906" w:h="16838"/><w:pgMar w:top="${mg[0]}" w:right="${mg[1]}" w:bottom="${mg[2]}" w:left="${mg[3]}" w:header="${hd}" w:footer="${fd}" w:gutter="0"/>` +
-      `<w:pgNumType w:fmt="${fmt}" w:start="${inicio}"/>${capa && n.num.ativo ? '<w:titlePg/>' : ''}</w:sectPr>`;
-    const E = { imgs: [], notas: [], listas: [], idDesenho: 0, temIndice: false, quebra: false, larguraTw, larguraEmu: larguraTw * 635, alturaEmu: alturaTw * 635, titulos: tits,
-      seccao: n.num.romanas ? sectXml('lowerRoman', 1, n.num.capa) : null, dividiu: false };
+    // números de página: no fim (rodapé) ou no início (cabeçalho) da página; capa sem número;
+    // romanas: i, ii… até ao capítulo escolhido; ABNT: contadas desde a folha de rosto (a capa é a 0), sem número até ao capítulo
+    const parte = n.num.lugar === 'inicio-direita' ? 'header' : 'footer', modo = n.num.modo;
+    const refs = (capa) => (n.num.ativo ? `<w:${parte}Reference w:type="default" r:id="rIdNum"/>${capa ? `<w:${parte}Reference w:type="first" r:id="rIdNum1"/>` : ''}` : '');
+    const sectXml = ({ refs: r, fmt, inicio, capa }) => `<w:sectPr>${r}<w:footnotePr><w:numFmt w:val="decimal"/></w:footnotePr><w:pgSz w:w="11906" w:h="16838"/>` +
+      `<w:pgMar w:top="${mg[0]}" w:right="${mg[1]}" w:bottom="${mg[2]}" w:left="${mg[3]}" w:header="${hd}" w:footer="${fd}" w:gutter="0"/>` +
+      `<w:pgNumType w:fmt="${fmt}"${inicio != null ? ` w:start="${inicio}"` : ''}/>${capa ? '<w:titlePg/>' : ''}</w:sectPr>`;
+    const capaSimples = n.num.ativo && n.num.capa;
+    const E = { imgs: [], notas: [], listas: [], idDesenho: 0, temIndice: false, quebra: false, semQuebra: false, recuo: Math.round(n.recuo * TW),
+      larguraTw, larguraEmu: larguraTw * 635, alturaEmu: alturaTw * 635, titulos: tits, dividiu: false,
+      seccao: modo === 'romanas' ? sectXml({ refs: refs(capaSimples), fmt: 'lowerRoman', inicio: 1, capa: capaSimples })
+        : modo === 'abnt' ? sectXml({ refs: '', fmt: 'decimal', inicio: 0, capa: false }) : null };
     copia.querySelectorAll('.esc-indice').forEach((d) => { d.replaceChildren(); });
     const corpo = blocosXml(copia, E, { topo: true }) || '<w:p/>';
-    const sect = E.dividiu ? sectXml('decimal', n.num.inicio, false) : sectXml('decimal', n.num.inicio, n.num.capa);
+    let sect;
+    if (E.dividiu) sect = sectXml({ refs: refs(false), fmt: 'decimal', inicio: modo === 'abnt' ? null : n.num.inicio, capa: false });
+    else if (modo === 'abnt') sect = sectXml({ refs: refs(n.num.ativo), fmt: 'decimal', inicio: 0, capa: n.num.ativo });        // sem capítulo escolhido: número desde a folha de rosto
+    else sect = sectXml({ refs: refs(capaSimples), fmt: 'decimal', inicio: n.num.inicio, capa: capaSimples });
+    const usaPrimeira = n.num.ativo && (capaSimples || (modo === 'abnt' && !E.dividiu));
     const documento = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><w:document ${NS}><w:body>${corpo}${sect}</w:body></w:document>`;
-    const raizParte = parte === 'header' ? 'w:hdr' : 'w:ftr';
-    const comNumero = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><${raizParte} ${NS}><w:p><w:pPr><w:spacing w:before="0" w:after="0" w:line="240" w:lineRule="auto"/><w:jc w:val="${n.num.lugar === 'fim-centro' ? 'center' : 'right'}"/></w:pPr>` +
-      '<w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText xml:space="preserve"> PAGE </w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t>1</w:t></w:r><w:r><w:fldChar w:fldCharType="end"/></w:r></w:p></' + raizParte + '>';
-    const semNumero = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><${raizParte} ${NS}><w:p><w:pPr><w:spacing w:before="0" w:after="0" w:line="240" w:lineRule="auto"/></w:pPr></w:p></${raizParte}>`;
-    const usaPrimeira = n.num.ativo && n.num.capa;
+    const raizParte = parte === 'header' ? 'w:hdr' : 'w:ftr', szN = Math.round(n.num.tam * 2);
+    const rn = n.num.tam !== n.tam ? `<w:rPr><w:sz w:val="${szN}"/><w:szCs w:val="${szN}"/></w:rPr>` : '';
+    const pprN = `<w:spacing w:before="0" w:after="0" w:line="240" w:lineRule="auto"/>${n.recuo ? '<w:ind w:firstLine="0"/>' : ''}`;
+    const comNumero = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><${raizParte} ${NS}><w:p><w:pPr>${pprN}<w:jc w:val="${n.num.lugar === 'fim-centro' ? 'center' : 'right'}"/>${rn}</w:pPr>` +
+      `<w:r>${rn}<w:fldChar w:fldCharType="begin"/></w:r><w:r>${rn}<w:instrText xml:space="preserve"> PAGE </w:instrText></w:r><w:r>${rn}<w:fldChar w:fldCharType="separate"/></w:r><w:r>${rn}<w:t>1</w:t></w:r><w:r>${rn}<w:fldChar w:fldCharType="end"/></w:r></w:p></${raizParte}>`;
+    const semNumero = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><${raizParte} ${NS}><w:p><w:pPr>${pprN}</w:pPr></w:p></${raizParte}>`;
     // pela ordem do esquema do Word: defaultTabStop, characterSpacingControl, updateFields, footnotePr, compat, themeFontLang
     const definicoes = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><w:settings xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">` +
       `<w:defaultTabStop w:val="709"/><w:characterSpacingControl w:val="doNotCompress"/>${E.temIndice ? '<w:updateFields w:val="true"/>' : ''}<w:footnotePr><w:footnote w:id="-1"/><w:footnote w:id="0"/></w:footnotePr>` +
-      '<w:compat><w:compatSetting w:name="compatibilityMode" w:uri="http://schemas.microsoft.com/office/word" w:val="15"/></w:compat><w:themeFontLang w:val="pt-PT"/></w:settings>';
+      `<w:compat><w:compatSetting w:name="compatibilityMode" w:uri="http://schemas.microsoft.com/office/word" w:val="15"/></w:compat><w:themeFontLang w:val="${n.lingua}"/></w:settings>`;
     const rel = (id, tipo, alvo) => `<Relationship Id="${id}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/${tipo}" Target="${alvo}"/>`;
     const rels = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">` +
       rel('rIdEstilos', 'styles', 'styles.xml') + rel('rIdDef', 'settings', 'settings.xml') + rel('rIdNum0', 'numbering', 'numbering.xml') + rel('rIdNotas', 'footnotes', 'footnotes.xml') +
@@ -1560,9 +1713,9 @@ const ESCREVER = (() => {
       '<Relationship Id="rId2" Type="http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties" Target="docProps/core.xml"/></Relationships>';
     const agora = new Date().toISOString().replace(/\.\d+Z$/, 'Z');
     const core = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><cp:coreProperties xmlns:cp="http://schemas.openxmlformats.org/package/2006/metadata/core-properties" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">` +
-      `<dc:title>${x(doc.titulo || 'Documento')}</dc:title><dc:creator>${x(autor || '')}</dc:creator><dc:language>pt-PT</dc:language><dcterms:created xsi:type="dcterms:W3CDTF">${agora}</dcterms:created><dcterms:modified xsi:type="dcterms:W3CDTF">${agora}</dcterms:modified></cp:coreProperties>`;
+      `<dc:title>${x(doc.titulo || 'Documento')}</dc:title><dc:creator>${x(autor || '')}</dc:creator><dc:language>${n.lingua}</dc:language><dcterms:created xsi:type="dcterms:W3CDTF">${agora}</dcterms:created><dcterms:modified xsi:type="dcterms:W3CDTF">${agora}</dcterms:modified></cp:coreProperties>`;
     const fich = [{ name: '[Content_Types].xml', data: tipos }, { name: '_rels/.rels', data: raizRels }, { name: 'docProps/core.xml', data: core },
-      { name: 'word/document.xml', data: documento }, { name: 'word/styles.xml', data: estilosXml(c, larguraTw) }, { name: 'word/settings.xml', data: definicoes },
+      { name: 'word/document.xml', data: documento }, { name: 'word/styles.xml', data: estilosXml(n, larguraTw) }, { name: 'word/settings.xml', data: definicoes },
       { name: 'word/numbering.xml', data: numeracaoXml(E.listas) }, { name: 'word/footnotes.xml', data: notasXml(E.notas) }, { name: 'word/_rels/document.xml.rels', data: rels }];
     if (n.num.ativo) fich.push({ name: `word/${parte}1.xml`, data: comNumero });
     if (usaPrimeira) fich.push({ name: `word/${parte}2.xml`, data: semNumero });
@@ -1597,7 +1750,7 @@ const ESCREVER = (() => {
     const corpo = h('div', { class: 'esc-lista' }, h('p', { class: 'muted' }, 'A abrir…'));
     let todos = [], filtro = '';
     const nota = h('p', { class: 'muted' }, 'Escreva trabalhos, relatórios, cartas e a sua monografia, mesmo sem internet. Os documentos ficam só neste aparelho e ninguém mais os vê. ' +
-      'Enquanto escreve, vê em que página está. Descarregue em Word para entregar ou continuar noutro computador, ou em PDF para imprimir.');
+      'Enquanto escreve, vê as folhas como no Word. Descarregue em Word para entregar ou continuar noutro computador, ou em PDF para imprimir.');
     const procura = h('input', { type: 'search', class: 'inp', placeholder: 'Procurar nos meus documentos', 'aria-label': 'Procurar nos meus documentos', oninput: (e) => { filtro = e.target.value.trim().toLowerCase(); desenha(); } });
     const ficheiro = h('input', { type: 'file', accept: '.json,application/json', style: 'display:none', onchange: (e) => recupera(e.target.files[0]) });
 
@@ -1620,7 +1773,10 @@ const ESCREVER = (() => {
           btn('Eliminar', { sm: true, kind: 'ghost', onclick: async () => { if (!confirm(`Eliminar «${d.titulo || 'Documento sem título'}»? Não pode ser desfeito.`)) return; await Docs.apaga(d.id); toast('Documento eliminado.'); carrega(); } })))));
     }
     async function novo(m) {
-      const d = { id: uid('doc'), titulo: m.titulo, html: m.html(), texto: '', conf: { ...CONF0, ...m.conf }, modelo: m.id, criado: Date.now(), alterado: Date.now() };
+      const pr = lePref(), extra = {};
+      if (LINGUAS[pr.lingua]) extra.lingua = pr.lingua;
+      if (typeof pr.verificar === 'boolean') extra.verificar = pr.verificar;
+      const d = { id: uid('doc'), titulo: m.titulo, html: m.html(), texto: '', conf: { ...CONF0, ...extra, ...m.conf }, modelo: m.id, criado: Date.now(), alterado: Date.now() };
       try { await Docs.guarda(d); } catch (e) { toast('Não foi possível guardar neste navegador.'); return; }
       go('escrever', d.id);
     }
@@ -1666,14 +1822,20 @@ const ESCREVER = (() => {
   function editor(id, ctx) {
     const { h, btn, toast, go, offerFile } = ctx;
     let doc = null, sujo = false, temporizador = null, vivo = true, imgSel = null, selGuardada = null;
-    let pag = null, pontos = [], agendado = null, aCalcular = false, deNovo = false, paginaAtual = 0, chaveIndice = '';
+    let pag = null, pontos = [], agendado = null, aCalcular = false, deNovo = false, paginaAtual = 0, chaveIndice = '', compondo = false, ultimoInput = 0;
+    const INTERVALO = 24, BANDA = 40;          // px: espaço entre folhas (vista de páginas) e altura da faixa «Página N» (vista contínua)
+    const pref = lePref();
+    let vista = pref.vista === 'paginas' || pref.vista === 'continuo' ? pref.vista : (Math.min(window.innerWidth || 1024, (window.screen && window.screen.width) || 9999) >= 700 ? 'paginas' : 'continuo');
+    let zoom = ZOOMS.some(([k]) => k === pref.zoom) ? pref.zoom : 'ajustar';
     const estado = h('span', { class: 'chip esc-estado', role: 'status' }, 'A abrir…');
     const titulo = h('input', { class: 'esc-titulo', type: 'text', 'aria-label': 'Título do documento', placeholder: 'Título do documento', maxlength: '140',
       oninput: () => { if (doc) { doc.titulo = titulo.value; marca(); } } });
     const texto = h('div', { class: 'esc-texto', contenteditable: 'true', spellcheck: 'true', lang: 'pt-PT', role: 'textbox', 'aria-multiline': 'true', 'aria-label': 'Texto do documento' });
     const notasLista = h('div', { class: 'esc-notas' });
-    const marcas = h('div', { class: 'esc-marcas', 'aria-hidden': 'true' });
-    const folha = h('div', { class: 'esc-folha' }, marcas, texto, notasLista);
+    const fundo = h('div', { class: 'esc-fundo' });          // vista de páginas: folhas brancas, números e notas de cada folha
+    const folha = h('div', { class: 'esc-folha' }, fundo, texto, notasLista);
+    const palcoIn = h('div', { class: 'esc-palco-in' }, folha);
+    const palco = h('div', { class: 'esc-palco' }, palcoIn);
     const conta = h('span', { class: 'esc-conta' });
     const indicador = h('span', { class: 'esc-pagina-at', role: 'status' }, 'A contar as páginas…');
     const barraImg = h('div', { class: 'esc-sub', hidden: true });
@@ -1683,7 +1845,7 @@ const ESCREVER = (() => {
     function marca() { sujo = true; estado.textContent = 'Por guardar…'; clearTimeout(temporizador); temporizador = setTimeout(guarda, 900); }
     async function guarda() {
       clearTimeout(temporizador); if (!doc || !sujo) return; sujo = false;
-      const c = texto.cloneNode(true); c.querySelectorAll('.esc-indice').forEach((d) => d.replaceChildren()); c.querySelectorAll('.esc-sel').forEach((e) => e.classList.remove('esc-sel'));
+      const c = PAGINAS.tiraSaltos(texto.cloneNode(true)); c.querySelectorAll('.esc-indice').forEach((d) => d.replaceChildren()); c.querySelectorAll('.esc-sel').forEach((e) => e.classList.remove('esc-sel'));
       doc.html = c.innerHTML; doc.texto = (texto.innerText || '').slice(0, 4000); doc.alterado = Date.now();
       if (pag) doc.paginas = pag.total;
       try { await Docs.guarda({ ...doc }); if (vivo && !sujo) estado.textContent = Docs.soMemoria() ? 'Só nesta sessão' : 'Guardado'; }
@@ -1699,10 +1861,91 @@ const ESCREVER = (() => {
       if (selGuardada && dentro(selGuardada.startContainer)) { s.removeAllRanges(); s.addRange(selGuardada); }
       else if (!s.rangeCount || !dentro(s.anchorNode)) { const r = document.createRange(); r.selectNodeContents(texto); r.collapse(false); s.removeAllRanges(); s.addRange(r); }
     }
-    const cmd = (c, v) => { repoeSel(); document.execCommand(c, false, v ?? null); depois(); };
+
+    // ----- Desfazer e Refazer do Portal (o do navegador perdia-se com os separadores da vista de páginas)
+    const hist = { pilha: [], refazer: [], cat: '', t: 0, imgs: new Map(), srcs: new Map() };
+    const chaveImg = (s) => { let k = hist.imgs.get(s); if (!k) { k = String(hist.imgs.size + 1); hist.imgs.set(s, k); hist.srcs.set(k, s); } return k; };
+    // posição do cursor contada em carateres e fronteiras de elementos, sem os separadores nem o conteúdo do índice:
+    // é a mesma com e sem separadores, e por isso serve para voltar a pôr o cursor depois de desfazer
+    function linear(no, off) {
+      let n = 0, res = null;
+      const anda = (el) => {
+        const fs = el.childNodes;
+        for (let i = 0; i <= fs.length; i++) {
+          if (el === no && i === off) { res = n; return true; }
+          const c = fs[i]; if (!c) break;
+          if (c.nodeType === 3) { if (c === no) { res = n + Math.min(off, c.length); return true; } n += c.length; }
+          else if (c.nodeType === 1) {
+            if (c.classList.contains('esc-salto')) { if (c.contains(no)) { res = n; return true; } continue; }
+            n += 1;
+            if (c.classList.contains('esc-indice')) { if (c.contains(no)) { res = n; return true; } n += 1; continue; }
+            if (anda(c)) return true;
+            n += 1;
+          }
+        }
+        return false;
+      };
+      anda(texto); return res;
+    }
+    function deLinear(alvo) {
+      let n = 0, res = null;
+      const anda = (el) => {
+        const fs = el.childNodes;
+        for (let i = 0; i <= fs.length; i++) {
+          const c = fs[i];
+          if (n === alvo && !(c && c.nodeType === 3)) { res = { no: el, off: i }; return true; }
+          if (!c) break;
+          if (c.nodeType === 3) { if (alvo <= n + c.length) { res = { no: c, off: alvo - n }; return true; } n += c.length; }
+          else if (c.nodeType === 1) {
+            if (c.classList.contains('esc-salto')) continue;
+            n += 1;
+            if (c.classList.contains('esc-indice')) { n += 1; continue; }
+            if (anda(c)) return true;
+            n += 1;
+          }
+        }
+        return false;
+      };
+      anda(texto); return res;
+    }
+    function estadoAtual() {
+      const c = PAGINAS.tiraSaltos(texto.cloneNode(true));
+      c.querySelectorAll('.esc-indice').forEach((d) => d.replaceChildren());
+      c.querySelectorAll('.esc-sel').forEach((e) => e.classList.remove('esc-sel'));
+      c.querySelectorAll('img').forEach((im) => { const s = im.getAttribute('src') || ''; if (s.length > 64 && !s.startsWith('esc-img:')) im.setAttribute('src', 'esc-img:' + chaveImg(s)); });
+      const s = getSelection();
+      return { html: c.innerHTML, conf: JSON.stringify(doc.conf || {}), sel: s && s.rangeCount && dentro(s.focusNode) ? linear(s.focusNode, s.focusOffset) : null };
+    }
+    function guardaEstado(cat) {
+      if (!doc) return;
+      const agora = Date.now();
+      if (cat && cat === hist.cat && (cat === 'escrever' || cat === 'apagar') && agora - hist.t < 1500) { hist.t = agora; return; }   // escrever seguido: um só passo
+      hist.pilha.push(estadoAtual()); if (hist.pilha.length > 100) hist.pilha.shift();
+      hist.refazer.length = 0; hist.cat = cat || ''; hist.t = agora;
+    }
+    function poeEstado(st) {
+      PAGINAS.tiraSaltos(texto);
+      const r = document.createElement('div'); r.innerHTML = st.html;
+      r.querySelectorAll('img').forEach((im) => { const s = im.getAttribute('src') || ''; if (s.startsWith('esc-img:')) im.setAttribute('src', hist.srcs.get(s.slice(8)) || ''); });
+      texto.replaceChildren(...r.childNodes);
+      if (st.conf && st.conf !== JSON.stringify(doc.conf || {})) { try { doc.conf = JSON.parse(st.conf); aplicaConf(); } catch (e) { /* segue */ } }   // também desfaz as definições da página
+      imgSel = null; chaveIndice = '';
+      renumera(); desenhaIndice();
+      texto.focus({ preventScroll: true });
+      if (st.sel != null) {
+        const p = deLinear(st.sel);
+        if (p) { try { const rg = document.createRange(); rg.setStart(p.no, p.off); rg.collapse(true); const s = getSelection(); s.removeAllRanges(); s.addRange(rg); guardaSel(); } catch (e) { /* segue */ } }
+      }
+      atualizaBarras(); contagem(); marca(); pagAgora();
+    }
+    function pagAgora() { clearTimeout(agendado); contaPaginas(); }
+    function desfaz() { if (!hist.pilha.length) { toast('Não há mais nada para desfazer.'); return; } hist.refazer.push(estadoAtual()); poeEstado(hist.pilha.pop()); hist.cat = ''; }
+    function refaz() { if (!hist.refazer.length) { toast('Não há nada para refazer.'); return; } hist.pilha.push(estadoAtual()); poeEstado(hist.refazer.pop()); hist.cat = ''; }
+
+    const cmd = (c, v) => { repoeSel(); guardaEstado('formato'); document.execCommand(c, false, v ?? null); depois(); };
     // notas e imagens entram exatamente onde está o cursor (o insertHTML do navegador punha-as fora do parágrafo)
     function insereNo(no) {
-      repoeSel();
+      repoeSel(); guardaEstado('inserir');
       const s = getSelection(); if (!s.rangeCount) return;
       const r = s.getRangeAt(0); r.deleteContents();
       let alvo = no;
@@ -1714,7 +1957,7 @@ const ESCREVER = (() => {
     }
     // tabelas, índice e quebras entram como blocos inteiros, a seguir ao parágrafo onde está o cursor (ou no lugar dele, se estiver vazio)
     function insereBloco(html, foco) {
-      repoeSel();
+      repoeSel(); guardaEstado('inserir');
       const s = getSelection(); let b = s.rangeCount ? s.getRangeAt(0).startContainer : null;
       while (b && b.parentNode && b.parentNode !== texto) b = b.parentNode;
       if (!b || b === texto || !dentro(b)) b = null;
@@ -1734,20 +1977,33 @@ const ESCREVER = (() => {
     };
     const sep = () => h('span', { class: 'esc-sep', 'aria-hidden': 'true' });
 
-    // ----- páginas: conta-as por trás, depois de parar de escrever um pouco
-    function agendaPaginas(ms = 450) { clearTimeout(agendado); agendado = setTimeout(contaPaginas, ms); }
+    /* ----- páginas: conta-as por trás e põe o texto nas folhas (vista de páginas) ou as faixas «Página N» (vista contínua) */
+    // conta pouco depois de parar de escrever; a escrever sem parar, conta pelo menos de 1,5 em 1,5 segundos
+    let ultimaConta = 0;
+    function agendaPaginas(ms) {
+      clearTimeout(agendado);
+      let t = ms == null ? (vista === 'paginas' ? 280 : 450) : ms;
+      if (ms == null && ultimaConta && Date.now() - ultimaConta > 1500) t = 0;
+      agendado = setTimeout(contaPaginas, t);
+    }
     async function contaPaginas() {
       if (!vivo || !doc) return;
       if (aCalcular) { deNovo = true; return; }
-      aCalcular = true;
+      if (compondo) { agendaPaginas(400); return; }        // não mexer no texto a meio de uma palavra do teclado do telemóvel
+      aCalcular = true; ultimaConta = Date.now();
       try {
         const c = confN(doc.conf);
+        await PAGINAS.letras(c);          // com os tipos de letra prontos, o resto faz-se sem o ecrã piscar
+        if (!vivo) return;
+        const cursorDepois = cursorDepoisDeSalto();
+        PAGINAS.tiraSaltos(texto); texto.normalize();
         let r = await PAGINAS.calcula(texto, c);
         // o índice mostra os números das páginas; se mudaram, conta outra vez (o índice pode ficar com outra altura)
         for (let i = 0; i < 2 && desenhaIndice(r.titulos); i++) r = await PAGINAS.calcula(texto, c);
         if (!vivo) return;
         pag = r; pontos = r.caminhos.map((cm) => PAGINAS.resolve(texto, cm));
-        desenhaMarcas(); mostraPagina();
+        poeSaltos(); if (cursorDepois) cursorParaDepoisDoSalto();
+        desenhaFundo(); aplicaZoom(); mostraPagina();
       } catch (e) { console.warn('Os meus documentos: contagem das páginas', e); }
       finally { aCalcular = false; if (deNovo && vivo) { deNovo = false; agendaPaginas(150); } }
     }
@@ -1756,6 +2012,152 @@ const ESCREVER = (() => {
       while (aCalcular) await new Promise((ok) => setTimeout(ok, 40));
       await contaPaginas(); return pag;
     }
+    // separador: em linha (a meio de um parágrafo), espaço por cima de um bloco (princípio de parágrafo, título ou item) ou linha de tabela
+    function salto(alt, k) {
+      const s = document.createElement('span'); s.className = 'esc-salto'; s.setAttribute('contenteditable', 'false'); s.setAttribute('aria-hidden', 'true');
+      s.dataset.pagina = String(k + 1); s.style.height = alt + 'px'; s.style.setProperty('--esc-salto', alt + 'px'); return s;
+    }
+    function poeSalto(p, ini, alt, k) {
+      const no = p.no, off = p.off;
+      if (no.nodeType === 3) {
+        const s = salto(alt, k);
+        if (off <= 0) no.before(s); else if (off >= no.length) no.after(s); else no.splitText(off).before(s);
+        return { fim: s };
+      }
+      const alvo = no.childNodes[off];
+      if (!alvo) return null;
+      if (alvo.nodeType === 3) { const s = salto(alt, k); alvo.before(s); return { fim: s }; }
+      const t = alvo.tagName;
+      if (t === 'TR') {
+        const tb = alvo.closest('table'), n = Math.max(1, ...[...tb.rows].map((r) => [...r.cells].reduce((a, c) => a + (c.colSpan || 1), 0)));
+        const tr = document.createElement('tr'); tr.className = 'esc-salto esc-salto-tr'; tr.setAttribute('contenteditable', 'false'); tr.setAttribute('aria-hidden', 'true');
+        const td = document.createElement('td'); td.colSpan = n; td.style.height = alt + 'px'; td.dataset.pagina = String(k + 1); tr.append(td);
+        alvo.before(tr);
+        let fim = tr, extra = 0;
+        const cab = tb.rows[0];
+        if (ini.cab && cab && cab !== alvo && cab !== tr) {            // a linha de cabeçalho repete-se na folha seguinte, como no Word
+          const cl = cab.cloneNode(true); cl.classList.add('esc-salto', 'esc-salto-cab'); cl.setAttribute('contenteditable', 'false'); cl.setAttribute('aria-hidden', 'true');
+          alvo.before(cl); fim = cl; extra = ini.cab;
+        }
+        return { fim, extra };
+      }
+      if (/^(P|H1|H2|H3|BLOCKQUOTE|DIV|LI)$/.test(t) && !alvo.classList.contains('esc-indice')) {
+        alvo.dataset.escSalto = String(k + 1); alvo.style.paddingTop = alt + 'px'; alvo.style.setProperty('--esc-salto', alt + 'px');
+        return { bloco: alvo };
+      }
+      const s = salto(alt, k); alvo.before(s); return { fim: s };     // imagem, nota ou outro elemento em linha no princípio da linha
+    }
+    function poeSaltos() {
+      if (!pag) return;
+      const pg = vista === 'paginas', PH = pag.geo.ph, alts = [];
+      // alturas primeiro (pela ordem das folhas); depois põem-se do fim para o princípio, para as posições não mudarem
+      let S = 0;
+      for (let k = 1; k < pontos.length; k++) {
+        const ini = pag.inicios[k];
+        if (!pontos[k] || !ini || ini.tipo === 'raiz') { alts[k] = null; continue; }
+        let alt = pg ? k * (PH + INTERVALO) - ini.y - S : BANDA;
+        if (!(alt > 0)) alt = pg ? 0 : BANDA;
+        alts[k] = alt; S += alt + (ini.tipo === 'linha-tab' && ini.cab ? ini.cab : 0);
+      }
+      for (let k = pontos.length - 1; k >= 1; k--) {
+        if (alts[k] == null) continue;
+        const ini = pg ? pag.inicios[k] : { ...pag.inicios[k], cab: 0 };        // vista contínua: sem repetir o cabeçalho da tabela
+        let r = null; try { r = poeSalto(pontos[k], ini, alts[k], k); } catch (e) { r = null; }
+        pontos[k] = !r ? pontos[k] : r.bloco ? { no: r.bloco, off: 0 } : { apos: r.fim };
+      }
+      // vista contínua: a faixa vai de margem a margem, também dentro de listas e citações
+      if (!pg) {
+        const tr = texto.getBoundingClientRect(), z = tr.width / (texto.offsetWidth || 1) || 1, larg = texto.clientWidth + 'px';
+        texto.querySelectorAll('span.esc-salto, [data-esc-salto]').forEach((e) => {
+          e.style.setProperty('--esc-banda-esq', Math.max(0, (e.getBoundingClientRect().left - tr.left) / z) + 'px'); e.style.setProperty('--esc-banda-larg', larg);
+        });
+      }
+    }
+    const pontoReal = (p) => (!p ? null : p.apos ? (p.apos.parentNode ? { no: p.apos.parentNode, off: Array.prototype.indexOf.call(p.apos.parentNode.childNodes, p.apos) + 1 } : null) : p);
+    // cursor logo a seguir a um separador (no princípio de uma folha): volta para lá depois de contar as páginas
+    function cursorDepoisDeSalto() {
+      const s = getSelection(); if (!s.rangeCount || !s.isCollapsed || !dentro(s.focusNode)) return false;
+      const n = s.focusNode, o = s.focusOffset;
+      const ant = n.nodeType === 3 ? (o > 0 ? null : n.previousSibling) : (o > 0 ? n.childNodes[o - 1] : null);
+      return !!(ant && ant.nodeType === 1 && ant.classList.contains('esc-salto'));
+    }
+    function cursorParaDepoisDoSalto() {
+      const s = getSelection(); if (!s.rangeCount || !s.isCollapsed) return;
+      const n = s.focusNode, o = s.focusOffset;
+      let seg = n.nodeType === 3 ? (o < n.length ? null : n.nextSibling) : n.childNodes[o];
+      if (!(seg && seg.nodeType === 1 && seg.classList.contains('esc-salto'))) return;
+      while (seg.nextSibling && seg.nextSibling.nodeType === 1 && seg.nextSibling.classList.contains('esc-salto')) seg = seg.nextSibling;
+      const r = document.createRange(); r.setStartAfter(seg); r.collapse(true); s.removeAllRanges(); s.addRange(r);
+    }
+    // separador mesmo ao lado do cursor (para apagar o carácter do outro lado, como no Word)
+    function vizinho(dir) {
+      const s = getSelection(); const n = s.focusNode, o = s.focusOffset; let c = null;
+      if (!n) return null;
+      if (n.nodeType === 3) { if (dir < 0 ? o > 0 : o < n.length) return null; c = dir < 0 ? n.previousSibling : n.nextSibling; }
+      else c = dir < 0 ? n.childNodes[o - 1] : n.childNodes[o];
+      return c && c.nodeType === 1 && c.matches('span.esc-salto') ? c : null;
+    }
+    // folhas brancas, números de página e notas de rodapé de cada folha (vista de páginas)
+    function desenhaFundo() {
+      fundo.replaceChildren();
+      folha.classList.toggle('esc-com-folhas', vista === 'paginas' && !!pag);
+      if (vista !== 'paginas' || !pag) { folha.style.minHeight = ''; return; }
+      const g = pag.geo, c = confN(doc.conf), N = pag.total;
+      const notasEd = [...texto.querySelectorAll('.esc-nota')], notasMed = [...pag.raiz.querySelectorAll('.esc-nota')];
+      for (let k = 0; k < N; k++) {
+        const topo0 = k * (g.ph + INTERVALO);
+        fundo.append(h('div', { class: 'esc-folha-pg', style: `top:${topo0}px;height:${g.ph}px` }));
+        const rt = pag.rotulos[k];
+        if (rt && rt.visivel) {
+          const lugar = c.num.lugar;
+          fundo.append(h('div', { class: 'esc-pg-num', 'aria-hidden': 'true', style: `left:${g.ml}px;width:${g.W}px;text-align:${lugar === 'fim-centro' ? 'center' : 'right'};` +
+            (lugar === 'inicio-direita' ? `top:${topo0 + g.hd}px` : `top:${topo0 + g.ph - g.fd}px;transform:translateY(-100%)`) }, rt.texto));
+        }
+        const p = pag.paginas[k];
+        if (p && p.notas.length) {
+          const nt = h('div', { class: 'esc-pg-notas', style: `left:${g.ml}px;width:${g.W}px;top:${topo0 + g.mt + g.H}px;transform:translateY(-100%)` });
+          for (const n of p.notas) {
+            const i = notasMed.indexOf(n), ed = notasEd[i];
+            nt.append(h('p', { title: 'Tocar para mudar a nota', onclick: () => { if (ed) editaNota(ed); } }, h('sup', null, String(i + 1)), ' ' + (n.getAttribute('data-nota') || '')));
+          }
+          fundo.append(nt);
+        }
+      }
+      folha.style.minHeight = (N * (g.ph + INTERVALO) - INTERVALO) + 'px';
+    }
+    // zoom: como no Word (Ajustar, Largura da página, Página inteira, 50% a 200%)
+    function escala() {
+      const disp = Math.max(200, (palco.clientWidth || el.clientWidth || window.innerWidth) - 8);
+      const pw = 21 * PAGINAS.CM, ph = 29.7 * PAGINAS.CM;
+      if (vista === 'paginas') {
+        if (zoom === 'ajustar') {
+          if (disp >= pw) return 1;
+          if (disp < 600 && doc) { const c = confN(doc.conf); return Math.min(1, disp / ((21 - c.mg[1] - c.mg[3]) * PAGINAS.CM + 16)); }   // telemóvel: a largura do texto
+          return disp / pw;
+        }
+        if (zoom === 'largura') return disp / pw;
+        if (zoom === 'pagina') {
+          const t = document.querySelector('.top'), cima = (t ? t.getBoundingClientRect().height : 0) + barras.getBoundingClientRect().height + rodape.getBoundingClientRect().height + 28;
+          return Math.min(disp / pw, Math.max(150, window.innerHeight - cima) / ph);
+        }
+        return (+zoom || 100) / 100;
+      }
+      return /^\d+$/.test(zoom) ? +zoom / 100 : 1;        // vista contínua: o zoom só muda o tamanho da letra
+    }
+    function aplicaZoom() {
+      const s = escala();
+      if (vista === 'paginas') {
+        folha.style.zoom = '';
+        folha.style.transform = Math.abs(s - 1) < 0.001 ? '' : `scale(${s})`;
+        palcoIn.style.overflow = 'hidden';
+        palcoIn.style.width = Math.round(21 * PAGINAS.CM * s) + 'px';
+        palcoIn.style.height = Math.round(folha.offsetHeight * s) + 'px';
+        if (zoom === 'ajustar' && s < 1 && doc && palco.clientWidth < 600) palco.scrollLeft = Math.max(0, confN(doc.conf).mg[3] * PAGINAS.CM * s - 8);
+      } else {
+        folha.style.transform = ''; palcoIn.style.overflow = ''; palcoIn.style.width = ''; palcoIn.style.height = '';
+        folha.style.zoom = Math.abs(s - 1) < 0.001 ? '' : String(s);
+      }
+    }
     function mostraPagina() {
       if (!pag) return;
       const s = getSelection();
@@ -1763,7 +2165,7 @@ const ESCREVER = (() => {
         let k = 0; const r = document.createRange();
         try {
           r.setStart(s.focusNode, s.focusOffset);
-          for (let i = 1; i < pontos.length; i++) { const p = pontos[i]; if (!p || !p.no.isConnected) break; if (r.comparePoint(p.no, p.off) <= 0) k = i; else break; }
+          for (let i = 1; i < pontos.length; i++) { const p = pontoReal(pontos[i]); if (!p || !p.no.isConnected) break; if (r.comparePoint(p.no, p.off) <= 0) k = i; else break; }
         } catch (e) { k = paginaAtual; }
         paginaAtual = Math.min(k, pag.total - 1);
       }
@@ -1772,32 +2174,6 @@ const ESCREVER = (() => {
         rt && rt.visivel && rt.texto !== String(k1) ? ` · n.º ${rt.texto}` : '');
       indicador.title = pag.letrasOk ? 'Página onde está o cursor, em folhas A4 com as margens deste documento.' :
         'Este aparelho ainda não tem os tipos de letra do Word (abra uma vez com internet): a contagem pode diferir um pouco.';
-    }
-    function yDe(p) {     // altura no ecrã onde começa a página (linha onde está o primeiro carácter dela)
-      let n = p.no, off = p.off;
-      if (n.nodeType === 1) {
-        const f = n.childNodes[off]; if (!f) return null;
-        if (f.nodeType === 1) { const r = f.getBoundingClientRect(); return r.height || r.width ? r.top : null; }
-        n = f; off = 0;
-      }
-      const rg = document.createRange();
-      for (let o = off; o < Math.min(n.length, off + 8); o++) {
-        rg.setStart(n, o); rg.setEnd(n, o + 1); const rs = rg.getClientRects();
-        if (rs.length && rs[0].height) { const lh = parseFloat(getComputedStyle(n.parentElement).lineHeight) || rs[0].height; return rs[rs.length - 1].top - Math.max(0, (lh - rs[0].height) / 2); }
-      }
-      return null;
-    }
-    function desenhaMarcas() {
-      marcas.replaceChildren();
-      if (!doc || !pag || !confN(doc.conf).marcas) return;
-      const fr = folha.getBoundingClientRect();
-      for (let k = 1; k < pontos.length; k++) {
-        const p = pontos[k]; if (!p || !p.no.isConnected) continue;
-        const y = yDe(p); if (y == null) continue;
-        const rt = pag.rotulos[k];
-        marcas.append(h('div', { class: 'esc-marca', style: `top:${Math.round(y - fr.top) - 1}px` },
-          h('span', null, `Página ${k + 1}` + (rt && rt.visivel && rt.texto !== String(k + 1) ? ` · n.º ${rt.texto}` : ''))));
-      }
     }
 
     // ----- notas de rodapé
@@ -1829,8 +2205,8 @@ const ESCREVER = (() => {
     }
     function editaNota(n) {
       const ta = h('textarea', { class: 'inp', rows: '4' }); ta.value = n.getAttribute('data-nota') || '';
-      const d = caixa('Mudar a nota de rodapé', h('div', { class: 'field' }, ta), () => { const t = ta.value.trim(); if (!t) return false; return () => { n.setAttribute('data-nota', t); depois(); }; },
-        h('button', { type: 'button', class: 'btn warn', style: 'margin-right:auto', onclick: () => { n.remove(); depois(); d.close(); } }, 'Tirar a nota'));
+      const d = caixa('Mudar a nota de rodapé', h('div', { class: 'field' }, ta), () => { const t = ta.value.trim(); if (!t) return false; return () => { guardaEstado('nota'); n.setAttribute('data-nota', t); depois(); }; },
+        h('button', { type: 'button', class: 'btn warn', style: 'margin-right:auto', onclick: () => { guardaEstado('nota'); n.remove(); depois(); d.close(); } }, 'Tirar a nota'));
     }
 
     // ----- índice automático (títulos 1, 2 e 3), com os números das páginas; devolve true se mudou
@@ -1863,11 +2239,11 @@ const ESCREVER = (() => {
       imgSel = im; if (im) im.classList.add('esc-sel');
       atualizaBarras();
     }
-    function tamanhoImg(p) { if (!imgSel) return; imgSel.setAttribute('data-l', String(p)); imgSel.style.width = p + '%'; marca(); agendaPaginas(); }
+    function tamanhoImg(p) { if (!imgSel) return; guardaEstado('imagem'); imgSel.setAttribute('data-l', String(p)); imgSel.style.width = p + '%'; marca(); agendaPaginas(); }
     barraImg.append(h('span', { class: 'esc-sub-t' }, 'Imagem:'), ...[25, 50, 75, 100].map((p) => bb('', `${p}%`, () => tamanhoImg(p), { letra: p + '%', cls: 'txt' })),
       bb('esq', 'Imagem à esquerda', () => alinhaImg('left')), bb('cen', 'Imagem ao centro', () => alinhaImg('center')),
-      bb('', 'Tirar a imagem', () => { if (imgSel) { imgSel.remove(); imgSel = null; depois(); } }, { letra: 'Tirar', cls: 'txt perigo' }));
-    function alinhaImg(a) { if (!imgSel) return; const b = imgSel.closest('p, div, li, td, th') || imgSel.parentElement; if (b && b !== texto) { b.style.textAlign = a; marca(); } }
+      bb('', 'Tirar a imagem', () => { if (imgSel) { guardaEstado('imagem'); imgSel.remove(); imgSel = null; depois(); } }, { letra: 'Tirar', cls: 'txt perigo' }));
+    function alinhaImg(a) { if (!imgSel) return; const b = imgSel.closest('p, div, li, td, th') || imgSel.parentElement; if (b && b !== texto) { guardaEstado('imagem'); b.style.textAlign = a; marca(); agendaPaginas(); } }
 
     // ----- tabelas
     function novaTabela() {
@@ -1881,16 +2257,17 @@ const ESCREVER = (() => {
         return () => insereBloco(t + '</tbody></table><p><br></p>', 'td, th');
       });
     }
-    const celulaAtual = () => { const s = getSelection(); const n = s && s.rangeCount ? s.anchorNode : null; const el = n && (n.nodeType === 1 ? n : n.parentElement); return el && dentro(el) ? el.closest('td, th') : null; };
+    const celulaAtual = () => { const s = getSelection(); const n = s && s.rangeCount ? s.anchorNode : null; const el2 = n && (n.nodeType === 1 ? n : n.parentElement); return el2 && dentro(el2) ? el2.closest('td, th') : null; };
     function linha(mais) {
-      const c = celulaAtual(); if (!c) return; const tr = c.parentElement;
+      const c = celulaAtual(); if (!c || c.closest('.esc-salto')) return; guardaEstado('tabela'); const tr = c.parentElement;
       if (mais) { const n = tr.cloneNode(true); n.querySelectorAll('td, th').forEach((y) => { const td = document.createElement('td'); td.innerHTML = '<br>'; y.replaceWith(td); }); tr.after(n); }
-      else { const tb = tr.closest('table'); if (tb.rows.length <= 1) tb.remove(); else tr.remove(); }
+      else { const tb = tr.closest('table'); if ([...tb.rows].filter((r) => !r.classList.contains('esc-salto')).length <= 1) tb.remove(); else tr.remove(); }
       depois();
     }
     function coluna(mais) {
-      const c = celulaAtual(); if (!c) return; const i = c.cellIndex, tb = c.closest('table');
+      const c = celulaAtual(); if (!c || c.closest('.esc-salto')) return; guardaEstado('tabela'); const i = c.cellIndex, tb = c.closest('table');
       for (const r of tb.rows) {
+        if (r.classList.contains('esc-salto')) continue;
         const y = r.cells[Math.min(i, r.cells.length - 1)]; if (!y) continue;
         if (mais) { const n = document.createElement(y.tagName.toLowerCase()); n.innerHTML = '<br>'; y.after(n); }
         else if (r.cells.length > 1) y.remove();
@@ -1900,7 +2277,7 @@ const ESCREVER = (() => {
     }
     barraTab.append(h('span', { class: 'esc-sub-t' }, 'Tabela:'), bb('', '+ Linha', () => linha(true), { letra: '+ Linha', cls: 'txt' }), bb('', '+ Coluna', () => coluna(true), { letra: '+ Coluna', cls: 'txt' }),
       bb('', 'Tirar a linha', () => linha(false), { letra: '− Linha', cls: 'txt' }), bb('', 'Tirar a coluna', () => coluna(false), { letra: '− Coluna', cls: 'txt' }),
-      bb('', 'Tirar a tabela', () => { const c = celulaAtual(); if (c && confirm('Tirar a tabela inteira?')) { c.closest('table').remove(); depois(); } }, { letra: 'Tirar tabela', cls: 'txt perigo' }));
+      bb('', 'Tirar a tabela', () => { const c = celulaAtual(); if (c && confirm('Tirar a tabela inteira?')) { guardaEstado('tabela'); c.closest('table').remove(); depois(); } }, { letra: 'Tirar tabela', cls: 'txt perigo' }));
 
     function atualizaBarras() {
       barraImg.hidden = !(imgSel && texto.contains(imgSel));
@@ -1911,13 +2288,18 @@ const ESCREVER = (() => {
       let bloco = ''; try { bloco = String(document.queryCommandValue('formatBlock') || '').toLowerCase(); } catch (e) { bloco = ''; }
       barra.querySelectorAll('[data-bloco]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.bloco === bloco || (b.dataset.bloco === 'p' && (bloco === 'div' || bloco === '')))));
     }
-    function contagem() { const t = texto.innerText || ''; conta.textContent = `${mil(palavras(t))} palavras`; }
+    function contagem() {
+      let n = palavras(texto.innerText || '');
+      // sem os cabeçalhos de tabela repetidos nem as legendas do índice automático
+      texto.querySelectorAll('.esc-salto-cab, .esc-indice-t, .esc-indice-n').forEach((c) => { n -= palavras(c.innerText || ''); });
+      conta.textContent = `${mil(Math.max(0, n))} palavras`;
+    }
 
     // ----- barra de ferramentas
     const blocoB = (tag, rot, letra) => { const b = bb('', rot, () => cmd('formatBlock', tag), { letra, cls: 'txt' }); b.dataset.bloco = tag; return b; };
     const estadoB = (c, rot, letra, cls) => { const b = bb('', rot, () => cmd(c), { letra, cls }); b.dataset.estado = c; return b; };
     const barra = h('div', { class: 'esc-barra', role: 'toolbar', 'aria-label': 'Formatação' },
-      bb('desf', 'Desfazer', () => cmd('undo')), bb('ref', 'Refazer', () => cmd('redo')), sep(),
+      bb('desf', 'Desfazer (Ctrl+Z)', desfaz), bb('ref', 'Refazer (Ctrl+Y)', refaz), sep(),
       blocoB('p', 'Texto normal', 'Texto'), blocoB('h1', 'Título 1', 'T1'), blocoB('h2', 'Título 2', 'T2'), blocoB('h3', 'Título 3', 'T3'), blocoB('blockquote', 'Citação longa', '❝'), sep(),
       estadoB('bold', 'Negrito', 'N', 'neg'), estadoB('italic', 'Itálico', 'I', 'ita'), estadoB('underline', 'Sublinhado', 'S', 'sub'), sep(),
       bb('ul', 'Lista com marcas', () => cmd('insertUnorderedList')), bb('ol', 'Lista numerada', () => cmd('insertOrderedList')), sep(),
@@ -1928,44 +2310,75 @@ const ESCREVER = (() => {
         insereBloco('<div class="esc-indice" contenteditable="false"></div><p><br></p>'); }),
       bb('quebra', 'Quebra de página', () => insereBloco('<hr class="esc-quebra"><p><br></p>')), bb('limpa', 'Tirar a formatação', () => cmd('removeFormat')));
 
-    // ----- definições da página: letra, margens, números de página e marcas das páginas
+    // ----- definições da página: norma, letra, parágrafos, títulos, números de página, língua e ortografia
     function definicoes() {
-      const c = { ...CONF0, ...doc.conf };
+      const c = { ...CONF0, ...doc.conf }, n0 = confN(c);
       const sel = (opts, v) => h('select', { class: 'inp' }, opts.map(([k, t]) => h('option', { value: k, selected: String(k) === String(v) }, t)));
+      const opcao = (s, v, t) => { if (![...s.options].some((o) => o.value === String(v))) s.append(h('option', { value: v }, t || String(v).replace('.', ','))); s.value = String(v); };
       const chk = (v) => h('input', { type: 'checkbox', checked: !!v });
-      const letra = sel([['serif', 'Times New Roman (com serifa)'], ['sans', 'Arial (sem serifa)'], ['calibri', 'Calibri (sem serifa)']], c.letra);
-      const tam = sel([[10, '10'], [11, '11'], [12, '12'], [14, '14']], c.tam);
-      const esp = sel([[1, 'Simples'], [1.15, '1,15'], [1.5, '1,5'], [2, 'Duplo']], c.espaco);
+      const norma = sel(Object.entries(NORMAS).map(([k, v]) => [k, v.nome]), n0.norma);
+      const letra = sel([['serif', 'Times New Roman'], ['sans', 'Arial'], ['calibri', 'Calibri']], n0.letra);
+      const tam = sel([10, 11, 12, 14].map((t) => [t, String(t)]), n0.tam); opcao(tam, n0.tam);
+      const esp = sel([[1, 'Simples'], [1.15, '1,15'], [1.5, '1,5'], [2, 'Duplo']], n0.espaco); opcao(esp, n0.espaco);
       const marg = sel(Object.entries(MARGENS).map(([k, v]) => [k, v.nome]), c.margens);
-      const just = chk(c.justificar), num = chk(c.numeros), capa = chk(c.capa), rom = chk(c.romanas), marc = chk(c.marcas !== false);
-      const lugar = sel(Object.entries(LUGARES), c.numLugar);
-      const inicio = h('input', { type: 'number', class: 'inp', min: '0', max: '9999', value: String(confN(c).num.inicio) });
+      const just = chk(n0.just);
+      const recuo = sel([[0, 'Sem recuo'], [1.25, '1,25 cm'], [1.5, '1,5 cm']], n0.recuo); opcao(recuo, n0.recuo, String(n0.recuo).replace('.', ',') + ' cm');
+      const depoisP = sel([[0, '0 pt (nenhum)'], [6, '6 pt'], [8, '8 pt'], [12, '12 pt']], n0.depois); opcao(depoisP, n0.depois, String(n0.depois).replace('.', ',') + ' pt');
+      const tits = sel([['normal', 'Maiores do que o texto (16, 14 e 12 pt)'], ['abnt', 'Do tamanho do texto, como na ABNT']], c.titulos === 'abnt' ? 'abnt' : 'normal');
+      const capNova = chk(n0.capNova);
+      const num = chk(n0.num.ativo), capa = chk(n0.num.capa);
+      const lugar = sel(Object.entries(LUGARES), n0.num.lugar);
+      const inicio = h('input', { type: 'number', class: 'inp', min: '0', max: '9999', value: String(n0.num.inicio) });
+      const modo = sel([['simples', 'Todas as páginas com número'], ['romanas', 'Iniciais em numeração romana (i, ii, iii)'], ['abnt', 'Iniciais contadas mas sem número (ABNT)']], n0.num.modo);
       const caps = [...texto.querySelectorAll('h1')].filter((y) => y.textContent.replace(/​/g, '').trim());
       let atual = caps.findIndex((y) => y.hasAttribute('data-arabe'));
       if (atual < 0) atual = Math.max(0, caps.findIndex((y) => /introdu/i.test(y.textContent)));
       const cap = sel(caps.length ? caps.map((y, i) => [i, y.textContent.replace(/​/g, '').trim().slice(0, 70)]) : [[-1, '(primeiro escreva os capítulos com o botão T1)']], atual);
-      const liga = () => { for (const e of [lugar, inicio, capa, rom]) e.disabled = !num.checked; cap.disabled = !num.checked || !rom.checked || !caps.length; };
-      num.addEventListener('change', liga); rom.addEventListener('change', liga); liga();
+      const lingua = sel(Object.entries(LINGUAS), n0.lingua);
+      const verif = chk(n0.verificar);
+      const liga = () => {
+        for (const e of [lugar, modo]) e.disabled = !num.checked;
+        inicio.disabled = !num.checked || modo.value === 'abnt'; capa.disabled = !num.checked || modo.value === 'abnt';
+        cap.disabled = !num.checked || modo.value === 'simples' || !caps.length;
+      };
+      num.addEventListener('change', liga); modo.addEventListener('change', liga);
+      norma.addEventListener('change', () => {          // a norma preenche os outros campos (que depois se podem ajustar)
+        const p = (NORMAS[norma.value] || {}).conf || {};
+        if (p.tam) opcao(tam, p.tam); if (p.espaco) opcao(esp, p.espaco); if (p.margens) marg.value = p.margens; if (p.justificar != null) just.checked = p.justificar;
+        if (p.recuo != null) opcao(recuo, p.recuo, p.recuo ? String(p.recuo).replace('.', ',') + ' cm' : 'Sem recuo'); if (p.depois != null) opcao(depoisP, p.depois, p.depois + ' pt');
+        if (p.titulos) tits.value = p.titulos; if (p.capNova != null) capNova.checked = p.capNova;
+        if (p.numeros != null) num.checked = p.numeros; if (p.numLugar) lugar.value = p.numLugar; if (p.capa != null) capa.checked = p.capa; if (p.numModo) modo.value = p.numModo;
+        liga();
+      });
+      liga();
       const lab = (t, e, larga) => h('label', larga ? { class: 'larga' } : null, t, e);
       const ck = (e, t) => h('label', { class: 'esc-chk larga' }, e, ' ' + t);
       caixa('Página', h('div', { class: 'esc-grelha' },
+        h('fieldset', { class: 'esc-grupo' }, h('legend', null, 'Norma do trabalho'), lab('Norma', norma, true),
+          h('p', { class: 'esc-dica' }, 'ABNT: margens de 3 cm em cima e à esquerda e de 2 cm em baixo e à direita, letra 12, espaço 1,5, recuo de 1,25 cm, cada capítulo numa página nova e número no canto superior direito, a partir da Introdução.')),
         h('fieldset', { class: 'esc-grupo' }, h('legend', null, 'Letra e parágrafos'),
-          lab('Letra', letra), lab('Tamanho', tam), lab('Espaço entre linhas', esp), lab('Margens', marg, true), ck(just, 'Justificar o texto')),
+          lab('Letra', letra), lab('Tamanho', tam), lab('Espaço entre linhas', esp), lab('Espaço depois de cada parágrafo', depoisP), lab('Margens', marg, true),
+          lab('Recuo da primeira linha', recuo), h('span'), ck(just, 'Justificar o texto')),
+        h('fieldset', { class: 'esc-grupo' }, h('legend', null, 'Títulos e capítulos'), lab('Tamanho dos títulos', tits, true), ck(capNova, 'Cada capítulo (Título 1) começa numa página nova')),
         h('fieldset', { class: 'esc-grupo' }, h('legend', null, 'Números de página'),
-          ck(num, 'Pôr números nas páginas'), lab('Lugar do número', lugar, true), lab('Começar em', inicio), h('span'),
-          ck(capa, 'Sem número na primeira página (capa)'),
-          ck(rom, 'Páginas iniciais em numeração romana (i, ii, iii)'), lab('A numeração 1, 2, 3 começa no capítulo', cap, true),
-          h('p', { class: 'esc-dica' }, 'Nos trabalhos académicos, a capa, o índice e as outras páginas iniciais levam i, ii, iii, e a contagem 1, 2, 3 começa no capítulo escolhido, numa página nova.')),
-        h('fieldset', { class: 'esc-grupo' }, h('legend', null, 'Enquanto escreve'),
-          ck(marc, 'Mostrar onde começa cada página (linha tracejada)'),
-          h('p', { class: 'esc-dica' }, 'As páginas são contadas em folhas A4 com estas margens, como no Word. No telemóvel o texto ocupa a largura do ecrã, mas a contagem é a das folhas.'))), () => {
+          ck(num, 'Pôr números nas páginas'), lab('Lugar do número', lugar, true), lab('Páginas iniciais', modo, true), lab('A numeração 1, 2, 3 começa no capítulo', cap, true),
+          lab('Começar em', inicio), h('span'), ck(capa, 'Sem número na primeira página (capa)'),
+          h('p', { class: 'esc-dica' }, 'Romanas: a capa, o índice e as outras páginas iniciais levam i, ii, iii. ABNT: contam-se a partir da folha de rosto, mas só têm número a partir do capítulo escolhido. Esse capítulo começa sempre numa página nova.')),
+        h('fieldset', { class: 'esc-grupo' }, h('legend', null, 'Língua e ortografia'), lab('Língua do documento', lingua, true), ck(verif, 'Sublinhar os erros de ortografia'),
+          h('p', { class: 'esc-dica' }, 'O sublinhado vermelho vem do corretor do aparelho (no Portal) e do Word (no ficheiro). Desligado, o Word também deixa de sublinhar este documento.'))), () => {
         const ini = parseInt(inicio.value, 10);
-        doc.conf = { ...c, letra: letra.value, tam: +tam.value, espaco: +esp.value, margens: marg.value, justificar: just.checked, numeros: num.checked, numLugar: lugar.value,
-          numInicio: Number.isFinite(ini) ? Math.max(0, Math.min(9999, ini)) : 1, capa: capa.checked, romanas: rom.checked && caps.length > 0, marcas: marc.checked };
+        const nova = { ...c, norma: norma.value, letra: letra.value, tam: +tam.value, espaco: +esp.value, margens: marg.value, justificar: just.checked, recuo: +recuo.value, depois: +depoisP.value,
+          titulos: tits.value, capNova: capNova.checked, numeros: num.checked, numLugar: lugar.value, numInicio: Number.isFinite(ini) ? Math.max(0, Math.min(9999, ini)) : 1, capa: capa.checked,
+          // ABNT: a paginação em letra mais pequena (10)
+          numModo: modo.value !== 'simples' && !caps.length ? 'simples' : modo.value, romanas: false, numTam: norma.value === 'abnt' ? 10 : 0,
+          lingua: lingua.value, verificar: verif.checked };
         const escolhido = caps[+cap.value];
         return () => {
+          guardaEstado('definicoes');           // antes de mudar: «Desfazer» volta às definições anteriores
+          doc.conf = nova;
+          if (nova.norma !== 'abnt') guardaPref({ lingua: nova.lingua, verificar: nova.verificar });   // os documentos novos começam assim
           texto.querySelectorAll('h1[data-arabe]').forEach((y) => y.removeAttribute('data-arabe'));
-          if (doc.conf.romanas && escolhido) escolhido.setAttribute('data-arabe', '1');
+          if (doc.conf.numModo !== 'simples' && escolhido) escolhido.setAttribute('data-arabe', '1');
           aplicaConf(); marca(); agendaPaginas(30);
         };
       });
@@ -1973,12 +2386,35 @@ const ESCREVER = (() => {
     function aplicaConf() {
       const c = confN(doc.conf);
       PAGINAS.aplicaTipo(folha, c);
-      folha.classList.toggle('esc-romanas', c.num.ativo && c.num.romanas);
+      folha.classList.toggle('esc-romanas', c.num.ativo && c.num.modo !== 'simples');
       folha.style.setProperty('--esc-mt', c.mg[0] + 'cm'); folha.style.setProperty('--esc-md', c.mg[1] + 'cm'); folha.style.setProperty('--esc-mb', c.mg[2] + 'cm'); folha.style.setProperty('--esc-me', c.mg[3] + 'cm');
-      if (!c.marcas) marcas.replaceChildren();
+      texto.setAttribute('lang', c.lingua); texto.setAttribute('spellcheck', String(c.verificar)); texto.spellcheck = c.verificar;
+      aplicaVista();
     }
 
-    // ----- ver as folhas, descarregar
+    // ----- vista (páginas ou contínua) e zoom, na barra de baixo como no Word
+    const bVista = (v, rot, ic, dica) => { const b = h('button', { type: 'button', class: 'esc-vbtn', title: dica, 'aria-pressed': String(vista === v), onclick: () => mudaVista(v) }, svg(ic), rot); b.dataset.vista = v; return b; };
+    const bPag = bVista('paginas', 'Páginas', 'folhas', 'Ver as folhas como no Word');
+    const bCont = bVista('continuo', 'Contínuo', 'continuo', 'Texto contínuo, com uma faixa onde começa cada página (melhor no telemóvel)');
+    const zoomSel = h('select', { class: 'esc-zoom', 'aria-label': 'Zoom', title: 'Zoom', onchange: (e) => mudaZoom(e.target.value) }, ZOOMS.map(([k, t]) => h('option', { value: k, selected: k === zoom }, t)));
+    function aplicaVista() {
+      folha.classList.toggle('esc-vista-paginas', vista === 'paginas'); folha.classList.toggle('esc-vista-continuo', vista !== 'paginas');
+      bPag.setAttribute('aria-pressed', String(vista === 'paginas')); bCont.setAttribute('aria-pressed', String(vista !== 'paginas'));
+      if (vista !== 'paginas') { fundo.replaceChildren(); folha.style.minHeight = ''; folha.classList.remove('esc-com-folhas'); }
+      aplicaZoom();
+    }
+    function mudaVista(v) { if (v === vista) return; vista = v; guardaPref({ vista, zoom }); aplicaVista(); agendaPaginas(0); }
+    function mudaZoom(z) {
+      zoom = z; guardaPref({ vista, zoom }); aplicaZoom();
+      // «Página inteira»: a folha onde está o cursor fica toda à vista, logo abaixo das barras
+      if (z === 'pagina' && vista === 'paginas' && pag) {
+        const f = fundo.querySelectorAll('.esc-folha-pg')[paginaAtual];
+        if (f) { const t = document.querySelector('.top'), cima = (t ? t.getBoundingClientRect().height : 0) + barras.getBoundingClientRect().height + 10;
+          window.scrollTo({ top: Math.max(0, f.getBoundingClientRect().top + window.scrollY - cima) }); }
+      }
+    }
+
+    // ----- descarregar e ver as folhas
     async function verPaginas() {
       await guarda();
       const c = confN(doc.conf);
@@ -2011,26 +2447,81 @@ const ESCREVER = (() => {
     async function pdf() { await guarda(); try { await imprimir(confN(doc.conf), texto); } catch (e) { console.warn(e); toast('Não foi possível preparar o PDF.'); } }
 
     // ----- eventos do texto
-    texto.addEventListener('input', () => { if (imgSel && !texto.contains(imgSel)) imgSel = null; depois(); });
-    texto.addEventListener('click', (e) => { const im = e.target.closest && e.target.closest('img'); escolheImagem(im && dentro(im) ? im : null); const n = e.target.closest && e.target.closest('.esc-nota'); if (n) editaNota(n); });
+    texto.addEventListener('beforeinput', (e) => {
+      const t = e.inputType || '';
+      if (t === 'historyUndo') { e.preventDefault(); desfaz(); return; }
+      if (t === 'historyRedo') { e.preventDefault(); refaz(); return; }
+      const cat = /^insert(Text|ReplacementText|CompositionText)/.test(t) ? 'escrever' : t.startsWith('delete') ? 'apagar' : (t || 'outro');
+      if (!(e.isComposing && hist.cat === 'escrever')) guardaEstado(cat);
+      // apagar junto a um separador de página (a meio de um parágrafo): apaga o carácter do outro lado, como no Word
+      if (!e.isComposing && (t === 'deleteContentBackward' || t === 'deleteContentForward')) {
+        const s = getSelection();
+        if (s.rangeCount && s.isCollapsed) {
+          const atras = t === 'deleteContentBackward', sepr = vizinho(atras ? -1 : 1);
+          if (sepr) {
+            e.preventDefault();
+            const r = document.createRange(); if (atras) r.setStartBefore(sepr); else r.setStartAfter(sepr); r.collapse(true);
+            s.removeAllRanges(); s.addRange(r);
+            setTimeout(() => { document.execCommand(atras ? 'delete' : 'forwardDelete'); depois(); }, 0);
+          }
+        }
+      }
+    });
+    // Enter no primeiro parágrafo de uma folha: o navegador copia o espaço do separador para o parágrafo novo; fica só no primeiro
+    function limpaClones() {
+      const vistos = new Set();
+      texto.querySelectorAll('[data-esc-salto]').forEach((e) => {
+        const k = e.dataset.escSalto;
+        if (!vistos.has(k)) { vistos.add(k); return; }
+        e.removeAttribute('data-esc-salto'); for (const q of ['padding-top', '--esc-salto', '--esc-banda-esq', '--esc-banda-larg']) e.style.removeProperty(q);
+        if (!e.getAttribute('style')) e.removeAttribute('style');
+      });
+    }
+    texto.addEventListener('input', (e) => {
+      ultimoInput = Date.now(); if (imgSel && !texto.contains(imgSel)) imgSel = null;
+      depois();
+      if (/^insert(Paragraph|LineBreak|FromPaste|FromDrop)/.test(e.inputType || '')) { limpaClones(); pagAgora(); }
+    });
+    texto.addEventListener('compositionstart', () => { compondo = true; });
+    texto.addEventListener('compositionend', () => { compondo = false; agendaPaginas(); });
+    texto.addEventListener('click', (e) => { const im = e.target.closest && e.target.closest('img'); escolheImagem(im && dentro(im) && !im.closest('.esc-salto') ? im : null); const n = e.target.closest && e.target.closest('.esc-nota'); if (n) editaNota(n); });
     texto.addEventListener('load', (e) => { if (e.target && e.target.tagName === 'IMG') agendaPaginas(); }, true);
     texto.addEventListener('keydown', (e) => {
-      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 's') { e.preventDefault(); sujo = true; guarda(); }
+      const k = e.key.toLowerCase(), ctrl = e.ctrlKey || e.metaKey;
+      if (ctrl && k === 's') { e.preventDefault(); sujo = true; guarda(); }
+      if (ctrl && !e.altKey && ((k === 'z' && !e.shiftKey) || k === 'y' || (k === 'z' && e.shiftKey))) { e.preventDefault(); if (k === 'z' && !e.shiftKey) desfaz(); else refaz(); return; }
       if (e.key === 'Tab' && celulaAtual()) {   // Tab passa para a célula seguinte
-        e.preventDefault(); const c = celulaAtual(), todas = [...c.closest('table').querySelectorAll('td, th')], i = todas.indexOf(c), alvo = todas[i + (e.shiftKey ? -1 : 1)];
+        e.preventDefault(); const c = celulaAtual(), todas = [...c.closest('table').querySelectorAll('td, th')].filter((y) => !y.closest('.esc-salto')), i = todas.indexOf(c), alvo = todas[i + (e.shiftKey ? -1 : 1)];
         if (alvo) { const r = document.createRange(); r.selectNodeContents(alvo); r.collapse(false); const s = getSelection(); s.removeAllRanges(); s.addRange(r); }
       }
     });
     texto.addEventListener('paste', (e) => {
       const d = e.clipboardData; if (!d) return;
       const html = d.getData('text/html'), txt = d.getData('text/plain');
-      e.preventDefault();
+      e.preventDefault(); guardaEstado('colar');
       if (html) { const r = document.createElement('div'); r.innerHTML = html; limpa(r); document.execCommand('insertHTML', false, r.innerHTML); }
       else if (txt) document.execCommand('insertHTML', false, txt.split(/\r?\n\r?\n/).map((p) => `<p>${esc(p).replace(/\r?\n/g, '<br>')}</p>`).join(''));
       depois();
     });
+    // copiar e cortar sem os separadores da vista de páginas
+    function aoCopiar(e, cortar) {
+      const s = getSelection(); if (!s.rangeCount || s.isCollapsed || !dentro(s.anchorNode) || !e.clipboardData) return;
+      const frag = s.getRangeAt(0).cloneContents();
+      if (!frag.querySelector('.esc-salto, [data-esc-salto]')) return;        // o navegador faz bem o resto
+      const d = document.createElement('div'); d.append(frag); PAGINAS.tiraSaltos(d);
+      e.clipboardData.setData('text/html', d.innerHTML); e.clipboardData.setData('text/plain', s.toString()); e.preventDefault();
+      if (cortar) { guardaEstado('apagar'); document.execCommand('delete'); depois(); }
+    }
+    texto.addEventListener('copy', (e) => aoCopiar(e, false)); texto.addEventListener('cut', (e) => aoCopiar(e, true));
     texto.addEventListener('drop', (e) => { if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files.length) e.preventDefault(); });
-    const aoMudarSel = () => { if (!vivo) return; guardaSel(); atualizaBarras(); mostraPagina(); };
+    // clicar nas margens da folha põe o cursor na linha mais perto (como no Word)
+    folha.addEventListener('mousedown', (e) => {
+      if (vista !== 'paginas' || dentro(e.target) || (e.target.closest && e.target.closest('.esc-pg-notas'))) return;
+      const r = texto.getBoundingClientRect(), xx = Math.min(Math.max(e.clientX, r.left + 2), r.right - 2);
+      const pos = document.caretRangeFromPoint ? document.caretRangeFromPoint(xx, e.clientY) : null;
+      if (pos && dentro(pos.startContainer)) { e.preventDefault(); texto.focus({ preventScroll: true }); const s = getSelection(); s.removeAllRanges(); s.addRange(pos); }
+    });
+    const aoMudarSel = () => { if (!vivo) return; if (Date.now() - ultimoInput > 200) hist.cat = ''; guardaSel(); atualizaBarras(); mostraPagina(); };
     document.addEventListener('selectionchange', aoMudarSel);
     const aoEsconder = () => { if (document.visibilityState === 'hidden') guarda(); };
     document.addEventListener('visibilitychange', aoEsconder);
@@ -2041,7 +2532,7 @@ const ESCREVER = (() => {
     // ----- a barra fica por baixo do cimo da aplicação, que também está preso
     const barras = h('div', { class: 'esc-barras' }, barra, barraImg, barraTab);
     const topo = () => { const t = document.querySelector('.top'); barras.style.top = (t ? t.getBoundingClientRect().height : 0) + 'px'; };
-    const aoRedimensionar = () => { topo(); desenhaMarcas(); };
+    const aoRedimensionar = () => { topo(); aplicaZoom(); if (vista !== 'paginas') agendaPaginas(); };     // vista contínua: faixas com a nova largura
     window.addEventListener('resize', aoRedimensionar);
 
     const cab = h('div', { class: 'esc-cab' },
@@ -2051,7 +2542,8 @@ const ESCREVER = (() => {
         h('button', { type: 'button', class: 'btn sm', onclick: verPaginas }, svg('folhas'), 'Ver páginas'),
         h('button', { type: 'button', class: 'btn sm', onclick: pdf }, svg('pdf'), 'PDF'),
         h('button', { type: 'button', class: 'btn primary sm', onclick: word }, svg('word'), 'Word')));
-    const el = h('div', { class: 'view esc-vista' }, cab, titulo, barras, folha, h('div', { class: 'esc-rodape' }, indicador, conta, escolheImg));
+    const rodape = h('div', { class: 'esc-rodape' }, indicador, conta, h('div', { class: 'esc-vistas' }, bPag, bCont, zoomSel), escolheImg);
+    const el = h('div', { class: 'view esc-vista' }, cab, titulo, barras, palco, rodape);
 
     (async () => {
       try { doc = await Docs.um(id); } catch (e) { doc = null; }
@@ -2074,7 +2566,7 @@ const ESCREVER = (() => {
     } };
   }
 
-  return { vista, paraWord, limpa, confN, MODELOS, CONF0 };
+  return { vista, paraWord, limpa, confN, MODELOS, NORMAS, CONF0 };
 })();
 if (typeof module !== 'undefined') module.exports = ESCREVER;
 </script>
@@ -3524,6 +4016,9 @@ function toolRomanos() {
 
 /* ============================================================ CÓPIAS E ATUALIZAÇÕES */
 const NOVIDADES = [
+  { v: '1.7', d: '15/11/2026', itens: ['«Os meus documentos» como no Word: o texto aparece em folhas A4 separadas, com as margens, os números de página e as notas no fundo de cada folha. No telemóvel, a vista contínua mostra uma faixa «Página N» onde começa cada folha. Mude de vista e de zoom na barra de baixo.',
+    'Normas: livre, trabalho académico e ABNT (Brasil), com o modelo «Monografia (normas ABNT)». Recuo da primeira linha, espaço depois dos parágrafos e capítulos sempre numa página nova.',
+    'Língua do documento: português de Portugal ou do Brasil, com o sublinhado dos erros de ortografia ligado ou desligado (também no ficheiro Word). Botões Desfazer e Refazer.'] },
   { v: '1.6', d: '15/11/2026', itens: ['«Os meus documentos»: enquanto escreve, a barra de baixo diz em que página está e quantas páginas tem o documento, e uma linha tracejada mostra onde começa cada folha A4.',
     'Números de página à escolha (no fim ou no início da página, número inicial, capa sem número) e numeração romana nas páginas iniciais dos trabalhos académicos.',
     'Índice com os números das páginas, «Ver páginas» antes de imprimir e PDF com as notas no fundo de cada folha. Letras com as mesmas medidas do Times New Roman, do Arial e do Calibri, para as páginas coincidirem com o Word.'] },
