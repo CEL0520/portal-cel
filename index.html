@@ -651,6 +651,8 @@ body:not(.ready) > .top, body:not(.ready) > .layout { display: none }
   #print-root .esc-pgs { display: block }
   #print-root .esc-pg { break-after: page; box-shadow: none; margin: 0 }
   #print-root .esc-pg:last-child { break-after: auto }
+  /* o realce e a cor das células também saem no PDF (sem isto, o navegador não imprime os fundos) */
+  #print-root .esc-pg span[style*="background"], #print-root .esc-pg td[style*="background"], #print-root .esc-pg th { -webkit-print-color-adjust: exact; print-color-adjust: exact }
 }
 
 /* ---------- vista de páginas, como no Word: folhas brancas separadas (o texto passa de uma folha para a seguinte) */
@@ -783,6 +785,17 @@ body.esc-foco .layout { grid-template-columns: minmax(0, 1fr); max-width: none; 
   .esc-cab .esc-rot-m { display: none }
   .esc-cab .btn.sm { padding-inline: 9px; gap: 5px }
 }
+/* 1.11: cores (letra, realce, células) e barra «Mais / Menos» */
+.esc-paleta { position: fixed; z-index: 60; background: var(--surface); color: var(--ink); border: 1px solid var(--line); border-radius: var(--r-sm); box-shadow: 0 12px 32px rgba(0, 0, 0, .2); padding: 8px 10px 10px }
+.esc-paleta-t { font: 700 11.5px/1.4 system-ui, sans-serif; text-transform: uppercase; letter-spacing: .05em; color: var(--ink-3); margin-bottom: 6px }
+.esc-paleta-g { display: grid; grid-template-columns: repeat(5, 30px); gap: 6px }
+.esc-cor { width: 30px; height: 30px; padding: 0; border-radius: 6px; border: 1px solid rgba(0, 0, 0, .18); background: var(--c, #fff); cursor: pointer }
+.esc-cor:hover, .esc-cor:focus-visible { outline: 2px solid var(--focus); outline-offset: 1px }
+.esc-cor-nada { background: var(--surface); color: var(--ink-2); font: 600 17px/1 system-ui, sans-serif }
+.esc-b.cor .esc-l { font-family: Georgia, serif; font-size: 16px; border-bottom: 3px solid var(--esc-cor, #C00000); padding: 0 2px 1px; line-height: 1 }
+.esc-barra.esc-menos .esc-extra { display: none }
+/* no telemóvel os botões passam para a linha seguinte (todos à vista, «Mais» incluído), em vez de ficarem escondidos à direita */
+@media (max-width: 700px) { .esc-barra { flex-wrap: wrap; overflow-x: visible } }
 </style>
 </head>
 <body>
@@ -792,7 +805,7 @@ body.esc-foco .layout { grid-template-columns: minmax(0, 1fr); max-width: none; 
 <div id="toast" role="status" aria-live="polite"></div>
 <div id="print-root"></div>
 <div id="barra" class="barra" hidden></div>
-<script type="application/json" id="cel-config">{"versao": "1.10.0", "ano": "2026/2027", "chaveId": "1987a8c7", "verificador": "m+HQwwNueX1G3XlMCpRsYJOV0Tkds6FCJhmeHgobCN6OFobxkzA=", "dados": "dados.2460e27fab.bin", "contactos": {"whatsapp": "245955252417", "email": "cel.vf.gb@gmail.com"}, "diasSemLigacao": 30}</script>
+<script type="application/json" id="cel-config">{"versao": "1.11.0", "ano": "2026/2027", "chaveId": "1987a8c7", "verificador": "m+HQwwNueX1G3XlMCpRsYJOV0Tkds6FCJhmeHgobCN6OFobxkzA=", "dados": "dados.2460e27fab.bin", "contactos": {"whatsapp": "245955252417", "email": "cel.vf.gb@gmail.com"}, "diasSemLigacao": 30}</script>
 <script>/* Gerador mínimo de .docx (Word) no navegador — sem bibliotecas externas.
    Blocos: {t:'h', text, level} · {t:'p', text|runs, align, size, before, after, keep, border}
            {t:'list', items:[text|runs], ordered} · {t:'table', rows, widths, header, borders, minH}
@@ -1113,8 +1126,16 @@ const PAGINAS = (() => {
         const marca = el === raiz && n.dataset.arabe && /^(P|H1|H2|H3)$/.test(t) && ['romanas', 'abnt', 'reinicio'].includes(c.num.modo);
         if (marca) u.push({ tipo: 'quebra', el: n, secao: true, notas: [] });
         if (t === 'TABLE') {
-          const cab = cabecalho(n), hc = cab ? cab.getBoundingClientRect().height : 0;
-          for (const tr of n.rows) u.push(caixaUn(tr, 'linha-tab', { cab: cab && tr !== cab ? hc : 0 }));
+          // cada linha numa folha; as linhas ligadas por células unidas para baixo ficam juntas
+          const cab = cabecalho(n), hc = cab ? cab.getBoundingClientRect().height : 0, rows = [...n.rows];
+          let i0 = 0, fim = -1;
+          const fecha = (i) => {
+            const a = rows[i0], ra = a.getBoundingClientRect(), rb = rows[i].getBoundingClientRect();
+            u.push({ tipo: 'linha-tab', el: a, top: ra.top, bottom: Math.max(ra.bottom, rb.bottom), notas: rows.slice(i0, i + 1).flatMap((r) => [...r.querySelectorAll('.esc-nota')]), cab: cab && a !== cab ? hc : 0 });
+            i0 = i + 1;
+          };
+          rows.forEach((tr, i) => { for (const c of tr.cells) fim = Math.max(fim, i + Math.max(1, c.rowSpan || 1) - 1); if (i >= fim) fecha(i); });
+          if (i0 < rows.length) fecha(rows.length - 1);
           continue;
         }
         if (t === 'UL' || t === 'OL') { visita(n); continue; }
@@ -1402,7 +1423,7 @@ if (typeof module !== 'undefined') module.exports = PAGINAS;
 <script>/* Abrir ficheiros Word (.docx) em «Os meus documentos» (Portal CEL). Tudo neste aparelho, sem internet; o ficheiro original não muda.
    Passa para o editor: títulos (também numerados), parágrafos, negrito, itálico, sublinhado, listas, tabelas, imagens, notas de rodapé,
    índice, quebras de página e as definições do documento (letra, tamanho, espaços, recuo, margens, cabeçalho e rodapé com os números de página, língua).
-   O que o editor não tem (caixas de texto, desenhos, comentários, cores…) fica num relatório, para o professor saber.
+   O que o editor não tem (caixas de texto, desenhos, comentários…) fica num relatório, para o professor saber.
    Uso: const r = await ABRIRWORD.ler(ficheiro) → { titulo, html, conf, relatorio: { passou: [...], avisos: [...] } }
         (em caso de problema, lança um Error com uma mensagem para mostrar ao professor) */
 const ABRIRWORD = (() => {
@@ -1411,6 +1432,9 @@ const ABRIRWORD = (() => {
   const R = 'http://schemas.openxmlformats.org/officeDocument/2006/relationships', RS = 'http://purl.oclc.org/ooxml/officeDocument/relationships';
   const MC = 'http://schemas.openxmlformats.org/markup-compatibility/2006';
   const CM = 96 / 2.54, TW_CM = 567, EMU_CM = 360000;
+  // as cores do realce do Word
+  const REALCE_HEX = { yellow: 'FFFF00', green: '00FF00', cyan: '00FFFF', magenta: 'FF00FF', blue: '0000FF', red: 'FF0000', darkBlue: '000080', darkCyan: '008080', darkGreen: '008000',
+    darkMagenta: '800080', darkRed: '800000', darkYellow: '808000', darkGray: '808080', lightGray: 'C0C0C0', black: '000000' };
   const falha = (m) => new Error(m);
 
   /* ------------------------------------------------------------ ZIP (o .docx é um ZIP) */
@@ -1755,8 +1779,12 @@ const ABRIRWORD = (() => {
       const u = pega('u'); if (u) f.u = !/^none$/i.test(aw(u, 'val') || 'single');
       const va = pega('vertAlign'); if (va) { const v = aw(va, 'val'); f.sup = v === 'superscript'; f.sub = v === 'subscript'; }
       if (rp) {
+        // cor da letra e realce (os da formatação direta; o azul das ligações, que vem do estilo, não)
         const c = filho(rp, 'color'), hl = filho(rp, 'highlight'), sh = filho(rp, 'shd');
-        if ((c && !/^(auto|000000)$/i.test(aw(c, 'val') || 'auto')) || (hl && !/^none$/i.test(aw(hl, 'val') || 'none')) || (sh && !/^(auto|ffffff)?$/i.test(aw(sh, 'fill') || ''))) aviso('cores');
+        const cv = c ? String(aw(c, 'val') || '').toUpperCase() : ''; if (/^[0-9A-F]{6}$/.test(cv) && cv !== '000000') f.cor = cv;
+        const hv = hl ? REALCE_HEX[aw(hl, 'val')] : null;
+        if (hv) f.fundo = hv;
+        else if (sh) { const fv = String(aw(sh, 'fill') || '').toUpperCase(); if (/^[0-9A-F]{6}$/.test(fv) && fv !== 'FFFFFF') f.fundo = fv; }
         const z = filho(rp, 'sz'); if (z && Math.abs(+aw(z, 'val') / 2 - tamBase) > 0.6) aviso('tamanhos');
       }
       if (rp && filho(rp, 'caps')) f.caps = liga(filho(rp, 'caps'));
@@ -1764,6 +1792,7 @@ const ABRIRWORD = (() => {
     }
     function embrulha(no, f) {
       let n = no;
+      if (f.cor || f.fundo) { const s = document.createElement('span'); s.setAttribute('style', [f.cor ? `color: #${f.cor}` : '', f.fundo ? `background-color: #${f.fundo}` : ''].filter(Boolean).join('; ') + ';'); s.append(n); n = s; }
       for (const [k, tag] of [['sup', 'sup'], ['sub', 'sub'], ['s', 's'], ['u', 'u'], ['i', 'i'], ['b', 'b']]) if (f[k]) { const e = document.createElement(tag); e.append(n); n = e; }
       return n;
     }
@@ -1955,14 +1984,20 @@ const ABRIRWORD = (() => {
       fechaListas();
       const tb = document.createElement('table'); tb.className = 'esc-tab'; const corpoT = document.createElement('tbody'); tb.append(corpoT);
       let linhas = 0;
+      const abertas = new Map();          // coluna da grelha → célula que começou uma união para baixo
       for (const tr of filhos(t, 'tr')) {
         const trp = filho(tr, 'trPr'), cab = trp && filho(trp, 'tblHeader') ? liga(filho(trp, 'tblHeader')) : false;
         const linha = document.createElement('tr');
+        let col = trp && filho(trp, 'gridBefore') ? +aw(filho(trp, 'gridBefore'), 'val') || 0 : 0;
         for (const tc of [...filhos(tr, 'tc'), ...filhos(tr, 'sdt').flatMap((s) => filhos(filho(s, 'sdtContent'), 'tc'))]) {
           const tcp = filho(tc, 'tcPr'), span = tcp && filho(tcp, 'gridSpan') ? +aw(filho(tcp, 'gridSpan'), 'val') || 1 : 1;
-          const vm = tcp && filho(tcp, 'vMerge');
-          if (vm && aw(vm, 'val') !== 'restart') aviso('celulas-unidas');
+          const vm = tcp && filho(tcp, 'vMerge'), vmv = vm ? (aw(vm, 'val') || 'continue') : null;
+          if (vmv && vmv !== 'restart' && abertas.has(col)) { const cima = abertas.get(col); cima.rowSpan = (cima.rowSpan || 1) + 1; col += span; continue; }    // continua a célula de cima
           const td = document.createElement(cab ? 'th' : 'td'); if (span > 1) td.colSpan = span;
+          const shd = tcp && filho(tcp, 'shd'), fill = shd ? String(aw(shd, 'fill') || '').toUpperCase() : '';
+          if (/^[0-9A-F]{6}$/.test(fill) && fill !== 'FFFFFF' && !(cab && fill === 'E9EDF4')) td.style.backgroundColor = '#' + fill;
+          if (vmv === 'restart') abertas.set(col, td); else abertas.delete(col);
+          col += span;
           const tmp = document.createElement('div');
           for (const q of filhos(tc)) {
             if (ehW(q, 'p')) await paragrafo(q, tmp, true);
@@ -2273,11 +2308,9 @@ const ABRIRWORD = (() => {
     comentarios: 'Os comentários não passaram (o texto ficou igual).',
     revisoes: 'As alterações controladas foram aceites: fica o texto como estaria depois de as aceitar.',
     'notas-fim': 'As notas de fim passaram a notas de rodapé.',
-    cores: 'As cores e os realces do texto não passaram (o texto fica a preto).',
     tamanhos: 'Os tamanhos de letra diferentes dentro do texto passaram para o tamanho normal do documento.',
     simbolos: 'Alguns símbolos de tipos de letra especiais (Symbol, Wingdings) podem aparecer de outra forma.',
     colunas: 'O texto em colunas passou a uma só coluna.',
-    'celulas-unidas': 'As células de tabela unidas na vertical ficaram separadas.',
     'tabela-dentro': 'As tabelas dentro de tabelas passaram a linhas de texto.',
     papel: 'O tamanho do papel não é nenhum dos que o Portal tem (A4, A5, Carta, Ofício): fica em A4, por isso as páginas podem mudar.',
     'espaco-exato': 'O espaço entre linhas era uma medida fixa: foi convertido no espaçamento mais parecido.',
@@ -2363,6 +2396,26 @@ const ESCREVER = (() => {
   /* ------------------------------------------------------------ utilitários */
   // HTML de fora (colar, cópias de segurança, ficheiros): lido num documento à parte, sem executar nada nem carregar imagens; depois passa por limpa()
   const inerte = (html) => new DOMParser().parseFromString('<!doctype html><html><body>' + String(html || '') + '</body></html>', 'text/html').body;
+  // cores em RRGGBB (maiúsculas, sem #), venham do navegador, do Word ou de uma página da internet
+  const NOMES_COR = { black: '000000', white: 'FFFFFF', red: 'FF0000', yellow: 'FFFF00', lime: '00FF00', green: '008000', blue: '0000FF', aqua: '00FFFF', cyan: '00FFFF', fuchsia: 'FF00FF',
+    magenta: 'FF00FF', gray: '808080', grey: '808080', silver: 'C0C0C0', maroon: '800000', navy: '000080', purple: '800080', olive: '808000', teal: '008080', orange: 'FFA500' };
+  function normCor(v) {
+    const s = String(v || '').trim().toLowerCase();
+    if (!s || /^(transparent|inherit|initial|unset|currentcolor|none|auto|windowtext)$/.test(s)) return null;
+    let m = /^#([0-9a-f]{3})$/.exec(s); if (m) return m[1].split('').map((c) => c + c).join('').toUpperCase();
+    m = /^#?([0-9a-f]{6})$/.exec(s); if (m) return m[1].toUpperCase();
+    m = /^rgba?\(\s*(\d+)[\s,]+(\d+)[\s,]+(\d+)(?:[\s,/]+([\d.]+)(%?))?\s*\)$/.exec(s);
+    if (m) { if (m[4] != null && parseFloat(m[4]) === 0) return null; return [m[1], m[2], m[3]].map((y) => Math.min(255, +y).toString(16).padStart(2, '0')).join('').toUpperCase(); }
+    return NOMES_COR[s] || null;
+  }
+  const propEstilo = (st, nome) => { const m = new RegExp('(?:^|;)\\s*' + nome + '\\s*:\\s*([^;]+)', 'i').exec(String(st || '')); return m ? m[1].trim() : ''; };
+  const CORES_LETRA = [['C00000', 'Vermelho escuro'], ['FF0000', 'Vermelho'], ['E36C09', 'Laranja'], ['00B050', 'Verde'], ['0070C0', 'Azul'], ['002060', 'Azul-escuro'], ['7030A0', 'Roxo'], ['7F7F7F', 'Cinzento']];
+  const CORES_REALCE = [['FFFF00', 'Amarelo'], ['00FF00', 'Verde-claro'], ['00FFFF', 'Azul-claro'], ['FF00FF', 'Rosa'], ['C0C0C0', 'Cinzento']];
+  const CORES_CELULA = [['E9EDF4', 'Azul-acinzentado'], ['DEEAF6', 'Azul-claro'], ['E2EFD9', 'Verde-claro'], ['FFF2CC', 'Amarelo-claro'], ['FBE4D5', 'Laranja-claro'], ['EDEDED', 'Cinzento-claro'], ['D9D9D9', 'Cinzento']];
+  const PALETA_L = new Set(CORES_LETRA.map(([c]) => c)), PALETA_R = new Set(CORES_REALCE.map(([c]) => c)), PALETA_C = new Set(CORES_CELULA.map(([c]) => c));
+  // realce do Word (as cores com nome; as outras vão como sombreado)
+  const REALCE_WORD = { FFFF00: 'yellow', '00FF00': 'green', '00FFFF': 'cyan', FF00FF: 'magenta', '0000FF': 'blue', FF0000: 'red', '000080': 'darkBlue', '008080': 'darkCyan',
+    '008000': 'darkGreen', '800080': 'darkMagenta', '800000': 'darkRed', '808000': 'darkYellow', '808080': 'darkGray', C0C0C0: 'lightGray', '000000': 'black' };
   const esc = (s) => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
   const x = (s) => esc(s).replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F￾￿]/g, '');
   const hoje = () => new Date().toLocaleDateString('pt-PT', { day: 'numeric', month: 'long', year: 'numeric' });
@@ -2400,6 +2453,7 @@ const ESCREVER = (() => {
     pdf: '<path d="M6 9V3h12v6"/><rect x="3" y="9" width="18" height="8" rx="1.5"/><path d="M6 14h12v7H6z"/>',
     numera: '<path d="M6 3h9l4 4v14H6z"/><path d="M15 3v4h4"/><path d="M10.6 12.6l2-1.4V18"/>',
     nav: '<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M9 4v16"/><path d="M12.5 9h5M12.5 13h5M12.5 17h3"/>',
+    realce: '<path d="M15.5 3.5l4 4-8.5 8.5H7v-4z"/><path d="M13 6l4 4"/><path d="M3 20.5h18" stroke="#E8B800" stroke-width="3"/>',
     guardar: '<path d="M5 3h11l3 3v15H5z"/><path d="M8 3v5h7V3M8 21v-7h8v7"/>',
     ecra: '<path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/>', sairEcra: '<path d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5"/>',
     voltar: '<path d="M19 12H5M11 6l-6 6 6 6"/>', mais: '<circle cx="5" cy="12" r="1.5" fill="currentColor"/><circle cx="12" cy="12" r="1.5" fill="currentColor"/><circle cx="19" cy="12" r="1.5" fill="currentColor"/>'
@@ -2516,7 +2570,7 @@ const ESCREVER = (() => {
 
   /* ------------------------------------------------------------ limpeza do que se cola (de páginas, do WhatsApp, do Word) */
   const PERMITIDAS = new Set(['P', 'BR', 'H1', 'H2', 'H3', 'B', 'STRONG', 'I', 'EM', 'U', 'S', 'SUB', 'SUP', 'UL', 'OL', 'LI', 'TABLE', 'THEAD', 'TBODY', 'TR', 'TD', 'TH', 'IMG', 'BLOCKQUOTE', 'HR', 'DIV']);
-  function limpa(raiz) {
+  function limpa(raiz, op = {}) {
     const anda = (no) => {
       for (const c of [...no.childNodes]) {
         if (c.nodeType === 8) { c.remove(); continue; }
@@ -2525,6 +2579,16 @@ const ESCREVER = (() => {
         if (['SCRIPT', 'STYLE', 'META', 'LINK', 'TITLE', 'IFRAME', 'OBJECT', 'NOSCRIPT', 'SVG', 'CANVAS', 'VIDEO', 'AUDIO'].includes(t)) { c.remove(); continue; }
         if (c.classList.contains('esc-salto')) { c.remove(); continue; }          // separador da vista de páginas
         if (t === 'H4' || t === 'H5' || t === 'H6') { const n = document.createElement('h3'); n.append(...c.childNodes); c.replaceWith(n); anda(n); limpaAttr(n); continue; }
+        if (t === 'SPAN' || t === 'FONT') {          // cor da letra e realce (o resto da formatação destes elementos sai)
+          anda(c);
+          const st = c.getAttribute('style') || '';
+          const cor = normCor(t === 'FONT' ? (c.getAttribute('color') || propEstilo(st, 'color')) : propEstilo(st, 'color'));
+          const fundo = normCor(propEstilo(st, 'background-color'));
+          const corOk = !!cor && cor !== '000000' && (!op.colar || PALETA_L.has(cor)), fundoOk = !!fundo && fundo !== 'FFFFFF' && (!op.colar || PALETA_R.has(fundo));
+          if (!corOk && !fundoOk) { c.replaceWith(...c.childNodes); continue; }
+          const n = document.createElement('span'); n.setAttribute('style', [corOk ? `color: #${cor}` : '', fundoOk ? `background-color: #${fundo}` : ''].filter(Boolean).join('; ') + ';');
+          n.append(...c.childNodes); c.replaceWith(n); continue;
+        }
         if (!PERMITIDAS.has(t)) { anda(c); c.replaceWith(...c.childNodes); continue; }
         anda(c); limpaAttr(c);
       }
@@ -2532,7 +2596,12 @@ const ESCREVER = (() => {
     const limpaAttr = (el) => {
       const keep = {};
       if (el.tagName === 'IMG') { const s = el.getAttribute('src') || ''; if (!/^data:image\//i.test(s)) { el.remove(); return; } keep.src = s; keep.class = 'esc-img'; keep['data-l'] = el.getAttribute('data-l') || '100'; }
-      if (el.tagName === 'TD' || el.tagName === 'TH') { if (el.colSpan > 1) keep.colspan = el.colSpan; }
+      const estilo = [];
+      if (el.tagName === 'TD' || el.tagName === 'TH') {        // células unidas e cor da célula
+        if (el.colSpan > 1) keep.colspan = el.colSpan; if (el.rowSpan > 1) keep.rowspan = el.rowSpan;
+        const f = normCor(el.style && el.style.backgroundColor) || normCor(el.getAttribute('bgcolor'));
+        if (f && f !== 'FFFFFF' && (!op.colar || PALETA_C.has(f))) estilo.push(`background-color: #${f}`);
+      }
       if (el.tagName === 'SUP' && el.classList.contains('esc-nota')) {
         keep.class = 'esc-nota'; keep.contenteditable = 'false'; keep['data-nota'] = el.getAttribute('data-nota') || '';
         const fh = PAGINAS.notaHtml(el.getAttribute('data-nota-html') || ''); if (fh) keep['data-nota-html'] = fh;      // nota com negrito, itálico ou sublinhado
@@ -2543,12 +2612,87 @@ const ESCREVER = (() => {
       if (el.tagName === 'BLOCKQUOTE' && el.classList.contains('esc-natureza')) keep.class = 'esc-natureza';     // ABNT: natureza do trabalho (folha de rosto)
       if (/^(P|H1|H2|H3)$/.test(el.tagName) && el.getAttribute('data-arabe')) keep['data-arabe'] = '1';    // onde começa a numeração 1, 2, 3
       const al = (el.style && el.style.textAlign) || el.getAttribute('align');
-      if (al && /^(left|center|right|justify)$/.test(al) && /^(P|H1|H2|H3|DIV|LI|TD|TH|BLOCKQUOTE)$/.test(el.tagName)) keep.style = `text-align: ${al};`;
+      if (al && /^(left|center|right|justify)$/.test(al) && /^(P|H1|H2|H3|DIV|LI|TD|TH|BLOCKQUOTE)$/.test(el.tagName)) estilo.unshift(`text-align: ${al}`);
+      if (estilo.length) keep.style = estilo.join('; ') + ';';
       if (el.tagName === 'IMG') keep.style = `width: ${keep['data-l']}%;`;
       for (const a of [...el.attributes]) el.removeAttribute(a.name);
       for (const [k, v] of Object.entries(keep)) el.setAttribute(k, v);
     };
     anda(raiz); return raiz;
+  }
+
+  /* ------------------------------------------------------------ maiúsculas automáticas (como no módulo Word do Coordenador)
+     No princípio das frases e dos parágrafos (menos depois de abreviaturas e nas alíneas), nos nomes de países e de terras e nas siglas
+     e instituições da educação. Nunca nos meses, nos dias da semana, nas línguas nem nos gentílicos. Ficam de fora os nomes que também
+     são palavras comuns (praia, empada, camarões, argentina, suíça…), para não estragar o texto. */
+  const AC_ABREV = new Set(['sr', 'sra', 'srs', 'sras', 'dr', 'dra', 'drs', 'dras', 'prof', 'profa', 'profs', 'profas', 'eng', 'enga', 'arq', 'exmo', 'exma', 'exmos', 'v', 'vv',
+    'p', 'pp', 'pág', 'págs', 'pag', 'n', 'nº', 'no', 'nr', 'núm', 'num', 'cf', 'cfr', 'vd', 'ex', 'exs', 'etc', 'al', 'alin', 'alín', 'inc', 'par', 'art', 'arts', 'cap', 'caps',
+    'tít', 'fig', 'figs', 'tab', 'obs', 'vol', 'vols', 'ed', 'eds', 'org', 'orgs', 'coord', 'trad', 'rev', 'atual', 'ampl', 'reimpr', 'tel', 'telm', 'av', 'r', 'lda', 'ltda',
+    'sec', 'secs', 'séc', 'min', 'mín', 'máx', 'aprox', 'dep', 'dir', 'adj', 'pe', 'op', 'cit', 'ibid', 'id', 'apud', 'et', 'ss', 'seg', 'segs', 'sto', 'sta', 'dec', 'dl',
+    'proc', 'fl', 'fls', 'rel', 'des', 'resp', 'doc', 'ref', 'esp', 'sup', 'inf', 'ac', 'pt', 'ob']);
+  // países (a lista do módulo Word, sem os que também são palavras comuns ou gentílicos: Argentina, Índia, Suíça, Camarões, Equador, Peru, China, Cuba…)
+  const AC_PAISES = ['Afeganistão', 'África do Sul', 'Albânia', 'Alemanha', 'Andorra', 'Angola', 'Antígua e Barbuda', 'Arábia Saudita', 'Argélia', 'Austrália', 'Áustria', 'Azerbaijão',
+    'Bahamas', 'Bangladesh', 'Bahrein', 'Bélgica', 'Belize', 'Benim', 'Bielorrússia', 'Bolívia', 'Bósnia e Herzegovina', 'Botsuana', 'Brasil', 'Brunei', 'Bulgária', 'Burquina Faso',
+    'Burkina Faso', 'Burundi', 'Butão', 'Cabo Verde', 'Camboja', 'Canadá', 'Cazaquistão', 'Chade', 'Chipre', 'Colômbia', 'Comores', 'Congo', 'Coreia do Norte', 'Coreia do Sul',
+    'Costa do Marfim', 'Croácia', 'Dinamarca', 'Djibuti', 'Dominica', 'Egito', 'Egipto', 'El Salvador', 'Emirados Árabes Unidos', 'Eritreia', 'Eslováquia', 'Eslovênia', 'Eslovénia',
+    'Espanha', 'Estados Unidos', 'Eswatini', 'Etiópia', 'Fiji', 'Finlândia', 'França', 'Gabão', 'Gâmbia', 'Geórgia', 'Grécia', 'Guatemala', 'Guiana', 'Guiné', 'Guiné-Bissau',
+    'Guiné-Conacri', 'Guiné Equatorial', 'Haiti', 'Holanda', 'Honduras', 'Hungria', 'Iêmen', 'Iémen', 'Ilhas Marshall', 'Ilhas Salomão', 'Indonésia', 'Inglaterra', 'Irã', 'Irão',
+    'Iraque', 'Irlanda', 'Islândia', 'Israel', 'Itália', 'Jamaica', 'Japão', 'Jordânia', 'Kosovo', 'Kuwait', 'Laos', 'Lesoto', 'Letônia', 'Letónia', 'Líbano', 'Libéria',
+    'Liechtenstein', 'Lituânia', 'Luxemburgo', 'Macedônia do Norte', 'Macedónia do Norte', 'Madagascar', 'Madagáscar', 'Malásia', 'Malaui', 'Malawi', 'Maldivas', 'Mali', 'Marrocos',
+    'Maurício', 'Mauritânia', 'México', 'Mianmar', 'Micronésia', 'Moçambique', 'Moldávia', 'Mônaco', 'Mónaco', 'Mongólia', 'Montenegro', 'Namíbia', 'Nauru', 'Nepal', 'Nicarágua',
+    'Níger', 'Nigéria', 'Noruega', 'Nova Zelândia', 'Omã', 'Países Baixos', 'Palau', 'Panamá', 'Papua-Nova Guiné', 'Paquistão', 'Paraguai', 'Polônia', 'Polónia', 'Portugal',
+    'Quênia', 'Quénia', 'Quirguistão', 'Reino Unido', 'República Centro-Africana', 'República Checa', 'República Democrática do Congo', 'República Dominicana', 'Romênia', 'Roménia',
+    'Ruanda', 'Rússia', 'Samoa', 'San Marino', 'Santa Lúcia', 'São Cristóvão e Névis', 'São Tomé e Príncipe', 'São Vicente e Granadinas', 'Seicheles', 'Senegal', 'Serra Leoa',
+    'Singapura', 'Somália', 'Sri Lanka', 'Sudão', 'Sudão do Sul', 'Suécia', 'Suriname', 'Tadjiquistão', 'Tailândia', 'Taiwan', 'Tanzânia', 'Timor-Leste', 'Togo', 'Tonga',
+    'Trinidad e Tobago', 'Tunísia', 'Turcomenistão', 'Turquia', 'Tuvalu', 'Ucrânia', 'Uganda', 'Uruguai', 'Uzbequistão', 'Vanuatu', 'Vaticano', 'Venezuela', 'Vietnã', 'Vietname',
+    'Zâmbia', 'Zimbábue', 'Zimbabué', 'Macau'];
+  // continentes, regiões e terras (Guiné-Bissau, CPLP e outras); ficam de fora Praia, Bula, Empada, Pirada, Formosa, Biombo, Faro, Porto, Salvador, Recife, Natal…
+  const AC_TERRAS = ['África', 'Europa', 'América', 'América do Sul', 'América do Norte', 'América Latina', 'Ásia', 'Oceânia', 'Médio Oriente', 'Antártida',
+    'Bissau', 'Bafatá', 'Gabu', 'Cacheu', 'Oio', 'Bolama', 'Bijagós', 'Quinara', 'Tombali', 'Canchungo', 'Farim', 'Mansoa', 'Buba', 'Catió', 'Bubaque', 'Bissorã', 'Quinhámel',
+    'Mansabá', 'Bambadinca', 'Xitole', 'Pitche', 'Contuboel', 'Sonaco', 'Bigene', 'Varela', 'Cacine', 'Bedanda', 'Galomaro', 'Nhacra', 'Prábis', 'Ingoré', 'Canhabaque', 'Orango',
+    'Lisboa', 'Coimbra', 'Setúbal', 'Brasília', 'Goiânia', 'Anápolis', 'São Paulo', 'Rio de Janeiro', 'Minas Gerais', 'Goiás', 'Bahia', 'Dakar', 'Ziguinchor', 'Conacri', 'Luanda',
+    'Maputo', 'Mindelo', 'Díli', 'Paris', 'Londres', 'Madrid', 'Roma', 'Nova Iorque'];
+  // siglas e instituições da educação (sem PISA, SIDA, COVID: escrevem-se também como palavras)
+  const AC_SIGLAS = ['CEL', 'PICEL', 'PECEL', 'MEN', 'INDE', 'ENS', 'UAC', 'UNESCO', 'UNICEF', 'ONU', 'OMS', 'FAO', 'PAM', 'PNUD', 'OIT', 'ONG', 'ONGs', 'CPLP', 'CEDEAO', 'UEMOA',
+    'UE', 'EUA', 'FMI', 'OCDE', 'MEC', 'INEP', 'ENEM', 'BNCC', 'LDB', 'PNE', 'CAPES', 'CNPq', 'IDEB', 'SAEB', 'EJA', 'AEE', 'NEE', 'ABNT', 'NBR', 'UFG', 'USP', 'UnB', 'PUC', 'DGE', 'IAVE',
+    'ANQEP', 'DGEstE', 'TIMSS', 'PIRLS', 'PNL', 'LBSE', 'TIC', 'APA', 'ISO', 'PDF', 'URL', 'HIV', 'PIB', 'IDH',
+    'Ministério da Educação', 'Ministério da Educação Nacional', 'Plano Nacional de Leitura', 'Lei de Bases do Sistema Educativo', 'Universidade Amílcar Cabral',
+    'Escola Normal Superior Tchico Té', 'Centro Educativo Líder', 'Nações Unidas', 'União Africana', 'União Europeia', 'Banco Mundial', 'Assembleia Nacional Popular'];
+  const acTira = (s) => String(s).normalize('NFD').replace(/[̀-ͯ]/g, '').normalize('NFC');
+  const acNorm = (s) => acTira(s).toLowerCase().replace(/[\s ]+/g, ' ').trim();
+  let acMapa = null;
+  function acDic() {
+    if (acMapa) return acMapa;
+    acMapa = new Map();
+    for (const c of [...AC_PAISES, ...AC_TERRAS, ...AC_SIGLAS]) { const k = acNorm(c); for (const kk of new Set([k, k.replace(/-/g, ' ')])) if (!acMapa.has(kk)) acMapa.set(kk, c); }
+    return acMapa;
+  }
+  // o fim de uma frase (. ! ?), menos depois de abreviaturas, iniciais, números e reticências
+  function acFimFrase(antes) {
+    const m = antes.match(/([\p{L}\p{N}.ºª-]*?)([.!?…]+)["”'»)\]]*\s+$/u); if (!m) return false;
+    const tok = m[1].replace(/\.$/, ''), fim = m[2];
+    if (/…|\.\.\./.test(fim)) return false;
+    if (/[!?]/.test(fim)) return true;
+    const w = tok.toLowerCase(); if (!w) return true;
+    if (AC_ABREV.has(w) || w.length === 1 || /\./.test(tok) || /\d/.test(w)) return false;
+    return true;
+  }
+  // a palavra (ou as palavras) acabada(s) de escrever é um nome do dicionário? devolve o que trocar
+  function acTroca(antes) {
+    const toks = [...antes.matchAll(/[\p{L}\p{N}][\p{L}\p{N}'’-]*/gu)]; if (!toks.length) return null;
+    const ult = toks[toks.length - 1]; if (ult.index + ult[0].length !== antes.length) return null;
+    const D = acDic();
+    for (let k = Math.min(7, toks.length); k >= 1; k--) {
+      const a = toks[toks.length - k].index, escrito = antes.slice(a);
+      if (k > 1 && /[,.;:!?​]/.test(escrito)) continue;
+      if (a > 0 && !/[\s ​(\[«“"'‘—–]/.test(antes[a - 1])) continue;          // colado a outra coisa (endereços, @, /): não mexe
+      const para = D.get(acNorm(escrito)); if (!para) continue;
+      if (acTira(para) === para && acTira(escrito) !== escrito) continue;                // as siglas não têm acentos: «ué» não é «UE»
+      if (escrito === para) return null;
+      if (escrito.length > 1 && escrito === escrito.toUpperCase()) continue;              // escrito todo em maiúsculas: fica como está
+      return { ini: a, fim: antes.length, para };
+    }
+    return null;
   }
 
   /* ------------------------------------------------------------ imagens: ficam leves (máx. 1400 px, JPEG) */
@@ -2603,12 +2747,19 @@ const ESCREVER = (() => {
     if (t === 'U' || /text-decoration[^;]*underline/.test(st)) g.u = true;
     if (t === 'S' || t === 'STRIKE' || t === 'DEL' || /text-decoration[^;]*line-through/.test(st)) g.s = true;
     if (t === 'SUP') g.sup = true; if (t === 'SUB') g.sub = true;
+    if (t === 'SPAN' || t === 'FONT') {
+      const cor = normCor(t === 'FONT' ? no.getAttribute('color') : propEstilo(st, 'color')); if (cor && cor !== '000000') g.cor = cor;
+      const fu = normCor(propEstilo(st, 'background-color')); if (fu && fu !== 'FFFFFF') g.fundo = fu;
+    }
     for (const c of no.childNodes) pedacos(c, g, E, out);
     return out;
   }
   function runXml(p) {
     const f = p.f || {};
-    const pr = (f.b ? '<w:b/><w:bCs/>' : '') + (f.i ? '<w:i/><w:iCs/>' : '') + (f.s ? '<w:strike/>' : '') + (f.u ? '<w:u w:val="single"/>' : '') +
+    // pela ordem do Word: b, i, strike, color, highlight, u, shd, vertAlign
+    const pr = (f.b ? '<w:b/><w:bCs/>' : '') + (f.i ? '<w:i/><w:iCs/>' : '') + (f.s ? '<w:strike/>' : '') + (f.cor ? `<w:color w:val="${f.cor}"/>` : '') +
+      (f.fundo && REALCE_WORD[f.fundo] ? `<w:highlight w:val="${REALCE_WORD[f.fundo]}"/>` : '') + (f.u ? '<w:u w:val="single"/>' : '') +
+      (f.fundo && !REALCE_WORD[f.fundo] ? `<w:shd w:val="clear" w:color="auto" w:fill="${f.fundo}"/>` : '') +
       (f.sup ? '<w:vertAlign w:val="superscript"/>' : f.sub ? '<w:vertAlign w:val="subscript"/>' : '');
     return `<w:r>${pr ? `<w:rPr>${pr}</w:rPr>` : ''}<w:t xml:space="preserve">${x(p.s)}</w:t></w:r>`;
   }
@@ -2678,20 +2829,27 @@ const ESCREVER = (() => {
     const linhas = [...tb.rows]; if (!linhas.length) return '';
     let pre = '';
     if (E.quebra) { pre = PARA_MINIMO().replace('</w:pPr></w:p>', '</w:pPr><w:r><w:br w:type="page"/></w:r></w:p>'); E.quebra = false; }
-    const ncol = Math.max(1, ...linhas.map((r) => [...r.cells].reduce((s, c) => s + (c.colSpan || 1), 0)));
+    // grelha: em cada linha, a célula que ocupa cada coluna (células unidas para o lado e para baixo)
+    const G = linhas.map(() => []);
+    linhas.forEach((r, i) => { let col = 0; for (const c of r.cells) { while (G[i][col]) col++; const cs = Math.max(1, c.colSpan || 1), rs = Math.max(1, Math.min(c.rowSpan || 1, linhas.length - i)); for (let a = 0; a < rs; a++) for (let b = 0; b < cs; b++) G[i + a][col + b] = { c, a, b, cs, rs }; col += cs; } });
+    const ncol = Math.max(1, ...G.map((g) => g.length));
     const larg = E.larguraTw, w = Math.floor(larg / ncol);
     const cab = linhas[0].cells.length && [...linhas[0].cells].every((c) => c.tagName === 'TH');
     let xml = `<w:tbl><w:tblPr><w:tblStyle w:val="TabelaCEL"/><w:tblW w:w="${larg}" w:type="dxa"/><w:tblLayout w:type="fixed"/></w:tblPr><w:tblGrid>${'<w:gridCol w:w="' + w + '"/>'.repeat(ncol)}</w:tblGrid>`;
     linhas.forEach((r, i) => {
       // as linhas não se partem entre páginas; a de cabeçalho repete-se em cada página (como no Portal)
       xml += `<w:tr><w:trPr><w:cantSplit/>${cab && i === 0 ? '<w:tblHeader/>' : ''}</w:trPr>`;
-      let usadas = 0;
-      for (const c of r.cells) {
-        const span = Math.min(c.colSpan || 1, ncol - usadas); if (span <= 0) break; usadas += span;
-        const dentro = blocosXml(c, E, { celula: true, alin: alinhamento(c) || 'left' }) || '<w:p/>';
-        xml += `<w:tc><w:tcPr><w:tcW w:w="${w * span}" w:type="dxa"/>${span > 1 ? `<w:gridSpan w:val="${span}"/>` : ''}${c.tagName === 'TH' ? '<w:shd w:val="clear" w:color="auto" w:fill="E9EDF4"/>' : ''}</w:tcPr>${dentro}</w:tc>`;
+      for (let col = 0; col < ncol;) {
+        const g = G[i][col];
+        if (!g) { xml += `<w:tc><w:tcPr><w:tcW w:w="${w}" w:type="dxa"/></w:tcPr><w:p/></w:tc>`; col++; continue; }
+        const span = Math.min(g.cs, ncol - col), c = g.c;
+        const fundo = normCor(c.style && c.style.backgroundColor) || (c.tagName === 'TH' ? 'E9EDF4' : null);
+        const pr = `<w:tcW w:w="${w * span}" w:type="dxa"/>${span > 1 ? `<w:gridSpan w:val="${span}"/>` : ''}${g.rs > 1 ? (g.a === 0 ? '<w:vMerge w:val="restart"/>' : '<w:vMerge/>') : ''}` +
+          (fundo && fundo !== 'FFFFFF' ? `<w:shd w:val="clear" w:color="auto" w:fill="${fundo}"/>` : '');
+        const dentro = g.a === 0 ? (blocosXml(c, E, { celula: true, alin: alinhamento(c) || 'left' }) || '<w:p/>') : '<w:p/>';     // célula unida para baixo: o texto fica na de cima
+        xml += `<w:tc><w:tcPr>${pr}</w:tcPr>${dentro}</w:tc>`;
+        col += span;
       }
-      for (; usadas < ncol; usadas++) xml += `<w:tc><w:tcPr><w:tcW w:w="${w}" w:type="dxa"/></w:tcPr><w:p/></w:tc>`;
       xml += '</w:tr>';
     });
     // o Word precisa de um parágrafo a seguir a uma tabela no fim; fica com 1 pt para não mudar as páginas
@@ -3671,14 +3829,66 @@ const ESCREVER = (() => {
       });
     }
     const celulaAtual = () => { const s = getSelection(); const n = s && s.rangeCount ? s.anchorNode : null; const el2 = n && (n.nodeType === 1 ? n : n.parentElement); return el2 && dentro(el2) ? el2.closest('td, th') : null; };
+    // grelha de uma tabela: em cada linha, a célula que ocupa cada coluna (com as células unidas para o lado e para baixo)
+    function grelha(tb) {
+      const rows = [...tb.rows].filter((r) => !r.classList.contains('esc-salto')), g = rows.map(() => []);
+      rows.forEach((r, i) => { let col = 0; for (const c of r.cells) { while (g[i][col]) col++; const cs = Math.max(1, c.colSpan || 1), rs = Math.max(1, Math.min(c.rowSpan || 1, rows.length - i)); for (let a = 0; a < rs; a++) for (let b = 0; b < cs; b++) g[i + a][col + b] = c; col += cs; } });
+      const pos = (c) => { for (let i = 0; i < rows.length; i++) { const j = g[i].indexOf(c); if (j >= 0) return { i, j }; } return null; };
+      return { rows, g, pos, ncol: Math.max(1, ...g.map((x) => x.length)) };
+    }
+    const vazia = (c) => !c.textContent.replace(/[\s\u200B]/g, '') && !c.querySelector('img, .esc-nota');
+    const unidas = (tb, baixo) => [...tb.querySelectorAll('td, th')].some((c) => (c.rowSpan || 1) > 1 || (!baixo && (c.colSpan || 1) > 1));
+    function uneCelula(dir) {
+      const c = celulaAtual(); if (!c || c.closest('.esc-salto')) return;
+      PAGINAS.tiraSaltos(texto);         // as linhas dos separadores de página não contam
+      const tb = c.closest('table'), G = grelha(tb), p = G.pos(c); if (!p) return;
+      const cs = Math.max(1, c.colSpan || 1), rs = Math.max(1, c.rowSpan || 1);
+      const outra = dir === 'direita' ? G.g[p.i][p.j + cs] : (G.g[p.i + rs] || [])[p.j];
+      const q = outra ? G.pos(outra) : null;
+      if (!outra || (dir === 'direita' ? q.i !== p.i || Math.max(1, outra.rowSpan || 1) !== rs : q.j !== p.j || Math.max(1, outra.colSpan || 1) !== cs)) {
+        toast(dir === 'direita' ? 'Só se unem células lado a lado com a mesma altura.' : 'Só se unem células uma por baixo da outra, com a mesma largura.'); pagAgora(); return;
+      }
+      guardaEstado('tabela');
+      if (!vazia(outra)) { if (vazia(c)) c.replaceChildren(); else c.append(document.createElement('br')); c.append(...outra.childNodes); }
+      if (dir === 'direita') c.colSpan = cs + Math.max(1, outra.colSpan || 1); else c.rowSpan = rs + Math.max(1, outra.rowSpan || 1);
+      outra.remove();
+      depois(); pagAgora();
+    }
+    function separaCelula() {
+      const c = celulaAtual(); if (!c || c.closest('.esc-salto')) return;
+      const cs = Math.max(1, c.colSpan || 1), rs = Math.max(1, c.rowSpan || 1);
+      if (cs === 1 && rs === 1) { toast('Esta célula não está unida a outras.'); return; }
+      PAGINAS.tiraSaltos(texto);
+      const tb = c.closest('table'), G = grelha(tb), p = G.pos(c); if (!p) return;
+      guardaEstado('tabela');
+      const nova = () => { const e = document.createElement(c.tagName.toLowerCase()); e.innerHTML = '<br>'; if (c.style.backgroundColor) e.style.backgroundColor = c.style.backgroundColor; return e; };
+      c.colSpan = 1; c.rowSpan = 1;
+      let ref = c; for (let k = 1; k < cs; k++) { const e = nova(); ref.after(e); ref = e; }
+      for (let a = 1; a < rs; a++) {          // nas linhas de baixo: as células no sítio certo da grelha
+        const i = p.i + a, row = G.rows[i]; if (!row) break;
+        let antes = null; for (let j = p.j - 1; j >= 0; j--) { const y = G.g[i][j]; if (y && y.parentElement === row) { antes = y; break; } }
+        const els = []; for (let k = 0; k < cs; k++) els.push(nova());
+        if (antes) antes.after(...els); else row.prepend(...els);
+      }
+      depois(); pagAgora();
+    }
+    function corCelula(c, cor) {
+      if (!c || !c.isConnected) return;
+      guardaEstado('tabela'); c.style.backgroundColor = cor ? '#' + cor : ''; if (!c.getAttribute('style')) c.removeAttribute('style');
+      marca(); agendaPaginas(); repoeSel();
+    }
     function linha(mais) {
-      const c = celulaAtual(); if (!c || c.closest('.esc-salto')) return; guardaEstado('tabela'); const tr = c.parentElement;
-      if (mais) { const n = tr.cloneNode(true); n.querySelectorAll('td, th').forEach((y) => { const td = document.createElement('td'); td.innerHTML = '<br>'; y.replaceWith(td); }); tr.after(n); }
-      else { const tb = tr.closest('table'); if ([...tb.rows].filter((r) => !r.classList.contains('esc-salto')).length <= 1) tb.remove(); else tr.remove(); }
+      const c = celulaAtual(); if (!c || c.closest('.esc-salto')) return; const tr = c.parentElement, tb = tr.closest('table');
+      if (unidas(tb, true)) { toast('Esta tabela tem células unidas para baixo: separe-as antes de acrescentar ou tirar linhas.'); return; }
+      guardaEstado('tabela');
+      if (mais) { const G = grelha(tb), n = document.createElement('tr'); for (let k = 0; k < G.ncol; k++) { const td = document.createElement('td'); td.innerHTML = '<br>'; n.append(td); } tr.after(n); }
+      else { if ([...tb.rows].filter((r) => !r.classList.contains('esc-salto')).length <= 1) tb.remove(); else tr.remove(); }
       depois();
     }
     function coluna(mais) {
-      const c = celulaAtual(); if (!c || c.closest('.esc-salto')) return; guardaEstado('tabela'); const i = c.cellIndex, tb = c.closest('table');
+      const c = celulaAtual(); if (!c || c.closest('.esc-salto')) return;
+      if (unidas(c.closest('table'), false)) { toast('Esta tabela tem células unidas: separe-as antes de acrescentar ou tirar colunas.'); return; }
+      guardaEstado('tabela'); const i = c.cellIndex, tb = c.closest('table');
       for (const r of tb.rows) {
         if (r.classList.contains('esc-salto')) continue;
         const y = r.cells[Math.min(i, r.cells.length - 1)]; if (!y) continue;
@@ -3688,8 +3898,11 @@ const ESCREVER = (() => {
       if (!mais && tb.rows[0] && tb.rows[0].cells.length <= 1 && !tb.textContent.trim()) tb.remove();
       depois();
     }
+    const bCorCel = bb('', 'Cor da célula', () => { const cel = celulaAtual(); abrePaleta(bCorCel, 'Cor da célula', CORES_CELULA, 'Sem cor', (cor) => corCelula(cel, cor)); }, { letra: 'Cor', cls: 'txt' });
     barraTab.append(h('span', { class: 'esc-sub-t' }, 'Tabela:'), bb('', '+ Linha', () => linha(true), { letra: '+ Linha', cls: 'txt' }), bb('', '+ Coluna', () => coluna(true), { letra: '+ Coluna', cls: 'txt' }),
       bb('', 'Tirar a linha', () => linha(false), { letra: '− Linha', cls: 'txt' }), bb('', 'Tirar a coluna', () => coluna(false), { letra: '− Coluna', cls: 'txt' }),
+      bb('', 'Unir com a célula da direita', () => uneCelula('direita'), { letra: 'Unir →', cls: 'txt' }), bb('', 'Unir com a célula de baixo', () => uneCelula('baixo'), { letra: 'Unir ↓', cls: 'txt' }),
+      bb('', 'Separar as células unidas', separaCelula, { letra: 'Separar', cls: 'txt' }), bCorCel,
       bb('', 'Tirar a tabela', () => { const c = celulaAtual(); if (c && confirm('Tirar a tabela inteira?')) { guardaEstado('tabela'); c.closest('table').remove(); depois(); } }, { letra: 'Tirar tabela', cls: 'txt perigo' }));
 
     function atualizaBarras() {
@@ -3716,18 +3929,68 @@ const ESCREVER = (() => {
     };
     const estadoB = (c, rot, letra, cls) => { const b = bb('', rot, () => cmd(c), { letra, cls }); b.dataset.estado = c; return b; };
     const bNav = bb('nav', 'Títulos (painel de navegação)', () => alternaNav()); bNav.setAttribute('aria-pressed', 'false');
+    const bCor = bb('', 'Cor da letra', () => abrePaleta(bCor, 'Cor da letra', CORES_LETRA, 'Automática (preto)', (c) => aplicaCor('foreColor', c)), { letra: 'A', cls: 'txt cor' });
+    const bRealce = bb('realce', 'Realce', () => abrePaleta(bRealce, 'Realce', CORES_REALCE, 'Sem realce', (c) => aplicaCor('hiliteColor', c)));
+    const extra = (...els) => els.map((e) => { e.classList.add('esc-extra'); return e; });       // escondidos com «Menos»
+    const bMaisB = bb('mais', 'Mais botões', () => alternaMais());
     const barra = h('div', { class: 'esc-barra', role: 'toolbar', 'aria-label': 'Formatação' },
       bNav, sep(), bb('desf', 'Desfazer (Ctrl+Z)', desfaz), bb('ref', 'Refazer (Ctrl+Y)', refaz), sep(),
       blocoB('p', 'Texto normal', 'Texto', 'Control+Alt+0'), blocoB('h1', 'Título 1', 'T1', 'Control+Alt+1'), blocoB('h2', 'Título 2', 'T2', 'Control+Alt+2'), blocoB('h3', 'Título 3', 'T3', 'Control+Alt+3'), blocoB('blockquote', 'Citação longa', '❝'), sep(),
-      estadoB('bold', 'Negrito', 'N', 'neg'), estadoB('italic', 'Itálico', 'I', 'ita'), estadoB('underline', 'Sublinhado', 'S', 'sub'), sep(),
-      bb('ul', 'Lista com marcas', () => cmd('insertUnorderedList')), bb('ol', 'Lista numerada', () => cmd('insertOrderedList')), sep(),
-      bb('esq', 'Alinhar à esquerda', () => cmd('justifyLeft')), bb('cen', 'Centrar', () => cmd('justifyCenter')), bb('dir', 'Alinhar à direita', () => cmd('justifyRight')), bb('just', 'Justificar', () => cmd('justifyFull')), sep(),
-      bb('img', 'Inserir imagem', () => { guardaSel(); escolheImg.click(); }), bb('tab', 'Inserir tabela', novaTabela), bb('nota', 'Nota de rodapé', novaNota),
-      bb('indice', 'Índice automático', () => {
-        const ja = texto.querySelector('.esc-indice'); if (ja) { ja.scrollIntoView({ block: 'center', behavior: 'smooth' }); toast('O documento já tem índice.'); return; }
-        insereBloco('<div class="esc-indice" contenteditable="false"></div><p><br></p>'); }),
-      bb('quebra', 'Quebra de página', () => insereBloco('<hr class="esc-quebra"><p><br></p>')), bb('numera', 'Começar a numeração das páginas aqui', numeraAqui),
-      bb('limpa', 'Tirar a formatação', () => cmd('removeFormat')));
+      estadoB('bold', 'Negrito', 'N', 'neg'), estadoB('italic', 'Itálico', 'I', 'ita'), estadoB('underline', 'Sublinhado', 'S', 'sub'), ...extra(bCor, bRealce), sep(),
+      bb('ul', 'Lista com marcas', () => cmd('insertUnorderedList')), bb('ol', 'Lista numerada', () => cmd('insertOrderedList')),
+      ...extra(sep(), bb('esq', 'Alinhar à esquerda', () => cmd('justifyLeft')), bb('cen', 'Centrar', () => cmd('justifyCenter')), bb('dir', 'Alinhar à direita', () => cmd('justifyRight')), bb('just', 'Justificar', () => cmd('justifyFull')), sep(),
+        bb('img', 'Inserir imagem', () => { guardaSel(); escolheImg.click(); }), bb('tab', 'Inserir tabela', novaTabela), bb('nota', 'Nota de rodapé', novaNota),
+        bb('indice', 'Índice automático', () => {
+          const ja = texto.querySelector('.esc-indice'); if (ja) { ja.scrollIntoView({ block: 'center', behavior: 'smooth' }); toast('O documento já tem índice.'); return; }
+          insereBloco('<div class="esc-indice" contenteditable="false"></div><p><br></p>'); }),
+        bb('quebra', 'Quebra de página', () => insereBloco('<hr class="esc-quebra"><p><br></p>')), bb('numera', 'Começar a numeração das páginas aqui', numeraAqui),
+        bb('limpa', 'Tirar a formatação', () => cmd('removeFormat'))),
+      sep(), bMaisB);
+    // «Mais / Menos»: no telemóvel começa só com os botões principais; fica como o professor deixar, neste aparelho
+    let menos = pref.barra === 'menos' || (pref.barra == null && window.innerWidth <= 700);
+    function alternaMais(v) {
+      menos = v == null ? !menos : !v;
+      barra.classList.toggle('esc-menos', menos);
+      const rot = menos ? 'Mais botões' : 'Menos botões';
+      bMaisB.title = rot; bMaisB.setAttribute('aria-label', rot); bMaisB.setAttribute('aria-expanded', String(!menos));
+      bMaisB.replaceChildren(h('span', { class: 'esc-l' }, menos ? 'Mais' : 'Menos')); bMaisB.classList.add('txt');
+      if (v == null) guardaPref({ barra: menos ? 'menos' : 'mais' });
+    }
+    alternaMais(!menos);
+
+    // ----- cores: da letra, realce e das células (paletas pequenas, como no Word)
+    let paleta = null;
+    const foraPaleta = (e) => { if (paleta && !paleta.contains(e.target)) fechaPaleta(); };
+    const escPaleta = (e) => { if (e.key === 'Escape' && paleta) { e.preventDefault(); e.stopPropagation(); fechaPaleta(); repoeSel(); } };
+    function fechaPaleta() {
+      if (!paleta) return;
+      paleta.remove(); paleta = null;
+      document.removeEventListener('pointerdown', foraPaleta, true); document.removeEventListener('keydown', escPaleta, true);
+    }
+    function abrePaleta(botao, titulo, cores, semNome, aplica) {
+      const ja = paleta && paleta.dataset.para === titulo; fechaPaleta(); if (ja) return;
+      guardaSel();
+      const bt = (cor, nome) => {
+        const b = h('button', { type: 'button', class: 'esc-cor' + (cor ? '' : ' esc-cor-nada'), title: nome, 'aria-label': nome, style: cor ? `--c:#${cor}` : null }, cor ? '' : '×');
+        b.addEventListener('pointerdown', (e) => { if (e.pointerType !== 'keyboard') e.preventDefault(); });
+        b.addEventListener('click', () => { fechaPaleta(); aplica(cor); });
+        return b;
+      };
+      paleta = h('div', { class: 'esc-paleta', role: 'group', 'aria-label': titulo }, h('div', { class: 'esc-paleta-t' }, titulo), h('div', { class: 'esc-paleta-g' }, bt(null, semNome), cores.map(([c, n]) => bt(c, n))));
+      paleta.dataset.para = titulo;
+      document.body.append(paleta);
+      const r = botao.getBoundingClientRect(), w = paleta.offsetWidth;
+      paleta.style.left = Math.max(8, Math.min(window.innerWidth - w - 8, r.left)) + 'px'; paleta.style.top = Math.round(r.bottom + 6) + 'px';
+      setTimeout(() => { document.addEventListener('pointerdown', foraPaleta, true); document.addEventListener('keydown', escPaleta, true); }, 0);
+    }
+    function aplicaCor(comando, cor) {       // foreColor (letra) ou hiliteColor (realce); sem cor: automática / sem realce
+      repoeSel(); guardaEstado('formato');
+      try { document.execCommand('styleWithCSS', false, true); } catch (e) { /* segue */ }
+      document.execCommand(comando, false, cor ? '#' + cor : (comando === 'foreColor' ? '#000000' : 'transparent'));
+      try { document.execCommand('styleWithCSS', false, false); } catch (e) { /* segue */ }
+      if (cor && comando === 'foreColor') bCor.style.setProperty('--esc-cor', '#' + cor);
+      depois();
+    }
 
     // ----- definições da página: norma (ou modelo guardado), letra e parágrafos, margens, títulos, citações longas,
     //       cabeçalho e rodapé, números de página, língua e ortografia
@@ -3782,7 +4045,7 @@ const ESCREVER = (() => {
       const rotCap = (y) => { const t = y.textContent.replace(/\u200B/g, '').trim(); return y.tagName === 'H1' ? t.slice(0, 70) : `«${t.slice(0, 50)}${t.length > 50 ? '…' : ''}»`; };
       const cap = sel(caps.length ? caps.map((y, i) => [i, rotCap(y)]) : [[-1, '(escreva os capítulos com T1 ou use «Começar a numeração aqui»)']], atual);
       const lingua = sel(Object.entries(LINGUAS), n0.lingua);
-      const verif = chk(n0.verificar);
+      const verif = chk(n0.verificar), maiusc = chk(autocap);
       const erro = h('p', { class: 'esc-erro larga', role: 'alert' });
       const liga = () => {
         for (const e of [lugar, modo]) e.disabled = !num.checked;
@@ -3867,6 +4130,7 @@ const ESCREVER = (() => {
           lab('Começar em', inicio), h('span'), ck(capa, 'Primeira página (capa) sem número nem cabeçalho'),
           h('p', { class: 'esc-dica' }, 'Romanas: a capa, o índice e as outras páginas iniciais levam i, ii, iii. ABNT: contam-se a partir da folha de rosto, mas só têm número a partir do ponto escolhido. Sem número: as páginas antes não têm número nem cabeçalho, e a numeração começa no número de «Começar em». O ponto escolhido começa sempre numa página nova. Também pode pôr o cursor no sítio e usar o botão «Começar a numeração aqui».')),
         h('fieldset', { class: 'esc-grupo' }, h('legend', null, 'Língua e ortografia'), lab('Língua do documento', lingua, true), ck(verif, 'Sublinhar os erros de ortografia'),
+          ck(maiusc, 'Maiúsculas automáticas (princípio das frases, países, terras e siglas; neste aparelho)'),
           h('p', { class: 'esc-dica' }, 'O sublinhado vermelho vem do corretor do aparelho (no Portal) e do Word (no ficheiro). Desligado, o Word também deixa de sublinhar este documento.')),
         erro), () => {
         const nova = lerCampos();
@@ -3876,6 +4140,7 @@ const ESCREVER = (() => {
           guardaEstado('definicoes');           // antes de mudar: «Desfazer» volta às definições anteriores
           doc.conf = nova;
           if (nova.norma !== 'abnt') guardaPref({ lingua: nova.lingua, verificar: nova.verificar });   // os documentos novos começam assim
+          if (autocap !== maiusc.checked) { autocap = maiusc.checked; guardaPref({ autocap }); }
           texto.querySelectorAll('[data-arabe]').forEach((y) => y.removeAttribute('data-arabe'));
           if (doc.conf.numModo !== 'simples' && escolhido) escolhido.setAttribute('data-arabe', '1');
           aplicaConf(); marca(); agendaPaginas(30);
@@ -4100,7 +4365,7 @@ const ESCREVER = (() => {
       if (t === 'historyUndo') { e.preventDefault(); desfaz(); return; }
       if (t === 'historyRedo') { e.preventDefault(); refaz(); return; }
       const cat = /^insert(Text|ReplacementText|CompositionText)/.test(t) ? 'escrever' : t.startsWith('delete') ? 'apagar' : (t || 'outro');
-      if (!(e.isComposing && hist.cat === 'escrever')) guardaEstado(cat);
+      if (!acAplica && !(e.isComposing && hist.cat === 'escrever')) guardaEstado(cat);
       // apagar junto a um separador de página (a meio de um parágrafo): apaga o carácter do outro lado, como no Word
       if (!e.isComposing && (t === 'deleteContentBackward' || t === 'deleteContentForward')) {
         const s = getSelection();
@@ -4114,6 +4379,85 @@ const ESCREVER = (() => {
           }
         }
       }
+    });
+    // ----- maiúsculas automáticas (ligam-se e desligam-se em «Página»; ficam neste aparelho)
+    // A maiúscula do princípio da frase entra logo com a letra. Os nomes do dicionário corrigem-se depois do espaço, da pontuação ou do Enter,
+    // num passo à parte: Ctrl+Z desfaz só a correção. Apagar logo a maiúscula posta sozinha deixa escrever a letra pequena («iPad», «x = 2»).
+    let autocap = pref.autocap !== false, acPend = null, acAuto = null, acSalta = null, acAplica = false;
+    const fora = '.esc-nota, .esc-salto, .esc-indice';
+    const textosDe = (bloco) => { const w = document.createTreeWalker(bloco, NodeFilter.SHOW_TEXT, { acceptNode: (n) => (n.parentElement && n.parentElement.closest(fora) ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT) }), out = []; let n; while ((n = w.nextNode())) out.push(n); return out; };
+    function acCtx() {
+      const s = getSelection(); if (!s.rangeCount || !s.isCollapsed || !dentro(s.anchorNode)) return null;
+      const nd = s.anchorNode, el0 = nd.nodeType === 1 ? nd : nd.parentElement;
+      if (!el0 || el0.closest(fora + ', blockquote, li, sup, sub')) return null;        // nas citações e nas listas não mexe (como no módulo Word)
+      const bloco = el0.closest('p, h1, h2, h3, td, th'); if (!bloco || !dentro(bloco)) return null;
+      let antes = '', achou = false;
+      for (const n of textosDe(bloco)) {
+        if (nd.nodeType === 3) { if (n === nd) { antes += n.data.slice(0, s.anchorOffset); achou = true; break; } }
+        else { const ref = nd.childNodes[s.anchorOffset]; if (ref && (ref === n || ref.contains(n) || (ref.compareDocumentPosition(n) & Node.DOCUMENT_POSITION_FOLLOWING))) { achou = true; break; } }
+        antes += n.data;
+      }
+      if (!achou && nd.nodeType === 1) achou = true;
+      return achou ? { bloco, antes } : null;
+    }
+    function acIntervalo(bloco, a, b) {
+      let pos = 0, sn = null, so = 0, en = null, eo = 0;
+      for (const n of textosDe(bloco)) { const L = n.data.length; if (!sn && a < pos + L) { sn = n; so = a - pos; } if (b <= pos + L) { en = n; eo = b - pos; break; } pos += L; }
+      if (!sn || !en) return null; const r = document.createRange(); r.setStart(sn, so); r.setEnd(en, eo); return r;
+    }
+    function acPoe(bloco, x) {      // o cursor na posição x do texto do bloco
+      let pos = 0;
+      for (const n of textosDe(bloco)) { const L = n.data.length; if (x <= pos + L) { const r = document.createRange(); r.setStart(n, x - pos); r.collapse(true); const s = getSelection(); s.removeAllRanges(); s.addRange(r); return true; } pos += L; }
+      return false;
+    }
+    texto.addEventListener('beforeinput', (e) => {
+      if (acAplica) return;
+      acPend = null;
+      if (!autocap || e.defaultPrevented || e.isComposing || compondo) return;
+      const t = e.inputType || '';
+      if (t === 'deleteContentBackward') {
+        const c = acAuto && acCtx();
+        acSalta = c && c.bloco === acAuto.bloco && c.antes.length === acAuto.pos + 1 ? { bloco: c.bloco, pos: acAuto.pos } : null; acAuto = null; return;
+      }
+      if (t !== 'insertText' && t !== 'insertParagraph') return;
+      const ch = t === 'insertText' ? (e.data || '') : '\n'; if (ch.length !== 1) return;
+      const ctx = acCtx(); if (!ctx) { acSalta = null; return; }
+      const limpo = ctx.antes.replace(/​/g, '');
+      if (/\p{Ll}/u.test(ch)) {
+        const salta = acSalta && acSalta.bloco === ctx.bloco && acSalta.pos === ctx.antes.length; acSalta = null;
+        if (salta) return;
+        const inicio = /^\s*$/.test(limpo);
+        if (inicio || (!/^\s*(\(?[a-z]{1,2}\)|[ivxlc]+\)|\d+(\.\d+)*[.)])\s*$/i.test(limpo) && /\s$/.test(limpo) && acFimFrase(limpo))) {
+          e.preventDefault(); acAplica = true;
+          try { document.execCommand('insertText', false, ch.toUpperCase()); } finally { acAplica = false; }
+          acAuto = { bloco: ctx.bloco, pos: ctx.antes.length, inicio };
+        }
+        return;
+      }
+      acSalta = null;
+      if (!/[\s.,;:!?)\]»”"']/.test(ch)) return;
+      // «a)» no princípio do parágrafo: a maiúscula posta sozinha volta a ser pequena (também «i)», «ii)», «iv)»)
+      if (ch === ')' && acAuto && acAuto.inicio && acAuto.bloco === ctx.bloco) {
+        const m = ctx.antes.slice(acAuto.pos).match(/^[A-Z]([a-z]{0,3})$/);
+        if (m && (!m[1] || /^[ivx]+$/i.test(m[0]))) { acPend = { tipo: t, bloco: ctx.bloco, ini: acAuto.pos, fim: ctx.antes.length, de: m[0], para: m[0].toLowerCase() }; acAuto = null; return; }
+      }
+      const tr = acTroca(ctx.antes); if (!tr) return;
+      acPend = { tipo: t, bloco: ctx.bloco, ini: tr.ini, fim: tr.fim, de: ctx.antes.slice(tr.ini, tr.fim), para: tr.para };
+    });
+    // depois de entrar o espaço, a pontuação ou o Enter: troca a palavra, com o cursor onde estava
+    texto.addEventListener('input', (e) => {
+      const p = acPend; acPend = null;
+      if (!p || acAplica || e.inputType !== p.tipo || !texto.contains(p.bloco)) return;
+      const r = acIntervalo(p.bloco, p.ini, p.fim); if (!r || r.toString() !== p.de) return;      // o texto mudou entretanto: fica como está
+      // onde fica o cursor: no mesmo bloco, pela posição no texto (o navegador reescreve os espaços); depois do Enter, no bloco novo, que não muda
+      const s = getSelection(), c0 = acCtx(), na = s.anchorNode, no = s.anchorOffset;
+      guardaEstado('auto');
+      acAplica = true;
+      try { s.removeAllRanges(); s.addRange(r); document.execCommand('insertText', false, p.para); } finally { acAplica = false; }
+      try {
+        if (c0 && c0.bloco === p.bloco) acPoe(p.bloco, c0.antes.length - (p.fim - p.ini) + p.para.length);
+        else if (na && texto.contains(na)) { const v = document.createRange(); v.setStart(na, Math.min(no, na.nodeType === 3 ? na.data.length : na.childNodes.length)); v.collapse(true); s.removeAllRanges(); s.addRange(v); }
+      } catch (err) { /* o cursor fica onde o navegador o deixou */ }
     });
     // Enter no primeiro parágrafo de uma folha: o navegador copia o espaço do separador para o parágrafo novo; fica só no primeiro
     function limpaClones() {
@@ -4158,7 +4502,7 @@ const ESCREVER = (() => {
       const d = e.clipboardData; if (!d) return;
       const html = d.getData('text/html'), txt = d.getData('text/plain');
       e.preventDefault(); guardaEstado('colar');
-      if (html) { const r = inerte(html); limpa(r); document.execCommand('insertHTML', false, r.innerHTML); }
+      if (html) { const r = inerte(html); limpa(r, { colar: true }); document.execCommand('insertHTML', false, r.innerHTML); }
       else if (txt) document.execCommand('insertHTML', false, txt.split(/\r?\n\r?\n/).map((p) => `<p>${esc(p).replace(/\r?\n/g, '<br>')}</p>`).join(''));
       depois();
     });
@@ -5712,6 +6056,10 @@ function toolRomanos() {
 
 /* ============================================================ CÓPIAS E ATUALIZAÇÕES */
 const NOVIDADES = [
+  { v: '1.11', d: '16/11/2026', itens: ['«Os meus documentos»: maiúsculas automáticas, como no módulo Word do CEL. Entram no princípio das frases e dos parágrafos (menos depois de abreviaturas como «Sr.» ou «p.» e nas alíneas «a)»), nos nomes de países e de terras (Guiné-Bissau, Bafatá, Cabo Verde…) e nas siglas da educação (UNESCO, CPLP, INDE, CEL…). Nunca nos meses, nos dias da semana nem nas línguas. Ctrl+Z desfaz uma correção; desligam-se em «Página».',
+    'Cor da letra e realce (marcador), também no ficheiro Word e ao abrir um ficheiro Word.',
+    'Tabelas: unir células para o lado e para baixo, separar outra vez e pintar o fundo das células. Passa para o Word e vem dos ficheiros Word.',
+    'No telemóvel, a barra mostra só os botões principais; «Mais» abre os outros (e «Menos» volta a fechá-los).'] },
   { v: '1.10', d: '16/11/2026', itens: ['«Os meus documentos»: painel de títulos ao lado da folha, como o «Painel de Navegação» do Word, com a página de cada título.',
     '«Começar a numeração aqui»: ponha o cursor onde a numeração deve começar e escolha como ficam as folhas antes (sem número, em i, ii, iii ou contadas como na ABNT). O Portal avisa quando o número não coincide com a posição da folha.',
     'Papel A5, Carta e Ofício, e a folha na horizontal, no editor, no PDF e no Word.',
