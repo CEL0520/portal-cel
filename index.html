@@ -902,7 +902,7 @@ body.abr-cheio-b { overflow: hidden }
 <div id="toast" role="status" aria-live="polite"></div>
 <div id="print-root"></div>
 <div id="barra" class="barra" hidden></div>
-<script type="application/json" id="cel-config">{"versao": "1.14.0", "ano": "2026/2027", "chaveId": "1987a8c7", "verificador": "m+HQwwNueX1G3XlMCpRsYJOV0Tkds6FCJhmeHgobCN6OFobxkzA=", "dados": "dados.2460e27fab.bin", "contactos": {"whatsapp": "245955252417", "email": "cel.vf.gb@gmail.com"}, "diasSemLigacao": 30, "sb": "https://ebwjnennfmwnhwdfxbuy.supabase.co", "anon": "sb_publishable_oLn3lkMEwu4sEOUTjRCLQA_4evc_ezB"}</script>
+<script type="application/json" id="cel-config">{"versao": "1.14.1", "ano": "2026/2027", "chaveId": "1987a8c7", "verificador": "m+HQwwNueX1G3XlMCpRsYJOV0Tkds6FCJhmeHgobCN6OFobxkzA=", "dados": "dados.2460e27fab.bin", "contactos": {"whatsapp": "245955252417", "email": "cel.vf.gb@gmail.com"}, "diasSemLigacao": 30, "sb": "https://ebwjnennfmwnhwdfxbuy.supabase.co", "anon": "sb_publishable_oLn3lkMEwu4sEOUTjRCLQA_4evc_ezB"}</script>
 <script>/* Gerador mínimo de .docx (Word) no navegador — sem bibliotecas externas.
    Blocos: {t:'h', text, level} · {t:'p', text|runs, align, size, before, after, keep, border}
            {t:'list', items:[text|runs], ordered} · {t:'table', rows, widths, header, borders, minH}
@@ -3352,7 +3352,7 @@ const ESCREVER = (() => {
     let pag = null, pontos = [], agendado = null, aCalcular = false, deNovo = false, paginaAtual = 0, chaveIndice = '', compondo = false, ultimoInput = 0;
     const INTERVALO = 24, BANDA = 40;          // px: espaço entre folhas (vista de páginas) e altura da faixa «Página N» (vista contínua)
     const pref = lePref();
-    let vista = pref.vista === 'paginas' || pref.vista === 'continuo' ? pref.vista : (Math.min(window.innerWidth || 1024, (window.screen && window.screen.width) || 9999) >= 700 ? 'paginas' : 'continuo');
+    let vista = 'paginas';      // desde a 1.14.1 só há páginas (o «Contínuo» saiu, a pedido da Coordenação)
     let zoom = zoomValido(pref.zoom) ? String(pref.zoom) : 'ajustar';
     let foco = false, centrado = false;      // ecrã inteiro; a folha já foi centrada uma vez
     const estado = h('span', { class: 'chip esc-estado', role: 'status' }, 'A abrir…');
@@ -4661,7 +4661,7 @@ const ESCREVER = (() => {
         h('button', { type: 'button', class: 'btn sm', onclick: guardarComo, 'aria-label': 'Guardar como', title: 'Guardar como: cópia, ficheiro, Word ou PDF' }, svg('guardar'), rotM('Guardar como')),
         h('button', { type: 'button', class: 'btn sm', onclick: pdf, 'aria-label': 'PDF', title: 'PDF (imprimir)' }, svg('pdf'), rotM('PDF')),
         h('button', { type: 'button', class: 'btn primary sm', onclick: word }, svg('word'), 'Word'), bEcra));
-    const rodape = h('div', { class: 'esc-rodape' }, hBar, indicador, conta, h('div', { class: 'esc-vistas' }, bPag, bCont, h('span', { class: 'esc-zooms' }, bMenos, zoomSel, bMais)), escolheImg);
+    const rodape = h('div', { class: 'esc-rodape' }, hBar, indicador, conta, h('div', { class: 'esc-vistas' }, h('span', { class: 'esc-zooms' }, bMenos, zoomSel, bMais)), escolheImg);
     const el = h('div', { class: 'view esc-vista' }, cab, titulo, barras, corpoEd, rodape);
     el.addEventListener('wheel', aoRodar, { passive: false });
 
@@ -6940,6 +6940,7 @@ function toolRomanos() {
 
 /* ============================================================ CÓPIAS E ATUALIZAÇÕES */
 const NOVIDADES = [
+  { v: '1.14.1', d: '16/11/2026', itens: ['«Os meus documentos»: o texto aparece sempre em páginas, como no Word, também no telemóvel. Saiu o modo «Contínuo».'] },
   { v: '1.14', d: '16/11/2026', itens: ['«Abrir ficheiros»: botão «Ecrã inteiro» para ver o PDF, o Word, o Excel, o PowerPoint, as imagens e o resto no ecrã todo (Esc ou «Sair do ecrã inteiro» para voltar).',
     '«Os meus ficheiros»: toque em «Guardar nos meus ficheiros» e o ficheiro fica no Portal deste aparelho, numa lista, para voltar a abrir quando quiser, também sem internet. Fica só neste aparelho.'] },
   { v: '1.13.1', d: '16/11/2026', itens: ['Formações: o manual da formação abre dentro do Portal (PDF, Word, PowerPoint…), em vez de ir para os downloads. Para o guardar no aparelho, use «Guardar no aparelho».', 'Em «Abrir ficheiros», qualquer ficheiro aberto pode ser guardado no aparelho.'] },
