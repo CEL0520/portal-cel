@@ -796,6 +796,85 @@ body.esc-foco .layout { grid-template-columns: minmax(0, 1fr); max-width: none; 
 .esc-barra.esc-menos .esc-extra { display: none }
 /* no telemóvel os botões passam para a linha seguinte (todos à vista, «Mais» incluído), em vez de ficarem escondidos à direita */
 @media (max-width: 700px) { .esc-barra { flex-wrap: wrap; overflow-x: visible } }
+/* ---------- «Abrir ficheiros»: ver PDF, Word, Excel, PowerPoint, imagens, vídeo, som, HTML e texto */
+.abr { display: flex; flex-direction: column; gap: 12px; min-width: 0 }
+.abr [hidden] { display: none !important }
+.abr-zona { margin-top: 14px; border: 2px dashed var(--line-2); border-radius: var(--r); padding: 28px 16px; text-align: center; cursor: pointer; background: var(--surface-2); transition: border-color .15s, background-color .15s }
+.abr-zona:hover, .abr-zona:focus-visible, .abr-zona.sobre { border-color: var(--accent, #F2B705); background: var(--surface); outline: none }
+.abr-zona-t { font: 700 18px/1.3 var(--f-display); color: var(--ink) }
+.abr-zona-s { color: var(--ink-3); font-size: 13px; margin-top: 4px }
+.abr-tipos { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin-top: 14px }
+.abr-tipos span { font-size: 12px; padding: 2px 9px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); color: var(--ink-2) }
+.abr-visor { display: flex; flex-direction: column; gap: 10px; min-width: 0 }
+.abr-cab { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-sm); padding: 8px 10px; box-shadow: var(--shadow); position: sticky; top: 0; z-index: 15 }
+.abr-nome { display: flex; flex-direction: column; min-width: 0; flex: 1 1 200px }
+.abr-nome b { overflow: hidden; text-overflow: ellipsis; white-space: nowrap }
+.abr-nome small { color: var(--ink-3) }
+.abr-acoes { display: flex; flex-wrap: wrap; align-items: center; gap: 6px }
+.abr-pct { min-width: 46px; text-align: center; font-variant-numeric: tabular-nums; color: var(--ink-2) }
+.abr-ir { width: 76px; min-height: 32px }
+.abr-barra-info { color: var(--ink-3); font-size: 13px; text-align: center }
+.abr-nota { margin: 0; font-size: 13px }
+.abr-quadro { background: var(--surface-2); border: 1px solid var(--line); border-radius: var(--r-sm); min-width: 0 }
+.abr-centro { display: flex; justify-content: center; align-items: flex-start; padding: 12px; overflow: auto; max-height: 80vh }
+.abr-rola { overflow: auto; max-height: 80vh; padding: 12px }
+.abr-erro h3 { margin-bottom: 6px }
+.abr-espera { text-align: center; color: var(--ink-2) }
+/* imagens, vídeo, som */
+.abr-img { max-width: 100%; height: auto; display: block; background: repeating-conic-gradient(#eee 0 25%, #fff 0 50%) 0 0 / 16px 16px }
+.abr-img.real { max-width: none }
+.abr-video { width: 100%; max-height: 75vh; background: #000; border-radius: 4px }
+.abr-som { width: min(100%, 520px); margin: 30px 0 }
+/* texto e HTML */
+.abr-texto { margin: 0; padding: 14px; background: var(--surface); color: var(--ink); border: 1px solid var(--line); border-radius: var(--r-sm); white-space: pre-wrap; word-break: break-word;
+  font: 13px/1.5 var(--f-mono, ui-monospace, monospace); max-height: 80vh; overflow: auto }
+.abr-html { width: 100%; height: 78vh; border: 1px solid var(--line); border-radius: var(--r-sm); background: #fff }
+/* tabelas (CSV e Excel) */
+.abr-tab { border-collapse: collapse; background: #fff; color: #111; font: 13px/1.35 system-ui, sans-serif }
+.abr-tab td, .abr-tab th { border: 1px solid #d9dde4; padding: 3px 6px; vertical-align: bottom; white-space: pre-wrap; max-width: 420px; overflow: hidden }
+.abr-tab th { background: #eef1f6; font-weight: 600 }
+.abr-xl { padding: 0 }
+.abr-xl-t { table-layout: fixed }
+.abr-xl-t thead th, .abr-xl-t tbody th { background: #eef1f6; color: #555; font-weight: 500; text-align: center; position: sticky; z-index: 1 }
+.abr-xl-t thead th { top: 0 }
+.abr-xl-t tbody th { left: 0; min-width: 40px }
+.abr-xl-t col:first-child { width: 44px }
+.abr-xl-t td { white-space: nowrap; text-overflow: ellipsis }
+.abr-abas { display: flex; gap: 4px; overflow-x: auto; padding-bottom: 2px }
+.abr-aba { border: 1px solid var(--line); background: var(--surface); color: var(--ink-2); border-radius: var(--r-sm) var(--r-sm) 0 0; padding: 6px 12px; font: inherit; cursor: pointer; white-space: nowrap }
+.abr-aba[aria-selected="true"] { background: var(--ink); color: var(--surface); border-color: var(--ink) }
+.abr-aba.oculta { font-style: italic }
+/* PDF */
+.abr-rola-pdf { overflow: auto; max-height: 82vh; padding: 12px }
+.abr-pdf { display: flex; flex-direction: column; align-items: center; gap: 12px; --abr-zoom: 1 }
+.abr-pg { position: relative; width: calc(min(100%, 880px) * var(--abr-zoom)); flex: none; background: #fff; box-shadow: 0 1px 4px rgba(0, 0, 0, .18) }
+.abr-pg-c { position: absolute; inset: 0; width: 100%; height: 100% }
+.abr-pg canvas ~ .abr-pg-n { display: none }
+.abr-pg-n { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); color: #bbb; font: 600 22px system-ui, sans-serif }
+/* Word */
+.abr-docx { background: #fff; color: #111; max-width: 820px; margin: 0 auto; padding: 48px 56px; box-shadow: 0 1px 4px rgba(0, 0, 0, .18); font: 12pt/1.5 "Times New Roman", serif }
+.abr-docx img { max-width: 100%; height: auto }
+.abr-docx table { border-collapse: collapse; max-width: 100% }
+.abr-docx td, .abr-docx th { border: 1px solid #999; padding: 3px 6px }
+@media (max-width: 600px) { .abr-docx { padding: 22px 16px } }
+/* PowerPoint */
+.abr-slides { display: flex; flex-direction: column; gap: 16px; align-items: center }
+.abr-slide-c { width: min(100%, 1000px); display: flex; gap: 8px; align-items: flex-start }
+.abr-slide-n { color: var(--ink-3); font: 600 13px system-ui, sans-serif; min-width: 20px; text-align: right; padding-top: 4px }
+.abr-slide-v { position: relative; flex: 1; overflow: hidden; box-shadow: 0 1px 4px rgba(0, 0, 0, .25); background: #fff }
+.abr-slide { position: absolute; left: 0; top: 0; transform-origin: 0 0; overflow: hidden; color: #000; font-family: Calibri, Carlito, Arial, sans-serif }
+.abr-f { position: absolute; box-sizing: border-box }
+.abr-f-img { width: 100%; height: 100%; object-fit: fill; display: block }
+.abr-f-falta { display: flex; align-items: center; justify-content: center; border: 1px dashed #aaa; color: #777; font: 14px system-ui, sans-serif; background: rgba(240, 240, 240, .7) }
+.abr-tx { position: absolute; inset: 0; display: flex; flex-direction: column; overflow: visible; box-sizing: border-box }
+.abr-p { margin: 0; line-height: 1.15; overflow-wrap: break-word }
+.abr-ptab { width: 100%; height: 100%; border-collapse: collapse; table-layout: fixed }
+.abr-ptab td, .abr-ptab th { border: 1px solid #fff; padding: 4px 8px; vertical-align: top; background: #e8ebf2 }
+.abr-ptab th { background: #4472c4; color: #fff }
+.abr-palco { position: fixed; inset: 0; z-index: 1000; background: #000; outline: none; cursor: pointer }
+.abr-palco > .abr-slide { position: absolute }
+.abr-palco-n { position: absolute; right: 14px; bottom: 10px; color: rgba(255, 255, 255, .6); font: 13px system-ui, sans-serif }
+.abr-palco-x { position: absolute; right: 10px; top: 8px; width: 40px; height: 40px; border-radius: 50%; border: 0; background: rgba(255, 255, 255, .15); color: #fff; font-size: 24px; cursor: pointer }
 </style>
 </head>
 <body>
@@ -805,7 +884,7 @@ body.esc-foco .layout { grid-template-columns: minmax(0, 1fr); max-width: none; 
 <div id="toast" role="status" aria-live="polite"></div>
 <div id="print-root"></div>
 <div id="barra" class="barra" hidden></div>
-<script type="application/json" id="cel-config">{"versao": "1.11.0", "ano": "2026/2027", "chaveId": "1987a8c7", "verificador": "m+HQwwNueX1G3XlMCpRsYJOV0Tkds6FCJhmeHgobCN6OFobxkzA=", "dados": "dados.2460e27fab.bin", "contactos": {"whatsapp": "245955252417", "email": "cel.vf.gb@gmail.com"}, "diasSemLigacao": 30}</script>
+<script type="application/json" id="cel-config">{"versao": "1.12.0", "ano": "2026/2027", "chaveId": "1987a8c7", "verificador": "m+HQwwNueX1G3XlMCpRsYJOV0Tkds6FCJhmeHgobCN6OFobxkzA=", "dados": "dados.2460e27fab.bin", "contactos": {"whatsapp": "245955252417", "email": "cel.vf.gb@gmail.com"}, "diasSemLigacao": 30}</script>
 <script>/* Gerador mínimo de .docx (Word) no navegador — sem bibliotecas externas.
    Blocos: {t:'h', text, level} · {t:'p', text|runs, align, size, before, after, keep, border}
            {t:'list', items:[text|runs], ordered} · {t:'table', rows, widths, header, borders, minH}
@@ -2339,7 +2418,7 @@ const ABRIRWORD = (() => {
     return { passou, avisos };
   }
 
-  return { ler, inflateJs, abreZip };
+  return { ler, inflateJs, abreZip, extrai };
 })();
 if (typeof module !== 'undefined') module.exports = ABRIRWORD;
 </script>
@@ -3081,6 +3160,28 @@ const ESCREVER = (() => {
   }
 
   /* ============================================================ VISTAS */
+  // abrir um ficheiro Word em «Os meus documentos» (da lista e da secção «Abrir ficheiros»)
+  async function importaWord(f, ctx) {
+    const { h, go, uid } = ctx;
+    const espera = h('dialog', { class: 'esc-dlg' }, h('h3', null, 'A abrir o ficheiro Word…'), h('p', { class: 'muted' }, `«${f.name}». Pode demorar um pouco se tiver muitas imagens.`));
+    document.body.append(espera); espera.addEventListener('cancel', (e) => e.preventDefault()); espera.showModal();
+    try {
+      if (typeof ABRIRWORD === 'undefined') throw new Error('O Portal não conseguiu preparar a leitura de ficheiros Word. Atualize o Portal e tente outra vez.');
+      const r = await ABRIRWORD.ler(f);
+      const pr = lePref(), extra = {};
+      if (typeof pr.verificar === 'boolean') extra.verificar = pr.verificar;
+      const d = { id: uid('doc'), titulo: r.titulo || 'Documento', html: r.html, texto: '', conf: { ...CONF0, ...extra, ...r.conf }, modelo: 'word', origem: f.name, criado: Date.now(), alterado: Date.now() };
+      await Docs.guarda(d);
+      relatorios.set(d.id, { ...r.relatorio, ficheiro: f.name });
+      espera.close(); espera.remove();
+      go('escrever', d.id);
+    } catch (e) {
+      espera.close(); espera.remove();
+      console.warn('Os meus documentos: abrir ficheiro Word', e);
+      const msg = e && e.message && !/^[a-z-]+$/.test(e.message) && !/is not|undefined|null|Cannot|Failed/i.test(e.message) ? e.message : 'Não foi possível abrir este ficheiro. Confirme que é um documento do Word (.docx) e tente outra vez.';
+      janela(h, 'Não foi possível abrir', h('p', null, msg));
+    }
+  }
   const relatorios = new Map();       // id do documento → relatório da abertura de um ficheiro Word
   function janela(h, titulo, ...corpo) {
     const dlg = h('dialog', { class: 'esc-dlg esc-relatorio' }, h('h3', null, titulo), ...corpo,
@@ -3102,28 +3203,7 @@ const ESCREVER = (() => {
     // abrir um ficheiro Word (.docx) do computador, do telemóvel ou do tablet: o original não muda
     const abrir = h('input', { type: 'file', style: 'display:none', 'aria-label': 'Escolher um ficheiro Word',
       accept: '.docx,.doc,.odt,.rtf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/msword', onchange: (e) => abreWord(e.target.files[0]) });
-    async function abreWord(f) {
-      abrir.value = '';
-      if (!f) return;
-      const espera = h('dialog', { class: 'esc-dlg' }, h('h3', null, 'A abrir o ficheiro Word…'), h('p', { class: 'muted' }, `«${f.name}». Pode demorar um pouco se tiver muitas imagens.`));
-      document.body.append(espera); espera.addEventListener('cancel', (e) => e.preventDefault()); espera.showModal();
-      try {
-        if (typeof ABRIRWORD === 'undefined') throw new Error('O Portal não conseguiu preparar a leitura de ficheiros Word. Atualize o Portal e tente outra vez.');
-        const r = await ABRIRWORD.ler(f);
-        const pr = lePref(), extra = {};
-        if (typeof pr.verificar === 'boolean') extra.verificar = pr.verificar;
-        const d = { id: uid('doc'), titulo: r.titulo || 'Documento', html: r.html, texto: '', conf: { ...CONF0, ...extra, ...r.conf }, modelo: 'word', origem: f.name, criado: Date.now(), alterado: Date.now() };
-        await Docs.guarda(d);
-        relatorios.set(d.id, { ...r.relatorio, ficheiro: f.name });
-        espera.close(); espera.remove();
-        go('escrever', d.id);
-      } catch (e) {
-        espera.close(); espera.remove();
-        console.warn('Os meus documentos: abrir ficheiro Word', e);
-        const msg = e && e.message && !/^[a-z-]+$/.test(e.message) && !/is not|undefined|null|Cannot|Failed/i.test(e.message) ? e.message : 'Não foi possível abrir este ficheiro. Confirme que é um documento do Word (.docx) e tente outra vez.';
-        janela(h, 'Não foi possível abrir', h('p', null, msg));
-      }
-    }
+    async function abreWord(f) { abrir.value = ''; if (f) await importaWord(f, ctx); }
     const procura = h('input', { type: 'search', class: 'inp', placeholder: 'Procurar nos meus documentos', 'aria-label': 'Procurar nos meus documentos', oninput: (e) => { filtro = e.target.value.trim().toLowerCase(); desenha(); } });
     const ficheiro = h('input', { type: 'file', accept: '.json,application/json', style: 'display:none', onchange: (e) => recupera(e.target.files[0]) });
 
@@ -4606,9 +4686,726 @@ const ESCREVER = (() => {
     } };
   }
 
-  return { vista, paraWord, limpa, confN, MODELOS, NORMAS, CONF0 };
+  return { vista, paraWord, limpa, confN, importaWord, MODELOS, NORMAS, CONF0 };
 })();
 if (typeof module !== 'undefined') module.exports = ESCREVER;
+</script>
+<script>/* «Abrir ficheiros» (Portal CEL): ver PDF, Word, Excel, PowerPoint, imagens, vídeo, som, páginas HTML e texto dentro do Portal, sem outras aplicações.
+   Tudo neste aparelho: o ficheiro não é enviado para a Internet nem fica guardado; ao sair, desaparece. Só para ler (o Word pode passar para «Os meus documentos»).
+   PDF com o PDF.js (Mozilla, licença Apache 2.0), descarregado da primeira vez que se abre um PDF e guardado para funcionar sem internet.
+   Uso: ABRIR.vista(arg, ctx) → { el, cleanup }, com ctx = { h, btn, toast, go, uid } da aplicação. */
+const ABRIR = (() => {
+  'use strict';
+  const PDFJS = 'pdfjs/';
+  const falha = (m) => new Error(m);
+  const ext = (n) => ((n || '').match(/\.([a-z0-9]+)$/i) || [, ''])[1].toLowerCase();
+  const tamanho = (b) => (b < 1024 ? `${b} B` : b < 1048576 ? `${(b / 1024).toFixed(0)} KB` : `${(b / 1048576).toFixed(1).replace('.', ',')} MB`);
+  const u32 = (d, o) => (d[o] | (d[o + 1] << 8) | (d[o + 2] << 16) | (d[o + 3] << 24)) >>> 0;
+  const LIMITE = 150 * 1024 * 1024;
+
+  /* ------------------------------------------------------------ que ficheiro é */
+  function tipo(nome, mime, b) {
+    const e = ext(nome), m = (mime || '').toLowerCase();
+    const ini = String.fromCharCode(...b.subarray(0, 8));
+    if (ini.startsWith('%PDF') || e === 'pdf') return 'pdf';
+    if (b.length >= 8 && u32(b, 0) === 0xE011CFD0 && u32(b, 4) === 0xE11AB1A1) return 'antigo';      // .doc, .xls, .ppt (ou Office com palavra-passe)
+    if (['docx', 'docm', 'dotx'].includes(e)) return 'docx';
+    if (['xlsx', 'xlsm', 'xltx'].includes(e)) return 'xlsx';
+    if (['pptx', 'pptm', 'ppsx', 'potx'].includes(e)) return 'pptx';
+    if (['odt', 'ods', 'odp', 'odg', 'rtf', 'pages', 'numbers', 'key', 'wps', 'pub', 'xps'].includes(e)) return 'outro';
+    if (/^image\//.test(m) || ['jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp', 'svg', 'avif', 'ico'].includes(e)) return e === 'heic' ? 'outro' : 'imagem';
+    if (/^video\//.test(m) || ['mp4', 'webm', 'ogv', 'mov', 'm4v'].includes(e)) return 'video';
+    if (/^audio\//.test(m) || ['mp3', 'wav', 'ogg', 'oga', 'm4a', 'aac', 'opus', 'flac'].includes(e)) return 'som';
+    if (['html', 'htm', 'xhtml', 'mht'].includes(e) || m === 'text/html') return 'html';
+    if (['csv', 'tsv'].includes(e) || m === 'text/csv') return 'csv';
+    if (['txt', 'md', 'json', 'xml', 'log', 'srt', 'vtt', 'ini', 'yml', 'yaml', 'js', 'css', 'py', 'tex', 'bib'].includes(e) || /^text\//.test(m)) return 'texto';
+    if (b[0] === 0x50 && b[1] === 0x4B) return 'zipdesconhecido';
+    return 'desconhecido';
+  }
+  const NOMES = { pdf: 'PDF', docx: 'Word', xlsx: 'Excel', pptx: 'PowerPoint', imagem: 'Imagem', video: 'Vídeo', som: 'Som', html: 'Página HTML', csv: 'Tabela (CSV)', texto: 'Texto' };
+
+  /* ------------------------------------------------------------ ZIP e XML (Word, Excel e PowerPoint são ZIPs de XML) */
+  async function zipDe(b) {
+    if (typeof ABRIRWORD === 'undefined' || !ABRIRWORD.abreZip) throw falha('O Portal não conseguiu preparar a leitura deste ficheiro. Atualize o Portal e tente outra vez.');
+    let ents;
+    try { ents = ABRIRWORD.abreZip(b); } catch (e) { throw falha('Este ficheiro está danificado ou não é do formato que o nome diz.'); }
+    const cache = new Map();
+    const bin = async (n) => { const e = ents.get(String(n).replace(/^\//, '').toLowerCase()); if (!e) return null; return ABRIRWORD.extrai(b, e); };
+    const txt = async (n) => { if (cache.has(n)) return cache.get(n); const d = await bin(n); const t = d ? new TextDecoder('utf-8').decode(d) : null; cache.set(n, t); return t; };
+    const xml = async (n) => { const t = await txt(n); if (!t) return null; const d = new DOMParser().parseFromString(t, 'application/xml'); return d.getElementsByTagName('parsererror').length ? null : d.documentElement; };
+    return { ents, bin, txt, xml };
+  }
+  const kids = (el, n) => (el ? [...el.children].filter((c) => c.localName === n) : []);
+  const kid = (el, n) => (el ? [...el.children].find((c) => c.localName === n) || null : null);
+  const fundo = (el, ...ns) => { let c = el; for (const n of ns) { c = kid(c, n); if (!c) return null; } return c; };
+  const todos = (el, n) => (el ? [...el.getElementsByTagNameNS('*', n)] : []);
+  const at = (el, n) => (el ? el.getAttribute(n) : null);
+  const atR = (el, n) => (el ? (el.getAttributeNS('http://schemas.openxmlformats.org/officeDocument/2006/relationships', n) || el.getAttribute('r:' + n)) : null);
+  const pasta = (p) => p.replace(/[^/]*$/, '');
+  function junta(base, alvo) {
+    if (!alvo) return null;
+    if (alvo.startsWith('/')) return alvo.slice(1);
+    const partes = (pasta(base) + alvo).split('/'), out = [];
+    for (const p of partes) { if (p === '..') out.pop(); else if (p && p !== '.') out.push(p); }
+    return out.join('/');
+  }
+  async function rels(z, parte) {
+    const r = await z.xml(pasta(parte) + '_rels/' + parte.split('/').pop() + '.rels'), m = new Map();
+    for (const x of kids(r, 'Relationship')) m.set(at(x, 'Id'), { alvo: at(x, 'TargetMode') === 'External' ? null : junta(parte, at(x, 'Target')), tipo: (at(x, 'Type') || '').split('/').pop() });
+    return m;
+  }
+  const MIME_IMG = { png: 'image/png', jpg: 'image/jpeg', jpeg: 'image/jpeg', gif: 'image/gif', bmp: 'image/bmp', webp: 'image/webp', svg: 'image/svg+xml', tif: 'image/tiff', tiff: 'image/tiff' };
+
+  /* ------------------------------------------------------------ cores (DrawingML) */
+  const hex2 = (n) => Math.max(0, Math.min(255, Math.round(n))).toString(16).padStart(2, '0');
+  function hsl(r, g, b) {
+    r /= 255; g /= 255; b /= 255; const mx = Math.max(r, g, b), mn = Math.min(r, g, b); let hh = 0, s = 0; const l = (mx + mn) / 2;
+    if (mx !== mn) { const d = mx - mn; s = l > 0.5 ? d / (2 - mx - mn) : d / (mx + mn); hh = mx === r ? (g - b) / d + (g < b ? 6 : 0) : mx === g ? (b - r) / d + 2 : (r - g) / d + 4; hh /= 6; }
+    return [hh, s, l];
+  }
+  function rgb(hh, s, l) {
+    if (!s) return [l * 255, l * 255, l * 255];
+    const f = (p, q, t) => { if (t < 0) t += 1; if (t > 1) t -= 1; return t < 1 / 6 ? p + (q - p) * 6 * t : t < 1 / 2 ? q : t < 2 / 3 ? p + (q - p) * (2 / 3 - t) * 6 : p; };
+    const q = l < 0.5 ? l * (1 + s) : l + s - l * s, p = 2 * l - q;
+    return [f(p, q, hh + 1 / 3) * 255, f(p, q, hh) * 255, f(p, q, hh - 1 / 3) * 255];
+  }
+  const SYS = { windowText: '000000', window: 'FFFFFF' };
+  const PRST = { black: '000000', white: 'FFFFFF', red: 'FF0000', blue: '0000FF', green: '008000', yellow: 'FFFF00', gray: '808080', grey: '808080' };
+  // el: srgbClr, schemeClr, sysClr, prstClr… (com lumMod, lumOff, tint, shade, alpha); tema: { cores, mapa }
+  function cor(el, tema) {
+    if (!el) return null;
+    let h6 = null;
+    if (el.localName === 'srgbClr') h6 = at(el, 'val');
+    else if (el.localName === 'sysClr') h6 = at(el, 'lastClr') || SYS[at(el, 'val')] || '000000';
+    else if (el.localName === 'prstClr') h6 = PRST[at(el, 'val')] || '000000';
+    else if (el.localName === 'schemeClr') { let v = at(el, 'val'); if (tema && tema.mapa && tema.mapa[v]) v = tema.mapa[v]; h6 = (tema && tema.cores[v]) || ({ dk1: '000000', lt1: 'FFFFFF', tx1: '000000', bg1: 'FFFFFF' })[v] || '000000'; }
+    else if (el.localName === 'scrgbClr') h6 = hex2(at(el, 'r') / 1000 * 2.55) + hex2(at(el, 'g') / 1000 * 2.55) + hex2(at(el, 'b') / 1000 * 2.55);
+    else return null;
+    if (!/^[0-9a-f]{6}$/i.test(h6 || '')) return null;
+    let r = parseInt(h6.slice(0, 2), 16), g = parseInt(h6.slice(2, 4), 16), b = parseInt(h6.slice(4, 6), 16), a = 1;
+    for (const m of el.children) {
+      const v = Number(at(m, 'val')) / 100000;
+      if (m.localName === 'lumMod' || m.localName === 'lumOff') { const [hh, s, l] = hsl(r, g, b); const l2 = m.localName === 'lumMod' ? l * v : l + v; [r, g, b] = rgb(hh, s, Math.max(0, Math.min(1, l2))); }
+      else if (m.localName === 'tint') { r = r + (255 - r) * (1 - v); g = g + (255 - g) * (1 - v); b = b + (255 - b) * (1 - v); }
+      else if (m.localName === 'shade') { r *= v; g *= v; b *= v; }
+      else if (m.localName === 'alpha') a = v;
+    }
+    return a < 1 ? `rgba(${Math.round(r)},${Math.round(g)},${Math.round(b)},${a.toFixed(2)})` : '#' + hex2(r) + hex2(g) + hex2(b);
+  }
+  const corDe = (pai, tema) => { if (!pai) return null; const c = [...pai.children].find((x) => /Clr$/.test(x.localName)); return cor(c, tema); };
+
+  /* ============================================================ a secção */
+  function vista(arg, ctx) {
+    const { h, btn, toast } = ctx;
+    let limpar = [];
+    const solta = () => { for (const f of limpar) try { f(); } catch (e) { /* segue */ } limpar = []; };
+    const entrada = h('input', { type: 'file', style: 'display:none', 'aria-label': 'Escolher um ficheiro para abrir', onchange: (e) => { const f = e.target.files[0]; e.target.value = ''; if (f) abre(f); } });
+    const escolhe = () => entrada.click();
+    const zona = h('div', { class: 'abr-zona', tabindex: '0', role: 'button', 'aria-label': 'Escolher um ficheiro para abrir', onclick: escolhe, onkeydown: (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); escolhe(); } } },
+      h('div', { class: 'abr-zona-t' }, 'Escolher um ficheiro'),
+      h('div', { class: 'abr-zona-s' }, 'ou arraste-o para aqui (no computador)'),
+      h('div', { class: 'abr-tipos' }, ...['PDF', 'Word', 'Excel', 'PowerPoint', 'Imagens', 'Vídeo e som', 'HTML', 'Texto e CSV'].map((t) => h('span', null, t))));
+    const inicio = h('div', { class: 'abr-inicio' },
+      h('div', { class: 'card' }, h('div', { class: 'eyebrow' }, 'Ver sem outras aplicações'), h('h2', { style: 'margin:6px 0 4px' }, 'Abrir ficheiros'),
+        h('p', { class: 'muted' }, 'Abra aqui os PDF, os ficheiros do Word, do Excel e do PowerPoint, as imagens, os vídeos e as páginas HTML que recebe. ' +
+          'O ficheiro abre-se neste aparelho: não é enviado para a Internet nem fica guardado no Portal. É só para ler; um ficheiro Word também pode passar para «Os meus documentos», para o editar.'),
+        zona, entrada));
+    const visor = h('div', { class: 'abr-visor', hidden: true });
+    const el = h('div', { class: 'abr' }, inicio, visor);
+    // arrastar e largar
+    const sobre = (e) => { if (e.dataTransfer && [...e.dataTransfer.types].includes('Files')) { e.preventDefault(); zona.classList.add('sobre'); } };
+    el.addEventListener('dragover', sobre); el.addEventListener('dragenter', sobre);
+    el.addEventListener('dragleave', (e) => { if (e.target === zona) zona.classList.remove('sobre'); });
+    el.addEventListener('drop', (e) => { const f = e.dataTransfer && e.dataTransfer.files[0]; if (f) { e.preventDefault(); zona.classList.remove('sobre'); abre(f); } });
+    // com internet, deixa o leitor de PDF já guardado para quando não houver
+    if (navigator.onLine) setTimeout(() => { for (const f of ['pdf.mjs', 'pdf.worker.mjs']) fetch(PDFJS + f).catch(() => {}); }, 1500);
+
+    function fecha() { solta(); visor.replaceChildren(); visor.hidden = true; inicio.hidden = false; if (document.fullscreenElement) document.exitFullscreen().catch(() => {}); }
+    function cabeca(f, t, ...extra) {
+      return h('div', { class: 'abr-cab' },
+        h('button', { type: 'button', class: 'btn ghost sm', onclick: fecha }, '← Fechar'),
+        h('div', { class: 'abr-nome' }, h('b', null, f.name), h('small', null, `${NOMES[t] || 'Ficheiro'} · ${tamanho(f.size)}`)),
+        h('div', { class: 'abr-acoes' }, ...extra, h('button', { type: 'button', class: 'btn ghost sm', onclick: escolhe }, 'Abrir outro')));
+    }
+    function mostraErro(f, msg) {
+      visor.replaceChildren(cabeca(f, ''), h('div', { class: 'card abr-erro' }, h('h3', null, 'Este ficheiro não se abre aqui'), h('p', null, msg)));
+    }
+
+    async function abre(f) {
+      solta(); inicio.hidden = true; visor.hidden = false;
+      visor.replaceChildren(h('div', { class: 'card abr-espera' }, h('p', null, `A abrir «${f.name}»…`)));
+      try {
+        if (f.size > LIMITE) throw falha('Este ficheiro é demasiado grande (mais de 150 MB) para abrir no Portal.');
+        const t0 = tipo(f.name, f.type, new Uint8Array(await f.slice(0, 16).arrayBuffer()));
+        if (t0 === 'antigo') throw falha(`Este ficheiro é do formato antigo do Office (.doc, .xls ou .ppt) ou está protegido com palavra-passe. No computador, abra-o no programa do Office e escolha «Guardar como»: ` +
+          'o formato novo (.docx, .xlsx ou .pptx) ou PDF. Depois abra aqui esse ficheiro.');
+        if (t0 === 'outro') throw falha(`Os ficheiros «.${ext(f.name)}» ainda não se abrem no Portal. No programa onde foi feito, guarde-o como PDF (ou como Word, Excel ou PowerPoint) e abra aqui esse ficheiro.`);
+        if (t0 === 'desconhecido' || t0 === 'zipdesconhecido') throw falha('O Portal não conhece este tipo de ficheiro. Abre PDF, Word, Excel, PowerPoint, imagens, vídeos, sons, páginas HTML e texto.');
+        await ({ pdf: vPdf, docx: vDocx, xlsx: vXlsx, pptx: vPptx, imagem: vImagem, video: vMedia, som: vMedia, html: vHtml, csv: vCsv, texto: vTexto })[t0](f, t0);
+      } catch (e) {
+        console.warn('Abrir ficheiros', e);
+        const m = e && e.message && !/is not|undefined|null|Cannot|Failed|^[a-z-]+$/i.test(e.message) ? e.message : 'Não foi possível abrir este ficheiro. Pode estar danificado ou não ser do formato que o nome diz.';
+        mostraErro(f, m);
+      }
+    }
+
+    /* ---------- imagens, vídeo e som (o navegador sabe mostrar) */
+    function url(f) { const u = URL.createObjectURL(f); limpar.push(() => URL.revokeObjectURL(u)); return u; }
+    async function vImagem(f, t) {
+      const img = h('img', { src: url(f), alt: f.name, class: 'abr-img' });
+      let inteira = false;
+      const bTam = h('button', { type: 'button', class: 'btn ghost sm', onclick: () => { inteira = !inteira; img.classList.toggle('real', inteira); bTam.textContent = inteira ? 'Ajustar ao ecrã' : 'Tamanho real'; } }, 'Tamanho real');
+      img.addEventListener('error', () => mostraErro(f, 'Este navegador não consegue mostrar esta imagem.'));
+      visor.replaceChildren(cabeca(f, t, bTam), h('div', { class: 'abr-quadro abr-centro' }, img));
+    }
+    async function vMedia(f, t) {
+      const m = h(t === 'video' ? 'video' : 'audio', { src: url(f), controls: true, preload: 'metadata', class: t === 'video' ? 'abr-video' : 'abr-som' });
+      m.addEventListener('error', () => mostraErro(f, 'Este aparelho não consegue reproduzir este formato. Experimente convertê-lo para MP4 (vídeo) ou MP3 (som).'));
+      visor.replaceChildren(cabeca(f, t), h('div', { class: 'abr-quadro abr-centro' }, m));
+    }
+
+    /* ---------- texto, CSV e HTML */
+    async function texto(f) {
+      const b = new Uint8Array(await f.arrayBuffer());
+      try { return new TextDecoder('utf-8', { fatal: true }).decode(b).replace(/^﻿/, ''); } catch (e) { return new TextDecoder('windows-1252').decode(b); }
+    }
+    async function vTexto(f, t) {
+      const s = await texto(f);
+      visor.replaceChildren(cabeca(f, t), h('pre', { class: 'abr-texto' }, s.length > 3e6 ? s.slice(0, 3e6) + '\n\n[…o resto do ficheiro não se mostra]' : s));
+    }
+    function csvLinhas(s) {
+      const l1 = s.split(/\r?\n/, 1)[0], sep = ['\t', ';', ','].map((c) => [c, l1.split(c).length]).sort((a, b) => b[1] - a[1])[0][0];
+      const out = []; let lin = [], cel = '', q = false;
+      for (let i = 0; i < s.length; i++) {
+        const c = s[i];
+        if (q) { if (c === '"') { if (s[i + 1] === '"') { cel += '"'; i++; } else q = false; } else cel += c; }
+        else if (c === '"' && cel === '') q = true;
+        else if (c === sep) { lin.push(cel); cel = ''; }
+        else if (c === '\n' || c === '\r') { if (c === '\r' && s[i + 1] === '\n') i++; lin.push(cel); out.push(lin); lin = []; cel = ''; if (out.length > 20000) break; }
+        else cel += c;
+      }
+      if (cel || lin.length) { lin.push(cel); out.push(lin); }
+      return out;
+    }
+    async function vCsv(f, t) {
+      const ls = csvLinhas(await texto(f)), max = Math.min(ls.length, 5000);
+      const tab = h('table', { class: 'abr-tab' }, h('tbody', null, ...ls.slice(0, max).map((l, i) => h('tr', null, ...l.map((c) => h(i === 0 ? 'th' : 'td', null, c))))));
+      visor.replaceChildren(cabeca(f, t), ls.length > max ? h('p', { class: 'muted abr-nota' }, `Mostram-se as primeiras ${max} linhas de ${ls.length}.`) : '', h('div', { class: 'abr-quadro abr-rola' }, tab));
+    }
+    async function vHtml(f, t) {
+      let s = await texto(f);
+      // sem programas, sem ir buscar nada à Internet: só o texto, os estilos e as imagens que vêm dentro do ficheiro
+      const csp = '<meta http-equiv="Content-Security-Policy" content="default-src \'none\'; img-src data: blob:; style-src \'unsafe-inline\'; font-src data:; media-src data: blob:">';
+      // e antes disso tira os programas e as ligações para fora (o navegador nem chega a pedi-las)
+      const d = new DOMParser().parseFromString(s, 'text/html');
+      d.querySelectorAll('script, noscript, iframe, frame, frameset, object, embed, applet, base, meta[http-equiv], link:not([rel~="stylesheet"]), link[href^="http"], link[href^="//"]').forEach((x) => x.remove());
+      const fora = /^\s*(https?:|\/\/|ftp:|file:|javascript:)/i;
+      for (const x of d.querySelectorAll('*')) for (const a of [...x.attributes]) {
+        if (/^on/i.test(a.name) || (['src', 'srcset', 'href', 'poster', 'background', 'action', 'formaction', 'data', 'xlink:href'].includes(a.name.toLowerCase()) && (fora.test(a.value) || (a.name === 'srcset' && /https?:|\/\//i.test(a.value))))) x.removeAttribute(a.name);
+        else if (a.name === 'style' && /url\s*\(\s*['"]?\s*(https?:|\/\/)/i.test(a.value)) x.setAttribute('style', a.value.replace(/url\s*\([^)]*\)/gi, 'none'));
+      }
+      d.querySelectorAll('style').forEach((st) => { st.textContent = st.textContent.replace(/@import[^;]+;/gi, '').replace(/url\s*\(\s*['"]?\s*(https?:|\/\/)[^)]*\)/gi, 'none'); });
+      s = '<!doctype html>' + d.documentElement.outerHTML;
+      s = /<head[^>]*>/i.test(s) ? s.replace(/<head[^>]*>/i, (m) => m + csp) : csp + s;
+      const fr = h('iframe', { class: 'abr-html', title: f.name, sandbox: '', referrerpolicy: 'no-referrer' });
+      fr.srcdoc = s;
+      visor.replaceChildren(cabeca(f, t), h('p', { class: 'muted abr-nota' }, 'A página aparece sem programas (scripts) e sem nada da Internet, para sua segurança.'), fr);
+    }
+
+    /* ---------- PDF (PDF.js) */
+    let pdfjsP = null;
+    function pdfjs() {
+      if (!pdfjsP) pdfjsP = import(new URL(PDFJS + 'pdf.mjs', document.baseURI).href).then((m) => { m.GlobalWorkerOptions.workerSrc = new URL(PDFJS + 'pdf.worker.mjs', document.baseURI).href; return m; });
+      pdfjsP.catch(() => { pdfjsP = null; });
+      return pdfjsP;
+    }
+    function pedePalavra(errada) {
+      return new Promise((res) => {
+        const inp = h('input', { type: 'password', class: 'inp', 'aria-label': 'Palavra-passe do PDF', autocomplete: 'off' });
+        const dlg = h('dialog', { class: 'esc-dlg' }, h('form', { method: 'dialog' }, h('h3', null, 'PDF protegido'),
+          h('p', null, errada ? 'A palavra-passe não está certa. Tente outra vez.' : 'Este PDF tem palavra-passe. Escreva-a para o abrir (fica só neste aparelho).'), inp,
+          h('div', { class: 'row end', style: 'margin-top:12px' }, h('button', { type: 'button', class: 'btn ghost', onclick: () => { dlg.close(); res(null); } }, 'Cancelar'), h('button', { type: 'submit', class: 'btn primary' }, 'Abrir'))));
+        dlg.addEventListener('close', () => { res(dlg.returnValue === 'cancel' ? null : inp.value); dlg.remove(); });
+        dlg.querySelector('form').addEventListener('submit', () => { dlg.returnValue = 'ok'; });
+        document.body.append(dlg); dlg.showModal(); inp.focus();
+      });
+    }
+    async function vPdf(f, t) {
+      let lib;
+      try { lib = await pdfjs(); } catch (e) {
+        throw falha(navigator.onLine ? 'Este navegador não consegue usar o leitor de PDF do Portal. Atualize o navegador (Chrome, Edge, Firefox ou Safari recentes) e tente outra vez.'
+          : 'O leitor de PDF descarrega-se da primeira vez que se abre um PDF com internet. Ligue-se à internet uma vez e depois já abre sem ela.');
+      }
+      const dados = new Uint8Array(await f.arrayBuffer());
+      const tarefa = lib.getDocument({ data: dados, isEvalSupported: false, enableXfa: false, standardFontDataUrl: new URL(PDFJS + 'standard_fonts/', document.baseURI).href, useSystemFonts: true });
+      let tentou = false, desistiu = false;
+      tarefa.onPassword = async (dar, razao) => { const p = await pedePalavra(tentou && razao === lib.PasswordResponses.INCORRECT_PASSWORD); tentou = true; if (p == null) { desistiu = true; tarefa.destroy(); } else dar(p); };
+      let doc;
+      try { doc = await tarefa.promise; } catch (e) { if (desistiu || (e && e.name === 'PasswordException')) throw falha('O PDF não se abriu sem a palavra-passe.'); throw falha('Este PDF está danificado ou não é um PDF.'); }
+      limpar.push(() => { try { doc.destroy(); } catch (e) { /* segue */ } });
+      const n = doc.numPages, folhas = h('div', { class: 'abr-pdf' }), info = h('span', { class: 'abr-info', role: 'status' }, `${n} ${n === 1 ? 'página' : 'páginas'}`);
+      let zoom = 1;
+      const p1 = await doc.getPage(1), v1 = p1.getViewport({ scale: 1 });
+      const caixas = [];
+      for (let i = 1; i <= n; i++) {
+        const c = h('div', { class: 'abr-pg', 'data-n': String(i), style: `aspect-ratio:${v1.width}/${v1.height}` }, h('span', { class: 'abr-pg-n' }, String(i)));
+        caixas.push(c); folhas.append(c);
+      }
+      const feitas = new Map();
+      async function desenha(c) {
+        const i = Number(c.dataset.n), larg = Math.round(c.clientWidth); if (!larg || feitas.get(i) === larg) return;
+        feitas.set(i, larg);
+        const pg = await doc.getPage(i), v = pg.getViewport({ scale: 1 });
+        c.style.aspectRatio = `${v.width}/${v.height}`;
+        const dpr = Math.min(window.devicePixelRatio || 1, 2), esc = Math.min(larg / v.width * dpr, Math.sqrt(16e6 / (v.width * v.height)));
+        const vp = pg.getViewport({ scale: esc }), cv = h('canvas', { width: Math.floor(vp.width), height: Math.floor(vp.height), class: 'abr-pg-c' });
+        try { await pg.render({ canvasContext: cv.getContext('2d'), viewport: vp }).promise; } catch (e) { feitas.delete(i); return; }
+        if (feitas.get(i) !== larg) return;
+        c.querySelectorAll('canvas').forEach((x) => x.remove()); c.prepend(cv); pg.cleanup();
+      }
+      const obs = new IntersectionObserver((es) => { for (const e of es) if (e.isIntersecting) desenha(e.target); }, { rootMargin: '800px 0px' });
+      caixas.forEach((c) => obs.observe(c)); limpar.push(() => obs.disconnect());
+      // a página que está à vista
+      const vis = new IntersectionObserver((es) => { for (const e of es) if (e.isIntersecting && e.intersectionRatio > 0.3) info.textContent = `Página ${e.target.dataset.n} de ${n}`; }, { threshold: [0.3] });
+      caixas.forEach((c) => vis.observe(c)); limpar.push(() => vis.disconnect());
+      const aplica = () => { folhas.style.setProperty('--abr-zoom', String(zoom)); pct.textContent = Math.round(zoom * 100) + '%'; requestAnimationFrame(() => caixas.forEach((c) => { const r = c.getBoundingClientRect(); if (r.bottom > -800 && r.top < innerHeight + 800) desenha(c); })); };
+      const pct = h('span', { class: 'abr-pct' }, '100%');
+      const bMenos = h('button', { type: 'button', class: 'btn ghost sm', 'aria-label': 'Diminuir', onclick: () => { zoom = Math.max(0.5, +(zoom - 0.25).toFixed(2)); aplica(); } }, '−');
+      const bMais = h('button', { type: 'button', class: 'btn ghost sm', 'aria-label': 'Aumentar', onclick: () => { zoom = Math.min(3, +(zoom + 0.25).toFixed(2)); aplica(); } }, '+');
+      const ir = h('input', { type: 'number', class: 'inp abr-ir', min: '1', max: String(n), 'aria-label': 'Ir para a página', placeholder: 'pág.',
+        onchange: (e) => { const k = Math.max(1, Math.min(n, Number(e.target.value) || 1)); caixas[k - 1].scrollIntoView({ block: 'start' }); e.target.value = ''; } });
+      const r = () => aplica(); window.addEventListener('resize', r); limpar.push(() => window.removeEventListener('resize', r));
+      visor.replaceChildren(cabeca(f, t, bMenos, pct, bMais, ir), h('div', { class: 'abr-barra-info' }, info), h('div', { class: 'abr-quadro abr-rola-pdf' }, folhas));
+      aplica();
+    }
+
+    /* ---------- Word: mostra e deixa passar para «Os meus documentos» */
+    async function vDocx(f, t) {
+      if (typeof ABRIRWORD === 'undefined') throw falha('O Portal não conseguiu preparar a leitura de ficheiros Word. Atualize o Portal e tente outra vez.');
+      const r = await ABRIRWORD.ler(f);
+      const folha = h('div', { class: 'abr-docx' });
+      folha.innerHTML = r.html;                      // vem do leitor do Portal, que só deixa passar o que o editor tem (sem programas)
+      folha.querySelectorAll('[contenteditable]').forEach((x) => x.removeAttribute('contenteditable'));
+      const bEdita = h('button', { type: 'button', class: 'btn primary sm', onclick: () => ESCREVER.importaWord(f, ctx) }, 'Editar em «Os meus documentos»');
+      visor.replaceChildren(cabeca(f, t, bEdita), h('div', { class: 'abr-quadro abr-rola' }, folha));
+    }
+
+    /* ---------- Excel */
+    async function vXlsx(f, t) {
+      const z = await zipDe(new Uint8Array(await f.arrayBuffer()));
+      const livro = await lerLivro(z);
+      if (!livro.folhas.length) throw falha('Este livro do Excel não tem folhas que se possam mostrar.');
+      const abas = h('div', { class: 'abr-abas', role: 'tablist' }), corpo = h('div', { class: 'abr-quadro abr-rola abr-xl' }), nota = h('p', { class: 'muted abr-nota' });
+      async function mostra(k) {
+        [...abas.children].forEach((b, i) => b.setAttribute('aria-selected', String(i === k)));
+        corpo.replaceChildren(h('p', { class: 'muted' }, 'A abrir a folha…'));
+        const fl = await lerFolha(z, livro, livro.folhas[k]);
+        corpo.replaceChildren(fl.tab); nota.textContent = fl.nota || '';
+      }
+      livro.folhas.forEach((fl, k) => abas.append(h('button', { type: 'button', role: 'tab', class: 'abr-aba' + (fl.oculta ? ' oculta' : ''), onclick: () => mostra(k) }, fl.nome + (fl.oculta ? ' (oculta)' : ''))));
+      visor.replaceChildren(cabeca(f, t), abas, nota, corpo);
+      await mostra(Math.max(0, livro.folhas.findIndex((x) => !x.oculta)));
+    }
+
+    /* ---------- PowerPoint */
+    async function vPptx(f, t) {
+      const z = await zipDe(new Uint8Array(await f.arrayBuffer()));
+      const ap = await lerApresentacao(z, (u) => limpar.push(() => URL.revokeObjectURL(u)));
+      if (!ap.slides.length) throw falha('Esta apresentação não tem diapositivos.');
+      const lista = h('div', { class: 'abr-slides' }), caixas = [];
+      ap.slides.forEach((s, i) => {
+        const c = h('div', { class: 'abr-slide-c' }, h('div', { class: 'abr-slide-n' }, `${i + 1}`), h('div', { class: 'abr-slide-v', style: `aspect-ratio:${ap.w}/${ap.h}` }, s));
+        caixas.push(c); lista.append(c);
+      });
+      const ajusta = () => { for (const c of caixas) { const v = c.querySelector('.abr-slide-v'); v.firstChild.style.transform = `scale(${v.clientWidth / ap.wpx})`; } };
+      const ro = new ResizeObserver(ajusta); ro.observe(lista); limpar.push(() => ro.disconnect());
+      // apresentar: um diapositivo de cada vez, no ecrã inteiro
+      const bApr = h('button', { type: 'button', class: 'btn primary sm', onclick: () => apresenta(0) }, 'Apresentar');
+      function apresenta(k0) {
+        let k = k0;
+        const palco = h('div', { class: 'abr-palco', tabindex: '0' }), cont = h('div', { class: 'abr-palco-n' });
+        const mostra = () => {
+          const s = ap.slides[k].cloneNode(true), esc = Math.min(innerWidth / ap.wpx, innerHeight / (ap.wpx * ap.h / ap.w));
+          s.style.transform = `scale(${esc})`; s.style.left = `${(innerWidth - ap.wpx * esc) / 2}px`; s.style.top = `${(innerHeight - ap.wpx * ap.h / ap.w * esc) / 2}px`;
+          palco.replaceChildren(s, cont, sair); cont.textContent = `${k + 1} / ${ap.slides.length}`;
+        };
+        const fim = () => { palco.remove(); window.removeEventListener('resize', mostra); document.removeEventListener('fullscreenchange', fs); if (document.fullscreenElement) document.exitFullscreen().catch(() => {}); };
+        const fs = () => { if (!document.fullscreenElement) fim(); };
+        const sair = h('button', { type: 'button', class: 'abr-palco-x', 'aria-label': 'Sair da apresentação', onclick: (e) => { e.stopPropagation(); fim(); } }, '×');
+        const anda = (d) => { k = Math.max(0, Math.min(ap.slides.length - 1, k + d)); mostra(); };
+        palco.addEventListener('click', (e) => anda(e.clientX < innerWidth / 3 ? -1 : 1));
+        palco.addEventListener('keydown', (e) => { if (['ArrowRight', 'ArrowDown', 'PageDown', ' ', 'Enter'].includes(e.key)) { e.preventDefault(); anda(1); } else if (['ArrowLeft', 'ArrowUp', 'PageUp', 'Backspace'].includes(e.key)) { e.preventDefault(); anda(-1); } else if (e.key === 'Escape') fim(); else if (e.key === 'Home') { k = 0; mostra(); } else if (e.key === 'End') { k = ap.slides.length - 1; mostra(); } });
+        document.body.append(palco); mostra(); palco.focus(); window.addEventListener('resize', mostra);
+        if (palco.requestFullscreen) palco.requestFullscreen().then(() => document.addEventListener('fullscreenchange', fs)).catch(() => {});
+        limpar.push(fim);
+      }
+      visor.replaceChildren(cabeca(f, t, bApr), ap.avisos.length ? h('p', { class: 'muted abr-nota' }, ap.avisos.join(' ')) : '', h('div', { class: 'abr-quadro abr-rola' }, lista));
+      ajusta();
+    }
+
+    return { el, cleanup: () => solta() };
+  }
+
+  /* ============================================================ Excel: ler o livro e as folhas */
+  const DATAS = new Set([14, 15, 16, 17, 18, 19, 20, 21, 22, 27, 30, 36, 45, 46, 47, 50, 57]);
+  async function lerLivro(z) {
+    const wb = await z.xml('xl/workbook.xml'); if (!wb) throw falha('Este ficheiro não é um livro do Excel válido.');
+    const rl = await rels(z, 'xl/workbook.xml');
+    const d1904 = at(fundo(wb, 'workbookPr'), 'date1904') === '1' || at(fundo(wb, 'workbookPr'), 'date1904') === 'true';
+    const folhas = kids(fundo(wb, 'sheets'), 'sheet').map((s) => ({ nome: at(s, 'name'), parte: (rl.get(atR(s, 'id')) || {}).alvo, oculta: !!at(s, 'state') && at(s, 'state') !== 'visible' })).filter((s) => s.parte && /worksheet|sheet\d*\.xml$/i.test(s.parte) && !/chartsheet/i.test(s.parte));
+    // textos partilhados
+    const ss = await z.xml('xl/sharedStrings.xml');
+    const textos = kids(ss, 'si').map((si) => todos(si, 't').filter((x) => x.parentElement.localName !== 'rPh').map((x) => x.textContent).join(''));
+    // estilos: formatos dos números, negrito, cor do fundo
+    const st = await z.xml('xl/styles.xml');
+    const fmts = new Map(kids(fundo(st, 'numFmts'), 'numFmt').map((x) => [Number(at(x, 'numFmtId')), at(x, 'formatCode') || '']));
+    const fontes = kids(fundo(st, 'fonts'), 'font').map((x) => ({ b: !!kid(x, 'b') && at(kid(x, 'b'), 'val') !== '0', i: !!kid(x, 'i') && at(kid(x, 'i'), 'val') !== '0', cor: at(kid(x, 'color'), 'rgb') }));
+    const fundos = kids(fundo(st, 'fills'), 'fill').map((x) => { const p = kid(x, 'patternFill'); return p && at(p, 'patternType') === 'solid' ? at(kid(p, 'fgColor'), 'rgb') : null; });
+    const xfs = kids(fundo(st, 'cellXfs'), 'xf').map((x) => {
+      const id = Number(at(x, 'numFmtId') || 0), code = fmts.get(id) || '', al = kid(x, 'alignment');
+      const data = DATAS.has(id) || (/[dmyhs]/i.test(code.replace(/"[^"]*"|\[[^\]]*\]|\\./g, '')) && !/^[#0.,%\s]*$/.test(code));
+      return { id, code, data, fonte: fontes[Number(at(x, 'fontId') || 0)] || {}, fundo: fundos[Number(at(x, 'fillId') || 0)] || null, alinha: at(al, 'horizontal') };
+    });
+    return { folhas, textos, xfs, d1904 };
+  }
+  const corXl = (a) => (a && /^[0-9a-f]{8}$/i.test(a) ? '#' + a.slice(2) : a && /^[0-9a-f]{6}$/i.test(a) ? '#' + a : null);
+  const colNum = (s) => [...s].reduce((n, c) => n * 26 + c.charCodeAt(0) - 64, 0);
+  const colNome = (n) => { let s = ''; while (n > 0) { const m = (n - 1) % 26; s = String.fromCharCode(65 + m) + s; n = Math.floor((n - 1) / 26); } return s; };
+  function numero(v, xf, d1904) {
+    const x = Number(v); if (!isFinite(x)) return v;
+    if (xf && xf.data) {
+      const ms = Math.round((x + (d1904 ? 1462 : 0) - 25569) * 86400000);           // 25569 = 1/1/1970 no calendário do Excel
+      const d = new Date(ms), p = (k) => String(k).padStart(2, '0');
+      const so = /^[hms:\s.0AMP/]+$/i.test((xf.code || '').replace(/\[[^\]]*\]/g, '')) && x < 1;
+      const dt = `${p(d.getUTCDate())}/${p(d.getUTCMonth() + 1)}/${d.getUTCFullYear()}`, hr = `${p(d.getUTCHours())}:${p(d.getUTCMinutes())}`;
+      if (so) return hr;
+      return /h/i.test(xf.code || '') || [22].includes(xf.id) ? `${dt} ${hr}` : dt;
+    }
+    const code = (xf && xf.code) || ({ 1: '0', 2: '0.00', 3: '#,##0', 4: '#,##0.00', 9: '0%', 10: '0.00%' })[xf && xf.id] || '';
+    const sec = code.split(';')[0].replace(/"[^"]*"|\[[^\]]*\]/g, '');
+    if (/%/.test(sec)) { const dec = ((sec.split('.')[1] || '').match(/0/g) || []).length; return (x * 100).toLocaleString('pt-PT', { minimumFractionDigits: dec, maximumFractionDigits: dec }) + '%'; }
+    if (/0/.test(sec)) { const dec = ((sec.split('.')[1] || '').match(/[0#]/g) || []).length; const s = x.toLocaleString('pt-PT', { minimumFractionDigits: dec, maximumFractionDigits: dec, useGrouping: /,/.test(sec) }); const pre = (code.match(/^"([^"]*)"/) || [, ''])[1], pos = (code.split(';')[0].match(/"([^"]*)"$/) || [, ''])[1]; return pre + s + pos; }
+    return Number.isInteger(x) ? String(x) : x.toLocaleString('pt-PT', { maximumSignificantDigits: 12 });
+  }
+  async function lerFolha(z, livro, fl) {
+    const doc = await z.xml(fl.parte); if (!doc) return { tab: document.createTextNode('Esta folha não se pôde ler.') };
+    const MAXL = 3000, MAXC = 120;
+    const cel = new Map(); let ml = 0, mc = 0, cortou = false;
+    for (const row of kids(fundo(doc, 'sheetData'), 'row')) {
+      const ri = Number(at(row, 'r')) || ml + 1; if (ri > MAXL) { cortou = true; break; }
+      let ci = 0;
+      for (const c of kids(row, 'c')) {
+        const ref = at(c, 'r'); ci = ref ? colNum(ref.replace(/\d+/g, '')) : ci + 1; if (ci > MAXC) { cortou = true; continue; }
+        const t = at(c, 't'), xf = livro.xfs[Number(at(c, 's') || 0)], vEl = kid(c, 'v');
+        let v = vEl ? vEl.textContent : '';
+        if (t === 's') v = livro.textos[Number(v)] || '';
+        else if (t === 'inlineStr') v = todos(kid(c, 'is'), 't').map((x) => x.textContent).join('');
+        else if (t === 'b') v = v === '1' ? 'VERDADEIRO' : 'FALSO';
+        else if (t === 'e' || t === 'str') { /* fica o texto */ }
+        else if (v !== '') v = numero(v, xf, livro.d1904);
+        if (v === '' && !(xf && xf.fundo)) continue;
+        cel.set(ri + ':' + ci, { v, xf, num: (!t || t === 'n') && v !== '' && vEl && isFinite(Number(vEl.textContent)) });
+        ml = Math.max(ml, ri); mc = Math.max(mc, ci);
+      }
+    }
+    // células unidas
+    const unidas = new Map(), tapadas = new Set();
+    for (const m of kids(fundo(doc, 'mergeCells'), 'mergeCell')) {
+      const [a, b] = (at(m, 'ref') || '').split(':'); if (!a || !b) continue;
+      const r1 = Number(a.replace(/\D/g, '')), c1 = colNum(a.replace(/\d/g, '')), r2 = Math.min(Number(b.replace(/\D/g, '')), MAXL), c2 = Math.min(colNum(b.replace(/\d/g, '')), MAXC);
+      unidas.set(r1 + ':' + c1, [r2 - r1 + 1, c2 - c1 + 1]);
+      for (let r = r1; r <= r2; r++) for (let c = c1; c <= c2; c++) if (r !== r1 || c !== c1) tapadas.add(r + ':' + c);
+      ml = Math.max(ml, r2); mc = Math.max(mc, c2);
+    }
+    const larg = new Map();
+    for (const c of kids(fundo(doc, 'cols'), 'col')) for (let k = Number(at(c, 'min')); k <= Math.min(Number(at(c, 'max')), MAXC); k++) larg.set(k, at(c, 'hidden') === '1' ? 0 : Number(at(c, 'width')) || 9);
+    if (!ml) return { tab: Object.assign(document.createElement('p'), { className: 'muted', textContent: 'Esta folha está vazia.' }) };
+    const tab = document.createElement('table'); tab.className = 'abr-tab abr-xl-t';
+    const cg = document.createElement('colgroup'); cg.append(document.createElement('col'));
+    for (let c = 1; c <= mc; c++) { const col = document.createElement('col'); const w = larg.has(c) ? larg.get(c) : 9; col.style.width = w ? `${Math.round(w * 7 + 8)}px` : '0'; if (!w) col.style.visibility = 'collapse'; cg.append(col); }
+    tab.append(cg);
+    const th = document.createElement('thead'), trh = document.createElement('tr'); trh.append(document.createElement('th'));
+    for (let c = 1; c <= mc; c++) { const x = document.createElement('th'); x.textContent = colNome(c); trh.append(x); }
+    th.append(trh); tab.append(th);
+    const tb = document.createElement('tbody');
+    for (let r = 1; r <= ml; r++) {
+      const tr = document.createElement('tr'), n = document.createElement('th'); n.textContent = r; tr.append(n);
+      for (let c = 1; c <= mc; c++) {
+        const k = r + ':' + c; if (tapadas.has(k)) continue;
+        const td = document.createElement('td'), x = cel.get(k);
+        if (unidas.has(k)) { const [rs, cs] = unidas.get(k); if (rs > 1) td.rowSpan = rs; if (cs > 1) td.colSpan = cs; }
+        if (x) {
+          td.textContent = x.v;
+          const fo = (x.xf && x.xf.fonte) || {};
+          if (fo.b) td.style.fontWeight = '700'; if (fo.i) td.style.fontStyle = 'italic';
+          const cf = corXl(fo.cor); if (cf && cf !== '#000000') td.style.color = cf;
+          const cb = corXl(x.xf && x.xf.fundo); if (cb) td.style.background = cb;
+          const al = x.xf && x.xf.alinha; td.style.textAlign = al === 'center' || al === 'centerContinuous' ? 'center' : al === 'right' ? 'right' : al === 'left' ? 'left' : x.num ? 'right' : '';
+        }
+        tr.append(td);
+      }
+      tb.append(tr);
+    }
+    tab.append(tb);
+    return { tab, nota: cortou ? `A folha é grande: mostram-se as primeiras ${MAXL} linhas e ${MAXC} colunas.` : 'Mostram-se os valores (os resultados das fórmulas, como ficaram da última vez que o ficheiro foi guardado).' };
+  }
+
+  /* ============================================================ PowerPoint: ler a apresentação e desenhar cada diapositivo */
+  const WPX = 960;          // largura de cada diapositivo desenhado (depois encolhe ou estica para caber)
+  async function lerApresentacao(z, regista) {
+    const pr = await z.xml('ppt/presentation.xml'); if (!pr) throw falha('Este ficheiro não é uma apresentação do PowerPoint válida.');
+    const rl = await rels(z, 'ppt/presentation.xml');
+    const sz = fundo(pr, 'sldSz'), cx = Number(at(sz, 'cx')) || 12192000, cy = Number(at(sz, 'cy')) || 6858000;
+    const E = WPX / cx;                      // EMU → píxeis
+    const PT = 12700 * E;                    // 1 ponto → píxeis
+    const avisos = new Set(), imagens = new Map(), temas = new Map(), docs = new Map();
+    async function img(parte) {
+      if (!parte) return null;
+      if (imagens.has(parte)) return imagens.get(parte);
+      const e = ext(parte), m = MIME_IMG[e];
+      if (!m) { avisos.add('Algumas imagens (EMF ou WMF) não se mostram aqui.'); imagens.set(parte, null); return null; }
+      const d = await z.bin(parte); const u = d ? URL.createObjectURL(new Blob([d], { type: m })) : null; if (u) regista(u);
+      imagens.set(parte, u); return u;
+    }
+    async function parte(p) {             // { el, rels } de um diapositivo, esquema ou modelo
+      if (!docs.has(p)) docs.set(p, (async () => ({ p, el: await z.xml(p), rels: await rels(z, p) }))());
+      return docs.get(p);
+    }
+    async function tema(mestre) {
+      const tp = [...mestre.rels.values()].find((r) => r.tipo === 'theme');
+      const k = tp ? tp.alvo : '';
+      if (!temas.has(k)) {
+        const t = tp ? await z.xml(tp.alvo) : null, cs = fundo(t, 'themeElements', 'clrScheme'), cores = {};
+        for (const c of cs ? [...cs.children] : []) { const x = c.firstElementChild; cores[c.localName] = x ? (at(x, 'val') && x.localName === 'srgbClr' ? at(x, 'val') : at(x, 'lastClr') || SYS[at(x, 'val')] || null) : null; }
+        const fs = fundo(t, 'themeElements', 'fontScheme');
+        temas.set(k, { cores, mj: at(fundo(fs, 'majorFont', 'latin'), 'typeface'), mn: at(fundo(fs, 'minorFont', 'latin'), 'typeface') });
+      }
+      const m = kid(mestre.el, 'clrMap'), mapa = {};
+      if (m) for (const a of m.attributes) mapa[a.name] = a.value;
+      return { ...temas.get(k), mapa };
+    }
+    const slides = [];
+    const ids = kids(fundo(pr, 'sldIdLst'), 'sldId');
+    for (const s of ids) {
+      const sp = (rl.get(atR(s, 'id')) || {}).alvo; if (!sp) continue;
+      const sl = await parte(sp); if (!sl.el) continue;
+      if (at(sl.el, 'show') === '0') continue;                              // diapositivo oculto
+      const lp = [...sl.rels.values()].find((r) => r.tipo === 'slideLayout'), la = lp ? await parte(lp.alvo) : null;
+      const mp = la && [...la.rels.values()].find((r) => r.tipo === 'slideMaster'), ms = mp ? await parte(mp.alvo) : null;
+      const tm = ms ? await tema(ms) : { cores: {}, mapa: {} };
+      slides.push(await desenhaSlide({ sl, la, ms, tm, E, PT, img, avisos, cx, cy }));
+    }
+    return { slides, w: cx, h: cy, wpx: WPX, avisos: [...avisos] };
+  }
+
+  async function desenhaSlide(c) {
+    const { sl, la, ms, tm, E, PT, img, avisos, cx, cy } = c;
+    const caixa = document.createElement('div'); caixa.className = 'abr-slide';
+    caixa.style.width = `${WPX}px`; caixa.style.height = `${Math.round(cy * E)}px`;
+    // fundo: do diapositivo, do esquema ou do modelo
+    const fundoDe = async (pt) => {
+      const bg = pt && pt.el ? fundo(pt.el, 'cSld', 'bg') : null; if (!bg) return false;
+      const bp = kid(bg, 'bgPr'), br = kid(bg, 'bgRef');
+      if (bp) {
+        const sf = kid(bp, 'solidFill'), gf = kid(bp, 'gradFill'), bf = kid(bp, 'blipFill');
+        if (sf) caixa.style.background = corDe(sf, tm) || '#fff';
+        else if (gf) { const gs = todos(gf, 'gs').map((g) => corDe(g, tm)).filter(Boolean); caixa.style.background = gs.length > 1 ? `linear-gradient(${gs.join(',')})` : gs[0] || '#fff'; }
+        else if (bf) { const u = await img((pt.rels.get(atR(kid(bf, 'blip'), 'embed')) || {}).alvo); if (u) { caixa.style.backgroundImage = `url("${u}")`; caixa.style.backgroundSize = 'cover'; caixa.style.backgroundPosition = 'center'; } }
+        return true;
+      }
+      if (br) { caixa.style.background = corDe(br, tm) || '#fff'; return true; }
+      return false;
+    };
+    caixa.style.background = '#fff';
+    if (!(await fundoDe(sl))) if (!(await fundoDe(la))) await fundoDe(ms);
+    // marcadores de posição (títulos, texto…) herdados do esquema e do modelo
+    const phs = (pt) => (pt && pt.el ? todos(fundo(pt.el, 'cSld', 'spTree'), 'sp').filter((s) => fundo(s, 'nvSpPr', 'nvPr', 'ph')) : []);
+    const phLa = phs(la), phMs = phs(ms);
+    const tipoPh = (ph) => (ph ? at(ph, 'type') || 'body' : null);
+    const achaPh = (lista, ph) => {
+      const t = tipoPh(ph), idx = at(ph, 'idx');
+      return (idx != null && lista.find((s) => at(fundo(s, 'nvSpPr', 'nvPr', 'ph'), 'idx') === idx)) ||
+        lista.find((s) => { const t2 = tipoPh(fundo(s, 'nvSpPr', 'nvPr', 'ph')); return t2 === t || (t === 'ctrTitle' && t2 === 'title') || (t === 'subTitle' && t2 === 'body') || (t === 'obj' && t2 === 'body'); }) || null;
+    };
+    const estiloMs = (t) => fundo(ms && ms.el, 'txStyles', t === 'title' || t === 'ctrTitle' ? 'titleStyle' : t && t !== 'other' && !['dt', 'ftr', 'sldNum', 'hdr'].includes(t) ? 'bodyStyle' : 'otherStyle');
+    const fonte = (tf) => (!tf ? null : tf === '+mj-lt' ? tm.mj : tf === '+mn-lt' ? tm.mn : tf.startsWith('+') ? tm.mn : tf);
+    // desenhar as formas: primeiro as do modelo e do esquema (decoração), depois as do diapositivo
+    const camadas = [];
+    const mostraMs = at(sl.el, 'showMasterSp') !== '0' && (!la || at(la.el, 'showMasterSp') !== '0');
+    if (ms && mostraMs) camadas.push([ms, true]);
+    if (la && at(sl.el, 'showMasterSp') !== '0') camadas.push([la, true]);
+    camadas.push([sl, false]);
+    for (const [pt, deco] of camadas) {
+      const arv = fundo(pt.el, 'cSld', 'spTree'); if (!arv) continue;
+      await formas([...arv.children], pt, deco, caixa, null);
+    }
+    return caixa;
+
+    async function formas(lista, pt, deco, alvo, grupo) {
+      for (const s of lista) {
+        const n = s.localName;
+        if (n === 'AlternateContent') { const esc = kid(s, 'Choice') && kid(s, 'Fallback') ? kid(s, 'Fallback') : kid(s, 'Choice'); if (esc) await formas([...esc.children], pt, deco, alvo, grupo); continue; }
+        if (!['sp', 'pic', 'grpSp', 'graphicFrame', 'cxnSp'].includes(n)) continue;
+        const nv = kid(s, 'nvSpPr') || kid(s, 'nvPicPr') || kid(s, 'nvGrpSpPr') || kid(s, 'nvGraphicFramePr') || kid(s, 'nvCxnSpPr');
+        const ph = fundo(nv, 'nvPr', 'ph');
+        if (deco && ph) continue;                                         // os marcadores do esquema e do modelo não aparecem
+        const pr = kid(s, 'spPr') || kid(s, 'grpSpPr');
+        let xf = n === 'graphicFrame' ? kid(s, 'xfrm') : kid(pr, 'xfrm');
+        let herd = [];
+        if (ph && !deco) { const a = achaPh(phLa, ph), b = achaPh(phMs, ph); herd = [a, b].filter(Boolean); if (!xf) for (const hh of herd) { const x2 = kid(kid(hh, 'spPr'), 'xfrm'); if (x2) { xf = x2; break; } } }
+        if (!xf) continue;
+        const off = kid(xf, 'off'), ex = kid(xf, 'ext');
+        let x = Number(at(off, 'x')) || 0, y = Number(at(off, 'y')) || 0, w = Number(at(ex, 'cx')) || 0, hh = Number(at(ex, 'cy')) || 0;
+        if (grupo) { x = grupo.x + (x - grupo.cx0) * grupo.sx; y = grupo.y + (y - grupo.cy0) * grupo.sy; w *= grupo.sx; hh *= grupo.sy; }
+        if (n === 'grpSp') {
+          const co = kid(xf, 'chOff'), ce = kid(xf, 'chExt');
+          const g = { x, y, cx0: Number(at(co, 'x')) || 0, cy0: Number(at(co, 'y')) || 0, sx: ce && Number(at(ce, 'cx')) ? w / Number(at(ce, 'cx')) : 1, sy: ce && Number(at(ce, 'cy')) ? hh / Number(at(ce, 'cy')) : 1 };
+          await formas([...s.children], pt, deco, alvo, g); continue;
+        }
+        const d = document.createElement('div'); d.className = 'abr-f';
+        Object.assign(d.style, { left: `${x * E}px`, top: `${y * E}px`, width: `${Math.max(1, w * E)}px`, height: `${Math.max(1, hh * E)}px` });
+        const rot = Number(at(xf, 'rot')) || 0, fh = at(xf, 'flipH') === '1', fv = at(xf, 'flipV') === '1';
+        if (rot) d.style.transform = `rotate(${rot / 60000}deg)`;
+        if (n === 'cxnSp' || at(kid(pr, 'prstGeom'), 'prst') === 'line') {        // linhas
+          const ln = kid(pr, 'ln'), cl = corDe(kid(ln, 'solidFill'), tm) || '#000', lw = Math.max(1, (Number(at(ln, 'w')) || 12700) * E);
+          d.innerHTML = `<svg width="100%" height="100%" viewBox="0 0 ${Math.max(1, w * E)} ${Math.max(1, hh * E)}" preserveAspectRatio="none" style="overflow:visible"><line x1="${fh ? w * E : 0}" y1="${fv ? hh * E : 0}" x2="${fh ? 0 : w * E}" y2="${fv ? 0 : hh * E}" stroke="${cl}" stroke-width="${lw}"/></svg>`;
+          alvo.append(d); continue;
+        }
+        if (n === 'pic' || (n === 'sp' && kid(s, 'blipFill'))) {
+          const bf = kid(s, 'blipFill'), u = await img((pt.rels.get(atR(kid(bf, 'blip'), 'embed')) || {}).alvo);
+          if (u) { const im = document.createElement('img'); im.src = u; im.alt = ''; im.className = 'abr-f-img'; if (fh || fv) im.style.transform = `scale(${fh ? -1 : 1},${fv ? -1 : 1})`; d.append(im); }
+          if (n === 'pic') { alvo.append(d); continue; }
+        }
+        if (n === 'graphicFrame') {
+          const gd = fundo(s, 'graphic', 'graphicData'), tbl = kid(gd, 'tbl');
+          if (tbl) d.append(tabelaPpt(tbl));
+          else { d.classList.add('abr-f-falta'); d.textContent = /chart/.test(at(gd, 'uri') || '') ? 'Gráfico (não se mostra aqui)' : 'Diagrama (não se mostra aqui)'; avisos.add('Os gráficos e os diagramas SmartArt não se mostram aqui.'); }
+          alvo.append(d); continue;
+        }
+        // forma com texto
+        const geo = at(kid(pr, 'prstGeom'), 'prst');
+        if (geo === 'ellipse') d.style.borderRadius = '50%';
+        else if (geo === 'roundRect') d.style.borderRadius = `${Math.min(w, hh) * E * 0.16}px`;
+        const sf = kid(pr, 'solidFill'), gf = kid(pr, 'gradFill');
+        const estiloRef = kid(s, 'style');
+        if (sf) d.style.background = corDe(sf, tm) || '';
+        else if (gf) { const gs = todos(gf, 'gs').map((g) => corDe(g, tm)).filter(Boolean); if (gs.length) d.style.background = gs.length > 1 ? `linear-gradient(${gs.join(',')})` : gs[0]; }
+        else if (!kid(pr, 'noFill') && estiloRef && !ph && kid(estiloRef, 'fillRef') && at(kid(estiloRef, 'fillRef'), 'idx') !== '0') d.style.background = corDe(kid(estiloRef, 'fillRef'), tm) || '';
+        const ln = kid(pr, 'ln');
+        if (ln && !kid(ln, 'noFill')) { const lc = corDe(kid(ln, 'solidFill'), tm); if (lc) d.style.border = `${Math.max(1, (Number(at(ln, 'w')) || 12700) * E)}px solid ${lc}`; }
+        else if (!ln && estiloRef && !ph && kid(estiloRef, 'lnRef') && at(kid(estiloRef, 'lnRef'), 'idx') !== '0') { const lc = corDe(kid(estiloRef, 'lnRef'), tm); if (lc) d.style.border = `${Math.max(1, 12700 * E)}px solid ${lc}`; }
+        const txb = kid(s, 'txBody');
+        if (txb && todos(txb, 't').some((t) => t.textContent.trim())) d.append(texto(txb, ph, herd, estiloRef));
+        alvo.append(d);
+      }
+    }
+
+    function texto(txb, ph, herd, estiloRef) {
+      const t = tipoPh(ph);
+      const bodies = [kid(txb, 'bodyPr'), ...herd.map((x) => fundo(x, 'txBody', 'bodyPr'))].filter(Boolean);
+      const bAt = (n) => { for (const b of bodies) { const v = at(b, n); if (v != null) return v; } return null; };
+      const anc = bAt('anchor') || (t === 'title' || t === 'ctrTitle' ? (t === 'ctrTitle' ? 'b' : 'ctr') : 't');
+      const ins = (n, d) => (bAt(n) != null ? Number(bAt(n)) : d) * E;
+      const af = kid(kid(txb, 'bodyPr'), 'normAutofit'), escala = af && at(af, 'fontScale') ? Number(at(af, 'fontScale')) / 100000 : 1;
+      const box = document.createElement('div'); box.className = 'abr-tx';
+      Object.assign(box.style, { padding: `${ins('tIns', 45720)}px ${ins('rIns', 91440)}px ${ins('bIns', 45720)}px ${ins('lIns', 91440)}px`, justifyContent: anc === 'ctr' ? 'center' : anc === 'b' ? 'flex-end' : 'flex-start' });
+      if (bAt('vert') === 'vert' || bAt('vert') === 'eaVert') box.style.writingMode = 'vertical-rl';
+      // a cadeia de estilos de cada nível: forma, esquema, modelo, estilos do modelo
+      const lst = (lv) => {
+        const c = [], nome = `lvl${lv + 1}pPr`;
+        c.push(fundo(txb, 'lstStyle', nome));
+        for (const x of herd) c.push(fundo(x, 'txBody', 'lstStyle', nome));
+        c.push(fundo(estiloMs(t || 'other'), nome));
+        return c.filter(Boolean);
+      };
+      const corTx = estiloRef && kid(estiloRef, 'fontRef') ? corDe(kid(estiloRef, 'fontRef'), tm) : null;
+      let num = 0;
+      for (const p of kids(txb, 'p')) {
+        const ppr = kid(p, 'pPr'), lv = Number(at(ppr, 'lvl')) || 0, cad = [ppr, ...lst(lv)].filter(Boolean);
+        const pAt = (n) => { for (const x of cad) { const v = at(x, n); if (v != null) return v; } return null; };
+        const pKid = (n) => { for (const x of cad) { const v = kid(x, n); if (v) return v; } return null; };
+        const defR = (n) => { for (const x of cad) { const r = kid(x, 'defRPr'); if (r && at(r, n) != null) return at(r, n); } return null; };
+        const defRK = (n) => { for (const x of cad) { const r = kid(x, 'defRPr'); const v = r && kid(r, n); if (v) return v; } return null; };
+        const pe = document.createElement('p'); pe.className = 'abr-p';
+        const al = pAt('algn'); if (al) pe.style.textAlign = { ctr: 'center', r: 'right', just: 'justify', dist: 'justify' }[al] || 'left';
+        const marL = pAt('marL'), ind = pAt('indent');
+        if (marL != null) pe.style.paddingLeft = `${Number(marL) * E}px`;
+        if (ind != null) pe.style.textIndent = `${Number(ind) * E}px`;
+        const ls = pKid('lnSpc'), lsp = ls && kid(ls, 'spcPct'); if (lsp) pe.style.lineHeight = String(Math.max(0.6, Number(at(lsp, 'val')) / 100000 * 1.2 * (af && at(af, 'lnSpcReduction') ? 1 - Number(at(af, 'lnSpcReduction')) / 100000 : 1)));
+        const sb = pKid('spcBef'), sbp = sb && kid(sb, 'spcPts'); if (sbp) pe.style.marginTop = `${Number(at(sbp, 'val')) / 100 * PT * escala}px`;
+        let tam0 = Number(defR('sz')) || (t === 'title' || t === 'ctrTitle' ? 4400 : 1800);
+        const runs = [...p.children].filter((x) => ['r', 'br', 'fld'].includes(x.localName));
+        const vazio = !runs.some((r) => (r.textContent || '').trim());
+        // marcas das listas
+        const bu = ['buNone', 'buChar', 'buAutoNum', 'buBlip'].map((n) => kid(ppr, n)).find(Boolean) || (() => { for (const x of lst(lv)) { const v = ['buNone', 'buChar', 'buAutoNum', 'buBlip'].map((n) => kid(x, n)).find(Boolean); if (v) return v; } return null; })();
+        if (bu && !vazio && bu.localName !== 'buNone') {
+          const m = document.createElement('span'); m.className = 'abr-bu';
+          if (bu.localName === 'buAutoNum') { num++; const tp = at(bu, 'type') || ''; m.textContent = (/alpha/i.test(tp) ? String.fromCharCode((/UcPeriod|Uc/.test(tp) ? 64 : 96) + num) : /roman/i.test(tp) ? ['i', 'ii', 'iii', 'iv', 'v', 'vi', 'vii', 'viii', 'ix', 'x'][num - 1] || num : num) + (/Paren/.test(tp) ? ')' : '.') + ' '; }
+          else m.textContent = (bu.localName === 'buChar' ? (at(bu, 'char') || '•').replace(/[]/, '▪').replace(/[]/, '•') : '•') + ' ';
+          const bc = pKid('buClr'); m.style.color = (bc && corDe(bc, tm)) || '';
+          pe.append(m);
+        } else if (!bu || bu.localName === 'buNone') num = 0;
+        for (const r of runs) {
+          if (r.localName === 'br') { pe.append(document.createElement('br')); continue; }
+          const rp = kid(r, 'rPr'), tx = (kid(r, 't') || {}).textContent || '';
+          const sp = document.createElement('span'); sp.textContent = tx;
+          const sz = Number(at(rp, 'sz')) || tam0;
+          sp.style.fontSize = `${sz / 100 * PT * escala}px`;
+          const b = at(rp, 'b') != null ? at(rp, 'b') : defR('b'), i = at(rp, 'i') != null ? at(rp, 'i') : defR('i'), u = at(rp, 'u') != null ? at(rp, 'u') : defR('u');
+          if (b === '1' || b === 'true') sp.style.fontWeight = '700';
+          if (i === '1' || i === 'true') sp.style.fontStyle = 'italic';
+          if (u && u !== 'none') sp.style.textDecoration = 'underline';
+          if (at(rp, 'strike') && at(rp, 'strike') !== 'noStrike') sp.style.textDecoration = 'line-through';
+          sp.style.color = corDe(kid(rp, 'solidFill'), tm) || corDe(defRK('solidFill'), tm) || corTx || '#' + (tm.cores[tm.mapa.tx1 || 'dk1'] || '000000');
+          const hl = kid(rp, 'highlight'); if (hl) sp.style.background = corDe(hl, tm) || '';
+          const lat = at(kid(rp, 'latin'), 'typeface') || at(defRK('latin'), 'typeface') || (t === 'title' || t === 'ctrTitle' ? '+mj-lt' : '+mn-lt');
+          const fo = fonte(lat); if (fo) sp.style.fontFamily = `"${fo}", Calibri, Carlito, Arial, sans-serif`;
+          const bl = Number(at(rp, 'baseline')) || 0; if (bl) { sp.style.verticalAlign = bl > 0 ? 'super' : 'sub'; sp.style.fontSize = `${sz / 100 * PT * escala * 0.7}px`; }
+          pe.append(sp);
+        }
+        if (vazio) { pe.style.fontSize = `${tam0 / 100 * PT * escala}px`; pe.append(' '); }
+        box.append(pe);
+      }
+      return box;
+    }
+
+    function tabelaPpt(tbl) {
+      const t = document.createElement('table'); t.className = 'abr-ptab';
+      const cols = kids(fundo(tbl, 'tblGrid'), 'gridCol'), cg = document.createElement('colgroup');
+      for (const c of cols) { const x = document.createElement('col'); x.style.width = `${Number(at(c, 'w')) * E}px`; cg.append(x); }
+      t.append(cg);
+      const tp = kid(tbl, 'tblPr'), primeira = at(tp, 'firstRow') === '1';
+      kids(tbl, 'tr').forEach((tr, ri) => {
+        const r = document.createElement('tr'); r.style.height = `${Number(at(tr, 'h')) * E}px`;
+        for (const tc of kids(tr, 'tc')) {
+          if (at(tc, 'hMerge') === '1' || at(tc, 'vMerge') === '1') continue;
+          const d = document.createElement(primeira && ri === 0 ? 'th' : 'td');
+          if (Number(at(tc, 'gridSpan')) > 1) d.colSpan = Number(at(tc, 'gridSpan'));
+          if (Number(at(tc, 'rowSpan')) > 1) d.rowSpan = Number(at(tc, 'rowSpan'));
+          const tcp = kid(tc, 'tcPr'), sf = kid(tcp, 'solidFill'); if (sf) d.style.background = corDe(sf, tm) || '';
+          for (const p of kids(kid(tc, 'txBody'), 'p')) {
+            const pe = document.createElement('p'); pe.className = 'abr-p';
+            const al = at(kid(p, 'pPr'), 'algn'); if (al) pe.style.textAlign = { ctr: 'center', r: 'right' }[al] || 'left';
+            for (const rr of kids(p, 'r')) {
+              const rp = kid(rr, 'rPr'), sp = document.createElement('span'); sp.textContent = (kid(rr, 't') || {}).textContent || '';
+              sp.style.fontSize = `${(Number(at(rp, 'sz')) || 1800) / 100 * PT}px`;
+              if (at(rp, 'b') === '1') sp.style.fontWeight = '700'; if (at(rp, 'i') === '1') sp.style.fontStyle = 'italic';
+              const cr = corDe(kid(rp, 'solidFill'), tm); if (cr) sp.style.color = cr;
+              pe.append(sp);
+            }
+            d.append(pe);
+          }
+          r.append(d);
+        }
+        t.append(r);
+      });
+      return t;
+    }
+  }
+
+  return { vista, tipo };
+})();
+if (typeof module !== 'undefined') module.exports = ABRIR;
 </script>
 <script>/* Códigos de acesso dos Recursos do Professor (CEL-RP1) — partilhado pela aplicação e pela ferramenta do coordenador.
    Código (24 carateres) = validade (2 bytes, dias desde 01/01/2025) + série (1 byte, ao acaso) + chave do ano (12 bytes)
@@ -5034,7 +5831,7 @@ const planable = (it) => it.u || it.f || it.r;
 /* ============================================================ navegação */
 const VIEWS = [
   { id: 'inicio', label: 'Início' }, { id: 'biblioteca', label: 'Biblioteca' }, { id: 'planos', label: 'Planos de aula' },
-  { id: 'provas', label: 'Provas e gabaritos' }, { id: 'banco', label: 'Banco de questões' }, { id: 'ferramentas', label: 'Ferramentas' }, { id: 'escrever', label: 'Os meus documentos' },
+  { id: 'provas', label: 'Provas e gabaritos' }, { id: 'banco', label: 'Banco de questões' }, { id: 'ferramentas', label: 'Ferramentas' }, { id: 'escrever', label: 'Os meus documentos' }, { id: 'abrir', label: 'Abrir ficheiros' },
   { id: 'calendario', label: 'Calendário' }, { id: 'documentos', label: 'Documentos do CEL' }, { id: 'formacoes', label: 'Formações' }, { id: 'atualizacoes', label: 'Cópias e atualizações' }
 ];
 const main = $('#main');
@@ -5117,6 +5914,7 @@ function vInicio() {
       tile('Avaliar', 'Provas e gabaritos', 'Provas e fichas com as questões dos manuais, cotação, versões A e B e gabarito.', 'provas'),
       tile('Organizar', 'Ferramentas', 'Classificações da turma, planificação do ano letivo, números romanos e tabuada.', 'ferramentas'),
       tile('Escrever', 'Os meus documentos', 'Trabalhos, relatórios e monografias, como no Word e sem internet. Descarregue em Word ou PDF.', 'escrever'),
+      tile('Ver', 'Abrir ficheiros', 'PDF, Word, Excel, PowerPoint, imagens, vídeos e páginas HTML, aqui mesmo, sem outras aplicações. O ficheiro não sai do aparelho.', 'abrir'),
       tile('Consultar', 'Calendário', 'Reuniões, provas, feriados e atividades do ano letivo, com avisos.', 'calendario'),
       tile('Consultar', 'Documentos do CEL', 'Estatuto, Regulamento Interno, Código de Ética e Plano de Qualidade.', 'documentos'),
       tile('Aprender', 'Formações', 'As formações feitas no CEL e os manuais que os formadores disponibilizaram.', 'formacoes')),
@@ -6056,6 +6854,10 @@ function toolRomanos() {
 
 /* ============================================================ CÓPIAS E ATUALIZAÇÕES */
 const NOVIDADES = [
+  { v: '1.12', d: '16/11/2026', itens: ['Nova secção «Abrir ficheiros»: veja aqui os PDF, os ficheiros do Word, do Excel e do PowerPoint, as imagens, os vídeos, os sons, as páginas HTML e os ficheiros de texto, sem outras aplicações. O ficheiro abre-se neste aparelho: não vai para a Internet nem fica guardado.',
+    'PDF: páginas, zoom, ir para uma página e PDF com palavra-passe. Funciona sem internet depois de abrir o primeiro PDF com internet.',
+    'PowerPoint: os diapositivos com o texto, as listas, as tabelas, as imagens e as cores, e o botão «Apresentar» para mostrar em ecrã inteiro. Excel: cada folha num separador, com as células unidas, as cores, as datas e os resultados das fórmulas.',
+    'Word: o documento aparece logo, e o botão «Editar em «Os meus documentos»» passa-o para o editor.'] },
   { v: '1.11', d: '16/11/2026', itens: ['«Os meus documentos»: maiúsculas automáticas, como no módulo Word do CEL. Entram no princípio das frases e dos parágrafos (menos depois de abreviaturas como «Sr.» ou «p.» e nas alíneas «a)»), nos nomes de países e de terras (Guiné-Bissau, Bafatá, Cabo Verde…) e nas siglas da educação (UNESCO, CPLP, INDE, CEL…). Nunca nos meses, nos dias da semana nem nas línguas. Ctrl+Z desfaz uma correção; desligam-se em «Página».',
     'Cor da letra e realce (marcador), também no ficheiro Word e ao abrir um ficheiro Word.',
     'Tabelas: unir células para o lado e para baixo, separar outra vez e pintar o fundo das células. Passa para o Word e vem dos ficheiros Word.',
@@ -6585,7 +7387,8 @@ ICONS.shield ='<path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/>';
 ICONS.bell = '<path d="M6 16v-5a6 6 0 0 1 12 0v5l2 2H4z"/><path d="M10 21a2 2 0 0 0 4 0"/>';
 ICONS.back = '<path d="M19 12H5M11 6l-6 6 6 6"/>';
 const VIEWFN = { inicio: vInicio, biblioteca: vBiblioteca, planos: vPlanos, provas: vProvas, banco: vBanco, ferramentas: vFerramentas, calendario: vCalendario, documentos: vDocumentos, formacoes: vFormacoes, atualizacoes: vAtualizacoes,
-  escrever: (arg) => ESCREVER.vista(arg, { h, put, btn, toast, offerFile, go, uid, autor: (PWA && (PWA.nome || PWA.n)) || '' }) };
+  escrever: (arg) => ESCREVER.vista(arg, { h, put, btn, toast, offerFile, go, uid, autor: (PWA && (PWA.nome || PWA.n)) || '' }),
+  abrir: (arg) => ABRIR.vista(arg, { h, btn, toast, go, uid }) };
 Store.init(); buildNav(); modeChip();
 Store.on(k => { if (k === '*') modeChip(); });
 window.addEventListener('hashchange', () => { freshNav(); render(); });
