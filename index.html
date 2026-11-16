@@ -875,6 +875,24 @@ body.esc-foco .layout { grid-template-columns: minmax(0, 1fr); max-width: none; 
 .abr-palco > .abr-slide { position: absolute }
 .abr-palco-n { position: absolute; right: 14px; bottom: 10px; color: rgba(255, 255, 255, .6); font: 13px system-ui, sans-serif }
 .abr-palco-x { position: absolute; right: 10px; top: 8px; width: 40px; height: 40px; border-radius: 50%; border: 0; background: rgba(255, 255, 255, .15); color: #fff; font-size: 24px; cursor: pointer }
+/* ecrã inteiro e «Os meus ficheiros» */
+.abr-visor.abr-cheio { position: fixed; inset: 0; z-index: 900; background: var(--bg, #f4f5f7); padding: 8px; overflow: auto; gap: 8px }
+.abr-visor:fullscreen { background: var(--bg, #f4f5f7); padding: 8px; overflow: auto }
+.abr-cheio .abr-cab { position: static; box-shadow: none }
+.abr-cheio .abr-quadro, .abr-cheio .abr-rola, .abr-cheio .abr-rola-pdf, .abr-cheio .abr-centro, .abr-cheio .abr-texto { max-height: calc(100vh - 86px) }
+.abr-cheio .abr-html { height: calc(100vh - 110px) }
+.abr-cheio .abr-pg { width: calc(min(100%, 1400px) * var(--abr-zoom)) }
+.abr-cheio .abr-slide-c { width: min(100%, 1600px) }
+body.abr-cheio-b { overflow: hidden }
+.abr-meus { margin-top: 0 }
+.abr-meus h3 { margin-bottom: 2px }
+.abr-meus-l { display: flex; flex-direction: column; gap: 6px; margin-top: 10px }
+.abr-meu { display: flex; align-items: center; gap: 8px; border: 1px solid var(--line); border-radius: var(--r-sm); background: var(--surface); padding: 4px 6px 4px 4px }
+.abr-meu-a { flex: 1; min-width: 0; display: flex; flex-direction: column; align-items: flex-start; text-align: left; border: 0; background: none; color: inherit; font: inherit; padding: 6px 8px; cursor: pointer; border-radius: 6px }
+.abr-meu-a:hover, .abr-meu-a:focus-visible { background: var(--surface-2) }
+.abr-meu-a b { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap }
+.abr-meu-a small, .abr-espaco { color: var(--ink-3); font-size: 12px }
+.abr-vazio { margin: 0 }
 </style>
 </head>
 <body>
@@ -884,7 +902,7 @@ body.esc-foco .layout { grid-template-columns: minmax(0, 1fr); max-width: none; 
 <div id="toast" role="status" aria-live="polite"></div>
 <div id="print-root"></div>
 <div id="barra" class="barra" hidden></div>
-<script type="application/json" id="cel-config">{"versao": "1.13.1", "ano": "2026/2027", "chaveId": "1987a8c7", "verificador": "m+HQwwNueX1G3XlMCpRsYJOV0Tkds6FCJhmeHgobCN6OFobxkzA=", "dados": "dados.2460e27fab.bin", "contactos": {"whatsapp": "245955252417", "email": "cel.vf.gb@gmail.com"}, "diasSemLigacao": 30, "sb": "https://ebwjnennfmwnhwdfxbuy.supabase.co", "anon": "sb_publishable_oLn3lkMEwu4sEOUTjRCLQA_4evc_ezB"}</script>
+<script type="application/json" id="cel-config">{"versao": "1.14.0", "ano": "2026/2027", "chaveId": "1987a8c7", "verificador": "m+HQwwNueX1G3XlMCpRsYJOV0Tkds6FCJhmeHgobCN6OFobxkzA=", "dados": "dados.2460e27fab.bin", "contactos": {"whatsapp": "245955252417", "email": "cel.vf.gb@gmail.com"}, "diasSemLigacao": 30, "sb": "https://ebwjnennfmwnhwdfxbuy.supabase.co", "anon": "sb_publishable_oLn3lkMEwu4sEOUTjRCLQA_4evc_ezB"}</script>
 <script>/* Gerador mínimo de .docx (Word) no navegador — sem bibliotecas externas.
    Blocos: {t:'h', text, level} · {t:'p', text|runs, align, size, before, after, keep, border}
            {t:'list', items:[text|runs], ordered} · {t:'table', rows, widths, header, borders, minH}
@@ -4794,6 +4812,27 @@ const ABRIR = (() => {
   }
   const corDe = (pai, tema) => { if (!pai) return null; const c = [...pai.children].find((x) => /Clr$/.test(x.localName)); return cor(c, tema); };
 
+  /* ============================================================ «Os meus ficheiros»: guardados só neste aparelho (IndexedDB) */
+  const BD = { nome: 'cel-meus-ficheiros', loja: 'f' };
+  function bd() {
+    return new Promise((ok, no) => {
+      const r = indexedDB.open(BD.nome, 1);
+      r.onupgradeneeded = () => { if (!r.result.objectStoreNames.contains(BD.loja)) r.result.createObjectStore(BD.loja, { keyPath: 'id' }); };
+      r.onsuccess = () => ok(r.result); r.onerror = () => no(r.error);
+    });
+  }
+  async function op(modo, fn) { const d = await bd(); try { return await new Promise((ok, no) => { const t = d.transaction(BD.loja, modo), q = fn(t.objectStore(BD.loja)); t.oncomplete = () => ok(q && q.result); t.onerror = () => no(t.error); t.onabort = () => no(t.error); }); } finally { d.close(); } }
+  const Meus = {
+    lista: async () => ((await op('readonly', (s) => s.getAll())) || []).map(({ blob, ...x }) => x).sort((a, b) => String(b.guardado).localeCompare(String(a.guardado))),
+    abre: async (id) => { const x = await op('readonly', (s) => s.get(id)); return x ? new File([x.blob], x.nome, { type: x.tipo || '' }) : null; },
+    guarda: async (f) => {
+      const x = { id: 'f' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6), nome: f.name, tipo: f.type || '', tamanho: f.size, guardado: new Date().toISOString(), blob: f.slice(0, f.size, f.type) };
+      try { if (navigator.storage && navigator.storage.persist) await navigator.storage.persist(); } catch (e) { /* opcional */ }
+      await op('readwrite', (s) => s.put(x)); return x.id;
+    },
+    apaga: (id) => op('readwrite', (s) => s.delete(id)),
+  };
+
   /* ============================================================ a secção */
   // abrir um ficheiro que já está no Portal (por exemplo o manual de uma formação): mostra(ficheiro, { volta: 'formacoes' }) e depois go('abrir')
   let pendente = null;
@@ -4802,7 +4841,7 @@ const ABRIR = (() => {
     const { h, btn, toast } = ctx;
     let limpar = [];
     const solta = () => { for (const f of limpar) try { f(); } catch (e) { /* segue */ } limpar = []; };
-    const entrada = h('input', { type: 'file', style: 'display:none', 'aria-label': 'Escolher um ficheiro para abrir', onchange: (e) => { const f = e.target.files[0]; e.target.value = ''; if (f) abre(f); } });
+    const entrada = h('input', { type: 'file', style: 'display:none', 'aria-label': 'Escolher um ficheiro para abrir', onchange: (e) => { const f = e.target.files[0]; e.target.value = ''; if (f) { meuId = null; abre(f); } } });
     const escolhe = () => entrada.click();
     const zona = h('div', { class: 'abr-zona', tabindex: '0', role: 'button', 'aria-label': 'Escolher um ficheiro para abrir', onclick: escolhe, onkeydown: (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); escolhe(); } } },
       h('div', { class: 'abr-zona-t' }, 'Escolher um ficheiro'),
@@ -4813,18 +4852,48 @@ const ABRIR = (() => {
         h('p', { class: 'muted' }, 'Abra aqui os PDF, os ficheiros do Word, do Excel e do PowerPoint, as imagens, os vídeos e as páginas HTML que recebe. ' +
           'O ficheiro abre-se neste aparelho: não é enviado para a Internet nem fica guardado no Portal. É só para ler; um ficheiro Word também pode passar para «Os meus documentos», para o editar.'),
         zona, entrada));
+    const meusL = h('div', { class: 'abr-meus-l' });
+    const meus = h('div', { class: 'card abr-meus' }, h('h3', null, 'Os meus ficheiros'), h('p', { class: 'muted' }, 'Ficheiros que guardou aqui. Ficam só neste aparelho e abrem também sem internet.'), meusL);
+    inicio.append(meus);
+    async function desenhaMeus() {
+      let l = [];
+      try { l = await Meus.lista(); } catch (e) { meusL.replaceChildren(h('p', { class: 'muted' }, 'Neste navegador não é possível guardar ficheiros.')); return; }
+      if (!l.length) { meusL.replaceChildren(h('p', { class: 'muted abr-vazio' }, 'Ainda não guardou ficheiros. Ao abrir um ficheiro, toque em «Guardar nos meus ficheiros».')); return; }
+      meusL.replaceChildren(...l.map((x) => h('div', { class: 'abr-meu' },
+        h('button', { type: 'button', class: 'abr-meu-a', onclick: async () => { const f = await Meus.abre(x.id); if (f) { meuId = x.id; abre(f); } else { toast('Este ficheiro já não está guardado.'); desenhaMeus(); } } },
+          h('b', null, x.nome), h('small', null, `${NOMES[tipo(x.nome, x.tipo, new Uint8Array(8))] || 'Ficheiro'} · ${tamanho(x.tamanho)} · ${new Date(x.guardado).toLocaleDateString('pt-PT')}`)),
+        h('button', { type: 'button', class: 'btn ghost sm', 'aria-label': 'Apagar ' + x.nome, onclick: async () => { if (!confirm(`Apagar «${x.nome}» dos seus ficheiros?`)) return; await Meus.apaga(x.id); toast('Apagado.'); desenhaMeus(); } }, 'Apagar'))));
+      try { const e = navigator.storage && navigator.storage.estimate ? await navigator.storage.estimate() : null; if (e && e.quota) meusL.append(h('p', { class: 'muted abr-espaco' }, `Espaço ocupado pelo Portal neste aparelho: ${tamanho(e.usage || 0)} de ${tamanho(e.quota)}.`)); } catch (e) { /* nada */ }
+    }
+    desenhaMeus();
+    let meuId = null;          // o ficheiro aberto já está nos meus ficheiros?
     const visor = h('div', { class: 'abr-visor', hidden: true });
     const el = h('div', { class: 'abr' }, inicio, visor);
+    // ecrã inteiro: o navegador, quando deixa; senão (iPhone), o visor ocupa o ecrã todo
+    let cheio = false;
+    function ecraInteiro(v) {
+      cheio = v; visor.classList.toggle('abr-cheio', v); document.body.classList.toggle('abr-cheio-b', v);
+      visor.querySelectorAll('.abr-bcheio').forEach((b) => { b.textContent = v ? 'Sair do ecrã inteiro' : 'Ecrã inteiro'; });
+      if (v && visor.requestFullscreen && !document.fullscreenElement) visor.requestFullscreen().catch(() => {});
+      if (!v && document.fullscreenElement === visor) document.exitFullscreen().catch(() => {});
+      window.dispatchEvent(new Event('resize'));
+    }
+    const fsSai = () => { if (cheio && document.fullscreenElement !== visor && !document.fullscreenElement) ecraInteiro(false); };
+    document.addEventListener('fullscreenchange', fsSai);
+    const escSai = (e) => { if (e.key === 'Escape' && cheio && !document.querySelector('.abr-palco')) ecraInteiro(false); };
+    document.addEventListener('keydown', escSai);
     // arrastar e largar
     const sobre = (e) => { if (e.dataTransfer && [...e.dataTransfer.types].includes('Files')) { e.preventDefault(); zona.classList.add('sobre'); } };
     el.addEventListener('dragover', sobre); el.addEventListener('dragenter', sobre);
     el.addEventListener('dragleave', (e) => { if (e.target === zona) zona.classList.remove('sobre'); });
-    el.addEventListener('drop', (e) => { const f = e.dataTransfer && e.dataTransfer.files[0]; if (f) { e.preventDefault(); zona.classList.remove('sobre'); abre(f); } });
+    el.addEventListener('drop', (e) => { const f = e.dataTransfer && e.dataTransfer.files[0]; if (f) { e.preventDefault(); zona.classList.remove('sobre'); meuId = null; abre(f); } });
     // com internet, deixa o leitor de PDF já guardado para quando não houver
     if (navigator.onLine) setTimeout(() => { for (const f of ['pdf.mjs', 'pdf.worker.mjs']) fetch(PDFJS + f).catch(() => {}); }, 1500);
 
     let volta = null;
     function fecha() {
+      if (cheio) ecraInteiro(false);
+      meuId = null; desenhaMeus();
       solta(); visor.replaceChildren(); visor.hidden = true; inicio.hidden = false; if (document.fullscreenElement) document.exitFullscreen().catch(() => {});
       if (volta && ctx.go) { const v = volta; volta = null; ctx.go(v); }
     }
@@ -4833,8 +4902,15 @@ const ABRIR = (() => {
         h('button', { type: 'button', class: 'btn ghost sm', onclick: fecha }, '← Fechar'),
         h('div', { class: 'abr-nome' }, h('b', null, f.name), h('small', null, `${NOMES[t] || 'Ficheiro'} · ${tamanho(f.size)}`)),
         h('div', { class: 'abr-acoes' }, ...extra,
+          t ? h('button', { type: 'button', class: 'btn ghost sm abr-bcheio', onclick: () => ecraInteiro(!cheio) }, cheio ? 'Sair do ecrã inteiro' : 'Ecrã inteiro') : null,
+          t ? (meuId ? h('button', { type: 'button', class: 'btn ghost sm', disabled: true }, 'Nos meus ficheiros ✓')
+            : h('button', { type: 'button', class: 'btn ghost sm', onclick: async (ev) => {
+              const b = ev.currentTarget; b.disabled = true;
+              try { meuId = await Meus.guarda(f); b.textContent = 'Nos meus ficheiros ✓'; toast('Guardado nos seus ficheiros, neste aparelho.'); }
+              catch (e) { b.disabled = false; toast(e && e.name === 'QuotaExceededError' ? 'Não há espaço neste aparelho para guardar este ficheiro.' : 'Não foi possível guardar este ficheiro.'); }
+            } }, 'Guardar nos meus ficheiros')) : null,
           ctx.offerFile ? h('button', { type: 'button', class: 'btn ghost sm', onclick: async () => ctx.offerFile(f.name, new Uint8Array(await f.arrayBuffer()), f.type || 'application/octet-stream') }, 'Guardar no aparelho') : null,
-          h('button', { type: 'button', class: 'btn ghost sm', onclick: () => { volta = null; escolhe(); } }, 'Abrir outro')));
+          h('button', { type: 'button', class: 'btn ghost sm', onclick: () => { volta = null; meuId = null; escolhe(); } }, 'Abrir outro')));
     }
     function mostraErro(f, msg) {
       visor.replaceChildren(cabeca(f, ''), h('div', { class: 'card abr-erro' }, h('h3', null, 'Este ficheiro não se abre aqui'), h('p', null, msg)));
@@ -5053,7 +5129,7 @@ const ABRIR = (() => {
     }
 
     if (pendente) { const x = pendente; pendente = null; volta = x.volta; setTimeout(() => abre(x.f), 0); }
-    return { el, cleanup: () => solta() };
+    return { el, cleanup: () => { solta(); if (cheio) ecraInteiro(false); document.removeEventListener('fullscreenchange', fsSai); document.removeEventListener('keydown', escSai); } };
   }
 
   /* ============================================================ Excel: ler o livro e as folhas */
@@ -6864,6 +6940,8 @@ function toolRomanos() {
 
 /* ============================================================ CÓPIAS E ATUALIZAÇÕES */
 const NOVIDADES = [
+  { v: '1.14', d: '16/11/2026', itens: ['«Abrir ficheiros»: botão «Ecrã inteiro» para ver o PDF, o Word, o Excel, o PowerPoint, as imagens e o resto no ecrã todo (Esc ou «Sair do ecrã inteiro» para voltar).',
+    '«Os meus ficheiros»: toque em «Guardar nos meus ficheiros» e o ficheiro fica no Portal deste aparelho, numa lista, para voltar a abrir quando quiser, também sem internet. Fica só neste aparelho.'] },
   { v: '1.13.1', d: '16/11/2026', itens: ['Formações: o manual da formação abre dentro do Portal (PDF, Word, PowerPoint…), em vez de ir para os downloads. Para o guardar no aparelho, use «Guardar no aparelho».', 'Em «Abrir ficheiros», qualquer ficheiro aberto pode ser guardado no aparelho.'] },
   { v: '1.13', d: '16/11/2026', itens: ['A Coordenação Geral entra nos Recursos do Professor com o e-mail e a palavra-passe da conta da gestão escolar, em qualquer aparelho, sem pedir código. A chave do ano guarda-se uma vez na Gestão escolar → Acessos e fica fechada no servidor, só para a coordenação.',
     'Na gestão escolar, a coordenação tem sempre a ligação para os Recursos do Professor.', 'Os professores continuam a entrar com o código pessoal, como até agora.'] },
