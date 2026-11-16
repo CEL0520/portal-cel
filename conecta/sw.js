@@ -1,7 +1,7 @@
 // CEL Conecta — service worker (na pasta conecta/ do Portal CEL)
 // Guarda só a "casca" do app (página e ícones) para abrir depressa.
 // As mensagens, publicações e anexos vêm SEMPRE do servidor e nunca ficam em cache.
-const VERSAO = 'cel-conecta-v26';
+const VERSAO = 'cel-conecta-v27';
 const EXTERNOS = 'cel-externos';   // biblioteca do Supabase e tipos de letra (para abrir sem internet)
 const HOSTS_EXTERNOS = ['cdn.jsdelivr.net', 'fonts.googleapis.com', 'fonts.gstatic.com', 'cdnjs.cloudflare.com'];
 const CASCA = ['./', './index.html', './manifest.json', './cel-icone-192.png', './cel-icone-512.png', './cel-icone-180.png', './cel-notificacao.png', './toque-hino.mp3'];
