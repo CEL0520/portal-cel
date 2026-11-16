@@ -503,6 +503,11 @@ body:not(.ready) > .top, body:not(.ready) > .layout { display: none }
 .esc-titulo { font: 700 22px/1.25 "Lora", Georgia, serif; border: 0; border-bottom: 2px solid var(--line); background: none; color: var(--ink); padding: 6px 2px; width: 100%; box-sizing: border-box }
 .esc-titulo:focus { outline: none; border-bottom-color: var(--amber) }
 .esc-barras { position: sticky; top: 0; z-index: 20; display: flex; flex-direction: column; gap: 4px; padding: 4px 0; background: var(--bg, transparent) }
+.esc-fixo { display: contents }      /* no telemóvel: as barras ficam presas sozinhas, como antes */
+@media (min-width: 701px) and (min-height: 560px) {
+  .esc-fixo { display: flex; flex-direction: column; gap: 10px; position: sticky; top: 0; z-index: 20; background: var(--bg, #f4f5f7); padding: 8px 0 2px; margin-top: -8px; box-shadow: 0 6px 8px -8px rgba(0, 0, 0, .25) }
+  .esc-fixo .esc-barras { position: static; padding-bottom: 2px }
+}
 .esc-barra { display: flex; gap: 2px; align-items: center; overflow-x: auto; scrollbar-width: thin; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-sm); padding: 4px; box-shadow: var(--shadow) }
 .esc-b { flex: none; min-width: 36px; height: 36px; display: inline-flex; align-items: center; justify-content: center; border: 0; border-radius: 6px; background: none; color: var(--ink); cursor: pointer; padding: 0 6px; font-family: inherit; font-size: 15px; font-weight: 700; line-height: 1 }
 .esc-b:hover { background: var(--surface-2) }
@@ -902,7 +907,7 @@ body.abr-cheio-b { overflow: hidden }
 <div id="toast" role="status" aria-live="polite"></div>
 <div id="print-root"></div>
 <div id="barra" class="barra" hidden></div>
-<script type="application/json" id="cel-config">{"versao": "1.14.1", "ano": "2026/2027", "chaveId": "1987a8c7", "verificador": "m+HQwwNueX1G3XlMCpRsYJOV0Tkds6FCJhmeHgobCN6OFobxkzA=", "dados": "dados.2460e27fab.bin", "contactos": {"whatsapp": "245955252417", "email": "cel.vf.gb@gmail.com"}, "diasSemLigacao": 30, "sb": "https://ebwjnennfmwnhwdfxbuy.supabase.co", "anon": "sb_publishable_oLn3lkMEwu4sEOUTjRCLQA_4evc_ezB"}</script>
+<script type="application/json" id="cel-config">{"versao": "1.14.2", "ano": "2026/2027", "chaveId": "1987a8c7", "verificador": "m+HQwwNueX1G3XlMCpRsYJOV0Tkds6FCJhmeHgobCN6OFobxkzA=", "dados": "dados.2460e27fab.bin", "contactos": {"whatsapp": "245955252417", "email": "cel.vf.gb@gmail.com"}, "diasSemLigacao": 30, "sb": "https://ebwjnennfmwnhwdfxbuy.supabase.co", "anon": "sb_publishable_oLn3lkMEwu4sEOUTjRCLQA_4evc_ezB"}</script>
 <script>/* Gerador mínimo de .docx (Word) no navegador — sem bibliotecas externas.
    Blocos: {t:'h', text, level} · {t:'p', text|runs, align, size, before, after, keep, border}
            {t:'list', items:[text|runs], ordered} · {t:'table', rows, widths, header, borders, minH}
@@ -3664,7 +3669,7 @@ const ESCREVER = (() => {
         }
         if (zoom === 'largura') return disp / pw;
         if (zoom === 'pagina') {
-          const t = document.querySelector('.top'), cima = (t ? t.getBoundingClientRect().height : 0) + barras.getBoundingClientRect().height + rodape.getBoundingClientRect().height + 28;
+          const t = document.querySelector('.top'), cima = (t ? t.getBoundingClientRect().height : 0) + presoEl().getBoundingClientRect().height + rodape.getBoundingClientRect().height + 28;
           return Math.min(disp / pw, Math.max(150, window.innerHeight - cima) / ph);
         }
         return (+zoom || 100) / 100;
@@ -3699,7 +3704,7 @@ const ESCREVER = (() => {
       try { const r = document.createRange(); r.setStart(s.focusNode, s.focusOffset); r.collapse(true); rc = r.getClientRects()[0] || null; } catch (e) { rc = null; }
       if (!rc || !(rc.height || rc.top)) { const e = s.focusNode.nodeType === 1 ? s.focusNode : s.focusNode.parentElement; if (!e || !e.getBoundingClientRect) return; rc = e.getBoundingClientRect(); }
       const t = document.querySelector('.top'), tt = t ? t.getBoundingClientRect() : null;
-      const cima = Math.max(tt && tt.height ? tt.bottom : 0, barras.getBoundingClientRect().bottom) + 8;
+      const cima = Math.max(tt && tt.height ? tt.bottom : 0, presoEl().getBoundingClientRect().bottom) + 8;
       const rr = rodape.getBoundingClientRect(), baixo = Math.min(window.innerHeight, rr.top > 0 ? rr.top : window.innerHeight) - 8;
       if (baixo - cima < 40) return;
       if (centrar && (rc.top < cima || rc.bottom > baixo)) { window.scrollBy({ top: rc.top - (cima + baixo) / 2 }); return; }
@@ -3802,7 +3807,7 @@ const ESCREVER = (() => {
       texto.focus({ preventScroll: true }); const s = getSelection(); s.removeAllRanges(); s.addRange(r); guardaSel();
       const rr = document.createRange(); rr.selectNodeContents(y);
       const alvo = [...rr.getClientRects()].find((q) => q.height > 0) || y.getBoundingClientRect();
-      const t = document.querySelector('.top'), cima = (t ? t.getBoundingClientRect().height : 0) + barras.getBoundingClientRect().height + 24;
+      const t = document.querySelector('.top'), cima = (t ? t.getBoundingClientRect().height : 0) + presoEl().getBoundingClientRect().height + 24;
       window.scrollTo({ top: Math.max(0, alvo.top + window.scrollY - cima), behavior: 'smooth' });
       y.classList.remove('esc-flash'); void y.offsetWidth; y.classList.add('esc-flash');
       setTimeout(() => y.classList.remove('esc-flash'), 1600);
@@ -4308,7 +4313,7 @@ const ESCREVER = (() => {
       // «Página inteira»: a folha onde está o cursor fica toda à vista, logo abaixo das barras
       if (z === 'pagina' && vista === 'paginas' && pag) {
         const f = fundo.querySelectorAll('.esc-folha-pg')[paginaAtual];
-        if (f) { const t = document.querySelector('.top'), cima = (t ? t.getBoundingClientRect().height : 0) + barras.getBoundingClientRect().height + 10;
+        if (f) { const t = document.querySelector('.top'), cima = (t ? t.getBoundingClientRect().height : 0) + presoEl().getBoundingClientRect().height + 10;
           window.scrollTo({ top: Math.max(0, f.getBoundingClientRect().top + window.scrollY - cima) }); }
       } else if (rel > 0 && antes > 0 && Math.abs(agora - antes) > 0.001) window.scrollTo({ top: topoP + rel * agora / antes });     // continua no mesmo sítio do texto
       centra();
@@ -4641,9 +4646,13 @@ const ESCREVER = (() => {
 
     // ----- a barra fica por baixo do cimo da aplicação, que também está preso
     const barras = h('div', { class: 'esc-barras' }, barra, barraImg, barraTab);
+    // no computador fica preso todo o cabeçalho (botões, título e barras); no telemóvel só as barras, para sobrar ecrã para o texto
+    let fixo = null;
+    function presoEl() { return fixo && getComputedStyle(fixo).position === 'sticky' ? fixo : barras; }      // o que fica preso no cimo
     const topo = () => {
       const t = document.querySelector('.top'), a = t ? t.getBoundingClientRect().height : 0; barras.style.top = a + 'px';
-      el.style.setProperty('--esc-nav-top', Math.round(a + barras.getBoundingClientRect().height + 8) + 'px');      // o painel de títulos fica por baixo das barras
+      if (fixo) fixo.style.top = a + 'px';
+      el.style.setProperty('--esc-nav-top', Math.round(a + presoEl().getBoundingClientRect().height + 8) + 'px');      // o painel de títulos fica por baixo
     };
     let largAnt = 0;
     const aoRedimensionar = () => {
@@ -4662,7 +4671,8 @@ const ESCREVER = (() => {
         h('button', { type: 'button', class: 'btn sm', onclick: pdf, 'aria-label': 'PDF', title: 'PDF (imprimir)' }, svg('pdf'), rotM('PDF')),
         h('button', { type: 'button', class: 'btn primary sm', onclick: word }, svg('word'), 'Word'), bEcra));
     const rodape = h('div', { class: 'esc-rodape' }, hBar, indicador, conta, h('div', { class: 'esc-vistas' }, h('span', { class: 'esc-zooms' }, bMenos, zoomSel, bMais)), escolheImg);
-    const el = h('div', { class: 'view esc-vista' }, cab, titulo, barras, corpoEd, rodape);
+    fixo = h('div', { class: 'esc-fixo' }, cab, titulo, barras);
+    const el = h('div', { class: 'view esc-vista' }, fixo, corpoEd, rodape);
     el.addEventListener('wheel', aoRodar, { passive: false });
 
     (async () => {
@@ -6940,6 +6950,7 @@ function toolRomanos() {
 
 /* ============================================================ CÓPIAS E ATUALIZAÇÕES */
 const NOVIDADES = [
+  { v: '1.14.2', d: '16/11/2026', itens: ['«Os meus documentos»: no computador, o cabeçalho (os botões, o título e a barra de formatação) fica fixo no cimo enquanto se desce no texto. No telemóvel fica fixa a barra de formatação.'] },
   { v: '1.14.1', d: '16/11/2026', itens: ['«Os meus documentos»: o texto aparece sempre em páginas, como no Word, também no telemóvel. Saiu o modo «Contínuo».'] },
   { v: '1.14', d: '16/11/2026', itens: ['«Abrir ficheiros»: botão «Ecrã inteiro» para ver o PDF, o Word, o Excel, o PowerPoint, as imagens e o resto no ecrã todo (Esc ou «Sair do ecrã inteiro» para voltar).',
     '«Os meus ficheiros»: toque em «Guardar nos meus ficheiros» e o ficheiro fica no Portal deste aparelho, numa lista, para voltar a abrir quando quiser, também sem internet. Fica só neste aparelho.'] },
