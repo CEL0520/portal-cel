@@ -884,7 +884,7 @@ body.esc-foco .layout { grid-template-columns: minmax(0, 1fr); max-width: none; 
 <div id="toast" role="status" aria-live="polite"></div>
 <div id="print-root"></div>
 <div id="barra" class="barra" hidden></div>
-<script type="application/json" id="cel-config">{"versao": "1.12.0", "ano": "2026/2027", "chaveId": "1987a8c7", "verificador": "m+HQwwNueX1G3XlMCpRsYJOV0Tkds6FCJhmeHgobCN6OFobxkzA=", "dados": "dados.2460e27fab.bin", "contactos": {"whatsapp": "245955252417", "email": "cel.vf.gb@gmail.com"}, "diasSemLigacao": 30}</script>
+<script type="application/json" id="cel-config">{"versao": "1.13.0", "ano": "2026/2027", "chaveId": "1987a8c7", "verificador": "m+HQwwNueX1G3XlMCpRsYJOV0Tkds6FCJhmeHgobCN6OFobxkzA=", "dados": "dados.2460e27fab.bin", "contactos": {"whatsapp": "245955252417", "email": "cel.vf.gb@gmail.com"}, "diasSemLigacao": 30, "sb": "https://ebwjnennfmwnhwdfxbuy.supabase.co", "anon": "sb_publishable_oLn3lkMEwu4sEOUTjRCLQA_4evc_ezB"}</script>
 <script>/* Gerador mínimo de .docx (Word) no navegador — sem bibliotecas externas.
    Blocos: {t:'h', text, level} · {t:'p', text|runs, align, size, before, after, keep, border}
            {t:'list', items:[text|runs], ordered} · {t:'table', rows, widths, header, borders, minH}
@@ -6854,6 +6854,8 @@ function toolRomanos() {
 
 /* ============================================================ CÓPIAS E ATUALIZAÇÕES */
 const NOVIDADES = [
+  { v: '1.13', d: '16/11/2026', itens: ['A Coordenação Geral entra nos Recursos do Professor com o e-mail e a palavra-passe da conta da gestão escolar, em qualquer aparelho, sem pedir código. A chave do ano guarda-se uma vez na Gestão escolar → Acessos e fica fechada no servidor, só para a coordenação.',
+    'Na gestão escolar, a coordenação tem sempre a ligação para os Recursos do Professor.', 'Os professores continuam a entrar com o código pessoal, como até agora.'] },
   { v: '1.12', d: '16/11/2026', itens: ['Nova secção «Abrir ficheiros»: veja aqui os PDF, os ficheiros do Word, do Excel e do PowerPoint, as imagens, os vídeos, os sons, as páginas HTML e os ficheiros de texto, sem outras aplicações. O ficheiro abre-se neste aparelho: não vai para a Internet nem fica guardado.',
     'PDF: páginas, zoom, ir para uma página e PDF com palavra-passe. Funciona sem internet depois de abrir o primeiro PDF com internet.',
     'PowerPoint: os diapositivos com o texto, as listas, as tabelas, as imagens e as cores, e o botão «Apresentar» para mostrar em ecrã inteiro. Excel: cada folha num separador, com as células unidas, as cores, as datas e os resultados das fórmulas.',
@@ -7528,10 +7530,75 @@ function telaRegisto(pre = null, aviso = null) {
       if (erros.length) { err.replaceChildren(h('div', null, 'Preencha primeiro os seus dados, iguais aos do pedido.'), ...erros.map(x => h('div', null, x))); return; }
       guardaPedido(p, 'manual'); telaAtivar();
     } })),
-    h('div', { class: 'g-links' }, btn('É da direção, da secretaria ou das finanças?', { kind: 'ghost', icon: 'pasta', onclick: () => { LS.del(KP.escolha); location.href = 'gestao.html'; } })));
+    h('div', { class: 'g-links' }, btn('É da direção, da secretaria ou das finanças?', { kind: 'ghost', icon: 'pasta', onclick: () => { LS.del(KP.escolha); location.href = 'gestao.html'; } })),
+    ligCoord());
 }
 
 /* Portal CEL: a primeira escolha, para quem ainda não usa nenhum dos ambientes neste aparelho */
+/* ---------- a Coordenação Geral entra com o e-mail e a palavra-passe da gestão escolar (sem código)
+   A chave do ano fica fechada no Supabase (Portal_CEL_1.13.0.sql): só uma conta ativa com o papel «coordenacao» lhe chega.
+   Com ela, o Portal faz aqui mesmo um código para este aparelho, até ao fim do ano letivo; a palavra-passe não fica guardada. */
+const ligCoord = () => (CFG.sb && CFG.anon ? h('div', { class: 'g-links' }, btn('Coordenação: entrar com e-mail e palavra-passe', { kind: 'ghost', icon: 'lock', onclick: () => telaCoord() })) : null);
+async function sb(caminho, corpo, tk) {
+  let r;
+  try {
+    r = await fetch(CFG.sb + caminho, { method: 'POST', cache: 'no-store', headers: Object.assign({ apikey: CFG.anon, 'Content-Type': 'application/json' }, tk ? { Authorization: 'Bearer ' + tk } : {}), body: JSON.stringify(corpo || {}) });
+  } catch (e) { const x = new Error('Sem ligação à internet. Para entrar com o e-mail e a palavra-passe precisa de internet (só desta vez).'); x.rede = true; throw x; }
+  const t = await r.text(); let j = null; try { j = t ? JSON.parse(t) : null; } catch (e) { /* nada */ }
+  if (!r.ok) { const x = new Error((j && (j.msg || j.message || j.error_description)) || String(r.status)); x.status = r.status; x.cod = j && (j.code || j.error_code); throw x; }
+  return j;
+}
+function telaCoord(msgErro = '') {
+  let pre = ''; try { const s = JSON.parse(localStorage.getItem(KP.gestao) || 'null'); pre = (s && s.user && s.user.email) || ''; } catch (e) { /* nada */ }
+  const email = h('input', { type: 'email', id: 'g-cemail', autocomplete: 'username', inputmode: 'email', value: pre, placeholder: 'nome@exemplo.com' });
+  const pw = h('input', { type: 'password', id: 'g-cpw', autocomplete: 'current-password', placeholder: 'A sua palavra-passe' });
+  const err = h('div', { class: 'g-err', role: 'alert' }, msgErro);
+  const ok = btn('Entrar', { kind: 'primary', icon: 'key' });
+  const entra = async () => {
+    const e = email.value.trim().toLowerCase();
+    if (!/^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i.test(e) || !pw.value) { err.textContent = 'Escreva o e-mail e a palavra-passe da sua conta da gestão escolar.'; return; }
+    ok.disabled = true; err.textContent = 'A entrar…';
+    try {
+      let s;
+      try { s = await sb('/auth/v1/token?grant_type=password', { email: e, password: pw.value }); }
+      catch (x) { if (x.rede) throw x; throw new Error('O e-mail ou a palavra-passe não estão certos.'); }
+      let chave;
+      try { chave = await sb('/rest/v1/rpc/portal_chave_recursos', {}, s.access_token); }
+      catch (x) {
+        if (x.rede) throw x;
+        if (x.status === 404) throw new Error('A entrada da coordenação ainda não está preparada no servidor (falta o ficheiro Portal_CEL_1.13.0.sql).');
+        throw new Error('Esta conta não é da Coordenação Geral. Os outros professores entram com o código pessoal.');
+      }
+      if (!chave) throw new Error('A chave do ano ainda não foi guardada. Abra a Gestão escolar → Acessos → «Recursos do Professor sem código» e cole lá a chave do ano.');
+      const k = (C.b32dec(String(chave)) || new Uint8Array()).slice(0, 12);
+      const ano = String(CFG.ano || '').match(/(\d{4})\D*$/), validade = `${ano ? ano[1] : new Date().getFullYear() + 1}-07-31`;
+      const p = { n: 'Coordenação Geral', e, w: '' };
+      const codigo = k.length === 12 ? await C.gera(k, aparelho(), validade, p) : '';
+      const r = codigo && await C.abre(codigo, aparelho(), p, CFG.verificador);
+      if (!r) throw new Error(`A chave guardada no servidor não é a deste ano letivo (${CFG.ano}). Na Gestão escolar → Acessos, cole a chave nova.`);
+      if (r.dias < hoje()) throw new Error('O ano letivo desta chave já terminou. Na Gestão escolar → Acessos, cole a chave do ano novo.');
+      pw.value = '';
+      LS.set(K.ativ, { codigo, p, dias: r.dias, ativado: new Date().toISOString(), versao: CFG.versao, coord: true });
+      LS.set(K.verif, hoje()); LS.del(K.estado);
+      try { if (navigator.storage && navigator.storage.persist) navigator.storage.persist(); } catch (x) { /* opcional */ }
+      await abrirApp(LS.get(K.ativ, null), r.key);
+      toast('Bem-vindo, Coordenação Geral.');
+    } catch (x) { err.textContent = x.message || 'Não foi possível entrar. Tente outra vez.'; }
+    finally { ok.disabled = false; }
+  };
+  ok.addEventListener('click', entra);
+  pw.addEventListener('keydown', (e) => { if (e.key === 'Enter') entra(); });
+  shell(
+    h('h1', null, 'Entrada da Coordenação'),
+    h('p', { class: 'muted' }, 'Entre com o e-mail e a palavra-passe da sua conta da gestão escolar. Não precisa de código: o acesso fica neste aparelho até ao fim do ano letivo. Só as contas da Coordenação Geral entram assim.'),
+    h('div', { class: 'card stack' },
+      h('div', { class: 'field' }, h('label', { for: 'g-cemail' }, 'E-mail'), email),
+      h('div', { class: 'field' }, h('label', { for: 'g-cpw' }, 'Palavra-passe'), pw),
+      err, h('div', { class: 'g-actions' }, ok)),
+    h('div', { class: 'g-links' }, btn('Voltar', { kind: 'ghost', onclick: () => inicio() })));
+  setTimeout(() => (pre ? pw : email).focus(), 50);
+}
+
 function telaEntrada() {
   const op = (ic, t, d, f) => h('button', { type: 'button', class: 'g-op', onclick: f }, h('span', { class: 'g-op-ic', 'aria-hidden': 'true' }, icon(ic)), h('span', null, h('b', null, t), h('small', null, d)));
   shell(
@@ -7540,7 +7607,8 @@ function telaEntrada() {
     h('div', { class: 'g-escolha' },
       op('livro', 'Professor(a)', 'Manuais, planos de aula, provas, calendário e formações', () => { LS.set(KP.escolha, 'prof'); telaRegisto(); }),
       op('pasta', 'Direção, secretaria e finanças', 'Gestão escolar: matrículas, recibos, pessoal e documentos', () => { location.href = 'gestao.html'; }),
-      op('conecta', 'CEL Conecta', 'Conversas, mural e avisos da escola, para toda a comunidade, também os encarregados', () => { location.href = 'conecta/'; })));
+      op('conecta', 'CEL Conecta', 'Conversas, mural e avisos da escola, para toda a comunidade, também os encarregados', () => { location.href = 'conecta/'; })),
+    ligCoord());
   const b = $('.g-top b'); if (b) b.textContent = 'Portal CEL';
 }
 
@@ -7581,7 +7649,8 @@ function telaAtivar(msgErro = '') {
         h('dt', null, 'Telemóvel'), h('dd', { class: 'mono' }, C.grupos(aparelho()))),
       h('div', { class: 'field' }, h('label', { for: 'g-cod' }, 'Código de acesso'), cod, h('div', { class: 'hint', id: 'g-cod-ajuda' }, `${C.TAM} letras e números. Os traços não contam.`)),
       err, h('div', { class: 'g-actions' }, ok, colar)),
-    h('div', { class: 'g-links' }, btn('Mudar os dados ou pedir de novo', { kind: 'ghost', onclick: () => telaRegisto() })));
+    h('div', { class: 'g-links' }, btn('Mudar os dados ou pedir de novo', { kind: 'ghost', onclick: () => telaRegisto() })),
+    ligCoord());
   setTimeout(() => cod.focus(), 50);
 }
 
@@ -7606,7 +7675,8 @@ function telaBloqueio(tipo) {
     h('div', { class: 'g-actions' },
       tipo === 'suspenso' || tipo === 'verificar' ? verificar : null,
       tipo === 'retirado' || tipo === 'expirado' || tipo === 'novo' ? btn('Pedir um código novo', { kind: 'primary', icon: 'key', onclick: () => { LS.del(K.ativ); LS.del(K.estado); telaRegisto(ult); } }) : null),
-    out, ult ? h('p', { class: 'tiny' }, `${ult.n} · telemóvel ${C.grupos(aparelho())}`) : null);
+    out, ult ? h('p', { class: 'tiny' }, `${ult.n} · telemóvel ${C.grupos(aparelho())}`) : null,
+    tipo !== 'suspenso' && tipo !== 'retirado' ? ligCoord() : null);
 }
 
 function telaAbrir() { shell(h('div', { class: 'g-wait' }, h('div', { class: 'g-spin', 'aria-hidden': 'true' }), h('p', null, 'A abrir os manuais…'))); }
