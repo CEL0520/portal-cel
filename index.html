@@ -926,7 +926,7 @@ body.abr-cheio-b { overflow: hidden }
 <div id="toast" role="status" aria-live="polite"></div>
 <div id="print-root"></div>
 <div id="barra" class="barra" hidden></div>
-<script type="application/json" id="cel-config">{"versao": "1.16.1", "ano": "2026/2027", "chaveId": "1987a8c7", "verificador": "m+HQwwNueX1G3XlMCpRsYJOV0Tkds6FCJhmeHgobCN6OFobxkzA=", "dados": "dados.2460e27fab.bin", "contactos": {"whatsapp": "245955252417", "email": "cel.vf.gb@gmail.com"}, "diasSemLigacao": 30, "sb": "https://ebwjnennfmwnhwdfxbuy.supabase.co", "anon": "sb_publishable_oLn3lkMEwu4sEOUTjRCLQA_4evc_ezB"}</script>
+<script type="application/json" id="cel-config">{"versao": "1.16.2", "ano": "2026/2027", "chaveId": "1987a8c7", "verificador": "m+HQwwNueX1G3XlMCpRsYJOV0Tkds6FCJhmeHgobCN6OFobxkzA=", "dados": "dados.2460e27fab.bin", "contactos": {"whatsapp": "245955252417", "email": "cel.vf.gb@gmail.com"}, "diasSemLigacao": 30, "sb": "https://ebwjnennfmwnhwdfxbuy.supabase.co", "anon": "sb_publishable_oLn3lkMEwu4sEOUTjRCLQA_4evc_ezB"}</script>
 <script>/* Gerador mínimo de .docx (Word) no navegador — sem bibliotecas externas.
    Blocos: {t:'h', text, level} · {t:'p', text|runs, align, size, before, after, keep, border}
            {t:'list', items:[text|runs], ordered} · {t:'table', rows, widths, header, borders, minH}
@@ -3247,7 +3247,7 @@ const ESCREVER = (() => {
       accept: '.docx,.doc,.odt,.rtf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/msword', onchange: (e) => abreWord(e.target.files[0]) });
     async function abreWord(f) { abrir.value = ''; if (f) await importaWord(f, ctx); }
     const procura = h('input', { type: 'search', class: 'inp', placeholder: 'Procurar nos meus documentos', 'aria-label': 'Procurar nos meus documentos', oninput: (e) => { filtro = e.target.value.trim().toLowerCase(); desenha(); } });
-    const ficheiro = h('input', { type: 'file', accept: '.json,application/json', style: 'display:none', onchange: (e) => recupera(e.target.files[0]) });
+    const ficheiro = h('input', { type: 'file', style: 'display:none', onchange: (e) => recupera(e.target.files[0]) });
 
     const aviso = h('div');
     const bLixo = btn('Lixeira', { sm: true, kind: 'ghost', onclick: () => abreLixeira() });
@@ -6980,6 +6980,8 @@ function toolRomanos() {
 
 /* ============================================================ CÓPIAS E ATUALIZAÇÕES */
 const NOVIDADES = [
+  { v: '1.16.2', d: '17/11/2026', itens: ['Telemóveis e tablets: as cópias de segurança feitas no computador (Recursos, «Os meus documentos» e Gestão escolar) e a folha Excel dos alunos já se escolhem no seletor de ficheiros do telemóvel.',
+    'Gestão escolar: as assinaturas do termo ficam fechadas; só abre o quadro quem carrega em «Assinar», e «Concluir» volta a fechá-lo. Ao lado aparece «Assinado ✓» ou «Sem assinatura». Assim já não se assina sem querer ao escrever ou ao deslizar no telemóvel.'] },
   { v: '1.16.1', d: '17/11/2026', itens: ['Gestão escolar: a Coordenação pode apagar todos os dados para recomeçar depois dos ensaios (Acessos → «Apagar todos os dados»); a numeração recomeça.',
     'Importar lista: os alunos com NUA anterior a CEL-0105 entram como renovação de matrícula (alunos internos) e os outros como alunos novos; a coluna «Ordem de matrícula» (001, 002…) passa para o termo; sem ela, a ordem é automática. O primeiro NUA dos novos muda-se no mesmo cartão.',
     'Pesquisa: basta escrever o número (8 ou 0008) para encontrar CEL-0008, também ao escolher o aluno nos recibos e nas matrículas.'] },
@@ -7031,7 +7033,7 @@ const NOVIDADES = [
     'Ferramentas: classificações, grelhas da turma em Word, planificação do ano letivo, romanos e tabuada.', 'Biblioteca com glossários, Dicionário Português–Crioulo e conteúdos da Caligrafia.'] }
 ];
 function vAtualizacoes() {
-  const fileIn = h('input', { type: 'file', accept: '.json,application/json', id: 'imp-file', class: 'sr' });
+  const fileIn = h('input', { type: 'file', id: 'imp-file', class: 'sr' });
   const impMsg = h('p', { class: 'small', role: 'status' });
   fileIn.addEventListener('change', () => {
     const f = fileIn.files && fileIn.files[0]; if (!f) return;
