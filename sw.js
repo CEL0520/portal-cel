@@ -1,6 +1,6 @@
 /* Portal CEL — guarda a aplicação no telemóvel para funcionar sem internet.
    Os Recursos do Professor ficam guardados para todos; a gestão escolar (gestao.html) só nos aparelhos de quem a abre. */
-const VERSAO = '1.17.0-0ea65df4';
+const VERSAO = '1.17.1-4d30a2ff';
 const CACHE = 'cel-rp-' + VERSAO;
 const FICHEIROS = ["./", "./index.html", "./manifest.webmanifest", "./dados.2460e27fab.bin", "./fonts/Lora-Bold.woff", "./fonts/Figtree.woff", "./fonts/IBMPlexMono-Regular.woff", "./fonts/IBMPlexMono-Medium.woff", "./fonts/cel-letra-serif-400.woff", "./fonts/cel-letra-serif-700.woff", "./icons/icon-192.png", "./icons/icon-512.png", "./icons/maskable-512.png", "./icons/emblema.jpg"];
 const GEST = 'cel-portal-g-' + VERSAO;     // gestão escolar: só existe nos aparelhos de quem a usa
