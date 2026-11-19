@@ -935,6 +935,9 @@ body.abr-cheio-b { overflow: hidden }
 details > summary { cursor: pointer; margin: 4px 0 }
 .fch-ver { display: none }
 @media (max-width: 1100px) { .fch-ver { display: inline-flex } }
+.fch-cotl { display: inline-flex; align-items: center; gap: 5px; font-size: 12.5px; color: var(--ink-2) }
+.fch-cot { width: 56px; padding: 4px 6px }
+@font-face { font-family: 'CEL Manuscrita'; font-weight: 400; font-style: normal; font-display: swap; src: url(fonts/cel-letra-manuscrita.woff) format('woff') }
 </style>
 </head>
 <body>
@@ -944,7 +947,7 @@ details > summary { cursor: pointer; margin: 4px 0 }
 <div id="toast" role="status" aria-live="polite"></div>
 <div id="print-root"></div>
 <div id="barra" class="barra" hidden></div>
-<script type="application/json" id="cel-config">{"versao": "1.22.0", "ano": "2026/2027", "chaveId": "1987a8c7", "verificador": "m+HQwwNueX1G3XlMCpRsYJOV0Tkds6FCJhmeHgobCN6OFobxkzA=", "dados": "dados.26347696d7.bin", "contactos": {"whatsapp": "245955252417", "email": "cel.vf.gb@gmail.com"}, "diasSemLigacao": 30, "sb": "https://ebwjnennfmwnhwdfxbuy.supabase.co", "anon": "sb_publishable_oLn3lkMEwu4sEOUTjRCLQA_4evc_ezB"}</script>
+<script type="application/json" id="cel-config">{"versao": "1.23.0", "ano": "2026/2027", "chaveId": "1987a8c7", "verificador": "m+HQwwNueX1G3XlMCpRsYJOV0Tkds6FCJhmeHgobCN6OFobxkzA=", "dados": "dados.26347696d7.bin", "contactos": {"whatsapp": "245955252417", "email": "cel.vf.gb@gmail.com"}, "diasSemLigacao": 30, "sb": "https://ebwjnennfmwnhwdfxbuy.supabase.co", "anon": "sb_publishable_oLn3lkMEwu4sEOUTjRCLQA_4evc_ezB"}</script>
 <script>/* Gerador mínimo de .docx (Word) no navegador — sem bibliotecas externas.
    Blocos: {t:'h', text, level} · {t:'p', text|runs, align, size, before, after, keep, border}
            {t:'list', items:[text|runs], ordered} · {t:'table', rows, widths, header, borders, minH}
@@ -5793,6 +5796,13 @@ const FICHAS_DES = (() => {
   f('lua_cheia', 'lua cheia', 'casa noite', `<circle cx="50" cy="50" r="38"/><circle cx="38" cy="40" r="6" ${L}/><circle cx="60" cy="58" r="8" ${L}/><circle cx="62" cy="32" r="4" ${L}/>`);
   f('galo', 'galo', 'animais animal dia casa:capoeira', `<path d="M42 84 L40 96 M34 96 L46 96 M58 84 L60 96 M54 96 L66 96"/><path d="M74 50 C80 30 92 22 98 26 C92 32 92 40 94 46 C98 50 98 60 88 66" ${N}/><ellipse cx="54" cy="64" rx="32" ry="23"/><path d="M40 62 C50 74 66 74 72 62" ${L} ${N}/><path d="M18 18 C14 6 22 4 25 12 C26 2 34 2 33 12 C37 4 44 8 38 18 Z" ${P}/><circle cx="28" cy="32" r="14"/><path d="M14 30 L4 35 L14 39 Z" ${P}/><path d="M22 44 C20 52 26 54 28 46" ${P}/><circle cx="24" cy="29" r="2.6" ${P}/>`);
 
+  /* ---------- 1.22+ : palavras do 1.º ano */
+  f('dedo', 'dedo', 'corpo', `<path d="M36 96 L36 40 C36 30 40 22 50 22 C60 22 64 30 64 40 L64 96"/><path d="M40 40 C40 32 60 32 60 40 L60 50 C60 54 40 54 40 50 Z" ${L}/><path d="M38 64 L62 64 M38 76 L62 76" ${L}/>`);
+  f('uva', 'uva', 'frutos comer', `<path d="M50 14 L52 4 M52 10 C60 2 72 4 76 10 C68 14 58 14 52 10Z"/><circle cx="38" cy="30" r="11"/><circle cx="62" cy="30" r="11"/><circle cx="50" cy="44" r="11"/><circle cx="28" cy="50" r="11"/><circle cx="72" cy="50" r="11"/><circle cx="40" cy="64" r="11"/><circle cx="60" cy="64" r="11"/><circle cx="50" cy="82" r="11"/>`);
+  f('dado', 'dado', 'escola', `<path d="M14 34 L50 18 L86 34 L50 50 Z"/><path d="M14 34 L14 74 L50 92 L50 50 Z"/><path d="M86 34 L86 74 L50 92 L50 50 Z"/><circle cx="50" cy="34" r="4" ${P}/><circle cx="26" cy="54" r="4" ${P}/><circle cx="38" cy="72" r="4" ${P}/><circle cx="62" cy="58" r="4" ${P}/><circle cx="74" cy="76" r="4" ${P}/>`);
+  f('mala', 'mala', 'escola', `<path d="M36 30 L36 18 C36 12 64 12 64 18 L64 30" ${N}/><rect x="8" y="30" width="84" height="60" rx="8"/><path d="M8 52 L92 52" ${L}/><rect x="44" y="46" width="12" height="12" ${P}/>`);
+  f('faca', 'faca', 'cozinha', `<path d="M6 60 C30 52 60 44 74 40 L74 56 C56 60 30 64 6 60Z"/><rect x="74" y="38" width="22" height="20" rx="4" ${P}/>`);
+
   /* ---------- letras e números de traço único (para traçar e escrever o nome)
      Caixa: largura própria × 80 de altura; mai úsculas de y 4 a 80; minúsculas de y 42 a 80 (hastes a y 4, pernas até y 104).
      [caminho, largura, [x, y] onde começa] */
@@ -5988,7 +5998,7 @@ const FICHAS = (() => {
   const NIV = { 1: 'Nível I', 2: 'Nível II', 3: 'Nível III' };
   const POR_FOLHA = { 1: 1, 2: 2, 3: 2 };
   const T = [];
-  const tipo = (o) => { T.push(Object.assign({ peso: 1, niv: [1, 2, 3], ic: 'tracar' }, o)); };
+  const tipo = (o) => { T.push(Object.assign({ peso: 1, niv: [1, 2, 3], ic: 'tracar', ciclo: 'JI' }, o)); };
   const LIVRE = 'Resposta livre';
 
   // linhas «rodeia o que…»: grelha com certos e errados
@@ -6145,6 +6155,7 @@ const FICHAS = (() => {
   rodeia('regras', 'fps', 'Regras da sala', 'Rodeia o que se deve fazer na sala.', ['braco_no_ar', 'ouvir', 'lixo_cesto', 'lavar_maos'], ['gritar', 'bater', 'lixo_chao'], { 2: [4, 2], 3: [6, 3] }, [2, 3]);
 
   const TIPO = Object.fromEntries(T.map((x) => [x.id, x]));
+  const regista = (o) => { const q = Object.assign({ peso: 1, ic: 'tracar', ciclo: 'EB', niv: [] }, o); T.push(q); TIPO[q.id] = q; return q; };
   function primeiroNome(n) { const w = String(n || '').trim().split(/\s+/)[0] || ''; return w.toLocaleUpperCase('pt-PT').split('').filter((ch) => glifo(ch)).join(''); }
 
   /* ============================================================ a folha */
@@ -6173,6 +6184,7 @@ const FICHAS = (() => {
       t(754, 1072, 'Portal CEL · Recursos do Professor · Fichas', 11, { a: 'end', w: 400, fill: '#555' });
   }
   function pagina(F, op = {}) {
+    if (F.ciclo === 'EB' && EB.paginas) return EB.paginas(F, op).join('');
     const cx = { foto: F.foto || '', nome: op.nome || '' }, ex = F.ex.filter((e) => TIPO[e.t]);
     const top = 156, bot = 1040, pesos = ex.map((e) => TIPO[e.t].peso), tot = pesos.reduce((a, b) => a + b, 0) || 1;
     let y = top, corpo = '';
@@ -6190,8 +6202,10 @@ const FICHAS = (() => {
   }
 
   /* ---------- criar e mudar uma ficha */
+  const EB = {};
+  function folhas(F, op = {}) { return F.ciclo === 'EB' && EB.paginas ? EB.paginas(F, op) : [pagina(F, op)]; }
   function novoEx(t, nv, nx, seed) { const s = seed || Math.floor(Math.random() * 1e9); return { t, seed: s, p: TIPO[t].gen(nv, rnd(s), nx) }; }
-  function disponiveis(nv, area) { return T.filter((q) => q.niv.includes(nv) && (!area || q.area === area)); }
+  function disponiveis(nv, area) { return T.filter((q) => q.ciclo === 'JI' && q.niv.includes(nv) && (!area || q.area === area)); }
 
   /* ---------- PDF (as folhas como imagens, como nos boletins) */
   function svgParaCanvas(svg, esc2 = 2) {
@@ -6256,31 +6270,62 @@ const FICHAS = (() => {
   const DRAFT = 'cel-fichas-rascunho', NOMES = 'cel-fichas-nomes';
   const LSg = (k, d) => { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch (e) { return d; } };
   const LSs = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); return true; } catch (e) { return false; } };
-  const UI = { F: null, tab: 'ficha', lista: false, para: 'uma', tur: '', turmas: null };
+  const UI = { F: null, tab: 'A', lista: false, para: 'uma', tur: '', turmas: null };
+  const EBm = () => (typeof FICHAS_EB !== 'undefined' ? FICHAS_EB : null);
+  const ehEB = (F) => F.ciclo === 'EB';
+  const MAXEB = { ficha: 4, prova: 6 };
+  const maxEx = (F) => (ehEB(F) ? MAXEB[F.doc || 'ficha'] : POR_FOLHA[F.nv]);
+  const lista = (F) => (ehEB(F) ? EBm().disponiveis(F.ano, F.disc, F.tri) : disponiveis(F.nv));
+  const exNovo = (F, t, nx, seed) => (ehEB(F) ? EBm().novo(t, F, seed) : novoEx(t, F.nv, nx, seed));
   function fichaNova(nv = 2, area = 'mat') {
     const L = disponiveis(nv, area), n = Math.min(POR_FOLHA[nv], L.length);
-    return { id: null, n: null, nv, area, foto: '', ex: L.slice(0, n).map((q) => novoEx(q.id, nv, n)) };
+    return { id: null, n: null, ciclo: 'JI', nv, area, foto: '', ex: L.slice(0, n).map((q) => novoEx(q.id, nv, n)) };
   }
-  const titulo = (F) => F.ex.map((e) => TIPO[e.t] ? TIPO[e.t].nome : '').filter(Boolean).join(' + ') || 'Ficha sem exercícios';
+  function fichaEB(ano = 1, disc = 'mat', tri = 1, doc = 'ficha') {
+    const F = { id: null, n: null, ciclo: 'EB', ano, disc, tri, doc, ver: 'A', dur: doc === 'prova' ? 45 : '', foto: '', ex: [] };
+    const E = EBm(), L = E.disponiveis(ano, disc, tri), [u0] = E.UNI[disc][tri];
+    // de preferência os exercícios das unidades deste trimestre, e que caibam numa folha
+    const deste = L.filter((q) => q.u >= u0), resto = L.filter((q) => q.u < u0), alvo = doc === 'prova' ? 5 : 3, esc = [];
+    let h = 0; for (const q of deste.concat(resto)) { if (esc.length >= alvo) break; const e = E.novo(q.id, F); const hh = q.alt(e.p) + 60; if (h + hh > 880 && esc.length >= 2) continue; esc.push(e); h += hh; }
+    F.ex = esc; return F;
+  }
+  const docNome = (F) => (ehEB(F) ? (F.doc === 'prova' ? 'Prova' : 'Ficha') : 'Ficha');
+  const titulo = (F) => (ehEB(F) ? `${EBm().DISC[F.disc]} · ${EBm().ANO[F.ano]} · ${F.tri}.º trimestre — ` : '') + (F.ex.map((e) => TIPO[e.t] ? TIPO[e.t].nome : '').filter(Boolean).join(' + ') || 'Sem exercícios');
   const fdata = (iso) => iso ? String(iso).slice(0, 10).split('-').reverse().join('/') : '';
+  const slug = (s) => String(s).normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^A-Za-z0-9]+/g, '_').replace(/^_|_$/g, '');
+
+  // a letra manuscrita dentro do PDF: a folha leva o tipo de letra consigo (vem do Portal, sem internet)
+  let MANB64 = null;
+  async function comLetra(svg) {
+    if (!svg.includes('CEL Manuscrita')) return svg;
+    if (MANB64 === null) { try { const r = await fetch('fonts/cel-letra-manuscrita.woff'); const b = new Uint8Array(await r.arrayBuffer()); let s2 = ''; for (let i = 0; i < b.length; i += 8192) s2 += String.fromCharCode.apply(null, b.subarray(i, i + 8192)); MANB64 = btoa(s2); } catch (e) { MANB64 = ''; } }
+    return MANB64 ? svg.replace('<defs>', `<defs><style>@font-face{font-family:'CEL Manuscrita';src:url(data:font/woff;base64,${MANB64}) format('woff')}</style>`) : svg;
+  }
 
   function vista(arg, X) {
     const { h, btn, toast, offerFile, Store } = X;
-    if (!UI.F) { const d = LSg(DRAFT, null); UI.F = d && d.ex && d.nv ? d : fichaNova(); }
+    if (!UI.F) { const d = LSg(DRAFT, null); UI.F = d && d.ex && (d.nv || d.ano) ? d : fichaNova(); if (!UI.F.ciclo) UI.F.ciclo = 'JI'; if (ehEB(UI.F) && !EBm()) UI.F = fichaNova(); }
     const F = UI.F;
     const guardaRascunho = () => { if (!LSs(DRAFT, F)) { const c = Object.assign({}, F, { foto: '' }); LSs(DRAFT, c); } };
-    const proximo = () => Store.list('fichas').reduce((m, x) => Math.max(m, +x.n || 0), 0) + 1;
+    const doc = () => (ehEB(F) ? F.doc || 'ficha' : 'ficha');
+    const proximo = () => Store.list('fichas').filter((x) => ((x.ciclo === 'EB' ? x.doc || 'ficha' : 'ficha') === doc())).reduce((m, x) => Math.max(m, +x.n || 0), 0) + 1;
     const numero = () => F.n || proximo();
-    const nx = () => F.ex.length;
     const prevBox = h('div', { class: 'stack' }), passosBox = h('div', { class: 'stack' }), listaBox = h('div'), saidaBox = h('div', { class: 'card stack' });
+    const prova = () => ehEB(F) && F.doc === 'prova';
 
-    function folha(op) { return pagina(Object.assign({}, F, { n: numero() }), op); }
+    function paginasDe(op) { return folhas(Object.assign({}, F, { n: numero() }), op); }
+    function separadores() {
+      const nd = docNome(F), sol = prova() ? 'Gabarito' : 'Soluções';
+      if (prova() && F.ver === 'AB') return [['A', `${nd} ${numero()} · A`], ['B', 'Versão B'], ['SA', `${sol} A`], ['SB', `${sol} B`]];
+      return [['A', `${nd} ${numero()}`], ['SA', sol]];
+    }
     function desenhaPrev() {
-      const tabs = h('div', { class: 'tabs', role: 'tablist' }, [['ficha', `Ficha ${numero()}`], ['sol', 'Soluções']].map(([k, tt]) =>
-        h('button', { type: 'button', role: 'tab', 'aria-selected': String(UI.tab === k), onclick: () => { UI.tab = k; desenhaPrev(); } }, tt)));
-      const f = h('div', { class: 'fch-folha', role: 'img', 'aria-label': UI.tab === 'sol' ? 'Pré-visualização da folha de soluções' : 'Pré-visualização da ficha' });
-      f.innerHTML = F.ex.length ? folha({ sol: UI.tab === 'sol' }) : '';
-      prevBox.replaceChildren(tabs, F.ex.length ? f : h('div', { class: 'empty' }, 'Escolha pelo menos um exercício.'));
+      const tabsL = separadores(); if (!tabsL.some(([k]) => k === UI.tab)) UI.tab = 'A';
+      const tabs = h('div', { class: 'tabs', role: 'tablist' }, tabsL.map(([k, tt]) => h('button', { type: 'button', role: 'tab', 'aria-selected': String(UI.tab === k), onclick: () => { UI.tab = k; desenhaPrev(); } }, tt)));
+      const sol = UI.tab[0] === 'S', ver = UI.tab.endsWith('B') ? 'B' : 'A';
+      const pgs = F.ex.length ? paginasDe({ sol, ver }) : [];
+      prevBox.replaceChildren(tabs, pgs.length ? h('div', { class: 'stack' }, pgs.map((sv, i) => { const f = h('div', { class: 'fch-folha', role: 'img', 'aria-label': (sol ? 'Pré-visualização das soluções' : 'Pré-visualização') + (pgs.length > 1 ? `, folha ${i + 1} de ${pgs.length}` : '') }); f.innerHTML = sv; return f; }),
+        pgs.length > 1 ? h('p', { class: 'tiny' }, `${pgs.length} folhas: a segunda vai no verso. Para caber numa só folha, tire um exercício.`) : null) : h('div', { class: 'empty' }, 'Escolha pelo menos um exercício.'));
     }
     const muda = () => { guardaRascunho(); desenhaPassos(); desenhaPrev(); };
 
@@ -6288,45 +6333,63 @@ const FICHAS = (() => {
       const ops = tr.op.slice();
       if (!tr.letra && !tr.num && !tr.txt && F.foto && !ops.includes('foto')) ops.push('foto');
       const rot = (v) => tr.txt ? tr.txt[v] : (tr.letra || tr.num) ? String(v) : v === 'foto' ? 'A minha fotografia' : nome(v);
-      const lista = tr.letra || tr.num || tr.txt ? ops : ops.slice().sort((a, b) => (a === 'foto') - (b === 'foto') || rot(a).localeCompare(rot(b), 'pt'));
-      if (!lista.includes(tr.v)) lista.unshift(tr.v);
-      return h('select', { 'aria-label': tr.rot, onchange: (e) => { tr.set(tr.num ? +e.target.value : e.target.value); muda(); } }, lista.map((v) => h('option', { value: String(v), selected: String(v) === String(tr.v) }, rot(v))));
+      const lista2 = tr.letra || tr.num || tr.txt ? ops : ops.slice().sort((a, b) => (a === 'foto') - (b === 'foto') || rot(a).localeCompare(rot(b), 'pt'));
+      if (!lista2.includes(tr.v)) lista2.unshift(tr.v);
+      return h('select', { 'aria-label': tr.rot, onchange: (e) => { tr.set(tr.num ? +e.target.value : e.target.value); muda(); } }, lista2.map((v) => h('option', { value: String(v), selected: String(v) === String(tr.v) }, rot(v))));
     }
+    const regenera = () => { F.ex = F.ex.filter((x) => lista(F).some((q) => q.id === x.t)).map((x) => exNovo(F, x.t, F.ex.length, x.seed)); };
 
     function desenhaPassos() {
-      const L = disponiveis(F.nv), max = POR_FOLHA[F.nv];
-      const nvSel = h('select', { id: 'fch-nv', onchange: (e) => { const nv = +e.target.value; F.nv = nv; F.ex = F.ex.filter((x) => TIPO[x.t].niv.includes(nv)).slice(0, POR_FOLHA[nv]);
-        if (!F.ex.length) F.ex = fichaNova(nv, F.area).ex; F.ex = F.ex.map((x) => novoEx(x.t, nv, F.ex.length, x.seed)); muda(); } },
-        [1, 2, 3].map((n) => h('option', { value: String(n), selected: F.nv === n }, `${NIV[n]} (${n + 2} anos)`)));
-      const arSel = h('select', { id: 'fch-area', onchange: (e) => { F.area = e.target.value; const D2 = disponiveis(F.nv, F.area); F.ex = D2.slice(0, Math.min(max, D2.length)).map((q) => novoEx(q.id, F.nv, Math.min(max, D2.length))); muda(); } },
-        AREAS.map(([k, tt]) => h('option', { value: k, selected: F.area === k }, tt)));
-      const p1 = h('div', { class: 'card stack' }, h('h3', null, '1. Nível e área'),
-        h('div', { class: 'fields' }, h('div', { class: 'field' }, h('label', { for: 'fch-nv' }, 'Nível'), nvSel), h('div', { class: 'field' }, h('label', { for: 'fch-area' }, 'Área'), arSel)),
-        h('p', { class: 'tiny' }, `No ${NIV[F.nv]} cabe${max > 1 ? 'm' : ''} ${max} exercício${max > 1 ? 's' : ''} por folha. A dificuldade ajusta-se sozinha ao nível.`));
-      const daArea = L.filter((q) => q.area === F.area), outras = L.filter((q) => q.area !== F.area);
-      const marca = (q) => { const i = F.ex.findIndex((x) => x.t === q.id);
+      const max = maxEx(F), E = EBm();
+      const nivelV = ehEB(F) ? 'EB' + F.ano : 'JI' + F.nv;
+      const nvSel = h('select', { id: 'fch-nv', onchange: (e) => { const v = e.target.value;
+          if (v.startsWith('EB')) { const o = fichaEB(+v.slice(2), ehEB(F) ? F.disc : 'mat', ehEB(F) ? F.tri : 1, ehEB(F) ? F.doc : 'ficha'); Object.keys(F).forEach((k) => delete F[k]); Object.assign(F, o); }
+          else { const nv = +v.slice(2); if (ehEB(F)) { const o = fichaNova(nv); Object.keys(F).forEach((k) => delete F[k]); Object.assign(F, o); } else { F.nv = nv; F.ex = F.ex.filter((x) => TIPO[x.t].niv.includes(nv)).slice(0, POR_FOLHA[nv]); if (!F.ex.length) F.ex = fichaNova(nv, F.area).ex; F.ex = F.ex.map((x) => novoEx(x.t, nv, F.ex.length, x.seed)); } }
+          muda(); } },
+        h('optgroup', { label: 'Jardim de Infância' }, [1, 2, 3].map((n) => h('option', { value: 'JI' + n, selected: nivelV === 'JI' + n }, `${NIV[n]} (${n + 2} anos)`))),
+        E ? h('optgroup', { label: 'Ensino Básico' }, [1].map((a) => h('option', { value: 'EB' + a, selected: nivelV === 'EB' + a }, E.ANO[a]))) : null);
+      let campos;
+      if (ehEB(F)) {
+        const novoEB = (o) => { const n = fichaEB(o.ano ?? F.ano, o.disc ?? F.disc, o.tri ?? F.tri, o.doc ?? F.doc); n.ver = F.ver; if (F.doc === n.doc) n.dur = F.dur; n.foto = F.foto; Object.keys(F).forEach((k) => delete F[k]); Object.assign(F, n); muda(); };
+        campos = [h('div', { class: 'field' }, h('label', { for: 'fch-disc' }, 'Disciplina'), h('select', { id: 'fch-disc', onchange: (e) => novoEB({ disc: e.target.value }) }, Object.entries(E.DISC).map(([k, tt]) => h('option', { value: k, selected: F.disc === k }, tt)))),
+          h('div', { class: 'field' }, h('label', { for: 'fch-tri' }, 'Trimestre'), h('select', { id: 'fch-tri', onchange: (e) => novoEB({ tri: +e.target.value }) }, [1, 2, 3].map((n) => h('option', { value: String(n), selected: F.tri === n }, `${n}.º trimestre`)))),
+          h('div', { class: 'field' }, h('label', { for: 'fch-doc' }, 'Documento'), h('select', { id: 'fch-doc', onchange: (e) => novoEB({ doc: e.target.value }) }, [['ficha', 'Ficha de trabalho'], ['prova', 'Prova']].map(([k, tt]) => h('option', { value: k, selected: (F.doc || 'ficha') === k }, tt))))];
+      } else campos = [h('div', { class: 'field' }, h('label', { for: 'fch-area' }, 'Área'), h('select', { id: 'fch-area', onchange: (e) => { F.area = e.target.value; const D2 = disponiveis(F.nv, F.area); F.ex = D2.slice(0, Math.min(max, D2.length)).map((q) => novoEx(q.id, F.nv, Math.min(max, D2.length))); muda(); } },
+        AREAS.map(([k, tt]) => h('option', { value: k, selected: F.area === k }, tt))))];
+      const p1 = h('div', { class: 'card stack' }, h('h3', null, ehEB(F) ? '1. Ano, disciplina e trimestre' : '1. Nível e área'),
+        h('div', { class: 'fields' }, h('div', { class: 'field' }, h('label', { for: 'fch-nv' }, 'Nível ou ano'), nvSel), ...campos),
+        prova() ? h('div', { class: 'fields' },
+          h('div', { class: 'field' }, h('label', { for: 'fch-ver' }, 'Versões'), h('select', { id: 'fch-ver', onchange: (e) => { F.ver = e.target.value; muda(); } }, [['A', 'Só uma versão'], ['AB', 'Versões A e B']].map(([k, tt]) => h('option', { value: k, selected: (F.ver || 'A') === k }, tt)))),
+          (() => { const d = h('input', { id: 'fch-dur', type: 'number', min: '10', max: '180', value: F.dur || '' }); d.addEventListener('change', () => { F.dur = d.value ? +d.value : ''; muda(); }); return h('div', { class: 'field' }, h('label', { for: 'fch-dur' }, 'Duração (minutos)'), d); })()) : null,
+        h('p', { class: 'tiny' }, ehEB(F) ? `Contam como dadas as unidades do manual até ao ${F.tri}.º trimestre (${E.DISC[F.disc]}: unidades 1 a ${E.maxU(F.disc, F.tri)}). Até ${max} exercícios; quando não cabem numa folha, seguem no verso.` : `No ${NIV[F.nv]} cabe${max > 1 ? 'm' : ''} ${max} exercício${max > 1 ? 's' : ''} por folha. A dificuldade ajusta-se sozinha ao nível.`));
+      const L = lista(F), daArea = ehEB(F) ? L : L.filter((q) => q.area === F.area), outras = ehEB(F) ? [] : L.filter((q) => q.area !== F.area);
+      const marca2 = (q) => { const i = F.ex.findIndex((x) => x.t === q.id);
         return h('label', { class: 'check fch-op' }, h('input', { type: 'checkbox', checked: i >= 0, onchange: (e) => {
-          if (e.target.checked) { if (F.ex.length >= max) { e.target.checked = false; toast(`No ${NIV[F.nv]} cabe${max > 1 ? 'm' : ''} só ${max} exercício${max > 1 ? 's' : ''} por folha. Tire um primeiro.`); return; } F.ex.push({ t: q.id, seed: 0, p: null }); }
+          if (e.target.checked) { if (F.ex.length >= max) { e.target.checked = false; toast(ehEB(F) ? `Cabem até ${max} exercícios. Tire um primeiro.` : `No ${NIV[F.nv]} cabe${max > 1 ? 'm' : ''} só ${max} exercício${max > 1 ? 's' : ''} por folha. Tire um primeiro.`); return; } F.ex.push(exNovo(F, q.id, F.ex.length + 1)); }
           else F.ex = F.ex.filter((x) => x.t !== q.id);
-          F.ex = F.ex.map((x) => novoEx(x.t, F.nv, F.ex.length, x.seed || undefined)); muda(); } }),
-          h('span', null, q.nome), i >= 0 && F.ex.length > 1 ? h('span', { class: 'chip' }, `n.º ${i + 1}`) : null); };
+          if (!ehEB(F)) F.ex = F.ex.map((x) => novoEx(x.t, F.nv, F.ex.length, x.seed || undefined)); muda(); } }),
+          h('span', null, q.nome + (ehEB(F) ? ` (u. ${q.u})` : '')), i >= 0 && F.ex.length > 1 ? h('span', { class: 'chip' }, `n.º ${i + 1}`) : null); };
       const p2 = h('div', { class: 'card stack' }, h('h3', null, '2. Exercícios'),
-        h('div', { class: 'fch-ops' }, daArea.map(marca)),
-        outras.length ? h('details', null, h('summary', { class: 'tiny' }, 'Juntar um exercício de outra área'), h('div', { class: 'fch-ops' }, outras.map(marca))) : null,
-        F.ex.length === 2 ? h('div', { class: 'row' }, btn('Trocar a ordem', { sm: true, kind: 'ghost', icon: 'down', onclick: () => { F.ex.reverse(); muda(); } })) : null);
+        h('div', { class: 'fch-ops' }, daArea.map(marca2)),
+        outras.length ? h('details', null, h('summary', { class: 'tiny' }, 'Juntar um exercício de outra área'), h('div', { class: 'fch-ops' }, outras.map(marca2))) : null,
+        F.ex.length >= 2 ? h('div', { class: 'row' }, btn(F.ex.length === 2 ? 'Trocar a ordem' : 'Passar o último para primeiro', { sm: true, kind: 'ghost', icon: 'down', onclick: () => { F.ex.unshift(F.ex.pop()); muda(); } })) : null);
+      const cots = prova() ? EBm().cotacoes(F) : null, ctx = ehEB(F) ? EBm().ctx(F) : null;
       const p3 = h('div', { class: 'card stack' }, h('h3', null, '3. Ajustar'),
-        F.ex.length ? F.ex.map((e, i) => { const q = TIPO[e.t], tr = q.troca ? q.troca(e.p, F.nv) : [];
-          return h('div', { class: 'fch-aj' }, h('div', { class: 'row' }, h('b', { class: 'grow' }, `${i + 1}. ${q.nome}`),
-            btn('Gerar outra', { sm: true, icon: 'refresh', onclick: () => { F.ex[i] = novoEx(e.t, F.nv, F.ex.length); muda(); } })),
-            tr.length ? h('div', { class: 'fch-tr' }, tr.map((x) => h('label', null, h('span', null, x.rot), opcoes(x)))) : h('p', { class: 'tiny' }, q.livre ? 'Exercício livre: não há desenhos para trocar.' : 'Use «Gerar outra» para mudar os desenhos.')); })
-          : h('p', { class: 'tiny' }, 'Escolha os exercícios no passo 2.'));
+        F.ex.length ? F.ex.map((e, i) => { const q = TIPO[e.t]; if (!q) return null; const tr = q.troca ? q.troca(e.p, F.nv, ctx) : [];
+          let cot = null; if (prova()) { const c = h('input', { type: 'text', inputmode: 'decimal', class: 'fch-cot', value: e.cot ?? '', placeholder: String(cots[i]).replace('.', ','), 'aria-label': `Cotação do exercício ${i + 1}`, title: 'Valores deste exercício. Vazio = repartido sozinho.' });
+            c.addEventListener('change', () => { const v = c.value.trim().replace(',', '.'); if (v === '' || !isFinite(+v)) delete e.cot; else e.cot = +v; muda(); }); cot = h('label', { class: 'fch-cotl' }, c, 'valores'); }
+          return h('div', { class: 'fch-aj' }, h('div', { class: 'row' }, h('b', { class: 'grow' }, `${i + 1}. ${q.nome}`), cot,
+            btn('Gerar outra', { sm: true, icon: 'refresh', onclick: () => { const c0 = e.cot; F.ex[i] = exNovo(F, e.t, F.ex.length); if (c0 != null) F.ex[i].cot = c0; muda(); } })),
+            tr.length ? h('div', { class: 'fch-tr' }, tr.map((x) => h('label', null, h('span', null, x.rot), opcoes(x)))) : h('p', { class: 'tiny' }, q.livre ? 'Exercício livre: não há desenhos para trocar.' : 'Use «Gerar outra» para mudar os números, as palavras ou os desenhos.')); })
+          : h('p', { class: 'tiny' }, 'Escolha os exercícios no passo 2.'),
+        prova() ? h('p', { class: 'tiny' }, `Total: ${String(cots.reduce((a, b) => a + b, 0)).replace('.', ',')} valores. Escreva um valor para fixar a cotação de um exercício; os outros repartem o resto.`) : null);
       const fin = h('input', { type: 'file', accept: 'image/*', id: 'fch-foto', class: 'fch-file', onchange: async (e) => { const f = e.target.files && e.target.files[0]; if (!f) return;
         try { F.foto = await lerFoto(f); muda(); toast('Fotografia pronta. Escolha «A minha fotografia» no lugar de um desenho (passo 3).'); } catch (er) { toast('Não foi possível abrir esta imagem.'); } } });
       const usada = F.ex.some((e) => JSON.stringify(e.p || {}).includes('"foto"'));
       const p4 = h('div', { class: 'card stack' }, h('h3', null, '4. Fotografia (opcional)'),
         h('p', { class: 'tiny' }, 'Para o que não houver nos desenhos: a escola, uma planta da horta, um objeto da sala. A fotografia sai a preto e branco e fica só neste aparelho, dentro da ficha.'),
         F.foto ? h('div', { class: 'row' }, h('img', { src: F.foto, alt: 'A fotografia escolhida', class: 'fch-mini' }), h('span', { class: 'tiny grow' }, usada ? 'Está a ser usada na ficha.' : 'Escolha «A minha fotografia» no passo 3.'),
-          btn('Tirar', { sm: true, kind: 'ghost', icon: 'trash', onclick: () => { F.foto = ''; F.ex.forEach((e) => { const q = TIPO[e.t]; (q.troca ? q.troca(e.p, F.nv) : []).forEach((x) => { if (x.v === 'foto') x.set(x.op[0]); }); }); muda(); } }))
+          btn('Tirar', { sm: true, kind: 'ghost', icon: 'trash', onclick: () => { F.foto = ''; F.ex.forEach((e) => { const q = TIPO[e.t]; (q && q.troca ? q.troca(e.p, F.nv, ctx) : []).forEach((x) => { if (x.v === 'foto') x.set(x.op[0]); }); }); muda(); } }))
           : h('label', { class: 'btn', for: 'fch-foto' }, X.icon('ul'), 'Escolher ou tirar uma fotografia'), fin);
       passosBox.replaceChildren(p1, p2, p3, p4, saidaBox);
       desenhaSaida();
@@ -6335,16 +6398,16 @@ const FICHAS = (() => {
     async function nomesParaImprimir() {
       if (UI.para === 'uma') return [''];
       if (UI.para === 'nomes') return String(LSg(NOMES, '') || '').split('\n').map((x) => x.trim()).filter(Boolean);
-      const t = (UI.turmas || []).find((x) => x.cod === UI.tur); return t ? t.nomes : [];
+      const t2 = (UI.turmas || []).find((x) => x.cod === UI.tur); return t2 ? t2.nomes : [];
     }
     function desenhaSaida() {
-      const temNome = F.ex.some((e) => e.t === 'nome');
+      const temNome = F.ex.some((e) => e.t === 'nome' || e.t === 'l1_nome'), nd = docNome(F).toLowerCase(), sol = prova() ? 'o gabarito' : 'as soluções';
       const radio = (v, tt) => h('label', { class: 'check' }, h('input', { type: 'radio', name: 'fch-para', value: v, checked: UI.para === v, onchange: () => { UI.para = v; desenhaSaida(); if (v === 'turma' && UI.turmas === null) carregaTurmas(); } }), tt);
       let extra = null;
       if (UI.para === 'turma') {
         if (UI.turmas === null) extra = h('p', { class: 'tiny' }, 'A procurar a lista da turma neste aparelho…');
         else if (!UI.turmas.length) extra = h('p', { class: 'tiny' }, 'Este aparelho ainda não tem a lista da turma. Abra uma vez a Gestão escolar (Diário) com a sua conta e internet, ou escreva os nomes.');
-        else { if (!UI.turmas.some((x) => x.cod === UI.tur)) UI.tur = UI.turmas[0].cod;
+        else { if (!UI.turmas.some((x) => x.cod === UI.tur)) UI.tur = (UI.turmas.find((x) => ehEB(F) ? !x.jardim : x.jardim) || UI.turmas[0]).cod;
           extra = h('div', { class: 'field' }, h('label', { for: 'fch-tur' }, 'Turma'), h('select', { id: 'fch-tur', onchange: (e) => { UI.tur = e.target.value; desenhaSaida(); } },
             UI.turmas.map((x) => h('option', { value: x.cod, selected: x.cod === UI.tur }, `${x.rot} (${x.nomes.length})`)))); }
       } else if (UI.para === 'nomes') {
@@ -6356,27 +6419,33 @@ const FICHAS = (() => {
       saidaBox.replaceChildren(h('h3', null, '5. Imprimir e guardar'),
         h('div', { class: 'stack', style: 'gap:6px' }, radio('uma', 'Uma folha, sem nome'), radio('turma', 'Toda a turma (uma folha com o nome de cada criança)'), radio('nomes', 'Escrever os nomes')),
         temNome && UI.para === 'uma' ? h('p', { class: 'tiny' }, '«Escreve o teu nome» precisa do nome de cada criança: escolha «Toda a turma» ou «Escrever os nomes».') : null,
+        prova() && F.ver === 'AB' ? h('p', { class: 'tiny' }, 'Com as versões A e B, as folhas alternam: A, B, A, B… (sem nomes, sai uma de cada).') : null,
         extra,
-        h('div', { class: 'row' }, X.inViewer ? null : acao('Imprimir a ficha', 'print', () => sai('ficha', 'imprimir')), X.inViewer ? null : acao('Imprimir as soluções', 'print', () => sai('sol', 'imprimir'))),
-        h('div', { class: 'row' }, acao('PDF da ficha', 'dl', () => sai('ficha', 'pdf')), acao('PDF das soluções', 'dl', () => sai('sol', 'pdf'))),
-        h('p', { class: 'tiny' }, 'Ao imprimir ou fazer o PDF, a ficha fica guardada em «As minhas fichas» com o seu número. Imprima em A4, a 100%.'));
+        h('div', { class: 'row' }, X.inViewer ? null : acao(`Imprimir a ${nd}`, 'print', () => sai(false, 'imprimir')), X.inViewer ? null : acao(`Imprimir ${sol}`, 'print', () => sai(true, 'imprimir'))),
+        h('div', { class: 'row' }, acao(`PDF da ${nd}`, 'dl', () => sai(false, 'pdf')), acao(prova() ? 'PDF do gabarito' : 'PDF das soluções', 'dl', () => sai(true, 'pdf'))),
+        h('p', { class: 'tiny' }, `Ao imprimir ou fazer o PDF, a ${nd} fica guardada em «As minhas fichas» com o seu número. Imprima em A4, a 100%${ehEB(F) ? '; se houver verso, imprima frente e verso' : ''}.`));
     }
     async function carregaTurmas() { UI.turmas = await turmasLocais(); desenhaSaida(); }
 
     async function guarda(silencio) {
-      if (!F.ex.length) { toast('A ficha não tem exercícios.'); return false; }
+      if (!F.ex.length) { toast('Não há exercícios.'); return false; }
       if (!F.n) F.n = proximo();
-      try { const o = await Store.save('fichas', Object.assign({}, F, { titulo: titulo(F) })); F.id = o.id; guardaRascunho(); if (!silencio) toast(`Ficha ${F.n} guardada em «As minhas fichas».`); desenhaPrev(); return true; }
+      try { const o = await Store.save('fichas', Object.assign({}, F, { titulo: titulo(F) })); F.id = o.id; guardaRascunho(); if (!silencio) toast(`${docNome(F)} ${F.n} guardada em «As minhas fichas».`); desenhaPrev(); desenhaLista(); return true; }
       catch (e) { return false; }
     }
-    async function sai(qual, modo) {
-      if (!F.ex.length) { toast('A ficha não tem exercícios.'); return; }
-      let nomes = qual === 'sol' ? [''] : await nomesParaImprimir();
+    async function sai(sol, modo) {
+      if (!F.ex.length) { toast('Não há exercícios.'); return; }
+      const nomes = sol ? [''] : await nomesParaImprimir();
       if (!nomes.length) { toast(UI.para === 'nomes' ? 'Escreva os nomes, um por linha.' : 'Não há nomes desta turma neste aparelho.'); return; }
       if (!(await guarda(true))) return;
-      const svgs = nomes.map((nm) => folha({ sol: qual === 'sol', nome: nm }));
-      const base = `Ficha_${F.n}_${NIV[F.nv].replace(/\s+/g, '_').replace('í', 'i')}${qual === 'sol' ? '_solucoes' : ''}`;
-      if (modo === 'pdf') { toast(svgs.length > 1 ? `A preparar o PDF com ${svgs.length} folhas…` : 'A preparar o PDF…'); try { const b = await pdfFolhas(svgs); offerFile(base + '.pdf', b, 'application/pdf'); } catch (e) { toast('Não foi possível preparar o PDF.'); } return; }
+      const AB = prova() && F.ver === 'AB';
+      let svgs = [];
+      if (sol) svgs = AB ? paginasDe({ sol: true, ver: 'A' }).concat(paginasDe({ sol: true, ver: 'B' })) : paginasDe({ sol: true });
+      else if (AB && nomes.length === 1 && !nomes[0]) svgs = paginasDe({ ver: 'A' }).concat(paginasDe({ ver: 'B' }));
+      else nomes.forEach((nm, i) => { svgs = svgs.concat(paginasDe({ nome: nm, ver: AB && i % 2 ? 'B' : 'A' })); });
+      const parte = ehEB(F) ? `${EBm().DISC[F.disc]}_${F.ano}ano` : NIV[F.nv];
+      const base = slug(`${docNome(F)}_${F.n}_${parte}${sol ? (prova() ? '_gabarito' : '_solucoes') : ''}`);
+      if (modo === 'pdf') { toast(svgs.length > 1 ? `A preparar o PDF com ${svgs.length} folhas…` : 'A preparar o PDF…'); try { const ss = []; for (const sv of svgs) ss.push(await comLetra(sv)); const b = await pdfFolhas(ss); offerFile(base + '.pdf', b, 'application/pdf'); } catch (e) { toast('Não foi possível preparar o PDF.'); } return; }
       imprime(svgs);
     }
     function imprime(svgs) {
@@ -6384,7 +6453,7 @@ const FICHAS = (() => {
       const css = document.createElement('style'); css.id = 'fch-pagina';
       css.textContent = '@media print { @page { size: 210mm 297mm; margin: 0 } #print-root .fch-pg { width: 210mm; height: 296.8mm; break-after: page; overflow: hidden } #print-root .fch-pg svg { width: 100%; height: 100% } }';
       document.getElementById('fch-pagina')?.remove(); document.head.append(css);
-      const box = h('div'); svgs.forEach((s) => { const d = h('div', { class: 'fch-pg' }); d.innerHTML = s; box.append(d); });
+      const box = h('div'); svgs.forEach((s2) => { const d = h('div', { class: 'fch-pg' }); d.innerHTML = s2; box.append(d); });
       pr.replaceChildren(box);
       const fim = () => { pr.replaceChildren(); css.remove(); window.removeEventListener('afterprint', fim); };
       window.addEventListener('afterprint', fim);
@@ -6392,34 +6461,376 @@ const FICHAS = (() => {
     }
 
     function desenhaLista() {
-      const items = Store.list('fichas').sort((a, b) => (+b.n || 0) - (+a.n || 0)); botLista.lastChild.textContent = `As minhas fichas (${items.length})`;
+      const items = Store.list('fichas').sort((a, b) => String(b.atualizado || '').localeCompare(String(a.atualizado || ''))); botLista.lastChild.textContent = `As minhas fichas (${items.length})`;
       if (!UI.lista) { listaBox.replaceChildren(); return; }
       listaBox.replaceChildren(h('div', { class: 'card stack' }, h('h3', null, 'As minhas fichas'),
-        items.length ? h('div', { class: 'items' }, items.map((it) => { const del = h('span');
-          return h('div', { class: 'item' }, h('div', { class: 'grow' }, h('div', { class: 't' }, `Ficha ${it.n} · ${it.titulo || ''}`),
-            h('div', { class: 'tiny' }, [NIV[it.nv], AREA[it.area], 'guardada ' + fdata(it.atualizado)].filter(Boolean).join(' · '))),
-            btn('Abrir', { sm: true, icon: 'open', onclick: () => { UI.F = JSON.parse(JSON.stringify(it)); UI.lista = false; LSs(DRAFT, UI.F); X.go('fichas'); } }),
-            btn('Fazer uma cópia', { sm: true, icon: 'dup', kind: 'ghost', onclick: () => { const c = JSON.parse(JSON.stringify(it)); delete c.id; delete c.criado; delete c.atualizado; c.n = null; UI.F = c; UI.lista = false; LSs(DRAFT, c); X.go('fichas'); toast('Cópia criada. Ganha o número seguinte quando a guardar.'); } }),
-            del, btn('Eliminar', { sm: true, icon: 'trash', kind: 'ghost', onclick: () => del.replaceChildren(h('span', { class: 'confirm' }, `Eliminar a Ficha ${it.n}?`,
+        items.length ? h('div', { class: 'items' }, items.map((it) => { const del = h('span'), nd = it.ciclo === 'EB' && it.doc === 'prova' ? 'Prova' : 'Ficha';
+          return h('div', { class: 'item' }, h('div', { class: 'grow' }, h('div', { class: 't' }, `${nd} ${it.n} · ${it.titulo || ''}`),
+            h('div', { class: 'tiny' }, [it.ciclo === 'EB' ? (EBm() ? EBm().ANO[it.ano] : '') : NIV[it.nv], it.ciclo === 'EB' ? '' : AREA[it.area], 'guardada ' + fdata(it.atualizado)].filter(Boolean).join(' · '))),
+            btn('Abrir', { sm: true, icon: 'open', onclick: () => { UI.F = JSON.parse(JSON.stringify(it)); UI.lista = false; UI.tab = 'A'; LSs(DRAFT, UI.F); X.go('fichas'); } }),
+            btn('Fazer uma cópia', { sm: true, icon: 'dup', kind: 'ghost', onclick: () => { const c = JSON.parse(JSON.stringify(it)); delete c.id; delete c.criado; delete c.atualizado; c.n = null; UI.F = c; UI.lista = false; UI.tab = 'A'; LSs(DRAFT, c); X.go('fichas'); toast('Cópia criada. Ganha o número seguinte quando a guardar.'); } }),
+            del, btn('Eliminar', { sm: true, icon: 'trash', kind: 'ghost', onclick: () => del.replaceChildren(h('span', { class: 'confirm' }, `Eliminar: ${nd} ${it.n}?`,
               btn('Sim, eliminar', { sm: true, kind: 'warn', onclick: async () => { await Store.remove('fichas', it.id); if (F.id === it.id) { F.id = null; F.n = null; guardaRascunho(); desenhaPrev(); } } }),
               btn('Cancelar', { sm: true, onclick: () => del.replaceChildren() }))) }));
         })) : h('div', { class: 'empty' }, 'Ainda não há fichas guardadas. Faça uma ficha e carregue em «Guardar ficha».')));
     }
     const botLista = btn('As minhas fichas (0)', { icon: 'open', onclick: () => { UI.lista = !UI.lista; desenhaLista(); } });
     const barra = h('div', { class: 'row' },
-      btn('Guardar ficha', { kind: 'primary', icon: 'save', onclick: () => guarda(false) }),
+      btn('Guardar', { kind: 'primary', icon: 'save', onclick: () => guarda(false) }),
       h('span', { class: 'fch-ver' }, btn('Ver a folha', { kind: 'ghost', icon: 'eye', onclick: () => prevBox.scrollIntoView({ behavior: 'smooth', block: 'start' }) })), h('span', { class: 'grow' }), botLista,
-      btn('Nova ficha', { icon: 'plus', kind: 'ghost', onclick: () => { UI.F = fichaNova(F.nv, F.area); UI.tab = 'ficha'; LSs(DRAFT, UI.F); X.go('fichas'); } }));
+      btn('Nova', { icon: 'plus', kind: 'ghost', onclick: () => { UI.F = ehEB(F) ? fichaEB(F.ano, F.disc, F.tri, F.doc) : fichaNova(F.nv, F.area); UI.tab = 'A'; LSs(DRAFT, UI.F); X.go('fichas'); } }));
     desenhaPassos(); desenhaPrev(); desenhaLista();
     const el = h('div', { class: 'view' },
-      h('div', { class: 'head' }, h('div', null, h('div', { class: 'eyebrow' }, 'Jardim de Infância'), h('h1', null, 'Fichas com desenhos')),
-        h('p', null, 'Fichas de trabalho a preto e branco, numa folha A4: escolha o nível e a área, os exercícios e os desenhos. A folha de soluções sai à parte, só para o professor. Funciona sem internet.')),
+      h('div', { class: 'head' }, h('div', null, h('div', { class: 'eyebrow' }, 'Jardim de Infância e 1.º ano'), h('h1', null, 'Fichas com desenhos')),
+        h('p', null, 'Fichas de trabalho e provas a preto e branco, em folhas A4: escolha o nível ou o ano, os exercícios e os desenhos. As soluções (o gabarito, nas provas) saem à parte, só para o professor. Funciona sem internet.')),
       barra, listaBox,
       h('div', { class: 'split doc' }, passosBox, h('div', { style: 'position:sticky;top:calc(env(safe-area-inset-top,0px) + 78px)' }, prevBox)));
     return { el, cleanup: Store.on((k) => { if (k === 'fichas' || k === '*') { desenhaLista(); desenhaPrev(); } }) };
   }
 
-  return { vista, T, TIPO, AREAS, AREA, NIV, POR_FOLHA, OBJ, LETRAS, nome, pagina, novoEx, disponiveis, rnd, pdfFolhas, lerFoto, turmasLocais, primeiroNome, fig, G0 };
+  return { vista, folhas, EB, regista, H: { fig, t, caixa, roda, marca, ponto, linha, palavra, largura, pauta, colunas, grelha, rnd, mix, pick, take, nome, som, esc, norm, ICON, cabecalho, rodape, FONT, W, Hh: H, PONT, CHEIO, legenda, art, o_, do_, ao_, primeiroNome }, T, TIPO, AREAS, AREA, NIV, POR_FOLHA, OBJ, LETRAS, nome, pagina, novoEx, disponiveis, rnd, pdfFolhas, lerFoto, turmasLocais, primeiroNome, fig, G0 };
+})();
+</script>
+<script>/* Fichas com desenhos — Ensino Básico (1.23.0): Matemática e Língua Portuguesa do 1.º ano, ligadas às unidades dos manuais do CEL.
+   Ficha de trabalho ou Prova (cotação de 20 valores, classificação e conceito, versões A e B), gabarito à parte;
+   cada documento procura caber numa folha A4 e passa ao verso quando for preciso.
+   Letra de imprensa para ler; letra manuscrita (Playwrite PT, guardada no Portal) para traçar e copiar. */
+const FICHAS_EB = (() => {
+  const F = FICHAS, { fig, t, caixa, roda, marca, ponto, linha, palavra, largura, rnd, mix, pick, take, nome, esc, norm, ICON, FONT } = F.H;
+  const MAN = "'CEL Manuscrita', 'Playwrite PT', cursive";
+  const DISC = { mat: 'Matemática', lp: 'Língua Portuguesa' };
+  const ANO = { 1: '1.º ano', 2: '2.º ano', 3: '3.º ano', 4: '4.º ano' };
+  // unidades dos manuais repartidas pelos trimestres, pela ordem do manual (decisão do Coordenador)
+  const UNI = { mat: { 1: [1, 5], 2: [6, 10], 3: [11, 14] }, lp: { 1: [1, 6], 2: [7, 11], 3: [12, 16] } };
+  const maxU = (d, tri) => UNI[d][tri][1];
+  // nomes comuns na Guiné-Bissau, sempre de pessoas inventadas
+  const NOMES = ['Aua', 'Braima', 'Djenabu', 'Malam', 'Fatumata', 'Iaia', 'Mamadu', 'Sadjo', 'Binta', 'Lassana', 'Adama', 'Cadi', 'Umaro', 'Mariama', 'Nhima', 'Quintino', 'Domingas', 'Seco'];
+  const FEMN = new Set(['Aua', 'Djenabu', 'Fatumata', 'Binta', 'Adama', 'Cadi', 'Mariama', 'Nhima', 'Domingas']);
+  const oa = (n) => (FEMN.has(n) ? 'a' : 'o');
+
+  /* ---------- peças */
+  const M = (x, y, s, sz, fill = '#111', a = 'start') => `<text x="${x.toFixed(1)}" y="${y.toFixed(1)}" font-family="${MAN}" font-size="${sz}" font-weight="400" fill="${fill}" text-anchor="${a}">${esc(s)}</text>`;
+  const pautaM = (x1, x2, base, xh) => `<line x1="${x1}" x2="${x2}" y1="${(base - xh * 2.1).toFixed(1)}" y2="${(base - xh * 2.1).toFixed(1)}" stroke="#ccc" stroke-width="1.2"/><line x1="${x1}" x2="${x2}" y1="${(base - xh).toFixed(1)}" y2="${(base - xh).toFixed(1)}" stroke="#bbb" stroke-width="1.2" stroke-dasharray="6 6"/><line x1="${x1}" x2="${x2}" y1="${base.toFixed(1)}" y2="${base.toFixed(1)}" stroke="#555" stroke-width="1.5"/>`;
+  const qd = (x, y, s = 44) => `<rect x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${s}" height="${s}" rx="6" fill="#fff" stroke="#111" stroke-width="2.5"/>`;
+  const rs = (x, y, v, s = 44) => t(x + s / 2, y + s * 0.72, String(v), (s * 0.6).toFixed(0), { w: 800, fill: '#555' });
+  const ln = (x1, x2, y) => `<line x1="${x1.toFixed(1)}" y1="${y.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y.toFixed(1)}" stroke="#111" stroke-width="2"/>`;
+  const moeda = (cx, cy, v, r = 26) => `<circle cx="${cx}" cy="${cy}" r="${r}" fill="#fff" stroke="#111" stroke-width="3"/><circle cx="${cx}" cy="${cy}" r="${r - 6}" fill="none" stroke="#111" stroke-width="1.2"/>` + t(cx, cy + r * 0.2, String(v), (r * (String(v).length > 2 ? 0.55 : 0.7)).toFixed(1), { w: 800 }) + t(cx, cy + r * 0.62, 'FCFA', (r * 0.26).toFixed(1), { w: 600 });
+  const nota = (x, y, v, w = 104, h = 56) => `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="6" fill="#fff" stroke="#111" stroke-width="2.5"/><rect x="${x + 6}" y="${y + 6}" width="${w - 12}" height="${h - 12}" rx="4" fill="none" stroke="#111" stroke-width="1"/>` + t(x + w / 2, y + h / 2 + 4, fmtN(v), 18, { w: 800 }) + t(x + w / 2, y + h - 10, 'FCFA', 9, { w: 600 });
+  const fmtN = (v) => String(v).replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+  function grupo(f, n, x, y, w, h, cx, max = 46) {   // n figuras arrumadas numa caixa
+    let best = { s: 0 }; for (let cols = 1; cols <= n; cols++) { const rows = Math.ceil(n / cols), s = Math.min(w / cols * 0.84, h / rows * 0.84, max); if (s > best.s) best = { s, cols, rows }; }
+    let o = ''; for (let k = 0; k < n; k++) { const r = Math.floor(k / best.cols), c = k % best.cols, nl = Math.min(best.cols, n - r * best.cols), off = (best.cols - nl) * (w / best.cols) / 2;
+      o += fig(f, x + off + (w / best.cols) * (c + 0.5), y + (h - best.rows * (h / best.rows)) / 2 + (h / best.rows) * (r + 0.5), best.s, cx); }
+    return { svg: o, s: best.s, cols: best.cols };
+  }
+  const cartoes = (B, n, h, fn) => { const w = (B.w - 10 * (n + 1)) / n; let o = ''; for (let i = 0; i < n; i++) { const x = B.x + 10 + i * (w + 10); o += `<rect x="${x.toFixed(1)}" y="${B.y + 10}" width="${w.toFixed(1)}" height="${h}" rx="10" fill="none" stroke="#111" stroke-width="1.5"/>` + fn(x, B.y + 10, w, h, i); } return o; };
+  const dist = (r, n, lo, hi) => { const a = []; let k = 0; while (a.length < n && k++ < 200) { const v = lo + Math.floor(r() * (hi - lo + 1)); if (!a.includes(v) || hi - lo + 1 < n) a.push(v); } return a; };
+  const OBJC = F.OBJ.filter((k) => !FICHAS_DES.D[k].t.includes('formas'));
+
+  /* ---------- Língua Portuguesa: letras estudadas por unidade e palavras com desenho */
+  const LETU = { 1: 'aeiou', 3: 'ptld', 4: 'mnbv', 5: 'cqg', 6: 'fjzs', 7: 'r', 8: 'xhkwy' };
+  const letras = (u) => Object.entries(LETU).filter(([k]) => +k <= u).map(([, v]) => v).join('');
+  const base = (w) => norm(w).replace(/ç/g, 'c');
+  const pode = (w, u) => [...base(w)].every((ch) => letras(Math.min(u, 8)).includes(ch) || ch === '-' || ch === ' ');
+  const PAL = [['pato', 'pa-to'], ['lua', 'lu-a'], ['dedo', 'de-do'], ['dado', 'da-do'], ['papa', 'pa-pá'], ['papaia', 'pa-pai-a'], ['mao', 'mão'], ['mama', 'ma-mã'], ['bola', 'bo-la'], ['vaca', 'va-ca'],
+    ['uva', 'u-va'], ['ovo', 'o-vo'], ['bebe', 'be-bé'], ['banana', 'ba-na-na'], ['mota', 'mo-ta'], ['mala', 'ma-la'], ['menino', 'me-ni-no'], ['menina', 'me-ni-na'], ['nuvem', 'nu-vem'], ['vela', 've-la'],
+    ['avo', 'a-vó'], ['caju', 'ca-ju'], ['coco', 'co-co'], ['gato', 'ga-to'], ['galo', 'ga-lo'], ['copo', 'co-po'], ['cao', 'cão'], ['macaco', 'ma-ca-co'], ['tomate', 'to-ma-te'], ['camiao', 'ca-mi-ão'],
+    ['sapo', 'sa-po'], ['sol', 'sol'], ['sumo', 'su-mo'], ['mesa', 'me-sa'], ['sino', 'si-no'], ['casa', 'ca-sa'], ['faca', 'fa-ca'], ['rato', 'ra-to'], ['rio', 'ri-o'], ['carro', 'car-ro'],
+    ['burro', 'bur-ro'], ['regua', 'ré-gua'], ['tesoura', 'te-sou-ra'], ['porco', 'por-co'], ['cadeira', 'ca-dei-ra'], ['prato', 'pra-to'], ['flor', 'flor'], ['cabra', 'ca-bra'], ['crocodilo', 'cro-co-di-lo'], ['peixe', 'pei-xe'],
+    ['pao', 'pão'], ['limao', 'li-mão'], ['aviao', 'a-vi-ão'], ['galinha', 'ga-li-nha'], ['caneta', 'ca-ne-ta'], ['lapis', 'lá-pis'], ['mochila', 'mo-chi-la'], ['tabanca', 'ta-ban-ca'], ['canoa', 'ca-no-a'], ['manga', 'man-ga'],
+    ['laranja', 'la-ran-ja'], ['abelha', 'a-be-lha'], ['coelho', 'co-e-lho'], ['palmeira', 'pal-mei-ra'], ['tambor', 'tam-bor'], ['panela', 'pa-ne-la'], ['tartaruga', 'tar-ta-ru-ga'], ['borboleta', 'bor-bo-le-ta'], ['sapato', 'sa-pa-to'], ['livro', 'li-vro']]
+    .filter(([f]) => FICHAS_DES.D[f]).map(([f, s]) => ({ f, w: nome(f), s: s.split('-') }));
+  const palavras = (u) => PAL.filter((p) => pode(p.w, u));
+  const VOGI = ['ovo', 'uva', 'abelha', 'ananas', 'arroz', 'aviao', 'arvore', 'elefante', 'olho', 'orelha', 'ovelha', 'avo', 'escova', 'estrelas', 'oval'].filter((f) => FICHAS_DES.D[f]);
+  const MAI = 'ABDEFGILMNOPRSTUV';
+
+  /* ---------- registo dos exercícios */
+  const ex = (o) => F.regista(Object.assign({ ano: [1], cot: 1 }, o));
+  const ctxU = (c) => c.maxU;
+
+  /* ===== Matemática ===== */
+  ex({ id: 'm1_conta', disc: 'mat', u: 1, nome: 'Conta e escreve o número', ic: 'tracar', instr: () => 'Conta e escreve o número.',
+    gen(r, c) { const hi = c.maxU >= 2 ? 20 : 10; return { g: take(r, OBJC, 5).map((f, i, a) => ({ f, n: dist(r, 1, i < 2 ? 1 : 3, hi)[0] })) }; },
+    alt: () => 170,
+    draw(p, B, sol, cx) { return cartoes(B, 5, 150, (x, y, w, h, i) => { const g = p.g[i]; return grupo(g.f, g.n, x + 6, y + 6, w - 12, 86, cx, 38).svg + qd(x + w / 2 - 22, y + 98) + (sol ? rs(x + w / 2 - 22, y + 98, g.n) : ''); }); },
+    resumo: (p) => p.g.map((g) => g.n).join(' · '), troca: (p) => p.g.map((g, i) => ({ rot: `Grupo ${i + 1}`, v: g.f, set: (v) => { g.f = v; }, op: OBJC })) });
+  ex({ id: 'm1_liga', disc: 'mat', u: 1, nome: 'Liga a quantidade ao número', ic: 'ligar', instr: () => 'Liga cada grupo ao seu número.',
+    gen(r, c) { const hi = c.maxU >= 2 ? 15 : 10; const ns = dist(r, 4, 1, hi); return { g: take(r, OBJC, 4).map((f, i) => ({ f, n: ns[i] })), ord: mix(r, [0, 1, 2, 3]) }; },
+    alt: () => 260,
+    draw(p, B, sol, cx) { const rh = (B.h - 16) / 4, yc = (i) => B.y + 8 + rh * (i + 0.5); let o = '';
+      p.g.forEach((g, i) => { o += grupo(g.f, g.n, B.x + 16, yc(i) - rh / 2 + 4, 380, rh - 8, cx, 40).svg + ponto(B.x + 420, yc(i)); });
+      p.ord.forEach((k, j) => { o += ponto(B.x + B.w - 120, yc(j)) + t(B.x + B.w - 60, yc(j) + 14, String(p.g[k].n), 38, { w: 800 }); });
+      if (sol) p.g.forEach((g, i) => { o += linha(B.x + 420, yc(i), B.x + B.w - 120, yc(p.ord.indexOf(i))); });
+      return o; },
+    resumo: (p) => p.g.map((g) => g.n).join(' · '), troca: (p) => p.g.map((g, i) => ({ rot: `Grupo ${i + 1}`, v: g.f, set: (v) => { g.f = v; }, op: OBJC })) });
+  ex({ id: 'm1_tracar', disc: 'mat', u: 1, nome: 'Traça os números', instr: () => 'Traça os números por cima do pontilhado.',
+    gen(r, c) { const ns = c.maxU >= 2 ? dist(r, 2, 11, 20) : dist(r, 2, 0, 9); return { n: ns.map(String) }; },
+    alt: () => 200,
+    draw(p, B, sol) { let o = ''; p.n.forEach((n, i) => { const s = 0.9, y = B.y + 18 + i * 92; let x = B.x + 24; const a = palavra(n, x, y, s, 'cheio'); o += a.svg; x = a.x + 30;
+      while (x + largura(n, s) < B.x + B.w - 16) { const q = palavra(n, x, y, s, sol ? 'cheio' : 'pont'); o += q.svg; x = q.x + 28; } }); return o; },
+    troca: (p) => p.n.map((n, i) => ({ rot: `Linha ${i + 1}`, v: n, set: (v) => { p.n[i] = String(v); }, op: Array.from({ length: 21 }, (_, k) => String(k)), letra: true })) });
+  ex({ id: 'm1_compara', disc: 'mat', u: 3, nome: 'Maior, menor ou igual (>, <, =)', instr: () => 'Escreve >, < ou = no quadrado.',
+    gen(r, c) { const hi = 20; return { p: [0, 1, 2, 3].map((i) => { const a = 1 + Math.floor(r() * hi); const b = i === 2 ? a : 1 + Math.floor(r() * hi); return [a, b]; }).sort(() => r() - 0.5) }; },
+    alt: () => 92,
+    draw(p, B, sol) { return cartoes(B, 4, 72, (x, y, w, h, i) => { const [a, b] = p.p[i]; return t(x + w * 0.2, y + 50, String(a), 34, { w: 800 }) + qd(x + w / 2 - 24, y + 12, 48) + t(x + w * 0.8, y + 50, String(b), 34, { w: 800 }) + (sol ? rs(x + w / 2 - 24, y + 12, a > b ? '>' : a < b ? '<' : '=', 48) : ''); }); },
+    resumo: (p) => p.p.map(([a, b]) => (a > b ? '>' : a < b ? '<' : '=')).join(' ') });
+  ex({ id: 'm1_vizinhos', disc: 'mat', u: 4, nome: 'O número antes e o número depois', instr: () => 'Escreve o número que vem antes e o que vem depois.',
+    gen(r) { return { n: dist(r, 4, 1, 19) }; }, alt: () => 92,
+    draw(p, B, sol) { return cartoes(B, 4, 72, (x, y, w, h, i) => { const n = p.n[i]; return qd(x + 12, y + 14, 44) + t(x + w / 2, y + 50, String(n), 32, { w: 800 }) + qd(x + w - 56, y + 14, 44) + (sol ? rs(x + 12, y + 14, n - 1) + rs(x + w - 56, y + 14, n + 1) : ''); }); },
+    resumo: (p) => p.n.map((n) => `${n - 1}-${n + 1}`).join(' · ') });
+  ex({ id: 'm1_reta', disc: 'mat', u: 4, nome: 'Completa a reta numérica', instr: () => 'Completa a reta numérica.',
+    gen(r, c) { const a = c.maxU >= 2 && r() < 0.5 ? 10 : 0; const gaps = take(r, Array.from({ length: 11 }, (_, k) => k).slice(1), 4); return { a, gaps }; }, alt: () => 120,
+    draw(p, B, sol) { const x0 = B.x + 40, x1 = B.x + B.w - 40, y = B.y + 48, st = (x1 - x0) / 10; let o = `<path d="M${x0 - 16} ${y} L${x1 + 20} ${y} M${x1 + 10} ${y - 8} L${x1 + 22} ${y} L${x1 + 10} ${y + 8}" fill="none" stroke="#111" stroke-width="3" stroke-linecap="round"/>`;
+      for (let k = 0; k <= 10; k++) { const x = x0 + st * k; o += `<line x1="${x}" y1="${y - 10}" x2="${x}" y2="${y + 10}" stroke="#111" stroke-width="3"/>`;
+        if (p.gaps.includes(k)) o += qd(x - 21, y + 18, 42) + (sol ? rs(x - 21, y + 18, p.a + k, 42) : ''); else o += t(x, y + 46, String(p.a + k), 24, { w: 800 }); }
+      return o; },
+    resumo: (p) => p.gaps.slice().sort((a, b) => a - b).map((k) => p.a + k).join(' · ') });
+  ex({ id: 'm1_junta', disc: 'mat', u: 5, nome: 'Junta e escreve quantos são', instr: () => 'Junta e escreve quantos são.',
+    gen(r, c) { const hi = c.maxU >= 6 ? 20 : 10; return { l: take(r, OBJC, 3).map((f) => { const s = 3 + Math.floor(r() * (hi - 2)); const a = 1 + Math.floor(r() * (s - 1)); return { f, a, b: s - a }; }) }; }, alt: () => 190,
+    draw(p, B, sol, cx) { let o = ''; p.l.forEach((l, i) => { const y = B.y + 12 + i * 58, sz = Math.min(36, 470 / (l.a + l.b + 2)); let x = B.x + 24;
+      for (let k = 0; k < l.a; k++) { o += fig(l.f, x + sz / 2, y + 24, sz, cx); x += sz + 3; } o += t(x + 14, y + 36, '+', 32, { w: 800 }); x += 34;
+      for (let k = 0; k < l.b; k++) { o += fig(l.f, x + sz / 2, y + 24, sz, cx); x += sz + 3; }
+      o += t(B.x + 540, y + 36, '=', 32, { w: 800 }) + qd(B.x + 566, y + 2) + t(B.x + 640, y + 32, `(${l.a} + ${l.b})`, 16, { w: 400, fill: '#555', a: 'start' }) + (sol ? rs(B.x + 566, y + 2, l.a + l.b) : ''); });
+      return o; },
+    resumo: (p) => p.l.map((l) => l.a + l.b).join(' · '), troca: (p) => p.l.map((l, i) => ({ rot: `Linha ${i + 1}`, v: l.f, set: (v) => { l.f = v; }, op: OBJC })) });
+  ex({ id: 'm1_tira', disc: 'mat', u: 7, nome: 'Tira e escreve quantos ficam', instr: () => 'Risca e escreve quantos ficam.',
+    gen(r, c) { const hi = c.maxU >= 8 ? 18 : 10; return { l: take(r, OBJC, 3).map((f) => { const a = 3 + Math.floor(r() * (hi - 2)); const b = 1 + Math.floor(r() * (a - 1)); return { f, a, b }; }) }; }, alt: () => 190,
+    draw(p, B, sol, cx) { let o = ''; p.l.forEach((l, i) => { const y = B.y + 12 + i * 58, sz = Math.min(36, 440 / (l.a + 1)); let x = B.x + 24;
+      for (let k = 0; k < l.a; k++) { const cxk = x + sz / 2; o += fig(l.f, cxk, y + 24, sz, cx); if (k >= l.a - l.b) o += `<path d="M${cxk - sz / 2} ${y + 24 - sz / 2} L${cxk + sz / 2} ${y + 24 + sz / 2} M${cxk + sz / 2} ${y + 24 - sz / 2} L${cxk - sz / 2} ${y + 24 + sz / 2}" stroke="#111" stroke-width="3"/>`; x += sz + 3; }
+      o += t(B.x + 500, y + 32, `${l.a} − ${l.b} =`, 22, { w: 700, a: 'start' }) + qd(B.x + 600, y + 2) + (sol ? rs(B.x + 600, y + 2, l.a - l.b) : ''); });
+      return o; },
+    resumo: (p) => p.l.map((l) => l.a - l.b).join(' · '), troca: (p) => p.l.map((l, i) => ({ rot: `Linha ${i + 1}`, v: l.f, set: (v) => { l.f = v; }, op: OBJC })) });
+  ex({ id: 'm1_contas', disc: 'mat', u: 5, nome: 'Faz as contas', instr: () => 'Faz as contas.',
+    gen(r, c) { const hi = c.maxU >= 6 ? 20 : 10, menos = c.maxU >= 7; return { c: Array.from({ length: 6 }, (_, i) => { const sub = menos && i % 2 === 1; const s = 2 + Math.floor(r() * (hi - 1)); const a = 1 + Math.floor(r() * (s - 1)); return sub ? [s, '−', a, s - a] : [a, '+', s - a, s]; }) }; }, alt: () => 170,
+    draw(p, B, sol) { let o = ''; p.c.forEach(([a, op, b, res], i) => { const col = i % 2, row = Math.floor(i / 2), x = B.x + 40 + col * 350, y = B.y + 14 + row * 52;
+      o += t(x, y + 32, `${a} ${op} ${b} =`, 28, { w: 700, a: 'start' }) + qd(x + 170, y) + (sol ? rs(x + 170, y, res) : ''); }); return o; },
+    resumo: (p) => p.c.map((c) => c[3]).join(' · ') });
+  ex({ id: 'm1_problema', disc: 'mat', u: 9, nome: 'Problema com imagem', ic: 'tracar', instr: () => 'Lê o problema, faz a conta e responde.', cot: 1.5,
+    gen(r) { const nm = take(r, NOMES, 2), f = pick(r, ['manga', 'caju', 'laranja', 'ovo', 'peixe', 'banana', 'lapis', 'bola']), sub = r() < 0.5;
+      const a = 4 + Math.floor(r() * 12), b = 1 + Math.floor(r() * (sub ? a - 2 : 8)); return { nm, f, sub, a, b }; }, alt: () => 190,
+    draw(p, B, sol, cx) { const pl = nome(p.f) + (/[rlz]$/.test(nome(p.f)) ? 'es' : /ão$/.test(nome(p.f)) ? '' : 's'), [x1, x2] = p.nm;
+      const txt = p.sub ? `${x1} tem ${p.a} ${pl}. Deu ${p.b} a${oa(x2) === 'a' ? ' ' : 'o '}${x2}. Com quant${/a$/.test(nome(p.f)) ? 'as' : 'os'} ficou?` : `${x1} tem ${p.a} ${pl}. ${x2} deu-lhe mais ${p.b}. Quant${/a$/.test(nome(p.f)) ? 'as' : 'os'} tem agora?`;
+      let o = t(B.x + 20, B.y + 34, txt, 19, { w: 600, a: 'start' }) + grupo(p.f, Math.min(p.a, 14), B.x + 20, B.y + 50, 300, 120, cx, 40).svg;
+      o += t(B.x + 380, B.y + 92, 'Conta:', 18, { w: 700, a: 'start' }) + qd(B.x + 450, B.y + 64) + t(B.x + 512, B.y + 96, p.sub ? '−' : '+', 28, { w: 800 }) + qd(B.x + 532, B.y + 64) + t(B.x + 594, B.y + 96, '=', 28, { w: 800 }) + qd(B.x + 614, B.y + 64);
+      o += t(B.x + 380, B.y + 152, 'Resposta:', 18, { w: 700, a: 'start' }) + ln(B.x + 470, B.x + B.w - 20, B.y + 156);
+      if (sol) { const res = p.sub ? p.a - p.b : p.a + p.b; o += rs(B.x + 450, B.y + 64, p.a) + rs(B.x + 532, B.y + 64, p.b) + rs(B.x + 614, B.y + 64, res) + t(B.x + 480, B.y + 150, `${x1} ${p.sub ? 'ficou com' : 'tem agora'} ${res} ${pl}.`, 17, { w: 700, fill: '#555', a: 'start' }); }
+      return o; },
+    resumo: (p) => String(p.sub ? p.a - p.b : p.a + p.b), troca: (p) => [{ rot: 'Objeto', v: p.f, set: (v) => { p.f = v; }, op: ['manga', 'caju', 'laranja', 'ovo', 'peixe', 'banana', 'lapis', 'bola', 'coco', 'tomate', 'copo', 'livro'] }] });
+  ex({ id: 'm1_formas', disc: 'mat', u: 10, nome: 'Pinta e conta as formas', ic: 'pintar', instr: (p) => `Pinta ${p.alvo === 'circulo' ? 'os círculos' : p.alvo === 'quadrado' ? 'os quadrados' : p.alvo === 'retangulo' ? 'os retângulos' : 'os triângulos'}. Quantos são?`,
+    gen(r) { const FS = ['triangulo', 'circulo', 'quadrado', 'retangulo'], alvo = pick(r, FS); const it = Array.from({ length: 9 }, () => pick(r, FS)); if (!it.includes(alvo)) it[0] = alvo; return { alvo, it }; }, alt: () => 110,
+    draw(p, B, sol, cx) { let o = ''; p.it.forEach((f, i) => { const x = B.x + 44 + i * 60, y = B.y + 52; o += fig(f, x, y, 46, cx); if (sol && f === p.alvo) o += roda(x, y, 30); });
+      o += t(B.x + 600, B.y + 62, 'São', 20, { w: 700 }) + qd(B.x + 630, B.y + 30) + (sol ? rs(B.x + 630, B.y + 30, p.it.filter((f) => f === p.alvo).length) : ''); return o; },
+    resumo: (p) => String(p.it.filter((f) => f === p.alvo).length) });
+  ex({ id: 'm1_formasnome', disc: 'mat', u: 10, nome: 'Liga a forma ao nome', ic: 'ligar', instr: () => 'Liga cada forma ao seu nome.',
+    gen(r) { return { ord: mix(r, [0, 1, 2, 3]) }; }, alt: () => 230,
+    draw(p, B, sol, cx) { const FS = ['circulo', 'quadrado', 'triangulo', 'retangulo'], rh = (B.h - 10) / 4, yc = (i) => B.y + 5 + rh * (i + 0.5); let o = '';
+      FS.forEach((f, i) => { o += fig(f, B.x + 80, yc(i), rh * 0.75, cx) + ponto(B.x + 150, yc(i)); });
+      p.ord.forEach((k, j) => { o += ponto(B.x + 440, yc(j)) + t(B.x + 470, yc(j) + 8, nome(FS[k]), 24, { w: 700, a: 'start' }); });
+      if (sol) FS.forEach((_, i) => { o += linha(B.x + 150, yc(i), B.x + 440, yc(p.ord.indexOf(i))); }); return o; } });
+  ex({ id: 'm1_medidas', disc: 'mat', u: 11, nome: 'Comprido, pesado, cheio', ic: 'rodear', instr: () => 'Rodeia a resposta certa em cada linha.',
+    gen(r) { return { o: [r() < 0.5, r() < 0.5, r() < 0.5], pes: pick(r, [['elefante', 'rato'], ['vaca', 'galinha'], ['hipopotamo', 'passaro']]) }; }, alt: () => 270,
+    draw(p, B, sol, cx) { let o = ''; const rh = (B.h - 10) / 3, row = (i) => B.y + 5 + rh * i;
+      const L = ['o mais comprido', 'o mais pesado', 'o que está cheio'];
+      L.forEach((l, i) => { const y = row(i); o += t(B.x + 20, y + rh / 2 + 7, `Rodeia ${l}:`, 18, { w: 700, a: 'start' }); if (i) o += `<line x1="${B.x + 14}" y1="${y}" x2="${B.x + B.w - 14}" y2="${y}" stroke="#bbb" stroke-dasharray="4 6"/>`; });
+      const xa = B.x + 380, xb = B.x + 580, swap = p.o;
+      // 1. lápis comprido e curto
+      const lap = (cxp, y, w) => `<g transform="translate(${cxp - w / 2},${y - 9})"><rect x="12" y="0" width="${w - 12}" height="18" rx="2" fill="#fff" stroke="#111" stroke-width="3"/><path d="M12 0 L0 9 L12 18 Z" fill="#fff" stroke="#111" stroke-width="3" stroke-linejoin="round"/><path d="M0 9 L5 6 L5 12 Z" fill="#111"/></g>`;
+      const y1 = row(0) + rh / 2, wl = swap[0] ? [170, 90] : [90, 170]; o += lap(xa, y1, wl[0]) + lap(xb, y1, wl[1]); if (sol) o += roda(wl[0] > wl[1] ? xa : xb, y1, 100, 24);
+      const y2 = row(1) + rh / 2, pz = swap[1] ? p.pes : [p.pes[1], p.pes[0]], sz = [pz[0] === p.pes[0] ? 76 : 44, pz[1] === p.pes[0] ? 76 : 44];
+      o += fig(pz[0], xa, y2, sz[0], cx) + fig(pz[1], xb, y2, sz[1], cx); if (sol) o += roda(pz[0] === p.pes[0] ? xa : xb, y2, 50);
+      const copo = (cxp, y, cheio) => `<path d="M${cxp - 26} ${y - 34} L${cxp + 26} ${y - 34} L${cxp + 20} ${y + 34} L${cxp - 20} ${y + 34} Z" fill="#fff" stroke="#111" stroke-width="3" stroke-linejoin="round"/>` + (cheio ? `<path d="M${cxp - 24} ${y - 22} L${cxp + 24} ${y - 22} L${cxp + 20} ${y + 32} L${cxp - 20} ${y + 32} Z" fill="#bbb" stroke="none"/><path d="M${cxp - 24} ${y - 22} C${cxp - 10} ${y - 26} ${cxp + 8} ${y - 18} ${cxp + 24} ${y - 22}" fill="none" stroke="#111" stroke-width="2"/>` : '');
+      const y3 = row(2) + rh / 2; o += copo(xa, y3, swap[2]) + copo(xb, y3, !swap[2]); if (sol) o += roda(swap[2] ? xa : xb, y3, 48);
+      return o; } });
+  ex({ id: 'm1_dinheiro', disc: 'mat', u: 12, nome: 'Quanto dinheiro há?', ic: 'rodear', instr: (p) => `Quanto dinheiro tem ${oa(p.nm) === 'a' ? 'a' : 'o'} ${p.nm}? Rodeia a resposta.`,
+    gen(r) { const V = [25, 50, 100, 200, 250, 500], n = 2 + Math.floor(r() * 3), m = Array.from({ length: n }, () => pick(r, V.slice(0, 5))).sort((a, b) => b - a), s = m.reduce((a, b) => a + b, 0);
+      const ops = mix(r, [s, s + pick(r, [25, 50, 100]), Math.max(25, s - pick(r, [25, 50, 100]))].filter((v, i, a) => a.indexOf(v) === i)); return { nm: pick(r, NOMES), m, s, ops }; }, alt: () => 96,
+    draw(p, B, sol) { let o = ''; p.m.forEach((v, i) => { o += moeda(B.x + 50 + i * 68, B.y + 48, v, 28); });
+      p.ops.forEach((v, i) => { const x = B.x + 400 + i * 104; o += `<rect x="${x}" y="${B.y + 22}" width="92" height="52" rx="10" fill="#fff" stroke="#111" stroke-width="2"/>` + t(x + 46, B.y + 55, fmtN(v) + ' FCFA', 15, { w: 800 }); if (sol && v === p.s) o += `<ellipse cx="${x + 46}" cy="${B.y + 48}" rx="56" ry="36" fill="none" stroke="#111" stroke-width="4"/>`; });
+      return o; },
+    resumo: (p) => `${fmtN(p.s)} FCFA` });
+  ex({ id: 'm1_moedas', disc: 'mat', u: 12, nome: 'Conhece as moedas e as notas', ic: 'rodear', instr: (p) => `Rodeia a moeda de ${p.a} FCFA e a nota de ${fmtN(p.b)} FCFA.`,
+    gen(r) { const C = [5, 10, 25, 50, 100, 200, 250, 500], N = [1000, 2000, 5000, 10000], c = take(r, C, 6), n = take(r, N, 3); return { c, a: pick(r, c), n, b: pick(r, n) }; }, alt: () => 170,
+    draw(p, B, sol) { const a = p.a, b = p.b; let o = '';
+      p.c.forEach((v, i) => { const x = B.x + 60 + i * 110; o += moeda(x, B.y + 46, v, 30); if (sol && v === a) o += roda(x, B.y + 46, 40); });
+      p.n.forEach((v, i) => { const x = B.x + 100 + i * 190; o += nota(x, B.y + 96, v, 130, 60); if (sol && v === b) o += `<ellipse cx="${x + 65}" cy="${B.y + 126}" rx="80" ry="40" fill="none" stroke="#111" stroke-width="4"/>`; });
+      return o; },
+    resumo: (p) => `${p.a} e ${fmtN(p.b)} FCFA` });
+  const DIAS = ['domingo', 'segunda', 'terça', 'quarta', 'quinta', 'sexta', 'sábado'], MESES = ['janeiro', 'fevereiro', 'março', 'abril', 'maio', 'junho', 'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro'];
+  ex({ id: 'm1_dias', disc: 'mat', u: 13, nome: 'Dias da semana e meses', ic: 'tracar', instr: () => 'Completa os dias da semana e os meses.',
+    gen(r) { const d = Math.floor(r() * 3), m = Math.floor(r() * 7); return { d, m, fd: [1, 3], fm: [1, 3] }; }, alt: () => 150,
+    draw(p, B, sol) { let o = ''; const row = (lista, i0, falta, y) => { for (let k = 0; k < 5; k++) { const x = B.x + 20 + k * 138, w = 128, v = lista[(i0 + k) % lista.length];
+      o += `<rect x="${x}" y="${y}" width="${w}" height="50" rx="8" fill="#fff" stroke="#111" stroke-width="1.5"/>`; if (falta.includes(k)) { o += ln(x + 12, x + w - 12, y + 38); if (sol) o += t(x + w / 2, y + 32, v, 17, { w: 700, fill: '#555' }); } else o += t(x + w / 2, y + 32, v, 17, { w: 700 }); } };
+      row(DIAS, p.d + 1, p.fd, B.y + 14); row(MESES, p.m, p.fm, B.y + 82); return o; },
+    resumo: (p) => [DIAS[(p.d + 2) % 7], DIAS[(p.d + 4) % 7], MESES[(p.m + 1) % 12], MESES[(p.m + 3) % 12]].join(', ') });
+  ex({ id: 'm1_grafico', disc: 'mat', u: 14, nome: 'Conta e pinta o gráfico', ic: 'pintar', instr: () => 'Conta os frutos e pinta um quadrado por cada um.',
+    gen(r) { const fs = take(r, ['manga', 'caju', 'laranja', 'banana', 'papaia', 'coco'], 3); return { g: fs.map((f) => ({ f, n: 1 + Math.floor(r() * 6) })), ord: [] }; }, alt: () => 250,
+    draw(p, B, sol, cx) { let o = ''; const pool = []; p.g.forEach((g) => { for (let k = 0; k < g.n; k++) pool.push(g.f); });
+      const sh = mix(rnd(p.g.map((g) => g.n).join('') * 7 + 3), pool); sh.forEach((f, i) => { o += fig(f, B.x + 40 + (i % 6) * 52, B.y + 40 + Math.floor(i / 6) * 52, 42, cx); });
+      const gx = B.x + 380, gy = B.y + 20, cw = 70, chh = 30; for (let c = 0; c < 3; c++) { for (let k = 0; k < 6; k++) { const y = gy + (5 - k) * chh; o += `<rect x="${gx + c * (cw + 20)}" y="${y}" width="${cw}" height="${chh}" fill="${sol && k < p.g[c].n ? '#bbb' : '#fff'}" stroke="#111" stroke-width="1.5"/>`; }
+        o += fig(p.g[c].f, gx + c * (cw + 20) + cw / 2, gy + 6 * chh + 26, 40, cx); }
+      for (let k = 1; k <= 6; k++) o += t(gx - 14, gy + (6 - k) * chh + 21, String(k), 13, { w: 600 });
+      return o; },
+    resumo: (p) => p.g.map((g) => `${nome(g.f)} ${g.n}`).join(', ') });
+
+  /* ===== Língua Portuguesa ===== */
+  ex({ id: 'l1_vogal', disc: 'lp', u: 1, nome: 'Rodeia a vogal com que começa', ic: 'rodear', instr: () => 'Rodeia a vogal com que começa cada palavra.',
+    gen(r) { return { f: take(r, VOGI, 4) }; }, alt: () => 190,
+    draw(p, B, sol, cx) { return cartoes(B, 4, 170, (x, y, w, h, i) => { const f = p.f[i], v = norm(nome(f))[0]; let o = fig(f, x + w / 2, y + 60, 90, cx);
+      'aeiou'.split('').forEach((l, k) => { const lx = x + 18 + k * (w - 36) / 4; o += t(lx, y + 152, l, 26, { w: 700 }); if (sol && l === v) o += roda(lx, y + 144, 16); }); return o; }); },
+    resumo: (p) => p.f.map((f) => norm(nome(f))[0]).join(' · '), troca: (p) => p.f.map((f, i) => ({ rot: `Figura ${i + 1}`, v: f, set: (v) => { p.f[i] = v; }, op: VOGI })) });
+  ex({ id: 'l1_tracarm', disc: 'lp', u: 1, nome: 'Traça as letras (manuscrita)', instr: () => 'Traça as letras por cima do cinzento e depois escreve sozinho.',
+    gen(r, c) { const u = c.maxU, ult = Object.keys(LETU).filter((k) => +k <= u && +k <= 7).pop(); const novas = u >= 8 ? 'bcdfgjlmnprstvz'.split('') : (LETU[ult] || 'aeiou').split('');
+      return { l: take(r, novas.length >= 3 ? novas : 'aeiou'.split(''), 3) }; }, alt: () => 290,
+    draw(p, B, sol) { let o = ''; p.l.forEach((l, i) => { const base = B.y + 72 + i * 92, xh = 17; o += pautaM(B.x + 20, B.x + B.w - 20, base, xh) + M(B.x + 30, base, l.toUpperCase() + ' ' + l, 46);
+      for (let k = 0; k < 5; k++) o += M(B.x + 176 + k * 82, base, l, 46, sol ? '#777' : '#c4c4c4'); }); return o; },
+    troca: (p) => p.l.map((l, i) => ({ rot: `Linha ${i + 1}`, v: l, set: (v) => { p.l[i] = v; }, op: 'abcdefghijlmnopqrstuvxz'.split(''), letra: true })) });
+  ex({ id: 'l1_maiusc', disc: 'lp', u: 2, nome: 'Liga a maiúscula à minúscula', ic: 'ligar', instr: () => 'Liga cada letra maiúscula à sua minúscula.',
+    gen(r) { const l = take(r, MAI.split(''), 5); return { l, ord: mix(r, [0, 1, 2, 3, 4]) }; }, alt: () => 250,
+    draw(p, B, sol) { const rh = (B.h - 10) / 5, yc = (i) => B.y + 5 + rh * (i + 0.5); let o = '';
+      p.l.forEach((l, i) => { o += t(B.x + 120, yc(i) + 13, l, 36, { w: 800 }) + ponto(B.x + 190, yc(i)); });
+      p.ord.forEach((k, j) => { o += ponto(B.x + 470, yc(j)) + t(B.x + 540, yc(j) + 13, p.l[k].toLowerCase(), 36, { w: 800 }); });
+      if (sol) p.l.forEach((_, i) => { o += linha(B.x + 190, yc(i), B.x + 470, yc(p.ord.indexOf(i))); }); return o; },
+    resumo: (p) => p.l.map((l) => l + l.toLowerCase()).join(' ') });
+  ex({ id: 'l1_nome', disc: 'lp', u: 2, nome: 'Escreve o teu nome', instr: (p, cx) => cx && cx.nome ? 'Traça o teu nome e depois escreve-o sozinho.' : 'Escreve o teu nome.', livre: true,
+    gen() { return {}; }, alt: () => 250,
+    orient: 'Cada criança escreve o seu nome: a primeira letra maiúscula e as outras minúsculas.',
+    draw(p, B, sol, cx) { const w = String((cx && cx.nome) || '').trim().split(/\s+/)[0] || ''; const nm = w ? w[0].toLocaleUpperCase('pt-PT') + w.slice(1).toLocaleLowerCase('pt-PT') : '';
+      let o = ''; for (let i = 0; i < 3; i++) { const base = B.y + 72 + i * 80; o += pautaM(B.x + 20, B.x + B.w - 20, base, 19); if (nm && i < 2) o += M(B.x + 30, base, nm, 52, i === 0 ? '#111' : '#c4c4c4'); } return o; } });
+  ex({ id: 'l1_completa', disc: 'lp', u: 3, nome: 'Completa a palavra com a letra que falta', instr: () => 'Completa a palavra com a letra que falta.',
+    gen(r, c) { const ps = take(r, palavras(c.maxU).filter((p) => p.w.length >= 3 && p.w.length <= 6 && !/\s/.test(p.w)), 4); const nov = letras(Math.min(c.maxU, 8)).replace('aeiou', '');
+      return { p: ps.map((q) => { const w = q.w, idx = [...w].map((ch, i) => i).filter((i) => nov.includes(base(w[i])) || i > 0); return { f: q.f, w, i: pick(r, idx.length ? idx : [0]) }; }) }; }, alt: () => 210,
+    draw(p, B, sol, cx) { return cartoes(B, 4, 190, (x, y, w, h, i) => { const q = p.p[i]; if (!q) return ''; const chs = [...q.w]; let o = fig(q.f, x + w / 2, y + 66, 96, cx);
+      const cw = 0.74, fs = Math.min(30, (w - 16) / (chs.length * cw)), tw = chs.length * fs * cw, x0 = x + w / 2 - tw / 2;
+      chs.forEach((ch, k) => { const cxk = x0 + fs * cw / 2 + k * fs * cw; if (k === q.i) o += `<rect x="${(cxk - fs * 0.34).toFixed(1)}" y="${y + 140}" width="${(fs * 0.68).toFixed(1)}" height="${(fs * 1.05).toFixed(1)}" rx="4" fill="#fff" stroke="#111" stroke-width="2"/>` + (sol ? t(cxk, y + 140 + fs * 0.85, ch, fs, { w: 800, fill: '#555' }) : ''); else o += t(cxk, y + 140 + fs * 0.85, ch, fs, { w: 700 }); });
+      return o; }); },
+    resumo: (p) => p.p.map((q) => q.w[q.i]).join(' · '), troca: (p, nv, c) => p.p.map((q, i) => ({ rot: `Palavra ${i + 1}`, v: q.f, set: (v) => { const w = nome(v); p.p[i] = { f: v, w, i: Math.min(q.i, w.length - 1) }; }, op: palavras(c ? c.maxU : 16).map((x) => x.f) })) });
+  ex({ id: 'l1_som', disc: 'lp', u: 3, nome: 'Rodeia as figuras que começam pela letra…', ic: 'rodear', instr: (p) => `Rodeia as figuras que começam pela letra ${p.l} (${p.l.toLowerCase()}).`,
+    gen(r, c) { const nov = letras(Math.min(c.maxU, 8)).replace('aeiou', '').split('').filter((l) => !'qhkwyx'.includes(l)); const cand = nov.filter((l) => PAL.filter((q) => base(q.w)[0] === l).length >= 2);
+      const l = pick(r, cand.length ? cand : ['p']); const pos = PAL.filter((q) => base(q.w)[0] === l).map((q) => q.f), neg = PAL.filter((q) => base(q.w)[0] !== l).map((q) => q.f);
+      const ok = take(r, pos, Math.min(3, pos.length)); return { l: l.toUpperCase(), it: mix(r, ok.concat(take(r, neg, 8 - ok.length))), ok }; }, alt: () => 230,
+    draw(p, B, sol, cx) { let o = `<rect x="${B.x + 14}" y="${B.y + 14}" width="110" height="${B.h - 28}" rx="12" fill="#fff" stroke="#111" stroke-width="2"/>` + t(B.x + 69, B.y + B.h / 2 - 6, p.l, 56, { w: 800 }) + t(B.x + 69, B.y + B.h / 2 + 54, p.l.toLowerCase(), 48, { w: 800 });
+      p.it.forEach((f, i) => { const col = i % 4, row = Math.floor(i / 4), x = B.x + 200 + col * 140, y = B.y + 58 + row * 104; o += fig(f, x, y, 76, cx); if (sol) { o += t(x, y + 52, nome(f), 12, { w: 400, fill: '#333' }); if (p.ok.includes(f)) o += roda(x, y, 46); } });
+      return o; },
+    resumo: (p) => p.ok.map(nome).join(', ') });
+  ex({ id: 'l1_copia', disc: 'lp', u: 3, nome: 'Lê, traça e copia a palavra', instr: () => 'Lê, traça e copia a palavra.',
+    gen(r, c) { return { p: take(r, palavras(c.maxU).filter((q) => q.w.length <= 7), 3).map((q) => q.f) }; }, alt: () => 300,
+    draw(p, B, sol, cx) { let o = ''; p.p.forEach((f, i) => { const base = B.y + 80 + i * 96, w = nome(f); o += fig(f, B.x + 52, base - 26, 66, cx) + t(B.x + 150, base - 14, w, 24, { w: 700 }) + pautaM(B.x + 210, B.x + B.w - 20, base, 18) + M(B.x + 222, base, w, 50, '#c4c4c4'); }); return o; },
+    troca: (p, nv, c) => p.p.map((f, i) => ({ rot: `Palavra ${i + 1}`, v: f, set: (v) => { p.p[i] = v; }, op: palavras(c ? c.maxU : 16).map((x) => x.f) })) });
+  ex({ id: 'l1_ligapal', disc: 'lp', u: 3, nome: 'Liga a palavra à imagem', ic: 'ligar', instr: () => 'Liga cada palavra à sua imagem.',
+    gen(r, c) { const ps = take(r, palavras(c.maxU), 4).map((q) => q.f); return { p: ps, ord: mix(r, [0, 1, 2, 3]) }; }, alt: () => 250,
+    draw(p, B, sol, cx) { const rh = (B.h - 10) / 4, yc = (i) => B.y + 5 + rh * (i + 0.5); let o = '';
+      p.p.forEach((f, i) => { o += t(B.x + 130, yc(i) + 10, nome(f), 28, { w: 700 }) + ponto(B.x + 230, yc(i)); });
+      p.ord.forEach((k, j) => { o += ponto(B.x + 480, yc(j)) + fig(p.p[k], B.x + 560, yc(j), rh * 0.8, cx); });
+      if (sol) p.p.forEach((_, i) => { o += linha(B.x + 230, yc(i), B.x + 480, yc(p.ord.indexOf(i))); }); return o; },
+    troca: (p, nv, c) => p.p.map((f, i) => ({ rot: `Palavra ${i + 1}`, v: f, set: (v) => { p.p[i] = v; }, op: palavras(c ? c.maxU : 16).map((x) => x.f) })) });
+  ex({ id: 'l1_silabas', disc: 'lp', u: 9, nome: 'Ordena as sílabas', instr: () => 'Ordena as sílabas e escreve a palavra.',
+    gen(r) { return { p: take(r, PAL.filter((q) => q.s.length >= 2 && q.s.length <= 3), 3).map((q) => ({ f: q.f, s: q.s, o: (() => { let m; let k = 0; do { m = mix(r, q.s.map((_, i) => i)); } while (m.every((v, i) => v === i) && k++ < 9); return m; })() })) }; }, alt: () => 300,
+    draw(p, B, sol, cx) { let o = ''; p.p.forEach((q, i) => { const y = B.y + 14 + i * 96; o += fig(q.f, B.x + 60, y + 40, 74, cx); let x = B.x + 120;
+      q.o.forEach((k) => { o += `<rect x="${x}" y="${y + 16}" width="76" height="48" rx="10" fill="#fff" stroke="#111" stroke-width="2"/>` + t(x + 38, y + 50, q.s[k].toUpperCase(), 22, { w: 800 }); x += 86; });
+      o += ln(B.x + 420, B.x + B.w - 20, y + 60) + (sol ? t(B.x + 430, y + 54, q.s.join(''), 26, { w: 700, fill: '#555', a: 'start' }) : ''); }); return o; },
+    resumo: (p) => p.p.map((q) => q.s.join('')).join(', ') });
+  ex({ id: 'l1_contasil', disc: 'lp', u: 9, nome: 'Quantas sílabas tem?', ic: 'pintar', instr: () => 'Bate as palmas e pinta um quadrado por cada sílaba.',
+    gen(r) { const by = [1, 2, 3, 4].map((n) => PAL.filter((q) => q.s.length === n)); const ps = mix(r, [pick(r, by[0].length ? by[0] : by[1]), pick(r, by[1]), pick(r, by[2]), pick(r, by[3].length ? by[3] : by[2])]); return { p: ps.map((q) => ({ f: q.f, n: q.s.length, w: q.w })) }; }, alt: () => 200,
+    draw(p, B, sol, cx) { return cartoes(B, 4, 180, (x, y, w, h, i) => { const q = p.p[i]; let o = fig(q.f, x + w / 2, y + 56, 82, cx) + t(x + w / 2, y + 120, q.w, 20, { w: 700 });
+      for (let k = 0; k < 4; k++) o += `<rect x="${x + w / 2 - 70 + k * 36}" y="${y + 136}" width="30" height="30" rx="4" fill="${sol && k < q.n ? '#bbb' : '#fff'}" stroke="#111" stroke-width="2"/>`; return o; }); },
+    resumo: (p) => p.p.map((q) => q.n).join(' · ') });
+  const ENC = [['cabra', 'br'], ['prato', 'pr'], ['flor', 'fl'], ['crocodilo', 'cr'], ['estrelas', 'tr'], ['livro', 'vr']].filter(([f]) => FICHAS_DES.D[f]);
+  const DIT = [['pao', 'ão'], ['limao', 'ão'], ['aviao', 'ão'], ['peixe', 'ei'], ['papaia', 'ai'], ['cadeira', 'ei'], ['palmeira', 'ei'], ['camiao', 'ão']].filter(([f]) => FICHAS_DES.D[f]);
+  const completaGrupo = (id, u, nm, lista, opcoes) => ex({ id, disc: 'lp', u, nome: nm, instr: () => `Completa a palavra com ${opcoes.join(', ').replace(/, ([^,]*)$/, ' ou $1')}.`,
+    gen(r) { return { p: take(r, lista, 4) }; }, alt: () => 230,
+    draw(p, B, sol, cx) { let o = t(B.x + B.w / 2, B.y + 30, opcoes.join('    '), 22, { w: 800 }); return o + cartoes({ x: B.x, y: B.y + 30, w: B.w }, 4, 186, (x, y, w, h, i) => { const [f, g] = p.p[i], wd = nome(f), k = wd.indexOf(g); let s = fig(f, x + w / 2, y + 64, 90, cx);
+      const antes = wd.slice(0, k), dep = wd.slice(k + g.length), fs = Math.min(28, (w - 20) / ((wd.length + 1) * 0.6)); const tw = (antes.length + dep.length) * fs * 0.6 + fs * 1.4, x0 = x + w / 2 - tw / 2;
+      s += t(x0, y + 156, antes, fs, { w: 700, a: 'start' }) + `<rect x="${(x0 + antes.length * fs * 0.6).toFixed(1)}" y="${(y + 156 - fs * 0.9).toFixed(1)}" width="${(fs * 1.3).toFixed(1)}" height="${(fs * 1.1).toFixed(1)}" rx="4" fill="#fff" stroke="#111" stroke-width="2"/>` + (sol ? t(x0 + antes.length * fs * 0.6 + fs * 0.65, y + 156, g, fs * 0.9, { w: 800, fill: '#555' }) : '') + t(x0 + antes.length * fs * 0.6 + fs * 1.4, y + 156, dep, fs, { w: 700, a: 'start' });
+      return s; }); },
+    resumo: (p) => p.p.map(([, g]) => g).join(' · ') });
+  completaGrupo('l1_encontros', 10, 'Encontros consonantais (br, cr, fl, pr, tr)', ENC, ['br', 'cr', 'fl', 'pr', 'tr', 'vr']);
+  completaGrupo('l1_ditongos', 11, 'Ditongos (ai, ei, ão)', DIT, ['ai', 'ei', 'ão']);
+  ex({ id: 'l1_lepinta', disc: 'lp', u: 12, nome: 'Lê a frase e rodeia', ic: 'rodear', instr: () => 'Lê a frase e rodeia o desenho certo.',
+    gen(r) { const ps = take(r, PAL.filter((q) => q.w.length <= 7), 9); const VERB = [['O', 'A', ' é grande.'], ['Vejo o ', 'Vejo a ', '.'], ['O meu ', 'A minha ', ' é bonit']]; return { l: [0, 1, 2].map((i) => ({ ok: ps[i * 3], it: mix(r, ps.slice(i * 3, i * 3 + 3)) })) }; }, alt: () => 280,
+    draw(p, B, sol, cx) { let o = ''; const rh = (B.h - 10) / 3; p.l.forEach((l, i) => { const y = B.y + 5 + rh * i, a = F.H.art(l.ok.f), fr = `${a === 'a' ? 'A' : 'O'} ${l.ok.w} está aqui.`;
+      o += t(B.x + 20, y + rh / 2 + 8, fr, 22, { w: 700, a: 'start' }); l.it.forEach((q, k) => { const x = B.x + 400 + k * 110; o += fig(q.f, x, y + rh / 2, rh * 0.72, cx); if (sol && q.f === l.ok.f) o += roda(x, y + rh / 2, rh * 0.45); });
+      if (i) o += `<line x1="${B.x + 14}" y1="${y}" x2="${B.x + B.w - 14}" y2="${y}" stroke="#bbb" stroke-dasharray="4 6"/>`; }); return o; },
+    resumo: (p) => p.l.map((l) => l.ok.w).join(', ') });
+  const PROP = ['Bissau', 'Bafatá', 'Gabu', 'Cacheu', 'Bolama', 'Aua', 'Braima', 'Djenabu', 'Malam', 'Binta'], COM = ['gato', 'mesa', 'escola', 'rio', 'casa', 'bola', 'manga', 'canoa', 'livro', 'sol'];
+  ex({ id: 'l1_proprios', disc: 'lp', u: 13, nome: 'Nomes próprios e nomes comuns', ic: 'rodear', instr: () => 'Rodeia os nomes próprios.',
+    gen(r) { const ok = take(r, PROP, 4); return { ok, it: mix(r, ok.concat(take(r, COM, 6))) }; }, alt: () => 150,
+    draw(p, B, sol) { let o = ''; p.it.forEach((w, i) => { const col = i % 5, row = Math.floor(i / 5), x = B.x + 80 + col * 138, y = B.y + 50 + row * 60; o += t(x, y + 9, w, 24, { w: 700 }); if (sol && p.ok.includes(w)) o += `<ellipse cx="${x}" cy="${y}" rx="${w.length * 8 + 16}" ry="24" fill="none" stroke="#111" stroke-width="4"/>`; }); return o; },
+    resumo: (p) => p.ok.join(', ') });
+  const FRASES = [['Como te chamas', '?'], ['O gato dorme na esteira', '.'], ['Que manga tão doce', '!'], ['Onde está a bola', '?'], ['A Aua vai à escola', '.'], ['Que calor', '!'], ['Gostas de caju', '?'], ['O rio é grande', '.']];
+  ex({ id: 'l1_pontuacao', disc: 'lp', u: 14, nome: 'A frase e a pontuação', instr: () => 'Escreve no quadrado o sinal certo: . ? ou !',
+    gen(r) { return { f: take(r, FRASES, 4) }; }, alt: () => 230,
+    draw(p, B, sol) { let o = t(B.x + B.w - 30, B.y + 34, '.    ?    !', 26, { w: 800, a: 'end' }); p.f.forEach(([fr, s], i) => { const y = B.y + 60 + i * 42; o += t(B.x + 30, y + 26, fr, 22, { w: 600, a: 'start' }); const x = B.x + 520; o += `<line x1="${B.x + 40 + fr.length * 12.8}" y1="${y + 26}" x2="${x - 8}" y2="${y + 26}" stroke="#bbb" stroke-width="1.5" stroke-dasharray="2 6"/>` + qd(x, y, 36) + (sol ? rs(x, y, s, 36) : ''); }); return o; },
+    resumo: (p) => p.f.map(([, s]) => s).join(' ') });
+  const RIMAS = [['gato', 'pato'], ['mao', 'pao'], ['limao', 'aviao'], ['carro', 'burro'], ['sapo', 'pato'], ['vela', 'panela']].filter(([a, b]) => FICHAS_DES.D[a] && FICHAS_DES.D[b]);
+  ex({ id: 'l1_rimas', disc: 'lp', u: 15, nome: 'Liga as palavras que rimam', ic: 'ligar', instr: () => 'Liga as palavras que rimam.',
+    gen(r) { let ps = []; for (const pr of mix(r, RIMAS)) { if (ps.length < 4 && !ps.flat().some((x) => pr.includes(x))) ps.push(pr); } return { p: ps, ord: mix(r, ps.map((_, i) => i)) }; }, alt: () => 250,
+    draw(p, B, sol, cx) { const n = p.p.length, rh = (B.h - 10) / n, yc = (i) => B.y + 5 + rh * (i + 0.5); let o = '';
+      p.p.forEach(([a], i) => { o += fig(a, B.x + 50, yc(i), rh * 0.75, cx) + t(B.x + 100, yc(i) + 9, nome(a), 24, { w: 700, a: 'start' }) + ponto(B.x + 250, yc(i)); });
+      p.ord.forEach((k, j) => { const b = p.p[k][1]; o += ponto(B.x + 440, yc(j)) + t(B.x + 470, yc(j) + 9, nome(b), 24, { w: 700, a: 'start' }) + fig(b, B.x + B.w - 60, yc(j), rh * 0.75, cx); });
+      if (sol) p.p.forEach((_, i) => { o += linha(B.x + 250, yc(i), B.x + 440, yc(p.ord.indexOf(i))); }); return o; },
+    resumo: (p) => p.p.map(([a, b]) => `${nome(a)}–${nome(b)}`).join(', ') });
+  const HIST = [['ovo', 'pintainho', 'galinha'], ['nuvem', 'chuva', 'flor'], ['bebe', 'menino', 'papa'], ['sol', 'lua', 'estrelas']].filter((h) => h.every((f) => FICHAS_DES.D[f]));
+  ex({ id: 'l1_historia', disc: 'lp', u: 16, nome: 'Ordena as imagens da história', instr: () => 'Escreve 1, 2 e 3 pela ordem da história.',
+    gen(r) { return { h: take(r, HIST, 2).map((h) => ({ h, o: (() => { let m; let k = 0; do { m = mix(r, [0, 1, 2]); } while (m.every((v, i) => v === i) && k++ < 9); return m; })() })) }; }, alt: () => 260,
+    draw(p, B, sol, cx) { let o = ''; p.h.forEach((q, i) => { const y = B.y + 10 + i * 122; q.o.forEach((k, j) => { const x = B.x + 30 + j * 230; o += `<rect x="${x}" y="${y}" width="210" height="112" rx="10" fill="none" stroke="#111" stroke-width="1.5"/>` + fig(q.h[k], x + 80, y + 56, 90, cx) + qd(x + 160, y + 34, 40) + (sol ? rs(x + 160, y + 34, k + 1, 40) : ''); }); }); return o; },
+    resumo: (p) => p.h.map((q) => q.o.map((k) => k + 1).join('-')).join(' · ') });
+
+  /* ============================================================ montagem das folhas (com verso quando é preciso) */
+  const disponiveis = (ano, disc, tri) => F.T.filter((q) => q.ciclo === 'EB' && q.ano.includes(ano) && q.disc === disc && q.u <= maxU(disc, tri));
+  const ctx = (Fi) => ({ ano: Fi.ano, tri: Fi.tri, disc: Fi.disc, maxU: maxU(Fi.disc, Fi.tri) });
+  const novo = (t, Fi, seed) => { const s = seed || Math.floor(Math.random() * 1e9); return { t, seed: s, p: F.TIPO[t].gen(rnd(s), ctx(Fi)) }; };
+  // cotações: 20 valores repartidos pelo peso de cada exercício (meio valor de cada vez); as escritas pelo professor ficam
+  function cotacoes(Fi) {
+    const ex = Fi.ex.filter((e) => F.TIPO[e.t]), fix = ex.map((e) => (e.cot != null && e.cot !== '' && isFinite(+e.cot) ? +e.cot : null));
+    const resto = 20 - fix.reduce((a, b) => a + (b || 0), 0), auto = ex.map((e, i) => (fix[i] == null ? F.TIPO[e.t].cot || 1 : 0)), pa = auto.reduce((a, b) => a + b, 0);
+    const out = ex.map((e, i) => (fix[i] != null ? fix[i] : pa ? Math.round(resto * auto[i] / pa * 2) / 2 : 0));
+    const dif = Math.round((20 - out.reduce((a, b) => a + b, 0)) * 2) / 2; const k = out.map((v, i) => (fix[i] == null ? i : -1)).filter((i) => i >= 0).pop(); if (k != null && k >= 0 && dif) out[k] += dif;
+    return out;
+  }
+  const valTxt = (v) => `${String(v).replace('.', ',')} ${v === 1 ? 'valor' : 'valores'}`;
+  function versao(Fi, v) { if (v !== 'B') return Fi; return Object.assign({}, Fi, { ex: Fi.ex.map((e) => (F.TIPO[e.t] ? { t: e.t, cot: e.cot, seed: (e.seed ^ 0x5bd1e995) >>> 0, p: F.TIPO[e.t].gen(rnd((e.seed ^ 0x5bd1e995) >>> 0), ctx(Fi)) } : e)) }); }
+  function cab(Fi, op, pg, tot) {
+    const prova = Fi.doc === 'prova', sol = op.sol, v = op.ver || 'A';
+    const sub = prova ? `Prova de ${DISC[Fi.disc]} · ${ANO[Fi.ano]} · ${Fi.tri}.º trimestre${Fi.ver === 'AB' ? ' · Versão ' + v : ''}${Fi.n ? ' · n.º ' + Fi.n : ''}` : `Ficha de trabalho · ${DISC[Fi.disc]} · ${ANO[Fi.ano]} · ${Fi.tri}.º trimestre`;
+    if (pg > 0) return `<rect x="40" y="30" width="714" height="56" rx="12" fill="#fff" stroke="#111" stroke-width="2"/>` + t(60, 54, 'CEL – Visão do Futuro · ' + sub, 12.5, { a: 'start', w: 600, fill: '#333' }) + (sol ? t(60, 76, prova ? 'Gabarito (continuação)' : 'Soluções (continuação)', 13, { a: 'start', w: 800 }) : t(60, 76, (op.nome ? 'Nome: ' + op.nome : 'Nome: ______________________________') + '   (verso)', 13, { a: 'start', w: 400 })) + t(736, 66, `${pg + 1}/${tot}`, 13, { a: 'end', w: 700 });
+    let o = `<rect x="40" y="30" width="714" height="112" rx="14" fill="#fff" stroke="#111" stroke-width="2"/>` + t(60, 60, 'CEL – Visão do Futuro', 19, { a: 'start', w: 800 }) + t(60, 82, sub, 13, { a: 'start', w: 400, fill: '#333' });
+    const nm = op.nome ? `Nome: ${op.nome}` : 'Nome: _____________________________';
+    if (sol) o += t(60, 118, prova ? 'Gabarito · só para o professor' : 'Folha de soluções · só para o professor', 15, { a: 'start', w: 800 });
+    else if (prova) o += t(60, 110, nm + '  Turma: _____', 14, { a: 'start', w: 400 }) + t(60, 132, `Data: ____ / ____ / ______   Duração: ${Fi.dur ? Fi.dur + ' min' : '_____'}`, 14, { a: 'start', w: 400 });
+    else o += t(60, 122, nm + '   Data: ____ / ____ / ______', 14, { a: 'start', w: 400 });
+    if (prova) o += `<rect x="560" y="44" width="180" height="86" rx="10" fill="#fff" stroke="#111" stroke-width="2"/>` + t(650, 66, 'Classificação', 12, { w: 700 }) + t(650, 98, sol ? '20' : '_____', 24, { w: 800 }) + t(650, 120, sol ? 'valores · Excelente' : 'valores · ____________', 11, { w: 400 });
+    else o += `<rect x="614" y="46" width="122" height="40" rx="20" fill="#111"/>` + t(675, 72, sol ? 'Soluções' : `Ficha ${Fi.n || '—'}`, 15, { fill: '#fff', w: 800 });
+    return o;
+  }
+  function paginas(Fi0, op = {}) {
+    const Fi = versao(Fi0, op.ver), cx = { foto: Fi.foto || '', nome: op.nome || '' }, prova = Fi.doc === 'prova', cots = cotacoes(Fi);
+    const ex = Fi.ex.filter((e) => F.TIPO[e.t]), blocos = [];
+    ex.forEach((e, i) => { const q = F.TIPO[e.t], h = q.alt(e.p); blocos.push({ e, q, i, h: h + 46 }); });
+    const fundo = prova ? 1050 : 1036, pags = [[]]; let y = 162;
+    blocos.forEach((b) => { if (y + b.h > fundo && pags[pags.length - 1].length) { pags.push([]); y = 102; } b.y = y; pags[pags.length - 1].push(b); y += b.h + 14; });
+    const tot = pags.length;
+    return pags.map((bs, pg) => {
+      let corpo = '';
+      bs.forEach((b) => { const yi = b.y + 16, ins = b.q.instr(b.e.p, cx), fsz = Math.min(18, (prova ? 520 : 600) / (ins.length * 0.52));
+        corpo += `<circle cx="58" cy="${yi}" r="16" fill="#111"/>` + t(58, yi + 6, String(b.i + 1), 16, { fill: '#fff', w: 800 }) + `<rect x="82" y="${yi - 19}" width="38" height="38" rx="8" fill="#fff" stroke="#111" stroke-width="2"/><g transform="translate(${b.q.ic === 'rodear' ? 82 : 83},${yi - 21}) scale(0.8)">${ICON[b.q.ic] || ICON.tracar}</g>` + t(132, yi + fsz * 0.36, ins, fsz.toFixed(1), { a: 'start', w: 800 });
+        if (prova) corpo += t(754, yi + 5, `(${valTxt(cots[b.i])})`, 12.5, { a: 'end', w: 600, fill: '#333' });
+        const B = { x: 40, y: b.y + 40, w: 714, h: b.h - 46 }; corpo += caixa(B) + b.q.draw(b.e.p, B, !!op.sol, cx);
+        if (op.sol && b.q.livre && b.q.orient) corpo += t(B.x + B.w / 2, B.y + B.h - 10, b.q.orient, 12, { w: 400, fill: '#333' }); });
+      let pe = '';
+      if (pg === tot - 1) {
+        if (op.sol) { const partes = ex.map((e, i) => { const q = F.TIPO[e.t]; return `${i + 1}${prova ? ' (' + String(cots[i]).replace('.', ',') + ' v)' : ''}: ${q.livre ? 'livre' : q.resumo ? q.resumo(e.p) : 'ver a folha'}`; }); let s = (prova ? 'Respostas e cotação — ' : 'Certas — ') + partes.join(' · '); if (s.length > 118) s = s.slice(0, 117) + '…';
+          pe += t(40, 1072, s, 11, { a: 'start', w: 400, fill: '#333' }); }
+        else if (!prova) { const cara = (x, d) => `<circle cx="${x}" cy="1067" r="16" fill="#fff" stroke="#111" stroke-width="2.5"/><circle cx="${x - 6}" cy="1062" r="2" fill="#111"/><circle cx="${x + 6}" cy="1062" r="2" fill="#111"/><path d="${d}" fill="none" stroke="#111" stroke-width="2.5" stroke-linecap="round"/>`;
+          pe += t(40, 1072, 'Como correu? (o professor rodeia)', 13, { a: 'start', w: 400, fill: '#333' }) + cara(340, 'M332 1071 C336 1077 344 1077 348 1071') + cara(390, 'M382 1073 L398 1073') + cara(440, 'M432 1075 C436 1069 444 1069 448 1075'); }
+      }
+      if (tot > 1 && pg === 0) pe += t(397, 1092, `Continua no verso →`, 12, { w: 700 });
+      pe += t(754, 1092, 'Portal CEL · Recursos do Professor · Fichas', 11, { a: 'end', w: 400, fill: '#555' });
+      const wm = op.sol ? `<text x="397" y="620" text-anchor="middle" font-family="${FONT}" font-size="${prova ? 104 : 120}" font-weight="800" fill="none" stroke="#e2e2e2" stroke-width="2" transform="rotate(-30 397 620)">${prova ? 'GABARITO' : 'SOLUÇÕES'}</text>` : '';
+      return `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="794" height="1123" viewBox="0 0 794 1123"><defs><filter id="cinza"><feColorMatrix type="saturate" values="0"/></filter></defs><rect width="794" height="1123" fill="#fff"/>${wm}${cab(Fi, op, pg, tot)}${corpo}${pe}</svg>`;
+    });
+  }
+  F.EB.paginas = paginas;
+  return { DISC, ANO, UNI, maxU, disponiveis, novo, cotacoes, ctx, paginas, NOMES };
 })();
 </script>
 <script>(() => {
@@ -7806,6 +8217,9 @@ function toolRomanos() {
 
 /* ============================================================ CÓPIAS E ATUALIZAÇÕES */
 const NOVIDADES = [
+  { v: '1.23.0', d: '19/11/2026', itens: ['«Fichas com desenhos» chega ao 1.º ano: Matemática e Língua Portuguesa, ligadas às unidades dos manuais do CEL. Escolha o trimestre: contam como dadas as unidades previstas até lá.',
+    'Ficha de trabalho ou Prova: na prova, a cotação de 20 valores reparte-se sozinha (pode mudá-la), há caixa de classificação e conceito, versões A e B e o gabarito à parte. Quando não cabe numa folha, segue no verso.',
+    'Mais de 30 exercícios: contar, juntar e tirar, comparar, reta numérica, problemas com nomes da nossa terra, formas, medidas, dinheiro em francos CFA, dias e meses, gráficos; vogais, letras, sílabas, encontros, ditongos, nomes próprios, pontuação, rimas e histórias. Letra de imprensa para ler e letra manuscrita (Playwrite PT) para traçar e copiar.'] },
   { v: '1.22.0', d: '19/11/2026', itens: ['Nova secção «Fichas com desenhos» (o antigo EducaPro): fichas de trabalho do Jardim de Infância, a preto e branco, numa folha A4, com desenhos de linha feitos para o CEL (frutos, animais, a tabanca, a canoa, a escola…). Funciona sem internet.',
     'Escolha o nível (I, II ou III) e a área; há 21 exercícios nas cinco áreas (traçar, contornar, pintar, labirinto, ligar, rodear, contar, sequências, letras e o próprio nome…) e a dificuldade ajusta-se ao nível. Troque os desenhos e os números, peça «Gerar outra» ou use uma fotografia sua.',
     'A folha de soluções sai à parte, só para o professor. Cada ficha fica numerada em «As minhas fichas»; com «Toda a turma» sai uma folha com o nome de cada criança (a lista fica só no telemóvel). Imprimir ou guardar em PDF.'] },
