@@ -352,7 +352,7 @@ legend { font-size: 12.5px; font-weight: 700; color: var(--ink-2); padding: 0 4p
 .cal-q { font-size: 12.5px; font-weight: 700; color: var(--ink-2); white-space: nowrap }
 .cal-q.perto { color: var(--amber-ink); background: var(--amber); border-radius: 999px; padding: 3px 10px }
 .cal-mes h2 { font-size: 19px; margin: 8px 0 10px }
-.g-reuniao { --cal-c: #2F6FED } .g-familias { --cal-c: #1F9D60 } .g-provas { --cal-c: #E0A100 } .g-aida { --cal-c: #9B5BD6 } .g-letiva { --cal-c: #5B7DB8 }
+.g-reuniao { --cal-c: #2F6FED } .g-familias { --cal-c: #1F9D60 } .g-provas { --cal-c: #E0A100 } .g-aida { --cal-c: #9B5BD6 } .g-letiva { --cal-c: #5B7DB8 } .g-complementar { --cal-c: #E07B39 }
 .g-feriado { --cal-c: #D9344B } .g-ferias { --cal-c: #E8798A } .g-matriculas { --cal-c: #13A3AE } .g-financeiro { --cal-c: #A67C2E } .g-alusiva { --cal-c: #8A95A8 }
 @media (max-width: 560px) { .cal-ev { grid-template-columns: 50px minmax(0, 1fr); gap: 10px } .cal-q { grid-column: 2; justify-self: start } }
 
@@ -418,6 +418,8 @@ legend { font-size: 12.5px; font-weight: 700; color: var(--ink-2); padding: 0 4p
 @media (max-width: 640px) { .top-conecta .tc-txt small { display: none } .top-conecta { padding: 6px 10px } }
 @media (max-width: 420px) { .top-conecta .tc-txt { display: none } .top-conecta { padding: 8px } }
 @media (prefers-reduced-motion: reduce) { .top-conecta .tc-ponto::after, .top-conecta.chama { animation: none } }
+
+.cal-nota { margin: 4px 0 0; font-size: 13px; color: var(--ink-2); line-height: 1.45 }
 /* entrada: registo, pedido do código, ativação e bloqueio */
 body:not(.ready) > .top, body:not(.ready) > .layout { display: none }
 .gate[hidden] { display: none }
@@ -926,7 +928,7 @@ body.abr-cheio-b { overflow: hidden }
 <div id="toast" role="status" aria-live="polite"></div>
 <div id="print-root"></div>
 <div id="barra" class="barra" hidden></div>
-<script type="application/json" id="cel-config">{"versao": "1.18.1", "ano": "2026/2027", "chaveId": "1987a8c7", "verificador": "m+HQwwNueX1G3XlMCpRsYJOV0Tkds6FCJhmeHgobCN6OFobxkzA=", "dados": "dados.a05f8f1399.bin", "contactos": {"whatsapp": "245955252417", "email": "cel.vf.gb@gmail.com"}, "diasSemLigacao": 30, "sb": "https://ebwjnennfmwnhwdfxbuy.supabase.co", "anon": "sb_publishable_oLn3lkMEwu4sEOUTjRCLQA_4evc_ezB"}</script>
+<script type="application/json" id="cel-config">{"versao": "1.18.2", "ano": "2026/2027", "chaveId": "1987a8c7", "verificador": "m+HQwwNueX1G3XlMCpRsYJOV0Tkds6FCJhmeHgobCN6OFobxkzA=", "dados": "dados.26347696d7.bin", "contactos": {"whatsapp": "245955252417", "email": "cel.vf.gb@gmail.com"}, "diasSemLigacao": 30, "sb": "https://ebwjnennfmwnhwdfxbuy.supabase.co", "anon": "sb_publishable_oLn3lkMEwu4sEOUTjRCLQA_4evc_ezB"}</script>
 <script>/* Gerador mínimo de .docx (Word) no navegador — sem bibliotecas externas.
    Blocos: {t:'h', text, level} · {t:'p', text|runs, align, size, before, after, keep, border}
            {t:'list', items:[text|runs], ordered} · {t:'table', rows, widths, header, borders, minH}
@@ -6980,6 +6982,7 @@ function toolRomanos() {
 
 /* ============================================================ CÓPIAS E ATUALIZAÇÕES */
 const NOVIDADES = [
+  { v: '1.18.2', d: '18/11/2026', itens: ['Calendário: férias com o período completo (21/12 a 01/01, 22/03 a 02/04, 05/07 a 17/09), aulas de reforço nas férias (19/07 a 31/08/2027, atividade complementar facultativa) e início do ano letivo 2027/2028 a 20/09/2027.'] },
   { v: '1.18.1', d: '18/11/2026', itens: ['Calendário 2026/2027 atualizado: depois das provas de cada trimestre, os dias servem para preparar a AIDA-CEL (Natal das Crianças, passeio escolar, formatura); as férias do 2.º trimestre começam a 22/03/2027 e as de fim do ano letivo a 05/07/2027.'] },
   { v: '1.18.0', d: '18/11/2026', itens: ['Gestão escolar → Relatórios: «Resumo mensal» em PDF (A4), para a Coordenação Geral e a Direção: entradas, saídas e saldo (com a comparação com o mês anterior), entradas por tipo e saídas por categoria, cobranças em atraso, matrículas, pessoal e adiantamentos, recibos anulados, pedidos para apagar, contratos, documentos e a última cópia de segurança.',
     'No início de cada mês, a Coordenação Geral vê o aviso «Resumo de … pronto», com o botão para o abrir.'] },
@@ -7112,7 +7115,7 @@ function vAtualizacoes() {
 /* ============================================================ CALENDÁRIO DE ATIVIDADES */
 const CAL = C.calendario || null;
 const GRUPOS = [['reuniao', 'Reuniões pedagógicas'], ['familias', 'Reuniões com as famílias'], ['provas', 'Provas e avaliações'], ['aida', 'AIDA-CEL'],
-  ['letiva', 'Atividade letiva'], ['feriado', 'Feriados e recessos'], ['ferias', 'Férias escolares'], ['matriculas', 'Matrículas'], ['financeiro', 'Prazos financeiros'], ['alusiva', 'Datas alusivas']];
+  ['letiva', 'Atividade letiva'], ['complementar', 'Atividades complementares'], ['feriado', 'Feriados e recessos'], ['ferias', 'Férias escolares'], ['matriculas', 'Matrículas'], ['financeiro', 'Prazos financeiros'], ['alusiva', 'Datas alusivas']];
 const DSEM = ['domingo', 'segunda', 'terça', 'quarta', 'quinta', 'sexta', 'sábado'];
 const MESES = ['janeiro', 'fevereiro', 'março', 'abril', 'maio', 'junho', 'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro'];
 const dOf = (iso) => { const [y, m, d] = String(iso).split('-').map(Number); return new Date(y, m - 1, d); };
@@ -7141,7 +7144,8 @@ function evRow(e, ref) {
     dataChip(d0),
     h('div', { class: 'cal-tx' }, h('b', null, e.t),
       h('div', { class: 'cal-meta' }, h('span', { class: 'sr' }, quando), h('span', { class: 'cal-cat' }, h('i', { 'aria-hidden': 'true' }), evCat(e)),
-        (e.datas && e.datas.length > 1) || e.ini ? h('span', null, e.txt) : null, e.h ? h('span', null, e.h) : null)),
+        (e.datas && e.datas.length > 1) || e.ini ? h('span', null, e.txt) : null, e.h ? h('span', null, e.h) : null),
+      e.nota ? h('p', { class: 'cal-nota' }, e.nota) : null),
     q ? h('span', { class: 'cal-q' + (p && !p.decorrer && diasAte(p.d, ref) <= 1 ? ' perto' : '') }, q) : null);
 }
 function proximas(ref, dias, max) {
