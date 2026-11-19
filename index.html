@@ -919,6 +919,22 @@ body.abr-cheio-b { overflow: hidden }
 .abr-meu-a b { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap }
 .abr-meu-a small, .abr-espaco { color: var(--ink-3); font-size: 12px }
 .abr-vazio { margin: 0 }
+/* Fichas do Jardim (1.22.0) */
+.fch-folha { background: #fff; border: 1px solid var(--line); border-radius: var(--r-sm); box-shadow: var(--shadow); overflow: hidden; margin-top: 10px }
+.fch-folha svg { display: block; width: 100%; height: auto }
+.fch-ops { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 6px 14px }
+.fch-op { align-items: flex-start; line-height: 1.3 }
+.fch-op input { margin-top: 1px; flex: none }
+.fch-aj { border-top: 1px solid var(--line); padding-top: 10px; display: flex; flex-direction: column; gap: 8px }
+.fch-aj:first-of-type { border-top: 0; padding-top: 0 }
+.fch-tr { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 8px }
+.fch-tr label { display: flex; flex-direction: column; gap: 3px; font-size: 12.5px; color: var(--ink-2) }
+.fch-tr select { width: 100% }
+.fch-file { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none }
+.fch-mini { width: 64px; height: 64px; object-fit: cover; border-radius: 8px; border: 1px solid var(--line); filter: grayscale(1) }
+details > summary { cursor: pointer; margin: 4px 0 }
+.fch-ver { display: none }
+@media (max-width: 1100px) { .fch-ver { display: inline-flex } }
 </style>
 </head>
 <body>
@@ -928,7 +944,7 @@ body.abr-cheio-b { overflow: hidden }
 <div id="toast" role="status" aria-live="polite"></div>
 <div id="print-root"></div>
 <div id="barra" class="barra" hidden></div>
-<script type="application/json" id="cel-config">{"versao": "1.21.0", "ano": "2026/2027", "chaveId": "1987a8c7", "verificador": "m+HQwwNueX1G3XlMCpRsYJOV0Tkds6FCJhmeHgobCN6OFobxkzA=", "dados": "dados.26347696d7.bin", "contactos": {"whatsapp": "245955252417", "email": "cel.vf.gb@gmail.com"}, "diasSemLigacao": 30, "sb": "https://ebwjnennfmwnhwdfxbuy.supabase.co", "anon": "sb_publishable_oLn3lkMEwu4sEOUTjRCLQA_4evc_ezB"}</script>
+<script type="application/json" id="cel-config">{"versao": "1.22.0", "ano": "2026/2027", "chaveId": "1987a8c7", "verificador": "m+HQwwNueX1G3XlMCpRsYJOV0Tkds6FCJhmeHgobCN6OFobxkzA=", "dados": "dados.26347696d7.bin", "contactos": {"whatsapp": "245955252417", "email": "cel.vf.gb@gmail.com"}, "diasSemLigacao": 30, "sb": "https://ebwjnennfmwnhwdfxbuy.supabase.co", "anon": "sb_publishable_oLn3lkMEwu4sEOUTjRCLQA_4evc_ezB"}</script>
 <script>/* Gerador mínimo de .docx (Word) no navegador — sem bibliotecas externas.
    Blocos: {t:'h', text, level} · {t:'p', text|runs, align, size, before, after, keep, border}
            {t:'list', items:[text|runs], ordered} · {t:'table', rows, widths, header, borders, minH}
@@ -5598,6 +5614,814 @@ const CELCODE = (() => {
   return { TAM, b32enc, b32dec, limpa, grupos, normNome, normEmail, normTel, ligacao, diasDe, isoDe, dataPT, hojeDias, b64, unb64, aesDe, decifra, impressao, gera, abre, linhaPedido, lePedido, semAcentos };
 })();
 </script>
+<script>/* Fichas do Jardim (1.22.0): biblioteca de desenhos de linha, feitos de raiz para o Portal CEL, e letras e números de traço único.
+   Cada desenho cabe numa caixa de 100 × 100; contorno preto grosso e interior branco, para a criança pintar.
+   «t» (etiquetas): grupo e o que serve a cada exercício (comer, noite, dia, limpo, sala+, sala-, animal, casa:…). */
+const FICHAS_DES = (() => {
+  const D = {};
+  const f = (id, nome, t, svg) => { D[id] = { nome, t: t.split(' '), svg }; };
+  const L = 'stroke-width="2.5"', P = 'fill="#111"', N = 'fill="none"';
+
+  /* ---------- frutos e comida */
+  f('caju', 'caju', 'frutos comer', `<path d="M50 12 L53 2"/><path d="M50 12 C70 10 82 24 80 42 C78 58 66 68 50 70 C34 68 22 58 20 42 C18 24 30 10 50 12Z"/><path d="M38 68 C28 76 30 96 46 96 C60 96 68 86 64 74 C62 70 58 76 53 76 C47 76 42 72 40 68Z"/><path d="M32 30 C30 38 30 46 34 52" ${L} ${N}/>`);
+  f('manga', 'manga', 'frutos comer', `<path d="M60 12 C66 4 80 2 90 8 C80 16 68 16 60 12Z"/><path d="M56 14 L58 20"/><path d="M58 20 C82 22 96 50 86 76 C76 100 44 106 26 90 C10 76 14 50 30 34 C38 26 46 20 58 20Z"/><path d="M32 48 C30 56 31 64 34 70" ${L}/>`);
+  f('banana', 'banana', 'frutos comer', `<path d="M18 22 L14 14 L22 12 L24 20"/><path d="M22 20 C14 50 30 84 66 88 C80 89 90 84 94 78 C80 80 60 76 46 62 C34 50 28 36 26 20 Z"/><path d="M30 34 C34 52 44 66 60 76" ${L} ${N}/>`);
+  f('papaia', 'papaia', 'frutos comer', `<path d="M50 6 L50 14"/><path d="M50 14 C66 14 74 30 76 50 C78 74 66 94 50 94 C34 94 22 74 24 50 C26 30 34 14 50 14Z"/><path d="M50 40 C58 40 62 52 60 64 C58 76 42 76 40 64 C38 52 42 40 50 40Z" ${L}/><circle cx="47" cy="56" r="2" ${P}/><circle cx="53" cy="62" r="2" ${P}/><circle cx="49" cy="66" r="2" ${P}/>`);
+  f('mancarra', 'mancarra', 'frutos comer', `<path d="M38 8 C54 4 66 16 62 32 C60 40 56 44 58 54 C62 68 64 90 44 94 C24 98 18 78 28 62 C34 52 32 46 30 38 C26 24 28 10 38 8Z"/><path d="M36 22 L40 24 M46 18 L48 22 M50 32 L46 34 M40 70 L44 72 M36 80 L40 80 M48 82 L50 86" ${L}/><path d="M33 44 C40 48 50 48 56 44" ${L} ${N}/>`);
+  f('laranja', 'laranja', 'frutos comer', `<path d="M50 14 L52 6"/><path d="M52 10 C60 2 72 4 76 10 C68 14 58 14 52 10Z"/><circle cx="50" cy="56" r="38"/><circle cx="36" cy="44" r="1.8" ${P}/><circle cx="58" cy="38" r="1.8" ${P}/><circle cx="66" cy="62" r="1.8" ${P}/><circle cx="42" cy="70" r="1.8" ${P}/>`);
+  f('ananas', 'ananás', 'frutos comer', `<path d="M50 36 L40 4 L50 22 L56 2 L58 24 L74 8 L62 34 Z"/><path d="M30 46 C30 36 70 36 70 46 L70 80 C70 98 30 98 30 80Z"/><path d="M30 52 L66 92 M30 70 L52 94 M44 40 L70 68 M34 92 L70 50 M30 76 L64 40 M46 94 L70 70" ${L}/>`);
+  f('coco', 'coco', 'frutos comer', `<path d="M14 54 C14 28 30 12 52 12 C76 12 88 32 86 54 C84 80 68 92 48 92 C28 92 14 78 14 54Z"/><circle cx="40" cy="40" r="4" ${P}/><circle cx="56" cy="38" r="4" ${P}/><circle cx="48" cy="52" r="4" ${P}/><path d="M24 30 C30 40 30 52 26 64 M74 28 C70 40 72 56 78 66" ${L} ${N}/>`);
+  f('arroz', 'arroz', 'comida comer', `<path d="M10 52 L90 52 C88 76 72 90 50 90 C28 90 12 76 10 52Z"/><path d="M14 52 C16 34 30 24 50 24 C70 24 84 34 86 52"/><path d="M32 38 l4 2 M46 32 l4 1 M60 38 l4 -1 M40 46 l4 1 M56 46 l4 -1 M70 44 l3 2 M26 46 l3 1" ${L}/><path d="M40 90 L38 96 L62 96 L60 90"/>`);
+  f('pao', 'pão', 'comida comer', `<path d="M8 66 C6 40 26 28 50 28 C74 28 94 40 92 66 C92 74 86 78 78 78 L22 78 C14 78 8 74 8 66Z"/><path d="M30 40 C34 46 34 54 30 60 M50 36 C54 44 54 52 50 60 M70 40 C74 46 74 54 70 60" ${L} ${N}/>`);
+  f('ovo', 'ovo', 'comida comer', `<path d="M50 8 C72 8 86 42 86 62 C86 82 70 94 50 94 C30 94 14 82 14 62 C14 42 28 8 50 8Z"/><path d="M30 40 C32 32 36 26 40 22" ${L} ${N}/>`);
+  f('milho', 'milho', 'comida comer', `<path d="M40 14 C58 10 66 30 64 54 C62 74 56 88 48 90 C40 88 34 74 34 54 C32 34 30 16 40 14Z"/><path d="M36 30 L62 30 M34 44 L64 44 M34 58 L63 58 M37 72 L60 72 M44 16 L42 88 M54 14 L56 88" ${L}/><path d="M46 92 C30 84 20 66 22 40 C30 56 36 70 46 80 M50 92 C66 84 78 68 78 44 C70 58 62 70 52 80"/>`);
+  f('tomate', 'tomate', 'frutos comer', `<path d="M50 24 C74 22 92 38 90 60 C88 82 70 94 50 94 C30 94 12 82 10 60 C8 38 26 22 50 24Z"/><path d="M50 26 L38 16 L48 20 L50 8 L54 20 L66 14 L58 26 L68 30 L52 30 L44 34 L46 28 L34 30 Z"/>`);
+  f('limao', 'limão', 'frutos comer', `<path d="M8 52 C8 30 30 18 50 18 C70 18 92 30 92 52 C92 74 70 86 50 86 C30 86 8 74 8 52Z"/><path d="M6 52 L12 52 M88 52 L94 52"/><path d="M24 36 C30 30 38 28 44 28" ${L} ${N}/>`);
+  f('peixe_seco', 'peixe seco', 'comida comer', `<path d="M10 50 C22 34 54 30 76 42 L94 30 L90 50 L94 70 L76 58 C54 70 22 66 10 50Z"/><circle cx="24" cy="48" r="3" ${P}/><path d="M38 40 L38 60 M50 38 L50 62 M62 40 L62 60" ${L}/>`);
+
+  /* ---------- animais */
+  f('galinha', 'galinha', 'animais animal casa:capoeira', `<path d="M42 84 L40 96 M34 96 L46 96 M58 84 L60 96 M54 96 L66 96"/><path d="M76 44 C90 30 96 34 92 50 C98 46 100 56 90 64"/><ellipse cx="54" cy="62" rx="34" ry="25"/><path d="M38 60 C48 74 66 74 74 62" ${L} ${N}/><path d="M16 14 C16 6 22 6 23 12 C24 4 31 4 30 12 C33 6 39 10 34 16"/><circle cx="26" cy="32" r="14"/><path d="M12 30 L2 35 L12 39 Z" ${P}/><circle cx="22" cy="29" r="2.6" ${P}/>`);
+  f('pintainho', 'pintainho', 'animais animal casa:capoeira', `<path d="M44 86 L42 96 M38 96 L48 96 M58 86 L60 96 M56 96 L66 96"/><ellipse cx="54" cy="66" rx="28" ry="22"/><circle cx="36" cy="38" r="16"/><path d="M20 36 L10 40 L20 44 Z" ${P}/><circle cx="32" cy="34" r="2.6" ${P}/><path d="M50 64 C56 72 66 72 72 64" ${L} ${N}/><path d="M36 22 C34 16 38 14 40 20" ${L}/>`);
+  f('cabra', 'cabra', 'animais animal casa:curral', `<path d="M38 70 L36 94 M50 72 L50 94 M72 72 L72 94 M84 70 L86 94"/><path d="M32 50 C38 40 76 38 88 46 C98 54 94 72 84 74 L36 74 C26 72 24 58 32 50Z"/><path d="M92 50 L98 42" ${L}/><path d="M34 52 C28 58 16 58 10 50 C6 42 10 30 20 28 C30 28 36 36 36 44 Z"/><path d="M22 28 C22 16 32 8 44 12 M28 28 C30 20 38 16 46 20" ${N}/><path d="M32 34 L44 36 L34 42"/><path d="M12 50 L10 62 L18 54"/><circle cx="20" cy="38" r="2.4" ${P}/>`);
+  f('vaca', 'vaca', 'animais animal casa:curral', `<path d="M28 70 L28 94 M40 72 L40 94 M66 72 L66 94 M78 70 L78 94"/><path d="M20 42 C26 34 74 32 86 40 C94 48 92 70 80 72 L28 72 C14 70 12 50 20 42Z"/><path d="M90 46 C96 56 96 66 94 70" ${L} ${N}/><path d="M44 42 C52 44 54 56 46 60 C40 58 38 48 44 42Z M64 54 C70 54 74 62 68 66 C62 66 60 58 64 54Z" ${P}/><path d="M8 26 C8 16 32 16 32 26 L32 42 C32 54 8 54 8 42Z"/><path d="M8 26 C2 22 0 14 4 12 M32 26 C38 22 40 14 36 12"/><circle cx="15" cy="30" r="2.2" ${P}/><circle cx="25" cy="30" r="2.2" ${P}/><ellipse cx="20" cy="44" rx="9" ry="6" ${L}/><path d="M42 72 C44 80 52 80 54 72" ${L}/>`);
+  f('porco', 'porco', 'animais animal casa:curral', `<path d="M30 74 L30 92 M42 76 L42 92 M62 76 L62 92 M74 74 L74 92"/><path d="M14 54 C14 34 36 26 54 26 C76 26 90 40 90 56 C90 72 74 80 54 80 C34 80 14 72 14 54Z"/><path d="M90 54 C98 52 98 44 92 46" ${L} ${N}/><ellipse cx="14" cy="56" rx="8" ry="11"/><circle cx="12" cy="52" r="1.8" ${P}/><circle cx="12" cy="60" r="1.8" ${P}/><circle cx="30" cy="44" r="2.6" ${P}/><path d="M34 28 L30 14 L44 26"/>`);
+  f('peixe', 'peixe', 'animais animal casa:rio', `<path d="M76 50 L98 30 L96 70 Z"/><ellipse cx="44" cy="50" rx="34" ry="22"/><circle cx="24" cy="44" r="3.5" ${P}/><path d="M48 30 C44 40 44 60 48 70" ${L} ${N}/><path d="M12 56 C16 58 20 58 24 56" ${L} ${N}/>`);
+  f('passaro', 'pássaro', 'animais animal casa:ninho', `<path d="M44 76 L42 90 M54 76 L56 90" ${L}/><path d="M20 46 C20 30 34 24 46 30 C60 22 80 30 88 22 C88 42 78 62 60 72 C44 80 22 70 20 46Z"/><path d="M40 52 C50 44 62 44 70 34 C70 50 56 62 42 60Z" ${L}/><path d="M20 40 L8 44 L20 48 Z" ${P}/><circle cx="30" cy="38" r="2.6" ${P}/>`);
+  f('cao', 'cão', 'animais animal', `<path d="M30 68 L28 92 M42 70 L42 92 M66 70 L66 92 M78 68 L80 92"/><path d="M84 50 C92 40 96 30 92 26" ${N}/><path d="M24 52 C26 44 70 42 82 48 C90 54 88 70 78 72 L30 72 C22 70 20 60 24 52Z"/><path d="M8 34 C8 22 18 16 28 18 C38 20 42 30 40 42 C38 52 20 54 12 48 C8 44 8 40 8 34Z"/><path d="M26 18 C34 14 40 22 36 34 C32 34 28 28 26 18Z" ${P}/><circle cx="18" cy="30" r="2.4" ${P}/><ellipse cx="9" cy="40" rx="4" ry="3" ${P}/>`);
+  f('gato', 'gato', 'animais animal', `<path d="M70 86 C90 86 96 70 88 60" ${N}/><path d="M30 92 C24 72 30 52 50 50 C70 52 76 72 70 92 Z"/><path d="M28 30 L26 8 L40 20 L60 20 L74 8 L72 30 C74 46 64 54 50 54 C36 54 26 46 28 30Z"/><circle cx="40" cy="34" r="2.8" ${P}/><circle cx="60" cy="34" r="2.8" ${P}/><path d="M46 42 L54 42 L50 46 Z" ${P}/><path d="M36 44 L20 42 M36 48 L20 50 M64 44 L80 42 M64 48 L80 50" ${L}/>`);
+  f('pato', 'pato', 'animais animal casa:rio', `<path d="M14 60 C14 46 30 44 46 50 C60 54 70 48 74 40 C84 46 92 58 86 70 C80 84 60 88 40 86 C24 84 14 74 14 60Z"/><circle cx="72" cy="28" r="14"/><path d="M84 26 L98 30 L84 34 Z" ${P}/><circle cx="74" cy="24" r="2.4" ${P}/><path d="M30 64 C40 72 54 72 62 64" ${L} ${N}/><path d="M6 92 C16 88 26 96 36 92 C46 88 56 96 66 92 C76 88 86 96 94 92" ${L} ${N}/>`);
+  f('borboleta', 'borboleta', 'animais animal', `<path d="M48 30 C30 8 6 14 8 34 C10 50 30 52 48 46 Z"/><path d="M52 30 C70 8 94 14 92 34 C90 50 70 52 52 46 Z"/><path d="M48 50 C30 54 14 64 18 80 C24 92 40 84 48 64 Z"/><path d="M52 50 C70 54 86 64 82 80 C76 92 60 84 52 64 Z"/><path d="M50 24 C54 24 54 84 50 84 C46 84 46 24 50 24Z" ${P}/><path d="M48 26 C44 14 38 8 34 6 M52 26 C56 14 62 8 66 6" ${L} ${N}/><circle cx="26" cy="32" r="5" ${L}/><circle cx="74" cy="32" r="5" ${L}/>`);
+  f('abelha', 'abelha', 'animais animal casa:colmeia', `<path d="M40 34 C26 10 6 18 14 32 C20 40 32 40 42 38 Z M58 34 C72 10 92 18 84 32 C78 40 66 40 56 38 Z" ${L}/><ellipse cx="50" cy="60" rx="30" ry="22"/><path d="M40 40 C36 50 36 70 40 80 M54 38 C50 50 50 70 54 82" stroke-width="7" ${N}/><circle cx="24" cy="56" r="3" ${P}/><path d="M80 60 L94 60" stroke-width="3"/><path d="M14 44 C10 36 12 30 16 28" ${L} ${N}/>`);
+  f('tartaruga', 'tartaruga', 'animais animal casa:rio', `<path d="M22 70 L18 84 L30 84 L32 72 M68 72 L70 84 L82 84 L78 70"/><path d="M14 66 C14 40 30 26 50 26 C70 26 86 40 86 66 Z"/><path d="M86 60 C94 56 100 60 98 66 C96 72 90 72 86 68"/><path d="M14 64 L8 70"/><path d="M36 30 L30 64 M64 30 L70 64 M18 48 L82 48 M42 48 L50 30 L58 48" ${L} ${N}/><circle cx="93" cy="62" r="1.8" ${P}/><path d="M10 66 L90 66"/>`);
+  f('caranguejo', 'caranguejo', 'animais animal casa:rio', `<ellipse cx="50" cy="58" rx="30" ry="20"/><path d="M24 64 L8 78 M28 70 L16 86 M76 64 L92 78 M72 70 L84 86 M22 56 L6 62 M78 56 L94 62"/><path d="M28 44 C22 30 12 26 10 16 C16 12 22 20 22 24 C24 16 32 18 30 26 C30 32 34 38 34 42" ${N}/><path d="M72 44 C78 30 88 26 90 16 C84 12 78 20 78 24 C76 16 68 18 70 26 C70 32 66 38 66 42" ${N}/><path d="M42 40 L40 30 M58 40 L60 30"/><circle cx="40" cy="28" r="3" ${P}/><circle cx="60" cy="28" r="3" ${P}/><path d="M40 62 C46 68 54 68 60 62" ${L} ${N}/>`);
+  f('coruja', 'coruja', 'animais animal noite casa:ninho', `<path d="M22 30 L18 10 L34 22 C44 18 56 18 66 22 L82 10 L78 30 C88 50 84 82 50 90 C16 82 12 50 22 30Z"/><circle cx="36" cy="38" r="11"/><circle cx="64" cy="38" r="11"/><circle cx="36" cy="38" r="4" ${P}/><circle cx="64" cy="38" r="4" ${P}/><path d="M46 48 L54 48 L50 56 Z" ${P}/><path d="M34 66 l4 4 l4 -4 M46 70 l4 4 l4 -4 M58 66 l4 4 l4 -4" ${L} ${N}/><path d="M40 90 L38 96 M60 90 L62 96"/>`);
+  f('rato', 'rato', 'animais animal', `<path d="M86 66 C96 60 98 46 90 40" ${N} ${L}/><path d="M18 70 C18 48 40 34 60 36 C80 38 90 54 88 70 Z"/><circle cx="30" cy="40" r="11"/><path d="M18 70 L4 66 C6 58 12 54 18 56"/><circle cx="12" cy="61" r="2.2" ${P}/><circle cx="4" cy="66" r="2" ${P}/><path d="M34 76 L32 84 M70 76 L72 84" ${L}/>`);
+  f('sapo', 'sapo', 'animais animal casa:rio', `<path d="M12 70 C12 50 28 40 50 40 C72 40 88 50 88 70 C88 82 72 86 50 86 C28 86 12 82 12 70Z"/><circle cx="32" cy="36" r="12"/><circle cx="68" cy="36" r="12"/><circle cx="32" cy="36" r="4.5" ${P}/><circle cx="68" cy="36" r="4.5" ${P}/><path d="M28 62 C40 72 60 72 72 62" ${L} ${N}/><path d="M12 76 L2 90 L18 88 M88 76 L98 90 L82 88"/>`);
+  f('elefante', 'elefante', 'animais animal', `<path d="M44 74 L44 94 L56 94 L56 76 M72 76 L72 94 L84 94 L84 72"/><path d="M36 48 C40 32 76 30 90 42 C98 52 96 72 86 76 L42 76 C36 70 34 58 36 48Z"/><path d="M96 54 L99 66" ${L}/><path d="M16 46 C8 58 6 74 10 88 C14 93 21 90 19 84 C16 74 18 62 26 54"/><circle cx="28" cy="40" r="18"/><path d="M32 26 C50 20 58 40 50 56 C44 62 34 58 32 50 Z"/><path d="M18 52 L8 56 L18 58" ${L}/><circle cx="22" cy="36" r="2.4" ${P}/>`);
+  f('macaco', 'macaco', 'animais animal', `<path d="M66 80 C86 84 92 64 84 52" ${N}/><path d="M34 92 C26 74 34 56 50 56 C66 56 74 74 66 92 Z"/><circle cx="20" cy="30" r="10"/><circle cx="80" cy="30" r="10"/><circle cx="50" cy="32" r="26"/><path d="M34 34 C34 20 66 20 66 34 C66 46 58 54 50 54 C42 54 34 46 34 34Z" ${L}/><circle cx="42" cy="32" r="2.8" ${P}/><circle cx="58" cy="32" r="2.8" ${P}/><path d="M44 44 C48 48 52 48 56 44" ${L} ${N}/>`);
+
+  /* ---------- casa e natureza */
+  f('tabanca', 'tabanca', 'casa dia', `<g transform="translate(-1,10) scale(0.78)" stroke-width="4.5"><path d="M24 56 L24 104 C24 116 106 116 106 104 L106 56"/><path d="M52 112 L52 82 C52 70 78 70 78 82 L78 113"/><path d="M65 2 L4 62 C30 76 100 76 126 62 Z"/><path d="M65 2 L60 -6 M65 2 L70 -6" stroke-width="3.5"/><path d="M65 8 L30 64 M65 8 L48 70 M65 8 L65 72 M65 8 L82 70 M65 8 L100 64" stroke-width="3"/><path d="M14 64 L10 72 M30 70 L27 78 M48 73 L46 81 M82 73 L84 81 M100 70 L103 78 M116 64 L120 72" stroke-width="3"/></g>`);
+  f('arvore', 'árvore', 'casa', `<path d="M42 94 L44 60 L56 60 L58 94 Z"/><path d="M50 6 C66 6 74 16 74 26 C88 28 94 42 86 54 C88 66 76 74 64 70 C58 78 42 78 36 70 C24 74 12 66 14 54 C6 42 12 28 26 26 C26 16 34 6 50 6Z"/><path d="M44 64 L38 56 M56 62 L62 54" ${L}/>`);
+  f('palmeira', 'palmeira', 'casa', `<path d="M46 96 C48 74 52 54 50 34 L56 34 C60 54 56 76 56 96 Z"/><path d="M53 34 C40 18 20 18 8 30 C24 26 36 30 46 38 Z M53 34 C66 18 86 18 96 30 C80 26 68 30 58 38 Z M53 32 C50 16 40 6 28 4 C38 12 44 22 48 34 Z M53 32 C58 16 70 8 82 8 C72 14 64 22 58 34 Z"/><circle cx="48" cy="40" r="4.5"/><circle cx="57" cy="41" r="4.5"/>`);
+  f('sol', 'sol', 'casa dia', `<circle cx="50" cy="50" r="22"/><path d="M50 6 L50 18 M50 82 L50 94 M6 50 L18 50 M82 50 L94 50 M19 19 L27 27 M73 73 L81 81 M81 19 L73 27 M27 73 L19 81"/>`);
+  f('lua', 'lua', 'casa noite', `<path d="M60 8 C34 12 18 34 20 56 C22 80 44 96 68 92 C78 90 86 84 92 76 C66 80 46 66 44 44 C42 28 48 16 60 8Z"/>`);
+  f('estrelas', 'estrelas', 'casa noite', `<path d="M36 14 L42 30 L60 30 L46 40 L52 58 L36 48 L20 58 L26 40 L12 30 L30 30 Z"/><path d="M74 46 L78 56 L90 56 L80 62 L84 74 L74 66 L64 74 L68 62 L58 56 L70 56 Z"/><path d="M30 74 L33 81 L41 81 L35 85 L37 93 L30 88 L23 93 L25 85 L19 81 L27 81 Z" ${L}/>`);
+  f('nuvem', 'nuvem', 'casa', `<path d="M24 74 C10 74 6 58 16 52 C14 38 30 30 40 38 C44 24 66 22 72 38 C86 36 94 50 88 60 C94 70 86 76 78 74 Z"/>`);
+  f('chuva', 'chuva', 'casa', `<path d="M24 54 C10 54 6 38 16 32 C14 18 30 10 40 18 C44 4 66 2 72 18 C86 16 94 30 88 40 C94 50 86 56 78 54 Z"/><path d="M28 66 L22 80 M48 66 L42 80 M68 66 L62 80 M38 84 L34 94 M58 84 L54 94"/>`);
+  f('rio', 'rio', 'casa', `<path d="M4 34 C18 26 30 42 44 34 C58 26 70 42 84 34 C90 31 94 32 96 34 M4 54 C18 46 30 62 44 54 C58 46 70 62 84 54 C90 51 94 52 96 54 M4 74 C18 66 30 82 44 74 C58 66 70 82 84 74 C90 71 94 72 96 74" ${N}/>`);
+  f('canoa', 'canoa', 'transportes', `<path d="M2 58 C22 80 78 80 98 58 Z"/><path d="M14 64 L86 64" ${L}/><circle cx="52" cy="22" r="8"/><path d="M52 30 L52 56 M52 38 L66 34"/><path d="M72 10 L58 76"/><path d="M55 72 C53 80 60 84 62 76 Z" ${P}/>`);
+  f('flor', 'flor', 'casa', `<path d="M50 56 L50 96"/><path d="M50 80 C40 70 28 72 24 78 C34 84 44 84 50 80 Z M50 72 C60 62 72 64 76 70 C66 76 56 76 50 72 Z"/><circle cx="50" cy="20" r="11"/><circle cx="31" cy="34" r="11"/><circle cx="69" cy="34" r="11"/><circle cx="38" cy="54" r="11"/><circle cx="62" cy="54" r="11"/><circle cx="50" cy="38" r="10"/>`);
+  f('folha', 'folha', 'casa', `<path d="M12 88 C10 50 34 14 90 10 C88 60 62 90 12 88Z"/><path d="M12 88 C34 66 56 44 82 18 M34 64 L32 44 M34 64 L54 66 M52 46 L50 30 M52 46 L70 48" ${L} ${N}/>`);
+  f('capoeira', 'capoeira', 'casa', `<path d="M10 40 L50 10 L90 40 Z"/><rect x="16" y="40" width="68" height="52"/><path d="M28 40 L28 92 M40 40 L40 92 M60 40 L60 92 M72 40 L72 92 M16 58 L84 58" ${L}/><rect x="42" y="66" width="16" height="26"/>`);
+  f('ninho', 'ninho', 'casa', `<path d="M8 50 C10 82 90 82 92 50 Z"/><ellipse cx="38" cy="46" rx="10" ry="12"/><ellipse cx="56" cy="44" rx="10" ry="12"/><path d="M8 50 L92 50 M12 60 C30 66 70 66 88 60 M18 70 C36 74 64 74 82 70 M14 56 L22 66 M30 62 L36 72 M50 64 L54 74 M70 62 L66 72 M84 56 L78 66" ${L} ${N}/>`);
+  f('colmeia', 'colmeia', 'casa', `<path d="M50 4 L50 12"/><path d="M30 14 L70 14 C80 20 80 28 74 32 C86 38 86 48 78 52 C90 58 90 70 80 74 C88 82 82 92 70 92 L30 92 C18 92 12 82 20 74 C10 70 10 58 22 52 C14 48 14 38 26 32 C20 28 20 20 30 14Z"/><path d="M26 32 L74 32 M22 52 L78 52 M20 74 L80 74" ${L}/><path d="M42 92 L42 82 C42 74 58 74 58 82 L58 92" ${P}/>`);
+  f('curral', 'curral', 'casa', `<path d="M8 30 L8 90 M30 30 L30 90 M52 30 L52 90 M74 30 L74 90 M96 30 L96 90" stroke-width="5"/><path d="M4 44 L100 44 M4 70 L100 70" stroke-width="4"/><path d="M4 92 L100 92" ${L}/>`);
+  f('candeeiro', 'candeeiro', 'casa noite', `<path d="M34 24 C34 14 66 14 66 24"/><path d="M50 4 L50 14"/><rect x="30" y="24" width="40" height="8"/><path d="M34 32 L30 76 L70 76 L66 32 Z"/><path d="M50 44 C58 52 56 64 50 66 C44 64 42 52 50 44Z" ${P}/><rect x="24" y="76" width="52" height="12" rx="3"/>`);
+  f('casa', 'casa', 'casa dia', `<path d="M8 46 L50 10 L92 46 Z"/><rect x="16" y="46" width="68" height="48"/><path d="M42 94 L42 66 L58 66 L58 94"/><rect x="22" y="56" width="14" height="14"/><rect x="64" y="56" width="14" height="14"/>`);
+
+  /* ---------- escola */
+  f('lapis', 'lápis', 'escola', `<path d="M16 84 L22 64 L74 12 L88 26 L36 78 Z"/><path d="M22 64 L36 78 M66 20 L80 34"/><path d="M16 84 L18 76 L24 82 Z" ${P}/>`);
+  f('livro', 'livro', 'escola', `<path d="M50 24 C36 14 18 14 8 18 L8 84 C18 80 36 80 50 90 C64 80 82 80 92 84 L92 18 C82 14 64 14 50 24Z"/><path d="M50 24 L50 90"/><path d="M16 32 C26 30 36 32 42 36 M16 46 C26 44 36 46 42 50 M58 36 C64 32 74 30 84 32 M58 50 C64 46 74 44 84 46" ${L} ${N}/>`);
+  f('mochila', 'mochila', 'escola', `<path d="M38 16 C38 4 62 4 62 16"/><path d="M20 30 C20 18 80 18 80 30 L80 88 C80 94 76 96 70 96 L30 96 C24 96 20 94 20 88 Z"/><path d="M28 56 L72 56 L72 82 L28 82 Z"/><path d="M20 40 L80 40" ${L}/><rect x="44" y="52" width="12" height="8" ${P}/>`);
+  f('quadro', 'quadro', 'escola', `<rect x="8" y="12" width="84" height="58"/><rect x="14" y="18" width="72" height="46" ${P}/><path d="M24 54 L32 30 L40 54 M27 46 L37 46 M50 30 L50 54 L58 54 C66 54 66 42 58 42 L50 42 M50 30 L57 30 C64 30 64 42 57 42" stroke="#fff" ${L} ${N}/><path d="M30 70 L20 94 M70 70 L80 94"/><path d="M60 72 L74 72" stroke-width="5"/>`);
+  f('bola', 'bola', 'escola', `<circle cx="50" cy="50" r="40"/><path d="M50 32 L66 44 L60 62 L40 62 L34 44 Z" ${P}/><path d="M50 32 L50 10 M66 44 L86 36 M60 62 L72 82 M40 62 L28 82 M34 44 L14 36" ${L}/>`);
+  f('regua', 'régua', 'escola', `<rect x="4" y="38" width="92" height="24" rx="3"/><path d="M14 38 L14 50 M24 38 L24 46 M34 38 L34 50 M44 38 L44 46 M54 38 L54 50 M64 38 L64 46 M74 38 L74 50 M84 38 L84 46" ${L}/>`);
+  f('tesoura', 'tesoura', 'escola', `<circle cx="24" cy="74" r="12"/><circle cx="76" cy="74" r="12"/><path d="M32 66 L70 10 L60 52 Z M68 66 L30 10 L40 52 Z"/><circle cx="50" cy="40" r="3" ${P}/>`);
+  f('cadeira', 'cadeira', 'escola', `<path d="M26 8 L26 56 M74 8 L74 56 M26 10 L74 10 M26 24 L74 24" stroke-width="5"/><rect x="18" y="54" width="64" height="10"/><path d="M24 64 L22 94 M76 64 L78 94" stroke-width="5"/>`);
+  f('borracha', 'borracha', 'escola', `<path d="M10 62 L48 24 L90 42 L52 80 Z"/><path d="M10 62 L10 72 L52 90 L52 80 M52 90 L90 52 L90 42"/><path d="M30 42 L72 60" ${L}/>`);
+
+  /* ---------- corpo e roupa */
+  f('mao', 'mão', 'corpo', `<path d="M30 94 L30 60 C30 52 18 40 14 34 C10 28 18 24 24 30 L32 40 L32 12 C32 6 40 6 40 12 L40 40 L42 6 C42 0 50 0 50 6 L50 40 L54 10 C54 4 62 4 62 10 L60 42 L66 18 C66 12 74 12 74 18 L70 60 L70 94 Z"/>`);
+  f('pe', 'pé', 'corpo', `<path d="M30 20 C30 8 50 6 54 16 L60 64 C62 78 70 82 70 90 C70 96 22 98 18 88 C14 80 26 70 28 58 Z"/><ellipse cx="78" cy="78" rx="5" ry="6"/><ellipse cx="78" cy="64" rx="5" ry="5"/><ellipse cx="74" cy="52" rx="4" ry="4"/>`);
+  f('olho', 'olho', 'corpo', `<path d="M6 50 C26 20 74 20 94 50 C74 80 26 80 6 50Z"/><circle cx="50" cy="50" r="16"/><circle cx="50" cy="50" r="7" ${P}/><path d="M20 28 L14 20 M36 22 L34 12 M50 20 L50 10 M64 22 L66 12 M80 28 L86 20" ${L}/>`);
+  f('orelha', 'orelha', 'corpo', `<path d="M36 14 C60 4 84 22 78 48 C74 62 62 66 58 78 C54 92 38 96 30 84"/><path d="M42 30 C56 24 68 36 62 48 C58 54 50 52 52 62" ${L} ${N}/>`);
+  f('nariz', 'nariz', 'corpo', `<path d="M48 10 C46 30 40 50 30 64 C22 74 30 84 40 80 C44 86 56 86 60 80 C70 84 78 74 70 64 C62 54 58 34 56 10" ${N}/><circle cx="40" cy="74" r="3" ${P}/><circle cx="60" cy="74" r="3" ${P}/>`);
+  f('boca', 'boca', 'corpo', `<path d="M8 44 C24 30 40 36 50 42 C60 36 76 30 92 44 C80 74 20 74 8 44Z"/><path d="M8 44 C30 54 70 54 92 44" ${L} ${N}/>`);
+  f('camisa', 'camisa', 'roupa', `<path d="M34 10 L50 22 L66 10 L92 24 L84 46 L72 40 L72 92 L28 92 L28 40 L16 46 L8 24 Z"/><path d="M50 22 L50 92" ${L}/><circle cx="50" cy="40" r="2" ${P}/><circle cx="50" cy="56" r="2" ${P}/><circle cx="50" cy="72" r="2" ${P}/>`);
+  f('calcoes', 'calções', 'roupa', `<path d="M14 14 L86 14 L92 80 L58 84 L50 40 L42 84 L8 80 Z"/><path d="M14 26 L86 26" ${L}/>`);
+  f('vestido', 'vestido', 'roupa', `<path d="M38 6 L44 20 L56 20 L62 6 L70 12 L64 40 C78 60 86 78 90 94 L10 94 C14 78 22 60 36 40 L30 12 Z"/><path d="M36 40 L64 40" ${L}/><path d="M22 80 L78 80" ${L}/>`);
+  f('chinelos', 'chinelos', 'roupa', `<path d="M14 30 C14 12 40 12 40 30 L40 84 C40 96 14 96 14 84 Z M60 30 C60 12 86 12 86 30 L86 84 C86 96 60 96 60 84 Z"/><path d="M27 24 L16 46 M27 24 L38 46 M73 24 L62 46 M73 24 L84 46" stroke-width="4"/>`);
+  f('chapeu', 'chapéu', 'roupa', `<path d="M4 66 C4 56 96 56 96 66 C96 76 4 76 4 66Z"/><path d="M24 60 C24 20 76 20 76 60"/><path d="M24 52 C40 56 60 56 76 52" stroke-width="6" ${N}/>`);
+  f('sapato', 'sapato', 'roupa', `<path d="M8 50 L8 80 L92 80 C94 68 84 62 70 60 L48 50 L44 36 L12 36 Z"/><path d="M8 72 L92 72" ${L}/><path d="M30 46 L40 52 M28 54 L38 58" ${L}/>`);
+
+  /* ---------- transportes */
+  f('carro', 'carro', 'transportes', `<path d="M6 70 L6 52 L22 50 L34 30 L68 30 L82 50 L94 54 L94 70 Z"/><path d="M28 50 L38 36 L50 36 L50 50 Z M56 36 L66 36 L76 50 L56 50 Z" ${L}/><circle cx="26" cy="72" r="10"/><circle cx="74" cy="72" r="10"/><circle cx="26" cy="72" r="3" ${P}/><circle cx="74" cy="72" r="3" ${P}/>`);
+  f('bicicleta', 'bicicleta', 'transportes', `<circle cx="22" cy="66" r="18"/><circle cx="78" cy="66" r="18"/><path d="M22 66 L40 40 L66 40 L78 66 M40 40 L50 66 L66 40 M50 66 L22 66 M36 32 L46 32 M62 28 L66 40 M58 28 L70 28" ${N}/>`);
+  f('tocatoca', 'toca-toca', 'transportes', `<path d="M4 76 L4 34 C4 26 10 22 18 22 L78 22 C88 22 94 30 96 44 L96 76 Z"/><path d="M12 32 L26 32 L26 48 L12 48 Z M32 32 L46 32 L46 48 L32 48 Z M52 32 L66 32 L66 48 L52 48 Z M72 32 L84 32 L90 48 L72 48 Z" ${L}/><path d="M4 60 L96 60" ${L}/><circle cx="24" cy="78" r="9"/><circle cx="76" cy="78" r="9"/>`);
+  f('barco', 'barco', 'transportes', `<path d="M6 62 L94 62 L80 86 L20 86 Z"/><path d="M48 62 L48 8 L84 54 L48 54"/><path d="M44 16 L14 54 L44 54 Z"/><path d="M2 94 C14 88 26 98 38 92 C50 86 62 98 74 92 C84 88 92 94 98 92" ${L} ${N}/>`);
+  f('aviao', 'avião', 'transportes', `<path d="M8 52 C8 44 80 40 90 44 C98 48 98 56 90 58 C80 62 8 60 8 52Z"/><path d="M40 48 L58 14 L66 14 L60 48 Z M40 58 L56 88 L64 88 L58 58 Z M12 50 L6 32 L16 32 L24 48 Z"/><path d="M76 46 L84 46 L84 50 L76 50 Z" ${L}/>`);
+  f('mota', 'mota', 'transportes', `<circle cx="20" cy="70" r="14"/><circle cx="80" cy="70" r="14"/><path d="M20 70 L36 50 L64 50 L80 70 M36 50 L46 70 L64 50 M62 50 L70 30 L80 30" ${N}/><path d="M30 46 C30 38 56 38 56 46 Z"/>`);
+
+  /* ---------- emoções e hábitos */
+  const cara = (b, x) => `<circle cx="50" cy="50" r="40"/><circle cx="36" cy="40" r="4" ${P}/><circle cx="64" cy="40" r="4" ${P}/>${b}${x || ''}`;
+  f('contente', 'contente', 'emocoes', cara(`<path d="M30 58 C38 74 62 74 70 58" ${N}/>`));
+  f('triste', 'triste', 'emocoes', cara(`<path d="M32 70 C40 58 60 58 68 70" ${N}/>`, `<path d="M36 48 C34 54 34 58 36 60 C38 58 38 54 36 48Z" ${P}/>`));
+  f('zangado', 'zangado', 'emocoes', cara(`<path d="M34 68 L66 68" ${N}/>`, `<path d="M26 28 L42 34 M74 28 L58 34" stroke-width="4"/>`));
+  f('assustado', 'assustado', 'emocoes', cara(`<ellipse cx="50" cy="66" rx="9" ry="11"/>`, `<path d="M28 26 C32 22 40 22 44 26 M56 26 C60 22 68 22 72 26" ${L} ${N}/>`));
+  f('sabao', 'sabão', 'limpo habitos', `<path d="M12 56 C12 42 22 38 50 38 C78 38 88 42 88 56 C88 70 78 76 50 76 C22 76 12 70 12 56Z"/><circle cx="30" cy="22" r="8"/><circle cx="48" cy="14" r="5"/><circle cx="62" cy="24" r="7"/><path d="M28 54 C36 50 46 50 52 54" ${L} ${N}/>`);
+  f('escova', 'escova de dentes', 'limpo habitos', `<rect x="4" y="60" width="62" height="12" rx="6"/><rect x="62" y="56" width="32" height="16" rx="3"/><path d="M66 56 L66 40 M72 56 L72 40 M78 56 L78 40 M84 56 L84 40 M90 56 L90 40"/><path d="M64 40 C70 30 84 32 92 38" ${L} ${N}/>`);
+  f('balde', 'balde de água', 'limpo habitos', `<path d="M16 34 L26 92 L74 92 L84 34 Z"/><path d="M16 34 C16 4 84 4 84 34" ${N}/><path d="M22 46 C34 52 46 42 58 48 C66 52 74 48 80 46" ${L} ${N}/><path d="M50 58 C56 66 56 74 50 76 C44 74 44 66 50 58Z" ${L}/>`);
+  f('toalha', 'toalha', 'limpo habitos', `<path d="M8 14 L92 14" stroke-width="5"/><path d="M20 14 L20 86 L80 86 L80 14"/><path d="M20 70 L80 70 M20 76 L80 76" ${L}/><path d="M26 86 L26 94 M36 86 L36 94 M46 86 L46 94 M56 86 L56 94 M66 86 L66 94 M74 86 L74 94" ${L}/>`);
+  f('lavar_maos', 'lavar as mãos', 'limpo habitos sala+', `<path d="M24 6 L58 6 L58 16 L44 16 L44 24"/><path d="M44 30 L44 38 M38 32 L36 40 M50 32 L52 40" ${L}/><path d="M14 74 C14 58 24 50 34 54 L50 62 L66 54 C76 50 86 58 86 74 C86 88 70 92 50 84 C30 92 14 88 14 74Z"/><circle cx="24" cy="44" r="4" ${L}/><circle cx="76" cy="46" r="5" ${L}/>`);
+  f('lixo_cesto', 'lixo no cesto', 'sala+ limpo', `<path d="M24 40 L32 94 L68 94 L76 40 Z"/><path d="M20 40 L80 40" stroke-width="5"/><path d="M38 52 L40 86 M50 52 L50 86 M62 52 L60 86" ${L}/><path d="M40 6 L58 10 L54 24 L38 20 Z" ${L}/><path d="M48 26 L50 34 M46 32 L50 36 L54 32" ${L} ${N}/>`);
+  f('lixo_chao', 'lixo no chão', 'sala- sujo', `<path d="M4 86 L96 86" ${L}/><path d="M14 70 L34 66 L36 84 L16 86 Z M50 74 C58 66 70 70 68 80 C66 86 52 86 50 74Z M76 62 L90 60 L92 78 L80 84 Z"/><path d="M20 58 C22 52 26 52 28 58 M60 60 C62 54 66 54 68 60" ${L} ${N}/>`);
+  f('braco_no_ar', 'pedir a palavra', 'sala+', `<circle cx="50" cy="22" r="12"/><path d="M50 34 L50 70 M50 70 L38 96 M50 70 L62 96 M50 44 L30 58 M50 44 L74 14"/><path d="M70 8 L80 6 L80 16" ${L} ${N}/>`);
+  f('gritar', 'gritar', 'sala-', `<circle cx="38" cy="30" r="20"/><ellipse cx="44" cy="38" rx="7" ry="8" ${P}/><circle cx="32" cy="24" r="2.4" ${P}/><path d="M38 50 L38 80 M38 80 L28 98 M38 80 L48 98 M38 58 L22 70 M38 58 L54 70"/><path d="M66 22 L88 12 M66 34 L92 34 M66 46 L88 56" stroke-width="4"/>`);
+  f('ouvir', 'ouvir com atenção', 'sala+', `<circle cx="50" cy="26" r="16"/><path d="M50 42 L50 74 M50 74 L40 96 M50 74 L60 96 M50 52 L34 64 M50 52 L66 64"/><path d="M42 24 l0 2 M58 24 l0 2" stroke-width="4"/><path d="M44 34 C48 36 52 36 56 34" ${L} ${N}/><path d="M74 16 C80 22 80 32 74 38 M82 10 C92 20 92 38 82 46" ${L} ${N}/>`);
+  f('bater', 'bater', 'sala-', `<circle cx="22" cy="24" r="12"/><path d="M22 36 L22 70 M22 70 L12 94 M22 70 L32 94 M22 46 L50 40"/><circle cx="78" cy="24" r="12"/><path d="M78 36 L78 70 M78 70 L68 94 M78 70 L88 94 M78 46 L92 58"/><path d="M56 30 L62 20 M58 42 L68 40 M56 52 L62 60" stroke-width="3"/>`);
+
+  /* ---------- formas */
+  f('circulo', 'círculo', 'formas', `<circle cx="50" cy="50" r="40"/>`);
+  f('quadrado', 'quadrado', 'formas', `<rect x="12" y="12" width="76" height="76"/>`);
+  f('triangulo', 'triângulo', 'formas', `<path d="M50 8 L92 88 L8 88 Z"/>`);
+  f('retangulo', 'retângulo', 'formas', `<rect x="4" y="24" width="92" height="52"/>`);
+  f('coracao', 'coração', 'formas', `<path d="M50 88 C20 66 6 50 8 32 C10 16 30 10 42 20 C46 24 48 28 50 32 C52 28 54 24 58 20 C70 10 90 16 92 32 C94 50 80 66 50 88Z"/>`);
+  f('estrela', 'estrela', 'formas', `<path d="M50 6 L61 38 L95 38 L68 58 L78 92 L50 72 L22 92 L32 58 L5 38 L39 38 Z"/>`);
+  f('losango', 'losango', 'formas', `<path d="M50 4 L90 50 L50 96 L10 50 Z"/>`);
+
+  /* ---------- mais animais */
+  f('burro', 'burro', 'animais animal casa:curral', `<path d="M38 70 L36 94 M50 72 L50 94 M72 72 L72 94 M84 70 L86 94"/><path d="M32 48 C38 40 76 38 88 46 C98 54 94 72 84 74 L36 74 C26 72 24 56 32 48Z"/><path d="M92 50 C98 58 96 66 98 70" ${N}/><path d="M36 52 C30 60 16 62 8 54 C2 46 8 34 20 32 C30 32 38 40 36 52Z"/><path d="M22 32 L16 6 L28 28 M28 32 L32 8 L36 34"/><circle cx="20" cy="42" r="2.4" ${P}/><circle cx="9" cy="52" r="1.8" ${P}/><path d="M36 40 C42 34 46 34 50 40" ${L} ${N}/>`);
+  f('ovelha', 'ovelha', 'animais animal casa:curral', `<path d="M34 72 L34 94 M48 74 L48 94 M64 74 L64 94 M78 72 L78 94"/><path d="M28 54 C20 50 22 36 32 36 C34 26 46 24 52 30 C58 22 72 24 74 34 C86 32 92 44 86 52 C94 58 88 72 78 70 C74 80 60 80 56 74 C50 82 36 80 34 72 C24 74 18 62 28 54Z"/><path d="M28 44 C20 50 8 48 6 40 C4 30 14 24 24 28 C30 32 32 38 28 44Z" ${P}/><circle cx="14" cy="36" r="2.4" fill="#fff" stroke="none"/>`);
+  f('coelho', 'coelho', 'animais animal', `<path d="M36 34 C30 12 30 2 36 2 C42 2 44 14 42 32 M54 32 C58 14 62 4 68 6 C72 10 66 22 60 36"/><circle cx="48" cy="44" r="16"/><path d="M30 94 C22 76 30 58 48 58 C66 58 74 76 66 94 Z"/><circle cx="72" cy="82" r="7"/><circle cx="42" cy="42" r="2.4" ${P}/><circle cx="54" cy="42" r="2.4" ${P}/><path d="M46 50 L50 50 L48 53 Z" ${P}/>`);
+  f('formiga', 'formiga', 'animais animal', `<circle cx="20" cy="44" r="12"/><ellipse cx="44" cy="50" rx="12" ry="9"/><ellipse cx="74" cy="52" rx="20" ry="15"/><path d="M38 58 L28 80 M44 59 L44 82 M50 58 L60 80 M36 42 L26 24 M50 42 L60 26" ${L} ${N}/><path d="M14 34 C8 22 4 18 2 18 M22 32 C24 20 28 14 32 12" ${L} ${N}/><circle cx="16" cy="44" r="2.4" ${P}/>`);
+  f('caracol', 'caracol', 'animais animal', `<path d="M8 80 C30 82 70 82 92 80 C96 72 90 68 80 70 L72 70"/><circle cx="54" cy="50" r="26"/><path d="M54 50 C54 44 62 44 62 50 C62 58 48 60 46 50 C44 38 62 34 68 46 C74 58 62 72 50 70" ${L} ${N}/><path d="M86 70 C88 56 86 46 82 40 M92 72 C96 60 96 50 94 44" ${N}/><circle cx="82" cy="38" r="3" ${P}/><circle cx="94" cy="42" r="3" ${P}/>`);
+  f('hipopotamo', 'hipopótamo', 'animais animal casa:rio', `<path d="M30 74 L30 90 L42 90 L42 76 M66 76 L66 90 L78 90 L78 74"/><path d="M26 46 C30 32 74 30 88 40 C98 50 96 72 84 76 L30 76 C22 70 22 56 26 46Z"/><path d="M30 50 C20 52 6 50 4 62 C2 74 14 80 26 76 C34 74 36 60 30 50Z"/><path d="M24 40 C24 34 32 34 32 40"/><circle cx="12" cy="62" r="2" ${P}/><circle cx="22" cy="44" r="2.4" ${P}/><path d="M2 94 C14 88 26 98 38 92 C50 86 62 98 74 92 C84 88 92 94 98 92" ${L} ${N}/>`);
+  f('crocodilo', 'crocodilo', 'animais animal casa:rio', `<path d="M38 64 L34 78 M56 66 L58 80 M74 64 L72 76 M84 62 L88 72"/><path d="M2 58 L30 50 C40 44 56 44 68 48 C80 51 92 56 98 60 C86 64 72 66 62 66 C48 70 36 68 30 64 L2 62 Z"/><path d="M4 60 L30 58" ${L}/><path d="M8 58 l3 4 l3 -4 l3 4 l3 -4 l3 4" ${L} ${N}/><circle cx="36" cy="45" r="5"/><circle cx="36" cy="45" r="2" ${P}/><path d="M46 46 l4 -5 l4 5 l4 -5 l4 5 l4 -5 l4 5 l4 -4 l4 4" ${L} ${N}/>`);
+  f('lagarto', 'lagarto', 'animais animal', `<path d="M12 50 C14 42 26 40 36 44 C50 40 64 44 74 50 C84 56 92 70 98 68 C90 76 78 70 70 62 C60 66 44 66 34 60 C24 60 14 58 12 50Z"/><path d="M36 56 L28 70 L22 72 M60 62 L64 76 L70 78 M38 46 L30 32 L24 30 M62 48 L68 34 L74 32" ${N}/><circle cx="20" cy="48" r="2.4" ${P}/>`);
+  f('cobra', 'cobra', 'animais animal', `<path d="M10 80 C10 64 30 64 40 72 C50 80 66 80 70 68 C74 56 60 50 50 54 C38 58 26 50 30 36 C34 22 54 18 64 26" stroke-width="9" ${N}/><path d="M10 80 C10 64 30 64 40 72 C50 80 66 80 70 68 C74 56 60 50 50 54 C38 58 26 50 30 36 C34 22 54 18 64 26" stroke="#fff" stroke-width="3" ${N}/><ellipse cx="72" cy="26" rx="12" ry="8"/><circle cx="74" cy="23" r="2" ${P}/><path d="M84 28 L94 30 M90 30 L96 26 M90 30 L96 34" ${L} ${N}/>`);
+
+  /* ---------- casa e cozinha */
+  f('pilao', 'pilão', 'cozinha', `<path d="M58 4 L68 4 L58 60 L48 60 Z"/><path d="M50 64 C46 60 44 58 46 52 L66 52 C68 58 66 60 62 64" ${N}/><path d="M22 56 L78 56 L70 72 L74 94 L26 94 L30 72 Z"/><path d="M30 72 L70 72" ${L}/>`);
+  f('panela', 'panela', 'cozinha', `<path d="M14 40 L86 40 L80 86 C78 92 22 92 20 86 Z"/><path d="M14 40 C14 30 86 30 86 40" ${N}/><path d="M14 52 C4 52 4 44 12 44 M86 52 C96 52 96 44 88 44" ${N}/><path d="M36 22 C36 14 64 14 64 22" ${N}/><path d="M40 24 C38 16 44 12 44 4 M56 24 C54 16 60 12 60 4" ${L} ${N}/>`);
+  f('cabaca', 'cabaça', 'cozinha', `<path d="M46 20 L46 6 L54 6 L54 20"/><path d="M46 20 C34 24 34 36 40 40 C18 46 10 64 16 78 C22 94 78 94 84 78 C90 64 82 46 60 40 C66 36 66 24 54 20 Z"/><path d="M26 70 C40 76 60 76 74 70" ${L} ${N}/>`);
+  f('vassoura', 'vassoura', 'cozinha limpo', `<path d="M48 4 L52 4 L54 52 L46 52 Z"/><path d="M42 52 L58 52 L80 96 L20 96 Z"/><path d="M40 58 L60 58 M32 96 L42 60 M44 96 L48 60 M56 96 L52 60 M68 96 L58 60" ${L}/>`);
+  f('copo', 'copo', 'cozinha', `<path d="M22 12 L78 12 L70 92 L30 92 Z"/><path d="M26 40 C40 46 60 34 74 40" ${L} ${N}/>`);
+  f('colher', 'colher', 'cozinha', `<ellipse cx="50" cy="26" rx="16" ry="22"/><path d="M47 48 L45 94 C45 98 55 98 55 94 L53 48"/>`);
+  f('prato', 'prato', 'cozinha', `<ellipse cx="50" cy="56" rx="44" ry="22"/><ellipse cx="50" cy="52" rx="28" ry="12" ${L}/>`);
+  f('pote', 'pote de água', 'cozinha limpo', `<path d="M36 10 L64 10 L60 22 C82 28 90 48 86 66 C82 86 66 94 50 94 C34 94 18 86 14 66 C10 48 18 28 40 22 Z"/><path d="M20 50 C40 56 60 56 80 50" ${L} ${N}/>`);
+  f('mesa', 'mesa', 'casa', `<rect x="4" y="34" width="92" height="12"/><path d="M14 46 L14 92 M86 46 L86 92 M26 46 L26 76 M74 46 L74 76" stroke-width="5"/>`);
+  f('cama', 'cama', 'casa noite', `<path d="M6 28 L6 90 M94 54 L94 90" stroke-width="5"/><rect x="6" y="56" width="88" height="16"/><path d="M12 56 C10 44 30 42 32 54 Z"/><path d="M30 56 C40 46 70 46 94 54" ${N}/><path d="M6 78 L94 78" stroke-width="4"/>`);
+  f('vela', 'vela', 'casa noite', `<rect x="38" y="40" width="24" height="50"/><path d="M50 40 L50 32" ${L}/><path d="M50 8 C60 18 58 30 50 32 C42 30 40 18 50 8Z"/><path d="M26 90 L74 90" stroke-width="5"/>`);
+  f('esteira', 'esteira', 'casa', `<path d="M4 40 L96 30 L96 76 L4 86 Z"/><path d="M4 52 L96 42 M4 64 L96 54 M4 76 L96 66 M24 38 L24 84 M44 36 L44 82 M64 34 L64 80 M84 31 L84 77" ${L}/>`);
+
+  /* ---------- comida da terra */
+  f('mandioca', 'mandioca', 'comida comer', `<path d="M10 30 C30 18 70 22 88 50 C96 62 94 76 84 80 C64 84 30 60 10 40 Z"/><path d="M10 30 L4 26 L6 36 L10 40"/><path d="M30 34 L34 40 M50 36 L52 44 M66 48 L70 56 M78 62 L82 70" ${L}/>`);
+  f('cebola', 'cebola', 'comida comer', `<path d="M50 10 C54 22 70 32 78 46 C88 66 74 90 50 90 C26 90 12 66 22 46 C30 32 46 22 50 10Z"/><path d="M50 18 C44 34 40 56 44 88 M50 18 C56 34 60 56 56 88" ${L} ${N}/><path d="M44 90 L42 98 M50 90 L50 98 M56 90 L58 98" ${L}/>`);
+  f('batata', 'batata-doce', 'comida comer', `<path d="M8 56 C10 36 36 26 60 30 C82 34 94 46 92 58 C90 72 70 78 46 74 C24 72 6 70 8 56Z"/><circle cx="34" cy="48" r="2" ${P}/><circle cx="60" cy="58" r="2" ${P}/><circle cx="74" cy="46" r="2" ${P}/><path d="M92 56 L98 52" ${L}/>`);
+  f('sumo', 'sumo', 'comida comer', `<path d="M24 22 L76 22 L68 94 L32 94 Z"/><path d="M28 40 L72 40" ${L}/><path d="M56 22 L66 4 L74 4" ${N}/><circle cx="76" cy="26" r="10"/>`);
+
+  /* ---------- família */
+  const pes = (x) => `<circle cx="${x}" cy="18" r="11"/><path d="M${x} 29 L${x} 62 M${x} 62 L${x - 10} 94 M${x} 62 L${x + 10} 94 M${x} 38 L${x - 16} 56 M${x} 38 L${x + 16} 56"/><path d="M${x - 5} 20 C${x - 2} 23 ${x + 2} 23 ${x + 5} 20" ${L} ${N}/>`;
+  f('papa', 'papá', 'familia', pes(50));
+  f('mama', 'mamã', 'familia', `<circle cx="50" cy="18" r="11"/><path d="M50 29 L50 40 M50 36 L34 56 M50 36 L66 56"/><path d="M50 38 L32 76 L68 76 Z"/><path d="M42 76 L40 94 M58 76 L60 94"/><path d="M40 10 C44 2 56 2 60 10" stroke-width="5" ${N}/><path d="M45 20 C48 23 52 23 55 20" ${L} ${N}/>`);
+  f('menino', 'menino', 'familia', `<circle cx="50" cy="30" r="12"/><path d="M50 42 L50 70 M50 70 L42 94 M50 70 L58 94 M50 50 L36 64 M50 50 L64 64"/><path d="M45 32 C48 35 52 35 55 32" ${L} ${N}/>`);
+  f('menina', 'menina', 'familia', `<circle cx="50" cy="30" r="12"/><path d="M50 42 L50 50 M50 48 L36 64 M50 48 L64 64"/><path d="M50 48 L36 78 L64 78 Z"/><path d="M44 78 L42 94 M56 78 L58 94"/><circle cx="36" cy="22" r="5"/><circle cx="64" cy="22" r="5"/><path d="M45 32 C48 35 52 35 55 32" ${L} ${N}/>`);
+  f('bebe', 'bebé', 'familia', `<circle cx="50" cy="40" r="18"/><path d="M26 92 C22 70 34 58 50 58 C66 58 78 70 74 92 Z"/><circle cx="44" cy="38" r="2" ${P}/><circle cx="56" cy="38" r="2" ${P}/><path d="M45 46 C48 49 52 49 55 46" ${L} ${N}/><path d="M48 22 C46 16 52 14 54 18" ${L} ${N}/>`);
+  f('avo', 'avó', 'familia', `<path d="M78 40 L80 94" stroke-width="4"/><circle cx="46" cy="18" r="11"/><path d="M46 29 L46 40 M46 36 L30 56 M46 36 L78 44"/><path d="M46 38 L28 78 L64 78 Z"/><path d="M38 78 L36 94 M54 78 L56 94"/><path d="M36 14 C40 4 52 4 56 14 L56 8 C50 2 42 2 36 8 Z"/><path d="M41 20 C44 23 48 23 51 20" ${L} ${N}/>`);
+
+  /* ---------- escola e música */
+  f('tambor', 'tambor', 'escola', `<ellipse cx="50" cy="26" rx="30" ry="10"/><path d="M20 26 L28 90 L72 90 L80 26"/><path d="M22 40 L48 86 M78 40 L52 86 M26 60 L74 60" ${L} ${N}/><path d="M70 4 L58 22 M86 10 L66 24" stroke-width="4"/>`);
+  f('sino', 'sino', 'escola', `<path d="M50 8 L50 16"/><path d="M50 16 C30 16 26 36 26 52 C26 64 18 70 12 76 L88 76 C82 70 74 64 74 52 C74 36 70 16 50 16Z"/><circle cx="50" cy="84" r="7"/>`);
+  f('caneta', 'caneta', 'escola', `<path d="M18 82 L24 66 L72 18 L82 28 L34 76 Z"/><path d="M24 66 L34 76"/><path d="M62 28 L74 40" ${L}/><path d="M18 82 L14 88" ${L}/>`);
+
+  /* ---------- transportes e natureza */
+  f('camiao', 'camião', 'transportes', `<rect x="4" y="22" width="58" height="50"/><path d="M62 38 L82 38 L96 54 L96 72 L62 72 Z"/><path d="M68 44 L80 44 L88 54 L68 54 Z" ${L}/><circle cx="22" cy="76" r="10"/><circle cx="78" cy="76" r="10"/>`);
+  f('montanha', 'montanha', 'casa', `<path d="M2 88 L36 22 L54 54 L66 36 L98 88 Z"/><path d="M28 38 L36 22 L44 38 L40 34 L36 40 L32 34 Z" ${P}/>`);
+  f('pedra', 'pedra', 'casa', `<path d="M10 80 C6 64 18 44 36 40 C50 30 70 34 80 46 C94 52 96 74 88 82 Z"/><path d="M30 60 L40 54 M62 50 L70 58" ${L}/>`);
+  f('oval', 'oval', 'formas', `<ellipse cx="50" cy="50" rx="44" ry="28"/>`);
+  f('lua_cheia', 'lua cheia', 'casa noite', `<circle cx="50" cy="50" r="38"/><circle cx="38" cy="40" r="6" ${L}/><circle cx="60" cy="58" r="8" ${L}/><circle cx="62" cy="32" r="4" ${L}/>`);
+  f('galo', 'galo', 'animais animal dia casa:capoeira', `<path d="M42 84 L40 96 M34 96 L46 96 M58 84 L60 96 M54 96 L66 96"/><path d="M74 50 C80 30 92 22 98 26 C92 32 92 40 94 46 C98 50 98 60 88 66" ${N}/><ellipse cx="54" cy="64" rx="32" ry="23"/><path d="M40 62 C50 74 66 74 72 62" ${L} ${N}/><path d="M18 18 C14 6 22 4 25 12 C26 2 34 2 33 12 C37 4 44 8 38 18 Z" ${P}/><circle cx="28" cy="32" r="14"/><path d="M14 30 L4 35 L14 39 Z" ${P}/><path d="M22 44 C20 52 26 54 28 46" ${P}/><circle cx="24" cy="29" r="2.6" ${P}/>`);
+
+  /* ---------- letras e números de traço único (para traçar e escrever o nome)
+     Caixa: largura própria × 80 de altura; mai úsculas de y 4 a 80; minúsculas de y 42 a 80 (hastes a y 4, pernas até y 104).
+     [caminho, largura, [x, y] onde começa] */
+  const G = {
+    A: ['M4 80 L28 4 L52 80 M14 50 L42 50', 56, [4, 80]], B: ['M8 80 L8 4 L30 4 C48 4 48 40 30 40 L8 40 M30 40 C52 40 52 80 30 80 L8 80', 50, [8, 80]],
+    C: ['M48 14 C40 4 26 2 16 10 C4 20 4 64 16 74 C26 82 40 80 48 70', 52, [48, 14]], D: ['M8 80 L8 4 L24 4 C54 4 54 80 24 80 L8 80', 52, [8, 80]],
+    E: ['M44 4 L8 4 L8 80 L44 80 M8 42 L36 42', 48, [44, 4]], F: ['M44 4 L8 4 L8 80 M8 42 L36 42', 46, [44, 4]],
+    G: ['M48 14 C40 4 26 2 16 10 C4 20 4 64 16 74 C28 84 46 78 48 64 L48 46 L32 46', 54, [48, 14]], H: ['M8 4 L8 80 M48 4 L48 80 M8 42 L48 42', 56, [8, 4]],
+    I: ['M10 4 L10 80', 20, [10, 4]], J: ['M38 4 L38 62 C38 82 10 84 6 66', 46, [38, 4]], K: ['M8 4 L8 80 M44 4 L8 48 M20 36 L46 80', 50, [8, 4]],
+    L: ['M8 4 L8 80 L42 80', 46, [8, 4]], M: ['M6 80 L6 4 L30 52 L54 4 L54 80', 60, [6, 80]], N: ['M6 80 L6 4 L50 80 L50 4', 56, [6, 80]],
+    O: ['M30 4 C6 4 4 30 4 42 C4 56 8 80 30 80 C52 80 56 56 56 42 C56 30 54 4 30 4Z', 60, [30, 4]], P: ['M8 80 L8 4 L30 4 C50 4 50 44 30 44 L8 44', 48, [8, 80]],
+    Q: ['M30 4 C6 4 4 30 4 42 C4 56 8 80 30 80 C52 80 56 56 56 42 C56 30 54 4 30 4Z M36 62 L56 86', 60, [30, 4]], R: ['M8 80 L8 4 L30 4 C50 4 50 44 30 44 L8 44 M26 44 L48 80', 52, [8, 80]],
+    S: ['M46 14 C40 2 10 0 8 20 C6 38 46 38 46 60 C46 82 10 84 4 68', 50, [46, 14]], T: ['M2 4 L50 4 M26 4 L26 80', 52, [2, 4]],
+    U: ['M6 4 L6 58 C6 84 50 84 50 58 L50 4', 56, [6, 4]], V: ['M4 4 L28 80 L52 4', 56, [4, 4]], W: ['M4 4 L18 80 L34 26 L50 80 L64 4', 68, [4, 4]],
+    X: ['M6 4 L46 80 M46 4 L6 80', 52, [6, 4]], Y: ['M4 4 L26 42 L48 4 M26 42 L26 80', 52, [4, 4]], Z: ['M6 4 L46 4 L6 80 L46 80', 52, [6, 4]],
+    a: ['M40 50 C34 38 10 40 8 60 C6 80 34 86 40 66 M40 44 L40 80', 46, [40, 50]], b: ['M8 4 L8 80 M8 60 C10 38 40 38 40 60 C40 82 10 82 8 62', 46, [8, 4]],
+    c: ['M40 48 C32 38 8 40 8 60 C8 82 32 84 40 72', 44, [40, 48]], d: ['M40 60 C38 38 8 38 8 60 C8 82 38 82 40 62 M40 4 L40 80', 46, [40, 60]],
+    e: ['M8 62 L40 62 C40 40 8 36 8 60 C8 82 32 84 40 74', 46, [8, 62]], f: ['M36 8 C30 2 16 2 16 18 L16 80 M4 42 L32 42', 38, [36, 8]],
+    g: ['M40 50 C34 38 10 40 8 60 C6 80 34 86 40 66 M40 44 L40 92 C40 108 14 108 8 98', 46, [40, 50]], h: ['M8 4 L8 80 M8 58 C10 38 40 38 40 58 L40 80', 46, [8, 4]],
+    i: ['M10 44 L10 80 M10 28 L10 30', 20, [10, 44]], j: ['M24 44 L24 94 C24 108 6 106 4 98 M24 28 L24 30', 30, [24, 44]],
+    k: ['M8 4 L8 80 M36 44 L8 66 M18 58 L38 80', 42, [8, 4]], l: ['M10 4 L10 80', 20, [10, 4]],
+    m: ['M6 80 L6 42 M6 54 C6 38 28 38 28 54 L28 80 M28 54 C28 38 50 38 50 54 L50 80', 56, [6, 42]], n: ['M8 80 L8 42 M8 56 C8 38 38 38 38 56 L38 80', 46, [8, 42]],
+    o: ['M24 42 C8 42 6 54 6 61 C6 70 8 80 24 80 C40 80 42 70 42 61 C42 54 40 42 24 42Z', 48, [24, 42]], p: ['M8 42 L8 104 M8 60 C10 38 40 38 40 60 C40 82 10 82 8 62', 46, [8, 42]],
+    q: ['M40 60 C38 38 8 38 8 60 C8 82 38 82 40 62 M40 42 L40 104', 46, [40, 60]], r: ['M8 80 L8 42 M8 58 C10 42 24 40 34 44', 38, [8, 42]],
+    s: ['M36 48 C32 38 8 38 8 50 C8 62 38 58 38 70 C38 84 10 84 6 74', 44, [36, 48]], t: ['M16 10 L16 72 C16 82 28 82 34 76 M4 42 L32 42', 38, [16, 10]],
+    u: ['M8 42 L8 64 C8 84 38 84 38 64 M38 42 L38 80', 46, [8, 42]], v: ['M4 42 L22 80 L40 42', 44, [4, 42]], w: ['M4 42 L16 80 L28 50 L40 80 L52 42', 56, [4, 42]],
+    x: ['M6 42 L38 80 M38 42 L6 80', 44, [6, 42]], y: ['M4 42 L22 80 M40 42 L22 80 L14 102', 44, [4, 42]], z: ['M6 42 L38 42 L6 80 L38 80', 44, [6, 42]],
+    0: ['M28 4 C8 4 6 30 6 42 C6 56 8 80 28 80 C48 80 50 56 50 42 C50 30 48 4 28 4Z', 56, [28, 4]], 1: ['M10 18 L28 4 L28 80', 40, [10, 18]],
+    2: ['M6 20 C10 2 46 0 46 24 C46 44 6 62 6 80 L48 80', 54, [6, 20]], 3: ['M8 12 C18 0 46 2 46 20 C46 36 30 40 22 40 C34 40 48 44 48 60 C48 82 14 84 6 70', 54, [8, 12]],
+    4: ['M38 80 L38 4 L4 58 L50 58', 54, [38, 80]], 5: ['M44 4 L12 4 L8 38 C22 30 48 32 48 56 C48 82 14 84 6 70', 54, [44, 4]],
+    6: ['M42 6 C22 10 8 30 8 54 C8 72 20 82 32 82 C46 82 54 72 54 60 C54 46 44 38 32 38 C20 38 10 46 8 56', 60, [42, 6]], 7: ['M4 4 L46 4 L18 80', 50, [4, 4]],
+    8: ['M28 6 C15 6 9 14 9 23 C9 33 19 38 28 43 C39 48 49 55 49 65 C49 75 39 82 28 82 C17 82 7 75 7 65 C7 55 17 48 28 43 C37 38 47 33 47 23 C47 14 41 6 28 6Z', 56, [28, 6]],
+    9: ['M48 30 C46 10 10 8 8 30 C6 50 40 52 48 30 C50 54 44 76 14 80', 56, [48, 30]]
+  };
+  // acentos e cedilha (por cima da letra; o Ç leva a cedilha por baixo)
+  const AC = { '´': 'M20 -14 L32 -24', '`': 'M18 -24 L30 -14', '^': 'M14 -12 L26 -24 L38 -12', '~': 'M12 -14 C18 -24 26 -10 32 -18 C36 -22 40 -20 42 -18', ',': 'M28 80 L28 88 C34 88 36 94 28 98' };
+  const DEC = { 'Á': ['A', '´'], 'À': ['A', '`'], 'Â': ['A', '^'], 'Ã': ['A', '~'], 'É': ['E', '´'], 'Ê': ['E', '^'], 'Í': ['I', '´'], 'Ó': ['O', '´'], 'Ô': ['O', '^'], 'Õ': ['O', '~'], 'Ú': ['U', '´'], 'Ç': ['C', ','],
+               'á': ['a', '´'], 'à': ['a', '`'], 'â': ['a', '^'], 'ã': ['a', '~'], 'é': ['e', '´'], 'ê': ['e', '^'], 'í': ['ı', '´'], 'ó': ['o', '´'], 'ô': ['o', '^'], 'õ': ['o', '~'], 'ú': ['u', '´'], 'ç': ['c', ','] };
+  G['ı'] = ['M10 44 L10 80', 20, [10, 44]];
+  function glifo(ch) {
+    if (G[ch]) return G[ch];
+    const d = DEC[ch]; if (!d) return null;
+    const b = G[d[0]]; if (!b) return null;
+    const w = b[1], dx = (w - 52) / 2, low = d[0] === d[0].toLowerCase();
+    const ac = AC[d[1]].replace(/(-?\d+(?:\.\d+)?) (-?\d+(?:\.\d+)?)/g, (m, x, y) => `${(+x + dx).toFixed(0)} ${d[1] === ',' ? y : (+y + (low ? 48 : 0)).toFixed(0)}`);
+    return [b[0] + ' ' + ac, w, b[2]];
+  }
+  return { D, G, glifo, ids: () => Object.keys(D) };
+})();
+</script>
+<script>/* Fichas do Jardim (1.22.0) — o antigo EducaPro: fichas de trabalho com desenhos e formas, a preto e branco, numa folha A4,
+   com a folha de soluções à parte. O professor escolhe o nível e a área, os exercícios, ajusta os desenhos e imprime.
+   Funciona sem internet: os desenhos estão em FICHAS_DES. Os nomes das crianças («Toda a turma») só se leem neste aparelho
+   (lista da turma que a gestão já guardou aqui, ou escrita pelo professor) e não ficam guardados na ficha. */
+const FICHAS = (() => {
+  const { D, glifo } = FICHAS_DES;
+  const W = 794, H = 1123, FONT = "Arial, Helvetica, 'Liberation Sans', sans-serif";
+  const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const norm = (s) => String(s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+  function rnd(seed) { let a = (seed >>> 0) || 1; return () => { a = (a + 0x6D2B79F5) | 0; let t = Math.imul(a ^ (a >>> 15), 1 | a); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
+  const mix = (r, a) => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(r() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+  const pick = (r, a) => a[Math.floor(r() * a.length)];
+  const take = (r, a, n) => mix(r, a).slice(0, n);
+  const com = (...t) => Object.keys(D).filter((k) => t.some((x) => D[k].t.includes(x)));
+  const nome = (id) => (id === 'foto' ? 'fotografia' : D[id] ? D[id].nome : id);
+
+  /* ---------- grupos de desenhos para cada exercício */
+  const SEM = new Set(['quadro', 'esteira', 'curral', 'rio', 'estrelas', 'lixo_chao', 'lixo_cesto', 'lavar_maos', 'capoeira', 'colmeia', 'ninho']);
+  const OBJ = com('frutos', 'comida', 'animais', 'transportes', 'escola', 'cozinha', 'formas').concat(['flor', 'folha', 'arvore', 'sol', 'nuvem', 'casa', 'tabanca', 'palmeira', 'lua', 'chapeu', 'camisa', 'sapato'])
+    .filter((k, i, a) => !SEM.has(k) && a.indexOf(k) === i);
+  const CONTORNA = ['circulo', 'quadrado', 'triangulo', 'coracao', 'estrela', 'losango', 'oval', 'sol', 'lua', 'peixe', 'ovo', 'casa', 'folha', 'nuvem', 'copo', 'sino', 'balde', 'chapeu', 'camisa', 'tomate', 'laranja', 'ananas', 'colher'];
+  const PINTA = ['galinha', 'peixe', 'borboleta', 'tartaruga', 'gato', 'porco', 'vaca', 'tabanca', 'casa', 'flor', 'arvore', 'palmeira', 'canoa', 'carro', 'barco', 'caju', 'manga', 'papaia', 'ananas', 'sol', 'coruja', 'elefante', 'caracol', 'sapo', 'tocatoca', 'camisa', 'vestido', 'bola', 'mochila', 'tambor', 'abelha', 'pato', 'cabra'];
+  const PARES = [['passaro', 'ninho'], ['abelha', 'flor'], ['carro', 'casa'], ['pintainho', 'galinha'], ['canoa', 'tabanca'], ['borboleta', 'flor'], ['cao', 'casa'], ['coelho', 'arvore'],
+    ['menina', 'casa'], ['sapo', 'rio'], ['caracol', 'folha'], ['formiga', 'folha'], ['macaco', 'palmeira'], ['bebe', 'mama'], ['pato', 'rio'], ['rato', 'pedra'], ['menino', 'tabanca'], ['abelha', 'colmeia'], ['tartaruga', 'rio']];
+  const CASAS = { capoeira: ['galinha', 'pintainho', 'galo'], curral: ['cabra', 'vaca', 'porco', 'burro', 'ovelha'], rio: ['peixe', 'pato', 'tartaruga', 'caranguejo', 'sapo', 'hipopotamo', 'crocodilo'], ninho: ['passaro', 'coruja'], colmeia: ['abelha'] };
+  const FEM = new Set(['mao', 'colher', 'flor', 'nuvem', 'arvore', 'avo', 'batata']), PL = new Set(['estrelas', 'chinelos', 'calcoes']);
+  const art = (id) => { if (id === 'foto') return 'a'; const w = norm(nome(id).split(' ')[0]), fem = PL.has(id) ? /as$/.test(w) : FEM.has(id) || /a$/.test(w); return (fem ? 'a' : 'o') + (PL.has(id) ? 's' : ''); };
+  const DO = { o: 'do', a: 'da', os: 'dos', as: 'das' }, AO = { o: 'ao', a: 'à', os: 'aos', as: 'às' };
+  const o_ = (id) => `${art(id)} ${nome(id)}`, do_ = (id) => `${DO[art(id)]} ${nome(id)}`, ao_ = (id) => `${AO[art(id)]} ${nome(id)}`;
+  // som inicial: só as letras cujo som não muda (c e g antes de e/i, h mudo e vogais incertas ficam de fora)
+  function som(id) {
+    const w = norm(nome(id)), c = w[0], d = w[1];
+    if (!c || 'eiuhkwyxzqj'.includes(c)) return '';
+    if ((c === 'c' || c === 'g') && 'ei'.includes(d)) return '';
+    return c.toUpperCase();
+  }
+  const SOMP = Object.keys(D).filter((k) => !D[k].t.includes('formas') && !D[k].t.includes('emocoes') && !D[k].t.includes('sala+') && !D[k].t.includes('sala-') && !['lixo_chao', 'lixo_cesto', 'lavar_maos', 'estrelas', 'lua_cheia', 'peixe_seco', 'escova', 'balde', 'pote', 'batata'].includes(k) && som(k));
+  const LETRAS = [...new Set(SOMP.map(som))].filter((l) => SOMP.filter((k) => som(k) === l).length >= 3).sort();
+
+  /* ---------- peças de desenho */
+  const G0 = '<g fill="#fff" stroke="#111" stroke-linejoin="round" stroke-linecap="round"';
+  function fig(id, cx, cy, s, op = {}) {
+    if (id === 'foto') {
+      const x = cx - s / 2, y = cy - s / 2, k = 'f' + Math.round(cx) + '_' + Math.round(cy);
+      if (!op.foto) return `<rect x="${x}" y="${y}" width="${s}" height="${s}" rx="10" fill="#fff" stroke="#111" stroke-width="2.5"/>`;
+      return `<clipPath id="${k}"><rect x="${x}" y="${y}" width="${s}" height="${s}" rx="10"/></clipPath><image href="${op.foto}" x="${x}" y="${y}" width="${s}" height="${s}" preserveAspectRatio="xMidYMid slice" clip-path="url(#${k})" filter="url(#cinza)"/><rect x="${x}" y="${y}" width="${s}" height="${s}" rx="10" fill="none" stroke="#111" stroke-width="2.5"/>`;
+    }
+    const d = D[id]; if (!d) return '';
+    const sc = s / 100, extra = op.ponto ? ` stroke-dasharray="${(0.1 / sc).toFixed(2)} ${(13 / sc).toFixed(2)}" stroke-width="${(5.5 / sc).toFixed(2)}"` : ' stroke-width="3.5"';
+    return `<g transform="translate(${(cx - s / 2).toFixed(1)},${(cy - s / 2).toFixed(1)}) scale(${sc.toFixed(4)})">${G0}${extra}>${d.svg}</g></g>`;
+  }
+  const t = (x, y, s, size, o = {}) => `<text x="${x.toFixed(1)}" y="${y.toFixed(1)}" font-family="${FONT}" font-size="${size}" font-weight="${o.w || 700}" fill="${o.fill || '#111'}" text-anchor="${o.a || 'middle'}">${esc(s)}</text>`;
+  const caixa = (B) => `<rect x="${B.x}" y="${B.y}" width="${B.w}" height="${B.h}" rx="12" fill="none" stroke="#111" stroke-width="1.5"/>`;
+  const roda = (cx, cy, rx, ry) => `<ellipse cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" rx="${rx.toFixed(1)}" ry="${(ry || rx).toFixed(1)}" fill="none" stroke="#111" stroke-width="4"/>`;
+  const marca = (cx, cy, n) => `<circle cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" r="11" fill="#111"/>${t(cx, cy + 5, String(n), 13, { fill: '#fff' })}`;
+  const ponto = (x, y) => `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="7" fill="#111"/>`;
+  const linha = (x1, y1, x2, y2) => `<path d="M${x1.toFixed(1)} ${y1.toFixed(1)} L${x2.toFixed(1)} ${y2.toFixed(1)}" stroke="#111" stroke-width="4" stroke-linecap="round"/>`;
+  const PONT = 'fill="none" stroke="#111" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="0.5 12"';
+  const CHEIO = 'fill="none" stroke="#111" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"';
+  const legenda = (s, cx, y) => t(cx, y, s, 12, { w: 400, fill: '#333' });
+
+  // grelha de figuras (para «rodeia»): devolve os centros e o tamanho
+  function grelha(B, n, op = {}) {
+    let best = null;
+    for (let cols = 1; cols <= n; cols++) {
+      const rows = Math.ceil(n / cols), cw = (B.w - 20) / cols, rh = (B.h - 20) / rows, s = Math.min(cw * 0.72, rh * (op.leg ? 0.6 : 0.74), op.max || 190);
+      if (!best || s > best.s) best = { cols, rows, cw, rh, s };
+    }
+    const out = []; for (let i = 0; i < n; i++) { const r = Math.floor(i / best.cols), c = i % best.cols, nl = Math.min(best.cols, n - r * best.cols), off = (best.cols - nl) * best.cw / 2;
+      out.push({ cx: B.x + 10 + off + best.cw * (c + 0.5), cy: B.y + 10 + best.rh * (r + 0.5) - (op.leg ? 10 : 0) }); }
+    return { pts: out, s: best.s };
+  }
+  // letras e palavras de traço único, com pauta
+  function palavra(txt, x, y, s, modo) {
+    let o = '', cx = x;
+    for (const ch of txt) {
+      if (ch === ' ') { cx += 30 * s; continue; }
+      const g = glifo(ch); if (!g) continue;
+      const tr = `translate(${cx.toFixed(1)},${y.toFixed(1)}) scale(${s.toFixed(3)})`;
+      if (modo === 'cheio') o += `<g transform="${tr}"><path d="${g[0]}" fill="none" stroke="#111" stroke-width="${(8 / s).toFixed(2)}" stroke-linecap="round" stroke-linejoin="round"/></g>`;
+      else o += `<g transform="${tr}"><path d="${g[0]}" fill="none" stroke="#111" stroke-width="${(4 / s).toFixed(2)}" stroke-linecap="round" stroke-dasharray="${(1 / s).toFixed(2)} ${(9 / s).toFixed(2)}"/><circle cx="${g[2][0]}" cy="${g[2][1]}" r="${(5 / s).toFixed(1)}" fill="#111"/></g>`;
+      cx += (g[1] + 14) * s;
+    }
+    return { svg: o, x: cx };
+  }
+  const largura = (txt, s) => [...txt].reduce((a, ch) => a + (ch === ' ' ? 30 : (glifo(ch) || [0, -14])[1] + 14) * s, 0);
+  const pauta = (x1, x2, y, s) => [[4, '#bbb', ''], [42, '#bbb', ' stroke-dasharray="6 6"'], [80, '#666', '']].map(([v, c, da]) => `<line x1="${x1}" y1="${(y + v * s).toFixed(1)}" x2="${x2}" y2="${(y + v * s).toFixed(1)}" stroke="${c}" stroke-width="1.5"${da}/>`).join('');
+
+  // ligar duas colunas
+  function colunas(B, esq, dir, ligacoes, sol, op = {}) {
+    const n = Math.max(esq.length, dir.length), rh = (B.h - 16) / n, s = Math.min(rh * 0.78, op.max || 120, B.w * 0.2);
+    const xl = B.x + 24 + s / 2, xr = B.x + B.w - 24 - s / 2, dl = xl + s / 2 + 22, dr = xr - s / 2 - 22;
+    let o = ''; const yc = (i) => B.y + 8 + rh * (i + 0.5);
+    esq.forEach((e, i) => { o += e(xl, yc(i), s) + ponto(dl, yc(i)); });
+    dir.forEach((e, i) => { o += e(xr, yc(i), s) + ponto(dr, yc(i)); });
+    if (sol) ligacoes.forEach(([a, b]) => { o += linha(dl, yc(a), dr, yc(b)); });
+    return o;
+  }
+
+  /* ---------- traçados das linhas */
+  function traco(tipo, x0, x1, y, a, r) {
+    const L = x1 - x0, k = (p) => (x0 + L * p).toFixed(1);
+    if (tipo === 'reta') return `M${x0} ${y} L${x1} ${y}`;
+    if (tipo === 'curva') return `M${x0} ${y} C${k(.3)} ${y - a * 1.6} ${k(.7)} ${y - a * 1.6} ${x1} ${y}`;
+    const n = { onda: 3, zz: 6, arcos: 4, lacos: 4, dentes: 5 }[tipo] || 3, w = L / n;
+    let d = `M${x0} ${y}`;
+    for (let i = 0; i < n; i++) {
+      const xa = x0 + w * i, xb = xa + w;
+      if (tipo === 'onda') d += ` C${(xa + w * .25).toFixed(1)} ${y - a} ${(xa + w * .25).toFixed(1)} ${y - a} ${(xa + w * .5).toFixed(1)} ${y} C${(xa + w * .75).toFixed(1)} ${y + a} ${(xa + w * .75).toFixed(1)} ${y + a} ${xb.toFixed(1)} ${y}`;
+      else if (tipo === 'zz') d += ` L${(xa + w / 2).toFixed(1)} ${y - a} L${xb.toFixed(1)} ${y}`.replace(` L${xb.toFixed(1)} ${y}`, ` L${xb.toFixed(1)} ${y + (i % 2 ? 0 : 0)}`);
+      else if (tipo === 'arcos') d += ` C${xa.toFixed(1)} ${y - a * 1.3} ${xb.toFixed(1)} ${y - a * 1.3} ${xb.toFixed(1)} ${y}`;
+      else if (tipo === 'lacos') d += ` C${(xa + w * .9).toFixed(1)} ${y} ${(xa + w * 1.05).toFixed(1)} ${y - a * 1.4} ${(xa + w * .6).toFixed(1)} ${y - a * 1.4} C${(xa + w * .15).toFixed(1)} ${y - a * 1.4} ${(xa + w * .35).toFixed(1)} ${y} ${xb.toFixed(1)} ${y}`;
+      else if (tipo === 'dentes') d += ` L${xa.toFixed(1)} ${y - a} L${(xa + w / 2).toFixed(1)} ${y - a} L${(xa + w / 2).toFixed(1)} ${y} L${xb.toFixed(1)} ${y}`;
+    }
+    if (tipo === 'zz') { d = `M${x0} ${y + a / 2}`; for (let i = 1; i <= n * 2; i++) d += ` L${(x0 + L * i / (n * 2)).toFixed(1)} ${i % 2 ? y - a / 2 : y + a / 2}`; }
+    return d;
+  }
+
+  /* ---------- labirinto */
+  function labirinto(cols, rows, r) {
+    const v = Array.from({ length: rows }, () => Array(cols).fill(false)), dir = Array.from({ length: rows }, () => Array(cols).fill(true)), bai = Array.from({ length: rows }, () => Array(cols).fill(true));
+    const pilha = [[0, 0]]; v[0][0] = true;
+    while (pilha.length) {
+      const [cx, cy] = pilha[pilha.length - 1];
+      const viz = mix(r, [[1, 0], [-1, 0], [0, 1], [0, -1]]).map(([dx, dy]) => [cx + dx, cy + dy, dx, dy]).filter(([x, y]) => x >= 0 && y >= 0 && x < cols && y < rows && !v[y][x]);
+      if (!viz.length) { pilha.pop(); continue; }
+      const [x, y, dx, dy] = viz[0]; v[y][x] = true;
+      if (dx === 1) dir[cy][cx] = false; if (dx === -1) dir[y][x] = false; if (dy === 1) bai[cy][cx] = false; if (dy === -1) bai[y][x] = false;
+      pilha.push([x, y]);
+    }
+    // caminho da entrada (0,0) à saída (cols-1, rows-1)
+    const prev = {}, fila = [[0, 0]], key = (x, y) => x + ',' + y; prev[key(0, 0)] = null;
+    while (fila.length) { const [x, y] = fila.shift(); if (x === cols - 1 && y === rows - 1) break;
+      const pode = [[1, 0, !dir[y][x]], [-1, 0, x > 0 && !dir[y][x - 1]], [0, 1, !bai[y][x]], [0, -1, y > 0 && !bai[y - 1][x]]];
+      for (const [dx, dy, ok] of pode) { const nx = x + dx, ny = y + dy; if (ok && nx >= 0 && ny >= 0 && nx < cols && ny < rows && !(key(nx, ny) in prev)) { prev[key(nx, ny)] = [x, y]; fila.push([nx, ny]); } } }
+    const cam = []; let c = [cols - 1, rows - 1]; while (c) { cam.unshift(c); c = prev[key(c[0], c[1])]; }
+    return { dir, bai, cam };
+  }
+
+  /* ============================================================ os 21 exercícios */
+  const AREAS = [['mot', 'Expressão Motora'], ['ling', 'Linguagem e Comunicação'], ['mat', 'Iniciação à Matemática'], ['mundo', 'Conhecimento do Mundo'], ['fps', 'Formação Pessoal e Social']];
+  const AREA = Object.fromEntries(AREAS);
+  const NIV = { 1: 'Nível I', 2: 'Nível II', 3: 'Nível III' };
+  const POR_FOLHA = { 1: 1, 2: 2, 3: 2 };
+  const T = [];
+  const tipo = (o) => { T.push(Object.assign({ peso: 1, niv: [1, 2, 3], ic: 'tracar' }, o)); };
+  const LIVRE = 'Resposta livre';
+
+  // linhas «rodeia o que…»: grelha com certos e errados
+  function rodeia(id, area, nomeT, instr, pos, neg, tam, niv, orient) {
+    tipo({ id, area, nome: nomeT, niv, ic: 'rodear', instr: () => instr,
+      gen(nv, r) { const [n, k] = tam[nv]; const cert = take(r, pos, Math.min(k, pos.length)); const err = take(r, neg, n - cert.length); return { it: mix(r, cert.concat(err)), ok: cert }; },
+      draw(p, B, sol, cx) { const g = grelha(B, p.it.length, { leg: sol }); let o = '';
+        p.it.forEach((f, i) => { const c = g.pts[i]; o += fig(f, c.cx, c.cy, g.s, cx); if (sol) { o += legenda(nome(f), c.cx, c.cy + g.s * 0.62 + 16); if (p.ok.includes(f)) o += roda(c.cx, c.cy, g.s * 0.6, g.s * 0.6); } });
+        return o; },
+      resumo: (p) => p.ok.map(nome).join(', '), troca: (p) => p.it.map((f, i) => ({ rot: `Figura ${i + 1}`, v: f, set: (v) => { p.it[i] = v; }, op: p.ok.includes(f) ? pos : neg, fixo: true })) , orient });
+  }
+
+  /* --- Expressão Motora */
+  tipo({ id: 'linhas', area: 'mot', nome: 'Traça as linhas', instr: () => 'Traça as linhas por cima do pontilhado.',
+    gen(nv, r, nx) { const TIP = { 1: ['reta', 'curva', 'reta'], 2: ['reta', 'onda', 'zz', 'arcos'], 3: ['onda', 'zz', 'arcos', 'lacos', 'dentes'] }[nv];
+      const n = nx > 1 ? Math.min(TIP.length, 3) : TIP.length; return { l: take(r, PARES, n).map((pr, i) => ({ a: pr[0], b: pr[1], t: (nx > 1 ? mix(r, TIP) : TIP)[i] })) }; },
+    draw(p, B, sol, cx) { const n = p.l.length, rh = B.h / n; let o = '';
+      p.l.forEach((l, i) => { const yc = B.y + rh * (i + 0.5), s = Math.min(rh * 0.7, 78), x0 = B.x + 20 + s, x1 = B.x + B.w - 20 - s, a = Math.min(rh * 0.28, 34);
+        o += fig(l.a, B.x + 14 + s / 2, yc, s, cx) + fig(l.b, B.x + B.w - 14 - s / 2, yc, s, cx) + `<path d="${traco(l.t, x0 + 6, x1 - 6, yc + (['arcos', 'lacos', 'curva', 'dentes'].includes(l.t) ? a * .55 : 0), a, null)}" ${sol ? CHEIO : PONT}/>` + (sol ? '' : ponto(x0 + 6, yc + (['arcos', 'lacos', 'curva', 'dentes'].includes(l.t) ? a * .55 : 0))); });
+      return o; },
+    troca: (p) => p.l.flatMap((l, i) => [{ rot: `Linha ${i + 1}: início`, v: l.a, set: (v) => { l.a = v; }, op: OBJ.concat(com('familia')) }, { rot: `Linha ${i + 1}: fim`, v: l.b, set: (v) => { l.b = v; }, op: OBJ.concat(com('casa', 'familia')) }]) });
+  tipo({ id: 'contorna', area: 'mot', nome: 'Contorna a figura', instr: (p) => p.f.length === 1 ? `Contorna ${o_(p.f[0])} por cima do pontilhado.` : 'Contorna as figuras por cima do pontilhado.',
+    gen(nv, r, nx) { return { f: take(r, CONTORNA, nv === 1 ? 1 : nx > 1 ? 2 : nv === 2 ? 2 : 3) }; },
+    draw(p, B, sol, cx) { const g = grelha(B, p.f.length, { max: 330 }); return p.f.map((f, i) => fig(f, g.pts[i].cx, g.pts[i].cy, g.s * 1.15, Object.assign({}, cx, { ponto: !sol }))).join(''); },
+    troca: (p) => p.f.map((f, i) => ({ rot: `Figura ${i + 1}`, v: f, set: (v) => { p.f[i] = v; }, op: CONTORNA })) });
+  tipo({ id: 'pinta', area: 'mot', nome: 'Pinta sem sair da linha', ic: 'pintar', instr: (p) => p.f.length === 1 ? `Pinta ${o_(p.f[0])} sem sair da linha.` : 'Pinta os desenhos sem sair da linha.',
+    gen(nv, r, nx) { return { f: take(r, PINTA, nv === 3 && nx === 1 ? 2 : 1) }; },
+    draw(p, B, sol, cx) { const g = grelha(B, p.f.length, { max: 360 }); return p.f.map((f, i) => fig(f, g.pts[i].cx, g.pts[i].cy, g.s * 1.15, cx)).join(''); },
+    livre: true, orient: 'Observe se a criança pinta por dentro da linha e se enche o desenho todo.', troca: (p) => p.f.map((f, i) => ({ rot: `Desenho ${i + 1}`, v: f, set: (v) => { p.f[i] = v; }, op: PINTA })) });
+  tipo({ id: 'labirinto', area: 'mot', nome: 'Labirinto', niv: [2, 3], instr: (p) => `Ajuda ${o_(p.a)} a chegar ${ao_(p.b)}.`,
+    gen(nv, r) { const pr = pick(r, PARES); return { a: pr[0], b: pr[1], c: nv === 2 ? 5 : 7, l: nv === 2 ? 4 : 5, seed: Math.floor(r() * 1e9) }; },
+    draw(p, B, sol, cx) { const s = Math.min(B.h * 0.32, 90), gx = B.x + s + 28, gw = B.w - 2 * s - 56, cs = Math.min(gw / p.c, (B.h - 30) / p.l), gw2 = cs * p.c, gh = cs * p.l, x0 = gx + (gw - gw2) / 2, y0 = B.y + (B.h - gh) / 2;
+      const M = labirinto(p.c, p.l, rnd(p.seed)); let d = '';
+      d += `M${x0} ${y0} L${x0 + gw2} ${y0} M${x0} ${y0 + cs} L${x0} ${y0 + gh} L${x0 + gw2} ${y0 + gh} M${x0 + gw2} ${y0} L${x0 + gw2} ${y0 + gh - cs}`;
+      for (let y = 0; y < p.l; y++) for (let x = 0; x < p.c; x++) { if (M.dir[y][x] && x < p.c - 1) d += ` M${x0 + cs * (x + 1)} ${y0 + cs * y} L${x0 + cs * (x + 1)} ${y0 + cs * (y + 1)}`; if (M.bai[y][x] && y < p.l - 1) d += ` M${x0 + cs * x} ${y0 + cs * (y + 1)} L${x0 + cs * (x + 1)} ${y0 + cs * (y + 1)}`; }
+      const cam = sol ? `<path d="M${(x0 - 4).toFixed(1)} ${(y0 + cs / 2).toFixed(1)} ${M.cam.map(([x, y]) => `L${(x0 + cs * (x + .5)).toFixed(1)} ${(y0 + cs * (y + .5)).toFixed(1)}`).join(' ')} L${(x0 + gw2 + 4).toFixed(1)} ${(y0 + gh - cs / 2).toFixed(1)}" fill="none" stroke="#9a9a9a" stroke-width="${Math.max(8, cs * 0.28).toFixed(1)}" stroke-linecap="round" stroke-linejoin="round"/>` : '';
+      return cam + `<path d="${d}" fill="none" stroke="#111" stroke-width="5" stroke-linecap="round"/>` + fig(p.a, x0 - s / 2 - 10, y0 + cs / 2, s, cx) + fig(p.b, x0 + gw2 + s / 2 + 10, y0 + gh - cs / 2, s, cx); },
+    troca: (p) => [{ rot: 'Quem anda', v: p.a, set: (v) => { p.a = v; }, op: OBJ.concat(com('familia')) }, { rot: 'Onde chega', v: p.b, set: (v) => { p.b = v; }, op: OBJ.concat(com('casa', 'familia')) }] });
+  tipo({ id: 'caminho', area: 'mot', nome: 'Traça o caminho', instr: (p) => `Traça o caminho ${do_(p.a)} até ${ao_(p.b)}.`,
+    gen(nv, r) { const pr = pick(r, PARES); return { a: pr[0], b: pr[1], t: nv === 1 ? 'curva' : nv === 2 ? 'onda' : pick(r, ['zz', 'lacos', 'dentes']) }; },
+    draw(p, B, sol, cx) { const s = Math.min(B.h * 0.62, 130), yc = B.y + B.h / 2, x0 = B.x + 24 + s, x1 = B.x + B.w - 24 - s, a = Math.min(B.h * 0.28, 60);
+      const y = yc + (['curva', 'lacos', 'dentes'].includes(p.t) ? a * .5 : 0);
+      return fig(p.a, B.x + 14 + s / 2, yc, s, cx) + fig(p.b, B.x + B.w - 14 - s / 2, yc, s, cx) + `<path d="${traco(p.t, x0, x1, y, a)}" ${sol ? CHEIO : PONT}/>` + (sol ? '' : ponto(x0, y)); },
+    troca: (p) => [{ rot: 'Início', v: p.a, set: (v) => { p.a = v; }, op: OBJ.concat(com('familia')) }, { rot: 'Fim', v: p.b, set: (v) => { p.b = v; }, op: OBJ.concat(com('casa', 'familia')) }] });
+
+  /* --- Linguagem e Comunicação */
+  tipo({ id: 'iguais', area: 'ling', nome: 'Liga as figuras iguais', ic: 'ligar', instr: () => 'Liga as figuras iguais.',
+    gen(nv, r, nx) { const n = { 1: 3, 2: 4, 3: nx > 1 ? 4 : 5 }[nv]; const f = take(r, OBJ, n); let ord; do { ord = mix(r, f.map((_, i) => i)); } while (n > 1 && ord.some((x, i) => x === i) && r() < 0.9); return { f, ord }; },
+    draw(p, B, sol, cx) { return colunas(B, p.f.map((f) => (x, y, s) => fig(f, x, y, s, cx)), p.ord.map((k) => (x, y, s) => fig(p.f[k], x, y, s, cx)), p.f.map((_, i) => [i, p.ord.indexOf(i)]), sol); },
+    troca: (p) => p.f.map((f, i) => ({ rot: `Par ${i + 1}`, v: f, set: (v) => { p.f[i] = v; }, op: OBJ })) });
+  tipo({ id: 'som', area: 'ling', nome: 'Rodeia a figura que começa pelo som…', niv: [2, 3], ic: 'rodear', instr: (p) => `Rodeia as figuras que começam pelo som da letra ${p.l}.`,
+    gen(nv, r, nx) { const l = pick(r, LETRAS), [n, k] = nv === 2 ? [6, 2] : [8, 3]; const pos = SOMP.filter((f) => som(f) === l), neg = SOMP.filter((f) => som(f) !== l && norm(nome(f))[0] !== l.toLowerCase());
+      const ok = take(r, pos, Math.min(k + (r() < .5 ? 1 : 0), pos.length)); return { l, it: mix(r, ok.concat(take(r, neg, n - ok.length))), ok }; },
+    draw(p, B, sol, cx) { const lw = 150; let o = `<rect x="${B.x + 14}" y="${B.y + 14}" width="${lw - 20}" height="${B.h - 28}" rx="12" fill="#fff" stroke="#111" stroke-width="2"/>`;
+      const s = Math.min(1.15, (B.h - 40) / 2 / 86); o += palavra(p.l, B.x + 14 + (lw - 20) / 2 - largura(p.l, s) / 2 + 7 * s, B.y + B.h / 2 - 84 * s, s, 'cheio').svg + palavra(p.l.toLowerCase(), B.x + 14 + (lw - 20) / 2 - largura(p.l.toLowerCase(), s) / 2 + 7 * s, B.y + B.h / 2 - 30 * s, s, 'cheio').svg;
+      const g = grelha({ x: B.x + lw, y: B.y, w: B.w - lw, h: B.h }, p.it.length, { leg: sol, max: 120 });
+      p.it.forEach((f, i) => { const c = g.pts[i]; o += fig(f, c.cx, c.cy, g.s, cx); if (sol) { o += legenda(nome(f), c.cx, c.cy + g.s * 0.62 + 16); if (p.ok.includes(f)) o += roda(c.cx, c.cy, g.s * 0.6); } });
+      return o; },
+    resumo: (p) => p.ok.map(nome).join(', '), troca: (p) => [{ rot: 'Letra', v: p.l, op: LETRAS, letra: true, set: (v) => { if (v === p.l) return; const r = rnd(Date.now()), n = p.it.length, pos = SOMP.filter((f) => som(f) === v), neg = SOMP.filter((f) => som(f) !== v && norm(nome(f))[0] !== v.toLowerCase());
+      p.l = v; p.ok = take(r, pos, Math.min(n === 6 ? 2 : 3, pos.length)); p.it = mix(r, p.ok.concat(take(r, neg, n - p.ok.length))); } }] });
+  tipo({ id: 'letra', area: 'ling', nome: 'Traça a letra', niv: [3], instr: (p) => `Traça a letra ${p.l}, ${p.f === 'foto' ? 'da fotografia' : 'de ' + nome(p.f)}.`,
+    gen(nv, r) { const l = pick(r, LETRAS); return { l, f: pick(r, SOMP.filter((f) => som(f) === l)) }; },
+    draw(p, B, sol, cx) { const fw = 150, rows = B.h > 420 ? 4 : 2, rh = B.h / rows, s = Math.min(1.25, (rh - 22) / 108); let o = '';
+      o += fig(p.f, B.x + fw / 2 + 4, B.y + Math.min(B.h, 300) / 2 - 10, Math.min(fw - 30, B.h * 0.5), cx) + t(B.x + fw / 2 + 4, B.y + Math.min(B.h, 300) / 2 + Math.min(fw - 30, B.h * 0.5) / 2 + 18, p.f === 'foto' ? '' : nome(p.f), 20);
+      for (let i = 0; i < rows; i++) { const ch = i < rows / 2 ? p.l : p.l.toLowerCase(), y = B.y + rh * i + (rh - 84 * s) / 2 - (ch !== p.l ? 6 * s : 0), x0 = B.x + fw + 10;
+        o += pauta(x0, B.x + B.w - 16, y, s); let x = x0 + 10; const r1 = palavra(ch, x, y, s, 'cheio'); o += r1.svg; x = r1.x + 18 * s;
+        while (x + largura(ch, s) < B.x + B.w - 16) { const q = palavra(ch, x, y, s, sol ? 'cheio' : 'pont'); o += q.svg; x = q.x + 16 * s; } }
+      return o; },
+    troca: (p) => [{ rot: 'Letra', v: p.l, set: (v) => { p.l = v; if (som(p.f) !== v && p.f !== 'foto') p.f = SOMP.find((f) => som(f) === v); }, op: LETRAS, letra: true }, { rot: 'Figura', v: p.f, set: (v) => { p.f = v; }, op: SOMP.filter((f) => som(f) === p.l) }] });
+  tipo({ id: 'nome', area: 'ling', nome: 'Escreve o teu nome', niv: [3], instr: (p, cx) => cx && cx.nome ? 'Escreve o teu nome por cima do pontilhado.' : 'Escreve o teu nome.',
+    gen() { return {}; },
+    draw(p, B, sol, cx) { const nm = primeiroNome(cx && cx.nome), rows = B.h > 420 ? 4 : 3, rh = B.h / rows; let o = '';
+      const s = nm ? Math.max(0.42, Math.min(1.3, (rh - 22) / 84, (B.w - 50) / largura(nm, 1))) : Math.min(1.3, (rh - 22) / 84);
+      for (let i = 0; i < rows; i++) { const y = B.y + rh * i + (rh - 80 * s) / 2; o += pauta(B.x + 16, B.x + B.w - 16, y, s);
+        if (nm && i < rows - (rows > 3 ? 1 : 0)) o += palavra(nm, B.x + 26, y, s, i === 0 || sol ? 'cheio' : 'pont').svg; }
+      return o; },
+    livre: true, orient: 'Cada criança escreve o seu nome. Veja se começa no ponto grande e segue o pontilhado.' });
+
+  /* --- Iniciação à Matemática */
+  tipo({ id: 'conta', area: 'mat', nome: 'Conta e rodeia o número certo', ic: 'rodear', peso: 1.4, instr: () => 'Conta e rodeia o número certo.',
+    gen(nv, r, nx) { const max = [3, 5, 10][nv - 1], min = nv === 3 ? 4 : 1, n = { 1: 3, 2: nx > 1 ? 4 : 5, 3: nx > 1 ? 3 : 5 }[nv];
+      const fs = take(r, OBJ, n); let cs = []; for (let i = 0; i < n; i++) { let c; let k = 0; do { c = min + Math.floor(r() * (max - min + 1)); k++; } while (cs.includes(c) && k < 12 && max - min + 1 >= n); cs.push(c); }
+      return { r: fs.map((f, i) => ({ f, c: cs[i], ch: escolhas(cs[i], nv, r) })) }; },
+    draw(p, B, sol, cx) { const n = p.r.length, rh = (B.h - 10 * (n + 1)) / n, dv = B.x + B.w * 0.64; let o = '';
+      p.r.forEach((w, i) => { const y = B.y + 10 + i * (rh + 10); o += `<rect x="${B.x + 10}" y="${y.toFixed(1)}" width="${B.w - 20}" height="${rh.toFixed(1)}" rx="10" fill="none" stroke="#111" stroke-width="1.5"/><line x1="${dv}" y1="${(y + 8).toFixed(1)}" x2="${dv}" y2="${(y + rh - 8).toFixed(1)}" stroke="#111" stroke-width="1.5" stroke-dasharray="4 6"/>`;
+        const c = w.c, cols = c <= 5 ? c : Math.ceil(c / 2), lin = c <= 5 ? 1 : 2, aw = dv - B.x - 30, s = Math.min(aw / cols * 0.86, (rh - 12) / lin * 0.86, 120), cw = aw / cols;
+        for (let k = 0; k < c; k++) { const l = Math.floor(k / cols), cc = k % cols, x = B.x + 20 + cw * (cc + 0.5), yy = y + rh / 2 + (lin === 2 ? (l - 0.5) * (rh - 12) / 2 : 0);
+          o += fig(w.f, x, yy, s, cx); if (sol) o += marca(x + s * 0.42, yy - s * 0.42, k + 1); }
+        const fsz = Math.min(54, rh * 0.5), rw = B.x + B.w - dv; w.ch.forEach((v, j) => { const x = dv + rw * (j + 0.5) / w.ch.length; o += t(x, y + rh / 2 + fsz * 0.36, String(v), fsz, { w: 800 }); if (sol && v === c) o += roda(x, y + rh / 2, fsz * 0.62 + (v >= 10 ? 10 : 0), fsz * 0.62); }); });
+      return o; },
+    resumo: (p) => p.r.map((w) => w.c).join(' · '),
+    troca: (p, nv) => p.r.flatMap((w, i) => [{ rot: `Linha ${i + 1}`, v: w.f, set: (v) => { w.f = v; }, op: OBJ }, { rot: `Quantos (linha ${i + 1})`, v: w.c, set: (v) => { w.c = +v; w.ch = escolhas(+v, nv, rnd(Date.now())); }, op: Array.from({ length: [3, 5, 10][nv - 1] }, (_, k) => k + 1), num: true }]) });
+  function escolhas(c, nv, r) {
+    if (nv === 1) return mix(r, [1, 2, 3]);
+    const max = nv === 2 ? 5 : 10, viz = nv === 2 ? [1, 2, 3, 4, 5] : [c - 2, c - 1, c + 1, c + 2]; const outros = mix(r, viz.filter((x) => x !== c && x >= 1 && x <= max)).slice(0, 2);
+    return mix(r, [c, ...outros]);
+  }
+  tipo({ id: 'numeros', area: 'mat', nome: 'Traça os números', niv: [3], instr: () => 'Traça os números por cima do pontilhado.',
+    gen(nv, r, nx) { return { d: take(r, '123456789'.split(''), nx > 1 ? 2 : 4) }; },
+    draw(p, B, sol) { const n = p.d.length, rh = B.h / n, s = Math.min(1.05, (rh - 18) / 84); let o = '';
+      p.d.forEach((d, i) => { const y = B.y + rh * i + (rh - 80 * s) / 2; let x = B.x + 24; const r1 = palavra(d, x, y, s, 'cheio'); o += r1.svg; x = r1.x + 30 * s;
+        while (x + largura(d, s) < B.x + B.w - 16) { const q = palavra(d, x, y, s, sol ? 'cheio' : 'pont'); o += q.svg; x = q.x + 30 * s; } });
+      return o; },
+    troca: (p) => p.d.map((d, i) => ({ rot: `Linha ${i + 1}`, v: d, set: (v) => { p.d[i] = v; }, op: '0123456789'.split(''), letra: true })) });
+  tipo({ id: 'tamanho', area: 'mat', nome: 'Rodeia o maior / o mais pequeno', ic: 'rodear', instr: (p) => p.q === 'maior' ? 'Rodeia o maior.' : 'Rodeia o mais pequeno.',
+    gen(nv, r, nx) { const n = { 1: nx > 1 ? 2 : 3, 2: 3, 3: nx > 1 ? 3 : 4 }[nv], tam = { 1: [1, .5], 2: [1, .72, .5], 3: [1, .84, .68, .54] }[nv]; return { q: r() < .5 ? 'maior' : 'menor', r: take(r, OBJ, n).map((f) => ({ f, t: mix(r, tam) })) }; },
+    draw(p, B, sol, cx) { const n = p.r.length, rh = B.h / n; let o = '';
+      p.r.forEach((w, i) => { const k = w.t.length, cw = (B.w - 30) / k, base = Math.min(rh - 20, cw * 0.9, 170), yb = B.y + rh * i + rh / 2 + base / 2;
+        if (i) o += `<line x1="${B.x + 16}" y1="${(B.y + rh * i).toFixed(1)}" x2="${B.x + B.w - 16}" y2="${(B.y + rh * i).toFixed(1)}" stroke="#bbb" stroke-width="1.5" stroke-dasharray="4 6"/>`;
+        const alvo = p.q === 'maior' ? Math.max(...w.t) : Math.min(...w.t);
+        w.t.forEach((v, j) => { const s = base * v, x = B.x + 15 + cw * (j + 0.5), y = yb - s / 2; o += fig(w.f, x, y, s, cx); if (sol && v === alvo) o += roda(x, y, s * 0.64 + 6); }); });
+      return o; },
+    troca: (p) => [{ rot: 'Pergunta', v: p.q, set: (v) => { p.q = v; }, op: ['maior', 'menor'], txt: { maior: 'o maior', menor: 'o mais pequeno' } }].concat(p.r.map((w, i) => ({ rot: `Linha ${i + 1}`, v: w.f, set: (v) => { w.f = v; }, op: OBJ }))) });
+  tipo({ id: 'sequencia', area: 'mat', nome: 'Continua a sequência', niv: [2, 3], instr: () => 'Continua a sequência: desenha o que vem a seguir.',
+    gen(nv, r, nx) { const PAD = nv === 2 ? ['AB', 'AAB', 'ABB'] : ['ABC', 'AABB', 'ABB', 'ABAC'], FOR = ['circulo', 'quadrado', 'triangulo', 'estrela', 'coracao', 'losango'];
+      const n = nv === 2 ? (nx > 1 ? 2 : 3) : (nx > 1 ? 3 : 4);
+      return { r: Array.from({ length: n }, () => { const pd = pick(r, PAD), fs = take(r, nv === 2 || r() < .5 ? FOR : OBJ.filter((x) => !D[x].t.includes('formas')).slice(), 3); return { pd, f: fs }; }), vz: nv === 2 ? 2 : 3 }; },
+    draw(p, B, sol, cx) { const n = p.r.length, rh = B.h / n, k = 8, cw = (B.w - 30) / k, s = Math.min(cw * 0.78, rh - 26); let o = '';
+      p.r.forEach((w, i) => { const yc = B.y + rh * (i + 0.5); for (let j = 0; j < k; j++) { const ch = w.pd[j % w.pd.length], f = w.f['ABC'.indexOf(ch)], x = B.x + 15 + cw * (j + 0.5);
+        if (j >= k - p.vz) { o += `<rect x="${(x - s / 2 - 6).toFixed(1)}" y="${(yc - s / 2 - 6).toFixed(1)}" width="${(s + 12).toFixed(1)}" height="${(s + 12).toFixed(1)}" rx="8" fill="none" stroke="#111" stroke-width="2" stroke-dasharray="6 6"/>`; if (sol) o += fig(f, x, yc, s, cx); }
+        else o += fig(f, x, yc, s, cx); } });
+      return o; },
+    troca: (p) => p.r.flatMap((w, i) => w.f.slice(0, new Set(w.pd).size).map((f, j) => ({ rot: `Linha ${i + 1}: ${'ABC'[j]}`, v: f, set: (v) => { w.f[j] = v; }, op: OBJ }))) });
+  tipo({ id: 'quantidade', area: 'mat', nome: 'Liga a quantidade ao número', niv: [2, 3], ic: 'ligar', instr: () => 'Liga cada grupo ao seu número.',
+    gen(nv, r, nx) { const n = nv === 2 ? (nx > 1 ? 3 : 4) : (nx > 1 ? 4 : 5), max = nv === 2 ? 5 : 10; const cs = take(r, Array.from({ length: max }, (_, i) => i + 1), n), fs = take(r, OBJ, n); return { g: cs.map((c, i) => ({ c, f: fs[i] })), ord: mix(r, cs.map((_, i) => i)) }; },
+    draw(p, B, sol, cx) { const n = p.g.length, rh = (B.h - 16) / n, gw = B.w * 0.5, xl = B.x + 16, dl = xl + gw + 14, xr = B.x + B.w - 60, dr = xr - 44; let o = '';
+      const yc = (i) => B.y + 8 + rh * (i + 0.5);
+      p.g.forEach((g, i) => { const c = g.c, cols = c <= 5 ? c : Math.ceil(c / 2), lin = c <= 5 ? 1 : 2, cw = gw / 5, s = Math.min(cw * 0.86, (rh - 10) / lin * 0.86, 70);
+        for (let k = 0; k < c; k++) { const l = Math.floor(k / cols), cc = k % cols; o += fig(g.f, xl + cw * (cc + 0.5), yc(i) + (lin === 2 ? (l - .5) * (rh - 10) / 2 : 0), s, cx); }
+        o += ponto(dl, yc(i)); });
+      p.ord.forEach((k, j) => { o += t(xr, yc(j) + 18, String(p.g[k].c), Math.min(50, rh * 0.55), { w: 800 }) + ponto(dr, yc(j)); });
+      if (sol) p.g.forEach((g, i) => { o += linha(dl, yc(i), dr, yc(p.ord.indexOf(i))); });
+      return o; },
+    resumo: (p) => p.g.map((g) => g.c).join(' · '), troca: (p) => p.g.map((g, i) => ({ rot: `Grupo ${i + 1}`, v: g.f, set: (v) => { g.f = v; }, op: OBJ })) });
+
+  /* --- Conhecimento do Mundo */
+  tipo({ id: 'casas', area: 'mundo', nome: 'Liga o animal à sua casa', ic: 'ligar', instr: () => 'Liga cada animal à sua casa.',
+    gen(nv, r, nx) { const n = { 1: 3, 2: nx > 1 ? 3 : 4, 3: nx > 1 ? 4 : 5 }[nv]; const cs = take(r, Object.keys(CASAS), n); return { a: cs.map((c) => pick(r, CASAS[c])), c: cs, ord: mix(r, cs.map((_, i) => i)) }; },
+    draw(p, B, sol, cx) { return colunas(B, p.a.map((f) => (x, y, s) => fig(f, x, y, s, cx)), p.ord.map((k) => (x, y, s) => fig(p.c[k], x, y, s, cx)), p.a.map((_, i) => [i, p.ord.indexOf(i)]), sol); },
+    resumo: (p) => p.a.map((a, i) => `${nome(a)} – ${nome(p.c[i])}`).join(', '), troca: (p) => p.a.map((a, i) => ({ rot: `Animal ${i + 1} (${nome(p.c[i])})`, v: a, set: (v) => { p.a[i] = v; }, op: CASAS[p.c[i]] })) });
+  rodeia('comer', 'mundo', 'Rodeia o que comemos', 'Rodeia o que comemos.', com('comer'), com('escola', 'transportes', 'roupa').concat(['bola', 'casa', 'pedra', 'cadeira', 'mesa', 'sino', 'tambor']).filter((k, i, a) => a.indexOf(k) === i), { 1: [4, 2], 2: [6, 3], 3: [8, 4] }, [1, 2, 3]);
+  rodeia('noite', 'mundo', 'Dia ou noite', 'Rodeia o que vemos à noite.', ['lua', 'estrelas', 'coruja', 'candeeiro', 'vela', 'lua_cheia'], ['sol', 'galo', 'borboleta', 'flor', 'abelha', 'chapeu'], { 2: [6, 3], 3: [8, 4] }, [2, 3]);
+
+  /* --- Formação Pessoal e Social */
+  rodeia('limpo', 'fps', 'Rodeia o que é limpo', 'Rodeia o que nos ajuda a estar limpos.', ['sabao', 'escova', 'balde', 'toalha', 'lavar_maos', 'vassoura'], ['lixo_chao', 'bola', 'carro', 'lapis', 'tambor', 'livro', 'mota', 'cadeira'], { 1: [4, 2], 2: [6, 3], 3: [8, 4] }, [1, 2, 3]);
+  tipo({ id: 'emocoes', area: 'fps', nome: 'Pinta a cara que mostra como te sentes', ic: 'pintar', instr: () => 'Pinta a cara que mostra como te sentes hoje.',
+    gen(nv) { return { f: nv === 1 ? ['contente', 'triste', 'zangado'] : ['contente', 'triste', 'zangado', 'assustado'], leg: nv === 3 }; },
+    draw(p, B, sol, cx) { const g = grelha(B, p.f.length, { leg: p.leg, max: 170 }); return p.f.map((f, i) => fig(f, g.pts[i].cx, g.pts[i].cy, g.s, cx) + (p.leg ? t(g.pts[i].cx, g.pts[i].cy + g.s / 2 + 26, nome(f), 18, { w: 400 }) : '')).join(''); },
+    livre: true, orient: 'Converse com a criança sobre o que sente e porquê.' });
+  tipo({ id: 'familia', area: 'fps', nome: 'Desenha a tua família', ic: 'pintar', peso: 1.4, instr: () => 'Desenha a tua família.',
+    gen() { return {}; },
+    draw(p, B, sol, cx) { const s = Math.min(70, B.h * 0.18); return `<line x1="${B.x + 20}" y1="${B.y + B.h - 34}" x2="${B.x + B.w - 20}" y2="${B.y + B.h - 34}" stroke="#bbb" stroke-width="2" stroke-dasharray="6 8"/>` + fig('sol', B.x + B.w - 18 - s / 2, B.y + 16 + s / 2, s, cx) + fig('tabanca', B.x + 18 + s / 2, B.y + B.h - 34 - s / 2 + 4, s, cx) + (sol ? t(B.x + B.w / 2, B.y + B.h / 2, 'Resposta livre', 16, { fill: '#333' }) : ''); },
+    livre: true, orient: 'Peça à criança que diga quem desenhou e escreva os nomes ao lado de cada pessoa.' });
+  rodeia('regras', 'fps', 'Regras da sala', 'Rodeia o que se deve fazer na sala.', ['braco_no_ar', 'ouvir', 'lixo_cesto', 'lavar_maos'], ['gritar', 'bater', 'lixo_chao'], { 2: [4, 2], 3: [6, 3] }, [2, 3]);
+
+  const TIPO = Object.fromEntries(T.map((x) => [x.id, x]));
+  function primeiroNome(n) { const w = String(n || '').trim().split(/\s+/)[0] || ''; return w.toLocaleUpperCase('pt-PT').split('').filter((ch) => glifo(ch)).join(''); }
+
+  /* ============================================================ a folha */
+  const ICON = {
+    rodear: `<ellipse cx="22" cy="24" rx="15" ry="11" fill="none" stroke="#111" stroke-width="3"/><text x="22" y="30" text-anchor="middle" font-size="16" font-weight="800" font-family="${FONT}" fill="#111">3</text>`,
+    tracar: '<g fill="none" stroke="#111" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"><path d="M10 38 L12 28 L32 8 L40 16 L20 36 Z"/><path d="M12 28 L20 36 M28 12 L36 20"/></g>',
+    pintar: '<g fill="none" stroke="#111" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"><path d="M10 38 L12 28 L32 8 L40 16 L20 36 Z" fill="#111"/><path d="M6 44 C16 40 24 46 36 41" stroke-width="2.5"/></g>',
+    ligar: '<g fill="none" stroke="#111" stroke-width="3" stroke-linecap="round"><circle cx="8" cy="24" r="4" fill="#111"/><path d="M14 24 L34 24 M28 18 L36 24 L28 30"/><circle cx="40" cy="24" r="4" fill="#111"/></g>'
+  };
+  function cabecalho(F, op) {
+    const sol = op.sol, nm = op.nome || '';
+    return `<rect x="40" y="36" width="714" height="104" rx="14" fill="#fff" stroke="#111" stroke-width="2"/>` +
+      t(62, 70, 'CEL – Visão do Futuro', 20, { a: 'start', w: 800 }) + t(62, 94, `Jardim de Infância · ${NIV[F.nv]} · ${AREA[F.area]}`, 14, { a: 'start', w: 400, fill: '#333' }) +
+      (sol ? t(62, 124, 'Folha de soluções · só para o professor', 15, { a: 'start', w: 800 }) + t(440, 124, `Corresponde à Ficha ${F.n || '—'} · ${NIV[F.nv]}`, 14, { a: 'start', w: 400, fill: '#333' })
+        : (nm ? t(62, 124, 'Nome: ', 15, { a: 'start', w: 400 }) + t(110, 124, nm.length > 34 ? nm.slice(0, 33) + '…' : nm, 15, { a: 'start', w: 700 }) : t(62, 124, 'Nome: ____________________________', 15, { a: 'start', w: 400 })) + t(440, 124, 'Data: ____ / ____ / ______', 15, { a: 'start', w: 400 })) +
+      `<rect x="614" y="52" width="122" height="44" rx="22" fill="#111"/>` + t(675, 80, sol ? 'Soluções' : `Ficha ${F.n || '—'}`, 16, { fill: '#fff', w: 800 });
+  }
+  function rodape(F, op) {
+    if (op.sol) {
+      const partes = F.ex.map((e, i) => { const q = TIPO[e.t]; return `${i + 1}: ${q.livre ? LIVRE.toLowerCase() : q.resumo ? q.resumo(e.p) : 'ver a folha'}`; });
+      let s = 'Certas — ' + partes.join(' · '); if (s.length > 96) s = s.slice(0, 95) + '…';
+      return t(40, 1072, s, 12, { a: 'start', w: 400, fill: '#333' }) + t(754, 1092, 'Portal CEL · Recursos do Professor · Fichas', 11, { a: 'end', w: 400, fill: '#555' });
+    }
+    const cara = (x, b) => `<circle cx="${x}" cy="1067" r="16" fill="#fff" stroke="#111" stroke-width="2.5"/><circle cx="${x - 6}" cy="1062" r="2" fill="#111"/><circle cx="${x + 6}" cy="1062" r="2" fill="#111"/><path d="${b}" fill="none" stroke="#111" stroke-width="2.5" stroke-linecap="round"/>`;
+    return t(40, 1072, 'Como correu? (o professor rodeia)', 13, { a: 'start', w: 400, fill: '#333' }) + cara(340, 'M332 1071 C336 1077 344 1077 348 1071') + cara(390, 'M382 1073 L398 1073') + cara(440, 'M432 1075 C436 1069 444 1069 448 1075') +
+      t(754, 1072, 'Portal CEL · Recursos do Professor · Fichas', 11, { a: 'end', w: 400, fill: '#555' });
+  }
+  function pagina(F, op = {}) {
+    const cx = { foto: F.foto || '', nome: op.nome || '' }, ex = F.ex.filter((e) => TIPO[e.t]);
+    const top = 156, bot = 1040, pesos = ex.map((e) => TIPO[e.t].peso), tot = pesos.reduce((a, b) => a + b, 0) || 1;
+    let y = top, corpo = '';
+    ex.forEach((e, i) => {
+      const q = TIPO[e.t], hh = (bot - top) * pesos[i] / tot, yi = y + 26;
+      let ins = q.instr(e.p, cx); const fsz = Math.min(21, 590 / (ins.length * 0.56));
+      corpo += `<circle cx="62" cy="${yi}" r="20" fill="#111"/>` + t(62, yi + 7, String(i + 1), 20, { fill: '#fff', w: 800 }) + `<rect x="94" y="${yi - 24}" width="48" height="48" rx="10" fill="#fff" stroke="#111" stroke-width="2"/><g transform="translate(${q.ic === 'rodear' ? 96 : 98},${yi - 22})">${ICON[q.ic]}</g>` + t(156, yi + fsz * 0.38, ins, fsz.toFixed(1), { a: 'start', w: 800 });
+      const B = { x: 40, y: y + 62, w: 714, h: hh - 74 };
+      corpo += caixa(B) + q.draw(e.p, B, !!op.sol, cx);
+      if (op.sol && q.livre && q.orient) corpo += t(B.x + B.w / 2, B.y + B.h - 12, q.orient, 12.5, { w: 400, fill: '#333' });
+      y += hh;
+    });
+    const wm = op.sol ? `<text x="397" y="620" text-anchor="middle" font-family="${FONT}" font-size="120" font-weight="800" fill="none" stroke="#e2e2e2" stroke-width="2" transform="rotate(-30 397 620)">SOLUÇÕES</text>` : '';
+    return `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}"><defs><filter id="cinza"><feColorMatrix type="saturate" values="0"/></filter></defs><rect width="${W}" height="${H}" fill="#fff"/>${wm}${cabecalho(F, op)}${corpo}${rodape(F, op)}</svg>`;
+  }
+
+  /* ---------- criar e mudar uma ficha */
+  function novoEx(t, nv, nx, seed) { const s = seed || Math.floor(Math.random() * 1e9); return { t, seed: s, p: TIPO[t].gen(nv, rnd(s), nx) }; }
+  function disponiveis(nv, area) { return T.filter((q) => q.niv.includes(nv) && (!area || q.area === area)); }
+
+  /* ---------- PDF (as folhas como imagens, como nos boletins) */
+  function svgParaCanvas(svg, esc2 = 2) {
+    return new Promise((ok, falha) => {
+      const im = new Image(), url = URL.createObjectURL(new Blob([svg], { type: 'image/svg+xml' }));
+      im.onload = () => { const c = document.createElement('canvas'); c.width = W * esc2; c.height = H * esc2; const g = c.getContext('2d'); g.fillStyle = '#fff'; g.fillRect(0, 0, c.width, c.height); g.drawImage(im, 0, 0, c.width, c.height); URL.revokeObjectURL(url); ok(c); };
+      im.onerror = (e) => { URL.revokeObjectURL(url); falha(e); };
+      im.src = url;
+    });
+  }
+  function pdfDe(cvs) {
+    const w = 595.28, h = 841.89, te = new TextEncoder(), ch = [], o = []; let len = 0; const push = (x) => { const u = typeof x === 'string' ? te.encode(x) : x; ch.push(u); len += u.length; };
+    const N = cvs.length; push('%PDF-1.4\n'); o[1] = len; push('1 0 obj\n<</Type/Catalog/Pages 2 0 R>>\nendobj\n');
+    o[2] = len; push('2 0 obj\n<</Type/Pages/Kids[' + cvs.map((_, i) => (3 + i * 3) + ' 0 R').join(' ') + ']/Count ' + N + '>>\nendobj\n');
+    cvs.forEach((cv, i) => { const b = 3 + i * 3, s = atob(cv.toDataURL('image/jpeg', 0.9).split(',')[1]), j = new Uint8Array(s.length); for (let k = 0; k < s.length; k++) j[k] = s.charCodeAt(k);
+      o[b] = len; push(`${b} 0 obj\n<</Type/Page/Parent 2 0 R/MediaBox[0 0 ${w.toFixed(2)} ${h.toFixed(2)}]/Resources<</XObject<</I ${b + 1} 0 R>>>>/Contents ${b + 2} 0 R>>\nendobj\n`);
+      o[b + 1] = len; push(`${b + 1} 0 obj\n<</Type/XObject/Subtype/Image/Width ${cv.width}/Height ${cv.height}/ColorSpace/DeviceRGB/BitsPerComponent 8/Filter/DCTDecode/Length ${j.length}>>\nstream\n`); push(j); push('\nendstream\nendobj\n');
+      const cs = `q ${w.toFixed(2)} 0 0 ${h.toFixed(2)} 0 0 cm /I Do Q`; o[b + 2] = len; push(`${b + 2} 0 obj\n<</Length ${cs.length}>>\nstream\n${cs}\nendstream\nendobj\n`); });
+    const xr = len, tot = 3 + N * 3; push(`xref\n0 ${tot}\n0000000000 65535 f \n`); for (let i = 1; i < tot; i++) push(String(o[i]).padStart(10, '0') + ' 00000 n \n');
+    push(`trailer\n<</Size ${tot}/Root 1 0 R>>\nstartxref\n${xr}\n%%EOF`); return new Blob(ch, { type: 'application/pdf' });
+  }
+  async function pdfFolhas(svgs) { const cv = []; for (const s of svgs) cv.push(await svgParaCanvas(s)); return pdfDe(cv); }
+
+  /* ---------- a fotografia do professor: pequena e a cinzento (fica só neste aparelho, dentro da ficha) */
+  function lerFoto(file) {
+    return new Promise((ok, falha) => {
+      const im = new Image(), url = URL.createObjectURL(file);
+      im.onload = () => { const m = 480, k = Math.min(1, m / Math.max(im.width, im.height)), c = document.createElement('canvas'); c.width = Math.round(im.width * k); c.height = Math.round(im.height * k);
+        const g = c.getContext('2d'); g.filter = 'grayscale(1)'; g.drawImage(im, 0, 0, c.width, c.height); URL.revokeObjectURL(url); ok(c.toDataURL('image/jpeg', 0.8)); };
+      im.onerror = () => { URL.revokeObjectURL(url); falha(new Error('imagem')); };
+      im.src = url;
+    });
+  }
+
+  /* ---------- nomes das crianças: a lista da turma que a gestão já guardou neste aparelho (nunca sai dele) */
+  function normCl(n) { const s = String(n || '').toLowerCase(); if (/jard|n[ií]vel|infan|pr[eé]/.test(s)) { if (/(^|[^a-z])(iii|3)([^a-z0-9]|$)/.test(s)) return 'J3'; if (/(^|[^a-z])(ii|2)([^a-z0-9]|$)/.test(s)) return 'J2'; if (/(^|[^a-z])(i|1)([^a-z0-9]|$)/.test(s)) return 'J1'; return ''; } const m = /(?:^|[^0-9])([1-4])\s*[.º°oª]*\s*(?:ano|classe)/.exec(s) || /^\s*([1-4])\s*$/.exec(s); return m ? m[1] : ''; }
+  const CLC = { J1: 'Nível I', J2: 'Nível II', J3: 'Nível III', 1: '1.º ano', 2: '2.º ano', 3: '3.º ano', 4: '4.º ano' };
+  async function turmasLocais() {
+    if (!window.indexedDB) return [];
+    const db = await new Promise((ok) => { let q; try { q = indexedDB.open('portal-gestao'); } catch (e) { ok(null); return; }
+      q.onupgradeneeded = () => { try { q.transaction.abort(); } catch (e) { /* nada */ } }; q.onsuccess = () => ok(q.result); q.onerror = () => ok(null); q.onblocked = () => ok(null); });
+    if (!db) return [];
+    try {
+      if (!db.objectStoreNames.contains('estado')) return [];
+      const vals = await new Promise((ok) => { const tx = db.transaction('estado', 'readonly'), r = tx.objectStore('estado').getAll(); r.onsuccess = () => ok(r.result || []); r.onerror = () => ok([]); });
+      const out = new Map(), viva = (a) => (a || []).filter((x) => x && !x.del);
+      for (const v of vals) {
+        const S = v && v.S; if (!S) continue; const ano = S.ano, tur = viva(S.tur).filter((t) => t.ano === ano && t.cod);
+        const rot = (cod) => { const t = tur.find((x) => x.cod === cod); return 'Turma ' + cod + (t && t.classes && t.classes.length ? ' · ' + t.classes.map((c) => CLC[c] || c).join(' e ') : ''); };
+        const junta = (cod, n, cl) => { if (!cod || !n) return; const k = ano + '|' + cod; if (!out.has(k)) out.set(k, { cod, rot: rot(cod), cls: new Set(), nomes: new Set() }); out.get(k).nomes.add(n); if (cl) out.get(k).cls.add(cl); };
+        if (S.alu && S.alu.ano === ano) for (const a of S.alu.lista || []) junta(a.tur, a.nome, a.cl);
+        const stu = new Map(viva(S.stu).map((s) => [s.id, s]));
+        for (const m of viva(S.mat)) { if (m.ano !== ano) continue; const c = normCl(m.nivel), t = tur.find((x) => (x.classes || []).includes(c)), s = stu.get(m.sid); if (t && s) junta(t.cod, s.aluno, c); }
+      }
+      return [...out.values()].map((x) => ({ cod: x.cod, rot: x.rot, jardim: [...x.cls].some((c) => /^J/.test(c)), nomes: [...x.nomes].sort((a, b) => a.localeCompare(b, 'pt')) }))
+        .sort((a, b) => (b.jardim - a.jardim) || String(a.cod).localeCompare(String(b.cod), 'pt', { numeric: true }));
+    } catch (e) { return []; } finally { try { db.close(); } catch (e) { /* nada */ } }
+  }
+
+
+  /* ============================================================ o ecrã «Fichas» nos Recursos do Professor */
+  const DRAFT = 'cel-fichas-rascunho', NOMES = 'cel-fichas-nomes';
+  const LSg = (k, d) => { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch (e) { return d; } };
+  const LSs = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); return true; } catch (e) { return false; } };
+  const UI = { F: null, tab: 'ficha', lista: false, para: 'uma', tur: '', turmas: null };
+  function fichaNova(nv = 2, area = 'mat') {
+    const L = disponiveis(nv, area), n = Math.min(POR_FOLHA[nv], L.length);
+    return { id: null, n: null, nv, area, foto: '', ex: L.slice(0, n).map((q) => novoEx(q.id, nv, n)) };
+  }
+  const titulo = (F) => F.ex.map((e) => TIPO[e.t] ? TIPO[e.t].nome : '').filter(Boolean).join(' + ') || 'Ficha sem exercícios';
+  const fdata = (iso) => iso ? String(iso).slice(0, 10).split('-').reverse().join('/') : '';
+
+  function vista(arg, X) {
+    const { h, btn, toast, offerFile, Store } = X;
+    if (!UI.F) { const d = LSg(DRAFT, null); UI.F = d && d.ex && d.nv ? d : fichaNova(); }
+    const F = UI.F;
+    const guardaRascunho = () => { if (!LSs(DRAFT, F)) { const c = Object.assign({}, F, { foto: '' }); LSs(DRAFT, c); } };
+    const proximo = () => Store.list('fichas').reduce((m, x) => Math.max(m, +x.n || 0), 0) + 1;
+    const numero = () => F.n || proximo();
+    const nx = () => F.ex.length;
+    const prevBox = h('div', { class: 'stack' }), passosBox = h('div', { class: 'stack' }), listaBox = h('div'), saidaBox = h('div', { class: 'card stack' });
+
+    function folha(op) { return pagina(Object.assign({}, F, { n: numero() }), op); }
+    function desenhaPrev() {
+      const tabs = h('div', { class: 'tabs', role: 'tablist' }, [['ficha', `Ficha ${numero()}`], ['sol', 'Soluções']].map(([k, tt]) =>
+        h('button', { type: 'button', role: 'tab', 'aria-selected': String(UI.tab === k), onclick: () => { UI.tab = k; desenhaPrev(); } }, tt)));
+      const f = h('div', { class: 'fch-folha', role: 'img', 'aria-label': UI.tab === 'sol' ? 'Pré-visualização da folha de soluções' : 'Pré-visualização da ficha' });
+      f.innerHTML = F.ex.length ? folha({ sol: UI.tab === 'sol' }) : '';
+      prevBox.replaceChildren(tabs, F.ex.length ? f : h('div', { class: 'empty' }, 'Escolha pelo menos um exercício.'));
+    }
+    const muda = () => { guardaRascunho(); desenhaPassos(); desenhaPrev(); };
+
+    function opcoes(tr) {
+      const ops = tr.op.slice();
+      if (!tr.letra && !tr.num && !tr.txt && F.foto && !ops.includes('foto')) ops.push('foto');
+      const rot = (v) => tr.txt ? tr.txt[v] : (tr.letra || tr.num) ? String(v) : v === 'foto' ? 'A minha fotografia' : nome(v);
+      const lista = tr.letra || tr.num || tr.txt ? ops : ops.slice().sort((a, b) => (a === 'foto') - (b === 'foto') || rot(a).localeCompare(rot(b), 'pt'));
+      if (!lista.includes(tr.v)) lista.unshift(tr.v);
+      return h('select', { 'aria-label': tr.rot, onchange: (e) => { tr.set(tr.num ? +e.target.value : e.target.value); muda(); } }, lista.map((v) => h('option', { value: String(v), selected: String(v) === String(tr.v) }, rot(v))));
+    }
+
+    function desenhaPassos() {
+      const L = disponiveis(F.nv), max = POR_FOLHA[F.nv];
+      const nvSel = h('select', { id: 'fch-nv', onchange: (e) => { const nv = +e.target.value; F.nv = nv; F.ex = F.ex.filter((x) => TIPO[x.t].niv.includes(nv)).slice(0, POR_FOLHA[nv]);
+        if (!F.ex.length) F.ex = fichaNova(nv, F.area).ex; F.ex = F.ex.map((x) => novoEx(x.t, nv, F.ex.length, x.seed)); muda(); } },
+        [1, 2, 3].map((n) => h('option', { value: String(n), selected: F.nv === n }, `${NIV[n]} (${n + 2} anos)`)));
+      const arSel = h('select', { id: 'fch-area', onchange: (e) => { F.area = e.target.value; const D2 = disponiveis(F.nv, F.area); F.ex = D2.slice(0, Math.min(max, D2.length)).map((q) => novoEx(q.id, F.nv, Math.min(max, D2.length))); muda(); } },
+        AREAS.map(([k, tt]) => h('option', { value: k, selected: F.area === k }, tt)));
+      const p1 = h('div', { class: 'card stack' }, h('h3', null, '1. Nível e área'),
+        h('div', { class: 'fields' }, h('div', { class: 'field' }, h('label', { for: 'fch-nv' }, 'Nível'), nvSel), h('div', { class: 'field' }, h('label', { for: 'fch-area' }, 'Área'), arSel)),
+        h('p', { class: 'tiny' }, `No ${NIV[F.nv]} cabe${max > 1 ? 'm' : ''} ${max} exercício${max > 1 ? 's' : ''} por folha. A dificuldade ajusta-se sozinha ao nível.`));
+      const daArea = L.filter((q) => q.area === F.area), outras = L.filter((q) => q.area !== F.area);
+      const marca = (q) => { const i = F.ex.findIndex((x) => x.t === q.id);
+        return h('label', { class: 'check fch-op' }, h('input', { type: 'checkbox', checked: i >= 0, onchange: (e) => {
+          if (e.target.checked) { if (F.ex.length >= max) { e.target.checked = false; toast(`No ${NIV[F.nv]} cabe${max > 1 ? 'm' : ''} só ${max} exercício${max > 1 ? 's' : ''} por folha. Tire um primeiro.`); return; } F.ex.push({ t: q.id, seed: 0, p: null }); }
+          else F.ex = F.ex.filter((x) => x.t !== q.id);
+          F.ex = F.ex.map((x) => novoEx(x.t, F.nv, F.ex.length, x.seed || undefined)); muda(); } }),
+          h('span', null, q.nome), i >= 0 && F.ex.length > 1 ? h('span', { class: 'chip' }, `n.º ${i + 1}`) : null); };
+      const p2 = h('div', { class: 'card stack' }, h('h3', null, '2. Exercícios'),
+        h('div', { class: 'fch-ops' }, daArea.map(marca)),
+        outras.length ? h('details', null, h('summary', { class: 'tiny' }, 'Juntar um exercício de outra área'), h('div', { class: 'fch-ops' }, outras.map(marca))) : null,
+        F.ex.length === 2 ? h('div', { class: 'row' }, btn('Trocar a ordem', { sm: true, kind: 'ghost', icon: 'down', onclick: () => { F.ex.reverse(); muda(); } })) : null);
+      const p3 = h('div', { class: 'card stack' }, h('h3', null, '3. Ajustar'),
+        F.ex.length ? F.ex.map((e, i) => { const q = TIPO[e.t], tr = q.troca ? q.troca(e.p, F.nv) : [];
+          return h('div', { class: 'fch-aj' }, h('div', { class: 'row' }, h('b', { class: 'grow' }, `${i + 1}. ${q.nome}`),
+            btn('Gerar outra', { sm: true, icon: 'refresh', onclick: () => { F.ex[i] = novoEx(e.t, F.nv, F.ex.length); muda(); } })),
+            tr.length ? h('div', { class: 'fch-tr' }, tr.map((x) => h('label', null, h('span', null, x.rot), opcoes(x)))) : h('p', { class: 'tiny' }, q.livre ? 'Exercício livre: não há desenhos para trocar.' : 'Use «Gerar outra» para mudar os desenhos.')); })
+          : h('p', { class: 'tiny' }, 'Escolha os exercícios no passo 2.'));
+      const fin = h('input', { type: 'file', accept: 'image/*', id: 'fch-foto', class: 'fch-file', onchange: async (e) => { const f = e.target.files && e.target.files[0]; if (!f) return;
+        try { F.foto = await lerFoto(f); muda(); toast('Fotografia pronta. Escolha «A minha fotografia» no lugar de um desenho (passo 3).'); } catch (er) { toast('Não foi possível abrir esta imagem.'); } } });
+      const usada = F.ex.some((e) => JSON.stringify(e.p || {}).includes('"foto"'));
+      const p4 = h('div', { class: 'card stack' }, h('h3', null, '4. Fotografia (opcional)'),
+        h('p', { class: 'tiny' }, 'Para o que não houver nos desenhos: a escola, uma planta da horta, um objeto da sala. A fotografia sai a preto e branco e fica só neste aparelho, dentro da ficha.'),
+        F.foto ? h('div', { class: 'row' }, h('img', { src: F.foto, alt: 'A fotografia escolhida', class: 'fch-mini' }), h('span', { class: 'tiny grow' }, usada ? 'Está a ser usada na ficha.' : 'Escolha «A minha fotografia» no passo 3.'),
+          btn('Tirar', { sm: true, kind: 'ghost', icon: 'trash', onclick: () => { F.foto = ''; F.ex.forEach((e) => { const q = TIPO[e.t]; (q.troca ? q.troca(e.p, F.nv) : []).forEach((x) => { if (x.v === 'foto') x.set(x.op[0]); }); }); muda(); } }))
+          : h('label', { class: 'btn', for: 'fch-foto' }, X.icon('ul'), 'Escolher ou tirar uma fotografia'), fin);
+      passosBox.replaceChildren(p1, p2, p3, p4, saidaBox);
+      desenhaSaida();
+    }
+
+    async function nomesParaImprimir() {
+      if (UI.para === 'uma') return [''];
+      if (UI.para === 'nomes') return String(LSg(NOMES, '') || '').split('\n').map((x) => x.trim()).filter(Boolean);
+      const t = (UI.turmas || []).find((x) => x.cod === UI.tur); return t ? t.nomes : [];
+    }
+    function desenhaSaida() {
+      const temNome = F.ex.some((e) => e.t === 'nome');
+      const radio = (v, tt) => h('label', { class: 'check' }, h('input', { type: 'radio', name: 'fch-para', value: v, checked: UI.para === v, onchange: () => { UI.para = v; desenhaSaida(); if (v === 'turma' && UI.turmas === null) carregaTurmas(); } }), tt);
+      let extra = null;
+      if (UI.para === 'turma') {
+        if (UI.turmas === null) extra = h('p', { class: 'tiny' }, 'A procurar a lista da turma neste aparelho…');
+        else if (!UI.turmas.length) extra = h('p', { class: 'tiny' }, 'Este aparelho ainda não tem a lista da turma. Abra uma vez a Gestão escolar (Diário) com a sua conta e internet, ou escreva os nomes.');
+        else { if (!UI.turmas.some((x) => x.cod === UI.tur)) UI.tur = UI.turmas[0].cod;
+          extra = h('div', { class: 'field' }, h('label', { for: 'fch-tur' }, 'Turma'), h('select', { id: 'fch-tur', onchange: (e) => { UI.tur = e.target.value; desenhaSaida(); } },
+            UI.turmas.map((x) => h('option', { value: x.cod, selected: x.cod === UI.tur }, `${x.rot} (${x.nomes.length})`)))); }
+      } else if (UI.para === 'nomes') {
+        const ta = h('textarea', { id: 'fch-nomes', rows: '5', placeholder: 'Um nome por linha', value: LSg(NOMES, '') });
+        ta.addEventListener('input', () => LSs(NOMES, ta.value));
+        extra = h('div', { class: 'field' }, h('label', { for: 'fch-nomes' }, 'Nomes das crianças (ficam só neste aparelho)'), ta);
+      }
+      const acao = (rot, ic, fn) => btn(rot, { icon: ic, onclick: fn });
+      saidaBox.replaceChildren(h('h3', null, '5. Imprimir e guardar'),
+        h('div', { class: 'stack', style: 'gap:6px' }, radio('uma', 'Uma folha, sem nome'), radio('turma', 'Toda a turma (uma folha com o nome de cada criança)'), radio('nomes', 'Escrever os nomes')),
+        temNome && UI.para === 'uma' ? h('p', { class: 'tiny' }, '«Escreve o teu nome» precisa do nome de cada criança: escolha «Toda a turma» ou «Escrever os nomes».') : null,
+        extra,
+        h('div', { class: 'row' }, X.inViewer ? null : acao('Imprimir a ficha', 'print', () => sai('ficha', 'imprimir')), X.inViewer ? null : acao('Imprimir as soluções', 'print', () => sai('sol', 'imprimir'))),
+        h('div', { class: 'row' }, acao('PDF da ficha', 'dl', () => sai('ficha', 'pdf')), acao('PDF das soluções', 'dl', () => sai('sol', 'pdf'))),
+        h('p', { class: 'tiny' }, 'Ao imprimir ou fazer o PDF, a ficha fica guardada em «As minhas fichas» com o seu número. Imprima em A4, a 100%.'));
+    }
+    async function carregaTurmas() { UI.turmas = await turmasLocais(); desenhaSaida(); }
+
+    async function guarda(silencio) {
+      if (!F.ex.length) { toast('A ficha não tem exercícios.'); return false; }
+      if (!F.n) F.n = proximo();
+      try { const o = await Store.save('fichas', Object.assign({}, F, { titulo: titulo(F) })); F.id = o.id; guardaRascunho(); if (!silencio) toast(`Ficha ${F.n} guardada em «As minhas fichas».`); desenhaPrev(); return true; }
+      catch (e) { return false; }
+    }
+    async function sai(qual, modo) {
+      if (!F.ex.length) { toast('A ficha não tem exercícios.'); return; }
+      let nomes = qual === 'sol' ? [''] : await nomesParaImprimir();
+      if (!nomes.length) { toast(UI.para === 'nomes' ? 'Escreva os nomes, um por linha.' : 'Não há nomes desta turma neste aparelho.'); return; }
+      if (!(await guarda(true))) return;
+      const svgs = nomes.map((nm) => folha({ sol: qual === 'sol', nome: nm }));
+      const base = `Ficha_${F.n}_${NIV[F.nv].replace(/\s+/g, '_').replace('í', 'i')}${qual === 'sol' ? '_solucoes' : ''}`;
+      if (modo === 'pdf') { toast(svgs.length > 1 ? `A preparar o PDF com ${svgs.length} folhas…` : 'A preparar o PDF…'); try { const b = await pdfFolhas(svgs); offerFile(base + '.pdf', b, 'application/pdf'); } catch (e) { toast('Não foi possível preparar o PDF.'); } return; }
+      imprime(svgs);
+    }
+    function imprime(svgs) {
+      const pr = document.getElementById('print-root'); if (!pr) return;
+      const css = document.createElement('style'); css.id = 'fch-pagina';
+      css.textContent = '@media print { @page { size: 210mm 297mm; margin: 0 } #print-root .fch-pg { width: 210mm; height: 296.8mm; break-after: page; overflow: hidden } #print-root .fch-pg svg { width: 100%; height: 100% } }';
+      document.getElementById('fch-pagina')?.remove(); document.head.append(css);
+      const box = h('div'); svgs.forEach((s) => { const d = h('div', { class: 'fch-pg' }); d.innerHTML = s; box.append(d); });
+      pr.replaceChildren(box);
+      const fim = () => { pr.replaceChildren(); css.remove(); window.removeEventListener('afterprint', fim); };
+      window.addEventListener('afterprint', fim);
+      setTimeout(() => window.print(), 60);
+    }
+
+    function desenhaLista() {
+      const items = Store.list('fichas').sort((a, b) => (+b.n || 0) - (+a.n || 0)); botLista.lastChild.textContent = `As minhas fichas (${items.length})`;
+      if (!UI.lista) { listaBox.replaceChildren(); return; }
+      listaBox.replaceChildren(h('div', { class: 'card stack' }, h('h3', null, 'As minhas fichas'),
+        items.length ? h('div', { class: 'items' }, items.map((it) => { const del = h('span');
+          return h('div', { class: 'item' }, h('div', { class: 'grow' }, h('div', { class: 't' }, `Ficha ${it.n} · ${it.titulo || ''}`),
+            h('div', { class: 'tiny' }, [NIV[it.nv], AREA[it.area], 'guardada ' + fdata(it.atualizado)].filter(Boolean).join(' · '))),
+            btn('Abrir', { sm: true, icon: 'open', onclick: () => { UI.F = JSON.parse(JSON.stringify(it)); UI.lista = false; LSs(DRAFT, UI.F); X.go('fichas'); } }),
+            btn('Fazer uma cópia', { sm: true, icon: 'dup', kind: 'ghost', onclick: () => { const c = JSON.parse(JSON.stringify(it)); delete c.id; delete c.criado; delete c.atualizado; c.n = null; UI.F = c; UI.lista = false; LSs(DRAFT, c); X.go('fichas'); toast('Cópia criada. Ganha o número seguinte quando a guardar.'); } }),
+            del, btn('Eliminar', { sm: true, icon: 'trash', kind: 'ghost', onclick: () => del.replaceChildren(h('span', { class: 'confirm' }, `Eliminar a Ficha ${it.n}?`,
+              btn('Sim, eliminar', { sm: true, kind: 'warn', onclick: async () => { await Store.remove('fichas', it.id); if (F.id === it.id) { F.id = null; F.n = null; guardaRascunho(); desenhaPrev(); } } }),
+              btn('Cancelar', { sm: true, onclick: () => del.replaceChildren() }))) }));
+        })) : h('div', { class: 'empty' }, 'Ainda não há fichas guardadas. Faça uma ficha e carregue em «Guardar ficha».')));
+    }
+    const botLista = btn('As minhas fichas (0)', { icon: 'open', onclick: () => { UI.lista = !UI.lista; desenhaLista(); } });
+    const barra = h('div', { class: 'row' },
+      btn('Guardar ficha', { kind: 'primary', icon: 'save', onclick: () => guarda(false) }),
+      h('span', { class: 'fch-ver' }, btn('Ver a folha', { kind: 'ghost', icon: 'eye', onclick: () => prevBox.scrollIntoView({ behavior: 'smooth', block: 'start' }) })), h('span', { class: 'grow' }), botLista,
+      btn('Nova ficha', { icon: 'plus', kind: 'ghost', onclick: () => { UI.F = fichaNova(F.nv, F.area); UI.tab = 'ficha'; LSs(DRAFT, UI.F); X.go('fichas'); } }));
+    desenhaPassos(); desenhaPrev(); desenhaLista();
+    const el = h('div', { class: 'view' },
+      h('div', { class: 'head' }, h('div', null, h('div', { class: 'eyebrow' }, 'Jardim de Infância'), h('h1', null, 'Fichas com desenhos')),
+        h('p', null, 'Fichas de trabalho a preto e branco, numa folha A4: escolha o nível e a área, os exercícios e os desenhos. A folha de soluções sai à parte, só para o professor. Funciona sem internet.')),
+      barra, listaBox,
+      h('div', { class: 'split doc' }, passosBox, h('div', { style: 'position:sticky;top:calc(env(safe-area-inset-top,0px) + 78px)' }, prevBox)));
+    return { el, cleanup: Store.on((k) => { if (k === 'fichas' || k === '*') { desenhaLista(); desenhaPrev(); } }) };
+  }
+
+  return { vista, T, TIPO, AREAS, AREA, NIV, POR_FOLHA, OBJ, LETRAS, nome, pagina, novoEx, disponiveis, rnd, pdfFolhas, lerFoto, turmasLocais, primeiroNome, fig, G0 };
+})();
+</script>
 <script>(() => {
 'use strict';
 function boot() {
@@ -5754,7 +6578,7 @@ function qWhere(q) {
 }
 
 /* ============================================================ armazenamento (conta ou este computador) */
-const KINDS = ['planos', 'provas', 'questoes', 'planificacoes', 'sugestoes'];
+const KINDS = ['planos', 'provas', 'questoes', 'planificacoes', 'sugestoes', 'fichas'];
 const LKEY = 'cel-professor-dados-v1';
 const Store = {
   mode: IN_VIEWER ? 'wait' : 'local', db: null, cloudWrite: true, local: null, cloud: null, fns: new Set(),
@@ -5948,7 +6772,7 @@ const planable = (it) => it.u || it.f || it.r;
 /* ============================================================ navegação */
 const VIEWS = [
   { id: 'inicio', label: 'Início' }, { id: 'biblioteca', label: 'Biblioteca' }, { id: 'planos', label: 'Planos de aula' },
-  { id: 'provas', label: 'Provas e gabaritos' }, { id: 'banco', label: 'Banco de questões' }, { id: 'ferramentas', label: 'Ferramentas' }, { id: 'escrever', label: 'Os meus documentos' }, { id: 'abrir', label: 'Abrir ficheiros' },
+  { id: 'provas', label: 'Provas e gabaritos' }, { id: 'fichas', label: 'Fichas com desenhos' }, { id: 'banco', label: 'Banco de questões' }, { id: 'ferramentas', label: 'Ferramentas' }, { id: 'escrever', label: 'Os meus documentos' }, { id: 'abrir', label: 'Abrir ficheiros' },
   { id: 'calendario', label: 'Calendário' }, { id: 'documentos', label: 'Documentos do CEL' }, { id: 'formacoes', label: 'Formações' }, { id: 'atualizacoes', label: 'Cópias e atualizações' }
 ];
 const main = $('#main');
@@ -6982,6 +7806,9 @@ function toolRomanos() {
 
 /* ============================================================ CÓPIAS E ATUALIZAÇÕES */
 const NOVIDADES = [
+  { v: '1.22.0', d: '19/11/2026', itens: ['Nova secção «Fichas com desenhos» (o antigo EducaPro): fichas de trabalho do Jardim de Infância, a preto e branco, numa folha A4, com desenhos de linha feitos para o CEL (frutos, animais, a tabanca, a canoa, a escola…). Funciona sem internet.',
+    'Escolha o nível (I, II ou III) e a área; há 21 exercícios nas cinco áreas (traçar, contornar, pintar, labirinto, ligar, rodear, contar, sequências, letras e o próprio nome…) e a dificuldade ajusta-se ao nível. Troque os desenhos e os números, peça «Gerar outra» ou use uma fotografia sua.',
+    'A folha de soluções sai à parte, só para o professor. Cada ficha fica numerada em «As minhas fichas»; com «Toda a turma» sai uma folha com o nome de cada criança (a lista fica só no telemóvel). Imprimir ou guardar em PDF.'] },
   { v: '1.21.0', d: '19/11/2026', itens: ['Gestão escolar → Avaliação → «Boletins»: o BET-CEL (1.º e 2.º trimestres), o BEF-CEL (3.º trimestre, com a nota final que premeia a progressão e o resultado do ano) e o Registo de Desenvolvimento da Criança (Jardim), cada um numa só folha A4, com o aspeto dos modelos da escola.',
     'O docente titular declara e envia à Direção; a Diretora assina um a um ou a turma toda (os boletins que ela própria declarou são assinados pela Coordenação Geral). A data, a hora, o nome e o código de verificação são escritos pelo servidor. Só a Coordenação Geral reabre um boletim assinado, com justificação; sai nova versão.',
     'Prazo para declarar, marcado no calendário escolar, com aviso ao docente dois dias antes; a Secretaria marca a entrega (papel ou WhatsApp) e verifica códigos. Melhor Aluno da Turma e Criança Destaque, por trimestre e no ano, com Certificado de Mérito ou de Destaque em PDF (A4 deitado), assinado com código.'] },
@@ -7564,7 +8391,8 @@ ICONS.bell = '<path d="M6 16v-5a6 6 0 0 1 12 0v5l2 2H4z"/><path d="M10 21a2 2 0 
 ICONS.back = '<path d="M19 12H5M11 6l-6 6 6 6"/>';
 const VIEWFN = { inicio: vInicio, biblioteca: vBiblioteca, planos: vPlanos, provas: vProvas, banco: vBanco, ferramentas: vFerramentas, calendario: vCalendario, documentos: vDocumentos, formacoes: vFormacoes, atualizacoes: vAtualizacoes,
   escrever: (arg) => ESCREVER.vista(arg, { h, put, btn, toast, offerFile, go, uid, autor: (PWA && (PWA.nome || PWA.n)) || '' }),
-  abrir: (arg) => ABRIR.vista(arg, { h, btn, toast, go, uid, offerFile }) };
+  abrir: (arg) => ABRIR.vista(arg, { h, btn, toast, go, uid, offerFile }),
+  fichas: (arg) => FICHAS.vista(arg, { h, btn, toast, offerFile, Store, go, icon, inViewer: IN_VIEWER }) };
 Store.init(); buildNav(); modeChip();
 Store.on(k => { if (k === '*') modeChip(); });
 window.addEventListener('hashchange', () => { freshNav(); render(); });
