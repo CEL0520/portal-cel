@@ -949,7 +949,7 @@ details > summary { cursor: pointer; margin: 4px 0 }
 <div id="toast" role="status" aria-live="polite"></div>
 <div id="print-root"></div>
 <div id="barra" class="barra" hidden></div>
-<script type="application/json" id="cel-config">{"versao": "1.26.0", "ano": "2026/2027", "chaveId": "1987a8c7", "verificador": "m+HQwwNueX1G3XlMCpRsYJOV0Tkds6FCJhmeHgobCN6OFobxkzA=", "dados": "dados.26347696d7.bin", "contactos": {"whatsapp": "245955252417", "email": "cel.vf.gb@gmail.com"}, "diasSemLigacao": 30, "sb": "https://ebwjnennfmwnhwdfxbuy.supabase.co", "anon": "sb_publishable_oLn3lkMEwu4sEOUTjRCLQA_4evc_ezB"}</script>
+<script type="application/json" id="cel-config">{"versao": "1.27.0", "ano": "2026/2027", "chaveId": "1987a8c7", "verificador": "m+HQwwNueX1G3XlMCpRsYJOV0Tkds6FCJhmeHgobCN6OFobxkzA=", "dados": "dados.26347696d7.bin", "contactos": {"whatsapp": "245955252417", "email": "cel.vf.gb@gmail.com"}, "diasSemLigacao": 30, "sb": "https://ebwjnennfmwnhwdfxbuy.supabase.co", "anon": "sb_publishable_oLn3lkMEwu4sEOUTjRCLQA_4evc_ezB"}</script>
 <script>/* Gerador mínimo de .docx (Word) no navegador — sem bibliotecas externas.
    Blocos: {t:'h', text, level} · {t:'p', text|runs, align, size, before, after, keep, border}
            {t:'list', items:[text|runs], ordered} · {t:'table', rows, widths, header, borders, minH}
@@ -6520,10 +6520,10 @@ const FICHAS = (() => {
 const FICHAS_EB = (() => {
   const F = FICHAS, { fig, t, caixa, roda, marca, ponto, linha, palavra, largura, rnd, mix, pick, take, nome, esc, norm, ICON, FONT } = F.H;
   const MAN = "'CEL Manuscrita', 'Playwrite PT', cursive";
-  const DISC = { mat: 'Matemática', lp: 'Língua Portuguesa' };
+  const DISC = { mat: 'Matemática', lp: 'Língua Portuguesa', mfs: 'Meio Físico e Social' };
   const ANO = { 1: '1.º ano', 2: '2.º ano', 3: '3.º ano', 4: '4.º ano' };
   // unidades dos manuais repartidas pelos trimestres, pela ordem do manual (decisão do Coordenador)
-  const UNI = { mat: { 1: [1, 5], 2: [6, 10], 3: [11, 14] }, lp: { 1: [1, 6], 2: [7, 11], 3: [12, 16] } };
+  const UNI = { mat: { 1: [1, 5], 2: [6, 10], 3: [11, 14] }, lp: { 1: [1, 6], 2: [7, 11], 3: [12, 16] }, mfs: { 1: [1, 4], 2: [5, 8], 3: [9, 12] } };
   const maxU = (d, tri) => UNI[d][tri][1];
   // nomes comuns na Guiné-Bissau, sempre de pessoas inventadas
   const NOMES = ['Aua', 'Braima', 'Djenabu', 'Malam', 'Fatumata', 'Iaia', 'Mamadu', 'Sadjo', 'Binta', 'Lassana', 'Adama', 'Cadi', 'Umaro', 'Mariama', 'Nhima', 'Quintino', 'Domingas', 'Seco'];
@@ -6823,6 +6823,7 @@ const FICHAS_EB = (() => {
     resumo: (p) => p.i.map((it) => (it.t === 'vf' ? vfDe(it.r) : it.r.replace(/\.$/, '').slice(0, 24))).join(' · '),
     troca: (p) => p.i.map((it, k) => ({ rot: `Pergunta ${k + 1}`, v: it.x, edit: true, set: (v) => { it.x = v; } })).concat(p.i.map((it, k) => ({ rot: `Resposta ${k + 1}`, v: it.r, edit: true, set: (v) => { it.r = v; } }))) });
   F.regista(Object.assign({}, F.TIPO.e_manual, { id: 'e_manual_lp', disc: 'lp' }));
+  F.regista(Object.assign({}, F.TIPO.e_manual, { id: 'e_manual_mfs', disc: 'mfs' }));
 
   /* ===== Matemática, 2.º ano ===== */
   const ex2 = (o) => ex(Object.assign({ ano: [2] }, o));
@@ -7452,6 +7453,129 @@ const FICHAS_EB = (() => {
   guiado('l4_opiniao', 13, 'Texto de opinião', (tm) => `Escreve a tua opinião: ${tm}`, [['A minha opinião', 2], ['1.ª razão', 2], ['2.ª razão', 2], ['Conclusão', 1]], 'Resposta livre. Opinião clara, duas razões com exemplos e conclusão. Usar «Eu acho que», «porque», «por isso».', ['Devemos plantar árvores na escola?', 'O recreio devia ser mais longo?', 'É importante ajudar nas tarefas de casa?', 'Os alunos deviam ter uma horta na escola?']);
   guiado('l4_entrevista', 14, 'Escrevo uma entrevista', (tm) => `Prepara uma entrevista ${tm}. Escreve as perguntas (P) e as respostas (R).`, [['Pessoa e tema', 1], ['P1', 1], ['R1', 1], ['P2', 1], ['R2', 1], ['P3', 1], ['R3', 1]], 'Resposta livre. Perguntas claras com ponto de interrogação; respostas da pessoa entrevistada; tema escolhido.', ['a um pescador sobre o seu trabalho', 'à cozinheira da escola', 'a um avô sobre a escola no tempo dele', 'a uma enfermeira do centro de saúde']);
   guiado('l4_noticia', 15, 'Escrevo uma notícia', (tm) => `Escreve uma notícia sobre ${tm}.`, [['Título', 1], ['O quê? Quem?', 1], ['Quando? Onde?', 1], ['Como? Porquê?', 1], ['Texto da notícia', 3]], 'Resposta livre. Título que chama a atenção; responde a: o quê, quem, quando, onde, como e porquê; frases curtas e verdadeiras.', ['a festa do fim do ano na escola', 'o jogo de futebol entre duas turmas', 'a limpeza da tabanca', 'a chegada da chuva']);
+
+
+  /* ============================================================ Meio Físico e Social, 1.º ao 4.º ano (1.27.0) */
+  const exM = (o) => ex(Object.assign({ disc: 'mfs' }, o));
+  // ligações do manual: «A → B; C → D.»
+  const paresDe = (resp) => String(resp || '').replace(/\.\s*$/, '').split(/;\s*/).map((x) => x.split(/\s*→\s*/)).filter((q) => q.length === 2 && q[0].trim() && q[1].trim()).map(([a, b]) => [a.trim(), b.trim().replace(/\.$/, '')]);
+  const ligasDe = (ano, disc, u0, u1) => { const out = []; for (let n = u0; n <= u1; n++) { const u = unid(ano, disc, n); if (!u) continue; for (const e of (u.exercito || []).concat(u.avalio || [])) if (e.tipo === 'liga') { const pr = paresDe(e.resposta); if (pr.length >= 2 && pr.length <= 5 && pr.every(([a, b]) => a.length < 34 && b.length < 46)) out.push({ pr, u: n }); } } return out; };
+  exM({ id: 'mf_liga', ano: [1, 2, 3, 4], u: 1, nome: 'Liga (ligações do manual)', ic: 'ligar', instr: () => 'Liga cada palavra ao que lhe corresponde.', manual: true, cot: 1.5,
+    gen(r, c) { const L = ligasDe(c.ano, 'mfs', 1, c.maxU), u0 = UNI.mfs[c.tri][0], rec = L.filter((q) => q.u >= u0), q = pick(r, rec.length ? rec : L.length ? L : [{ pr: [] }]); return { pr: q.pr.map((x) => x.slice()), ord: mix(r, q.pr.map((_, i) => i)) }; },
+    alt: (p) => 30 + Math.max(2, p.pr.length) * 58,
+    draw(p, B, sol) { if (!p.pr.length) return t(B.x + B.w / 2, B.y + 40, 'Abra os manuais no Portal para usar as ligações do manual.', 15, { w: 400, fill: '#555' }); const yc = (i) => B.y + 36 + i * 58; let o = '';
+      p.pr.forEach(([a], i) => { o += t(B.x + 24, yc(i) + 7, a, 18, { w: 700, a: 'start' }) + ponto(B.x + 300, yc(i)); });
+      p.ord.forEach((k, j) => { o += ponto(B.x + 380, yc(j)) + t(B.x + 400, yc(j) + 7, p.pr[k][1], 16, { w: 600, a: 'start' }); });
+      if (sol) p.pr.forEach((_, i) => { o += linha(B.x + 300, yc(i), B.x + 380, yc(p.ord.indexOf(i))); }); return o; },
+    resumo: (p) => p.pr.map(([a, b]) => `${a} – ${b}`).join(' · ').slice(0, 90),
+    troca: (p) => p.pr.flatMap((par, i) => [{ rot: `${i + 1}. Palavra`, v: par[0], edit: true, set: (v) => { par[0] = v; } }, { rot: `${i + 1}. Liga a`, v: par[1], edit: true, set: (v) => { par[1] = v; } }]) });
+  exM({ id: 'mf_leitura', ano: [3, 4], u: 1, nome: 'Leio o texto do manual e respondo', instr: () => 'Lê o texto e responde.', manual: true, cot: 2,
+    gen(r, c) { const [u0, u1] = UNI.mfs[c.tri], n = u0 + Math.floor(r() * (u1 - u0 + 1)), un = unid(c.ano, 'mfs', n); const tx = un ? (un.aprender || []).slice(0, 2).join(' ').replace(/\s+/g, ' ') : ''; const its = itens(c.ano, 'mfs', n, n).filter((i) => i.t !== 'pergunta').slice(0, 2); return { tx, i: its, n }; },
+    alt: F.TIPO.l2_leitura.alt, draw: F.TIPO.l2_leitura.draw, resumo: F.TIPO.l2_leitura.resumo, troca: F.TIPO.l2_leitura.troca });
+  // ligar palavra ao desenho (genérico)
+  const ligaDes = (id, ano, u, nm, instr2, pool, n = 4) => exM({ id, ano, u, nome: nm, ic: 'ligar', instr: () => instr2,
+    gen(r) { const a = take(r, pool.filter(([f]) => FICHAS_DES.D[f]), n); return { a, ord: mix(r, a.map((_, i) => i)) }; }, alt: () => 30 + n * 62,
+    draw(p, B, sol, cx) { const rh = 62, yc = (i) => B.y + 16 + rh * (i + 0.5); let o = '';
+      p.a.forEach(([, w], i) => { o += t(B.x + 130, yc(i) + 8, w, 22, { w: 700 }) + ponto(B.x + 250, yc(i)); });
+      p.ord.forEach((k, j) => { o += ponto(B.x + 450, yc(j)) + fig(p.a[k][0], B.x + 540, yc(j), rh * 0.86, cx); });
+      if (sol) p.a.forEach((_, i) => { o += linha(B.x + 250, yc(i), B.x + 450, yc(p.ord.indexOf(i))); }); return o; },
+    resumo: (p) => p.a.map(([, w]) => w).join(', ') });
+  ligaDes('mf1_corpo', [1], 1, 'Partes do corpo', 'Liga cada palavra à parte do corpo.', [['olho', 'olho'], ['nariz', 'nariz'], ['boca', 'boca'], ['mao', 'mão'], ['pe', 'pé'], ['orelha', 'orelha']]);
+  ligaDes('mf1_familia', [1], 2, 'A família', 'Liga cada palavra ao desenho.', [['avo', 'avó'], ['papa', 'pai'], ['mama', 'mãe'], ['bebe', 'bebé'], ['menino', 'irmão'], ['menina', 'irmã']]);
+  ligaDes('mf1_tempo', [1], 9, 'O tempo que faz', 'Liga cada palavra ao desenho.', [['sol', 'sol'], ['chuva', 'chuva'], ['nuvem', 'nuvem'], ['lua', 'lua'], ['estrelas', 'estrelas']]);
+  // rodear a opção certa por baixo de cada desenho
+  const classif = (id, ano, u, nm, instr2, opts, pool, n = 4) => exM({ id, ano, u, nome: nm, ic: 'rodear', instr: () => instr2,
+    gen(r) { return { l: take(r, pool.filter(([f]) => FICHAS_DES.D[f]), n) }; }, alt: () => (opts.length > 2 ? 240 : 190),
+    draw(p, B, sol, cx) { const v = opts.length > 2; return cartoes(B, n, v ? 220 : 170, (x, y, w, h, i) => { const [f, k] = p.l[i]; let o = fig(f, x + w / 2, y + (v ? 52 : 60), v ? 76 : 86, cx);
+      opts.forEach((op, j) => { const xx = v ? x + w / 2 : x + w / 4 + j * w / 2, yy = v ? y + 112 + j * 34 : y + 124; o += t(xx, yy + 18, op, 15, { w: 700 }); if (sol && j === k) o += `<ellipse cx="${xx}" cy="${yy + 13}" rx="${Math.max(24, op.length * 5.2)}" ry="14" fill="none" stroke="#111" stroke-width="2.5"/>`; }); return o; }); },
+    resumo: (p) => p.l.map(([f, k]) => `${nome(f)}: ${opts[k]}`).join(', ') });
+  classif('mf1_casa', [1], 3, 'Cada coisa no seu lugar da casa', 'Em que parte da casa costuma estar? Rodeia.', ['cozinha', 'quarto', 'casa de banho'], [['panela', 0], ['pote', 0], ['colher', 0], ['cama', 1], ['esteira', 1], ['escova', 2], ['sabao', 2], ['toalha', 2], ['prato', 0]]);
+  classif('mf1_escola', [1, 2], 4, 'Objetos da escola', 'Usa-se na escola? Rodeia sim ou não.', ['sim', 'não'], [['lapis', 0], ['livro', 0], ['quadro', 0], ['mochila', 0], ['regua', 0], ['borracha', 0], ['panela', 1], ['cama', 1], ['vassoura', 1], ['bola', 1]]);
+  classif('mf1_habitat', [1, 2], 5, 'Onde vivem os animais', 'Onde vive cada animal? Rodeia.', ['terra', 'água', 'ar'], [['vaca', 0], ['cabra', 0], ['elefante', 0], ['macaco', 0], ['peixe', 1], ['caranguejo', 1], ['passaro', 2], ['coruja', 2], ['borboleta', 2], ['porco', 0]]);
+  classif('mf1_domestico', [1, 2], 5, 'Animais domésticos e selvagens', 'Rodeia doméstico ou selvagem.', ['doméstico', 'selvagem'], [['vaca', 0], ['cabra', 0], ['galinha', 0], ['cao', 0], ['gato', 0], ['porco', 0], ['elefante', 1], ['macaco', 1], ['crocodilo', 1], ['hipopotamo', 1], ['cobra', 1]]);
+  classif('mf1_alimentos', [1, 2], 7, 'Alimentos de origem animal ou vegetal', 'De onde vem este alimento? Rodeia.', ['animal', 'vegetal'], [['ovo', 0], ['peixe', 0], ['peixe_seco', 0], ['arroz', 1], ['manga', 1], ['milho', 1], ['mandioca', 1], ['banana', 1], ['caju', 1], ['tomate', 1]]);
+  classif('mf2_transportes', [2], 4, 'Meios de transporte', 'Por onde anda? Rodeia terra, água ou ar.', ['terra', 'água', 'ar'], [['carro', 0], ['bicicleta', 0], ['mota', 0], ['tocatoca', 0], ['camiao', 0], ['canoa', 1], ['barco', 1], ['aviao', 2]]);
+  classif('mf_certo', [1, 2], 11, 'Certo ou errado', 'Está certo ou errado? Rodeia.', ['certo', 'errado'], [['lixo_cesto', 0], ['lixo_chao', 1], ['lavar_maos', 0], ['bater', 1], ['braco_no_ar', 0], ['gritar', 1], ['ouvir', 0], ['escova', 0]]);
+  F.TIPO.mf_certo.u = 11;
+  // partes da planta (desenho feito aqui)
+  exM({ id: 'mf1_planta', ano: [1, 2], u: 6, nome: 'As partes da planta', instr: () => 'Escreve o nome de cada parte da planta: raiz, caule, folha, flor, fruto.',
+    gen: () => ({}), alt: () => 300,
+    draw(p, B, sol) { const cx = B.x + 230, by = B.y + 220; let o = `<line x1="${B.x + 40}" x2="${B.x + 420}" y1="${by}" y2="${by}" stroke="#111" stroke-width="2" stroke-dasharray="6 5"/>`;
+      o += `<path d="M${cx} ${by} L${cx} ${B.y + 60}" stroke="#111" stroke-width="5"/><path d="M${cx} ${by} C${cx - 10} ${by + 20} ${cx - 40} ${by + 30} ${cx - 60} ${by + 50} M${cx} ${by} C${cx + 6} ${by + 26} ${cx + 30} ${by + 40} ${cx + 50} ${by + 60} M${cx} ${by + 6} L${cx} ${by + 64}" fill="none" stroke="#111" stroke-width="3"/>`;
+      o += `<path d="M${cx} ${B.y + 150} C${cx - 30} ${B.y + 120} ${cx - 80} ${B.y + 130} ${cx - 90} ${B.y + 150} C${cx - 60} ${B.y + 168} ${cx - 20} ${B.y + 166} ${cx} ${B.y + 150} Z" fill="#fff" stroke="#111" stroke-width="3"/><path d="M${cx} ${B.y + 120} C${cx + 30} ${B.y + 90} ${cx + 80} ${B.y + 100} ${cx + 90} ${B.y + 120} C${cx + 60} ${B.y + 138} ${cx + 20} ${B.y + 136} ${cx} ${B.y + 120} Z" fill="#fff" stroke="#111" stroke-width="3"/>`;
+      for (let k = 0; k < 6; k++) { const a = k * Math.PI / 3; o += `<circle cx="${(cx + Math.cos(a) * 18).toFixed(1)}" cy="${(B.y + 50 + Math.sin(a) * 18).toFixed(1)}" r="12" fill="#fff" stroke="#111" stroke-width="2.5"/>`; } o += `<circle cx="${cx}" cy="${B.y + 50}" r="9" fill="#fff" stroke="#111" stroke-width="2.5"/>`;
+      o += `<circle cx="${cx + 70}" cy="${B.y + 170}" r="16" fill="#fff" stroke="#111" stroke-width="3"/><path d="M${cx + 70} ${B.y + 154} L${cx + 40} ${B.y + 140}" stroke="#111" stroke-width="2.5"/>`;
+      const L = [['flor', B.y + 50, cx + 34], ['folha', B.y + 116, cx + 86], ['fruto', B.y + 172, cx + 88], ['caule', B.y + 196, cx + 4], ['raiz', by + 46, cx + 46]];
+      L.forEach(([nm, y, x1], i) => { const lx = B.x + 470; o += `<line x1="${x1}" y1="${y}" x2="${lx - 6}" y2="${B.y + 34 + i * 54}" stroke="#555" stroke-width="1.5"/>` + ln(lx, lx + 180, B.y + 38 + i * 54) + (sol ? t(lx + 8, B.y + 32 + i * 54, nm, 18, { w: 800, fill: '#555', a: 'start' }) : ''); }); return o; },
+    resumo: () => 'flor, folha, fruto, caule, raiz' });
+  // ordenar (números nos quadrados) com desenhos ou palavras
+  const ST = 'fill="#fff" stroke="#111" stroke-width="3" stroke-linecap="round"';
+  const ETAPA = { ovos: (x, y) => [0, 1, 2, 3, 4].map((k) => `<circle cx="${x - 24 + (k % 3) * 24}" cy="${y - 8 + Math.floor(k / 3) * 22}" r="9" ${ST}/>`).join(''), ovo: (x, y) => `<ellipse cx="${x}" cy="${y}" rx="20" ry="26" ${ST}/>`,
+    girino: (x, y) => `<ellipse cx="${x - 14}" cy="${y}" rx="16" ry="13" ${ST}/><path d="M${x} ${y} C${x + 16} ${y - 10} ${x + 28} ${y + 12} ${x + 42} ${y}" fill="none" stroke="#111" stroke-width="3"/>`,
+    'girino com patas': (x, y) => `<ellipse cx="${x - 14}" cy="${y}" rx="16" ry="13" ${ST}/><path d="M${x} ${y} C${x + 16} ${y - 10} ${x + 28} ${y + 12} ${x + 42} ${y} M${x - 4} ${y + 10} L${x + 6} ${y + 24} M${x - 22} ${y + 10} L${x - 30} ${y + 24}" fill="none" stroke="#111" stroke-width="3"/>`,
+    lagarta: (x, y) => [0, 1, 2, 3, 4].map((k) => `<circle cx="${x - 36 + k * 18}" cy="${y + (k % 2 ? -4 : 4)}" r="11" ${ST}/>`).join('') + `<circle cx="${x + 38}" cy="${y - 2}" r="2.5" fill="#111"/>`,
+    'crisálida': (x, y) => `<path d="M${x - 30} ${y - 34} L${x + 30} ${y - 34} M${x} ${y - 34} L${x} ${y - 24}" stroke="#111" stroke-width="3"/><path d="M${x} ${y - 24} C${x + 18} ${y - 14} ${x + 16} ${y + 24} ${x} ${y + 34} C${x - 16} ${y + 24} ${x - 18} ${y - 14} ${x} ${y - 24} Z" ${ST}/>`,
+    semente: (x, y) => `<path d="M${x - 50} ${y + 20} L${x + 50} ${y + 20}" stroke="#111" stroke-width="2" stroke-dasharray="5 4"/><ellipse cx="${x}" cy="${y + 4}" rx="14" ry="9" ${ST}/>`,
+    capim: (x, y) => `<path d="M${x - 30} ${y + 24} L${x - 24} ${y - 14} M${x - 14} ${y + 24} L${x - 10} ${y - 26} M${x} ${y + 24} L${x + 4} ${y - 18} M${x + 14} ${y + 24} L${x + 22} ${y - 24} M${x + 28} ${y + 24} L${x + 30} ${y - 10}" stroke="#111" stroke-width="3" stroke-linecap="round"/>` };
+  const ordena = (id, ano, u, nm, instr2, seqs) => exM({ id, ano, u, nome: nm, instr: () => instr2,
+    gen(r) { const k = Math.floor(r() * seqs.length); return { k, ord: mix(r, seqs[k].map((_, i) => i)) }; }, alt: () => 210,
+    draw(p, B, sol, cx) { const S = seqs[p.k]; return cartoes(B, S.length, 190, (x, y, w, h, i) => { const [f, w2] = S[p.ord[i]]; const img = f && FICHAS_DES.D[f] ? fig(f, x + w / 2, y + 66, Math.min(96, w - 20), cx) : ETAPA[w2] ? ETAPA[w2](x + w / 2, y + 66) : ''; let o = (img || t(x + w / 2, y + 74, w2, 16, { w: 800 })) + t(x + w / 2, y + 134, img ? w2 : '', 13, { w: 600 }) + qd(x + w / 2 - 18, y + 146, 36); if (sol) o += rs(x + w / 2 - 18, y + 146, p.ord[i] + 1, 36); return o; }); },
+    resumo: (p) => seqs[p.k].map(([, w]) => w).join(' → '), troca: (p) => [{ rot: 'Sequência', v: String(p.k), set: (v) => { p.k = +v; p.ord = mix(rnd(Date.now() % 1e6), seqs[p.k].map((_, i) => i)); }, op: seqs.map((_, i) => String(i)), txt: Object.fromEntries(seqs.map((q, i) => [i, q.map(([, w]) => w).join(' → ')])) }] });
+  ordena('mf1_maos', [1], 11, 'Lavar as mãos: a ordem certa', 'Escreve 1, 2, 3 e 4 pela ordem certa.', [[['balde', 'molhar as mãos'], ['sabao', 'esfregar com sabão'], ['lavar_maos', 'passar por água'], ['toalha', 'secar']]]);
+  ordena('mf2_crescer', [2], 1, 'O meu corpo cresce', 'Escreve 1, 2, 3 e 4 pela ordem em que crescemos.', [[['bebe', 'bebé'], ['menino', 'criança'], ['papa', 'adulto'], ['avo', 'idoso']]]);
+  ordena('mf2_ciclos', [2], 9, 'Ciclos de vida', 'Escreve os números pela ordem do ciclo de vida.', [[['ovo', 'ovo'], ['pintainho', 'pintainho'], ['galinha', 'galinha']], [['', 'ovos'], ['', 'girino'], ['', 'girino com patas'], ['sapo', 'sapo']], [['', 'ovo'], ['', 'lagarta'], ['', 'crisálida'], ['borboleta', 'borboleta']], [['', 'semente'], ['planta', 'planta'], ['flor', 'flor'], ['manga', 'fruto']]]);
+  ordena('mf3_digestao', [3], 7, 'O caminho dos alimentos', 'Escreve os números pela ordem do caminho dos alimentos na digestão.', [[['', 'boca'], ['', 'esófago'], ['', 'estômago'], ['', 'intestino delgado'], ['', 'intestino grosso']]]);
+  ordena('mf3_cadeia', [3], 9, 'Cadeia alimentar', 'Escreve os números pela ordem: quem é comido primeiro?', [[['folha', 'folha'], ['', 'lagarta'], ['passaro', 'pássaro'], ['', 'gavião']], [['', 'capim'], ['cabra', 'cabra'], ['', 'leão']], [['', 'algas'], ['peixe', 'peixe pequeno'], ['', 'peixe grande'], ['', 'pescador']]]);
+  const PROF = [['pescador', 'canoa'], ['professora', 'quadro'], ['agricultor', 'milho'], ['cozinheira', 'panela'], ['alfaiate', 'tesoura'], ['motorista', 'carro'], ['enfermeira', 'escova'], ['carpinteiro', 'cadeira']].filter(([, f]) => FICHAS_DES.D[f]);
+  ligaDes('mf2_profissoes', [2], 3, 'Profissões', 'Liga cada profissão a um objeto do seu trabalho.', PROF.filter(([p2]) => p2 !== 'enfermeira').map(([p2, f]) => [f, p2]));
+  const SEG = [['Atravessar a estrada pela passadeira.', 0], ['Brincar no meio da estrada.', 1], ['Olhar para os dois lados antes de atravessar.', 0], ['Nadar no rio sem um adulto.', 1], ['Usar colete na canoa.', 0], ['Andar de bicicleta à noite sem luz.', 1], ['Afastar-se de fios elétricos caídos.', 0], ['Brincar perto do rio cheio, na época das chuvas.', 1], ['Guardar água limpa e tapada.', 0], ['Deixar água parada em latas e pneus.', 1]];
+  const certoTxt = (id, ano, u, nm, lista) => exM({ id, ano, u, nome: nm, ic: 'rodear', instr: () => 'Rodeia C (certo) ou E (errado).',
+    gen(r) { return { l: take(r, lista, 6) }; }, alt: () => 270,
+    draw(p, B, sol) { let o = ''; p.l.forEach(([fr, k], i) => { const y = B.y + 34 + i * 40; o += t(B.x + 24, y, `${i + 1}) ${fr}`, 17, { w: 600, a: 'start' }); ['C', 'E'].forEach((c, j) => { const xx = B.x + 600 + j * 56; o += t(xx, y, c, 19, { w: 800 }); if (sol && j === k) o += `<circle cx="${xx}" cy="${y - 7}" r="15" fill="none" stroke="#111" stroke-width="2.5"/>`; }); }); return o; },
+    resumo: (p) => p.l.map(([, k]) => 'CE'[k]).join(' '), troca: editaL([[0, 'frase'], [1, '0 = certo, 1 = errado']]) });
+  certoTxt('mf2_seguranca', [2], 12, 'Segurança na rua e na água', SEG.slice(0, 8));
+  certoTxt('mf3_chuvas', [3], 12, 'Prevenção na época das chuvas', SEG.slice(3));
+  // rosa dos ventos e mapa em grelha
+  const MAPA = ['escola', 'casa', 'arvore', 'poço', 'mercado'];
+  exM({ id: 'mf_rosa', ano: [2, 3, 4], u: 5, nome: 'Rosa dos ventos e mapa', instr: () => 'Completa a rosa dos ventos. Depois responde olhando para o mapa.',
+    gen(r) { const pos = take(r, [[1, 0], [0, 1], [2, 1], [1, 2]], 4), f = take(r, ['casa', 'arvore', 'tabanca', 'rio'].filter((x) => FICHAS_DES.D[x]), 4); return { pos, f, q: Math.floor(r() * 4) }; }, alt: () => 270,
+    draw(p, B, sol, cx) { const rx = B.x + 130, ry = B.y + 120; let o = `<path d="M${rx} ${ry - 70} L${rx + 12} ${ry - 12} L${rx + 70} ${ry} L${rx + 12} ${ry + 12} L${rx} ${ry + 70} L${rx - 12} ${ry + 12} L${rx - 70} ${ry} L${rx - 12} ${ry - 12} Z" fill="#fff" stroke="#111" stroke-width="2.5"/>`;
+      o += t(rx, ry - 80, 'N', 22, { w: 800 }); [[rx, ry + 102, 'S'], [rx + 98, ry + 8, 'E'], [rx - 98, ry + 8, 'O']].forEach(([x, y, l]) => { o += qd(x - 16, y - 24, 32) + (sol ? rs(x - 16, y - 24, l, 32) : ''); });
+      const gx = B.x + 270, gy = B.y + 14, c2 = 76; for (let i = 0; i < 3; i++) for (let j = 0; j < 3; j++) o += `<rect x="${gx + i * c2}" y="${gy + j * c2}" width="${c2}" height="${c2}" fill="#fff" stroke="#bbb" stroke-width="1"/>`;
+      o += fig('quadro', gx + c2 * 1.5, gy + c2 * 1.5, 60, cx) + t(gx + c2 * 1.5, gy + c2 * 2 - 4, 'escola', 11, { w: 700 }); p.pos.forEach(([i, j], k) => { o += fig(p.f[k], gx + c2 * (i + 0.5), gy + c2 * (j + 0.5), 60, cx); });
+      o += t(gx + c2 * 1.5, gy - 2, 'N ↑', 12, { w: 800 }); const DIR = { '1,0': 'norte', '1,2': 'sul', '2,1': 'este', '0,1': 'oeste' }, k = p.q, d = DIR[p.pos[k].join(',')];
+      o += t(gx + 250, gy + 60, `O que fica a ${d}`, 15, { w: 700, a: 'start' }) + t(gx + 250, gy + 80, 'da escola?', 15, { w: 700, a: 'start' }) + ln(gx + 250, gx + 420, gy + 116) + (sol ? t(gx + 256, gy + 110, nome(p.f[k]), 16, { w: 800, fill: '#555', a: 'start' }) : '');
+      return o; },
+    resumo: (p) => `S, E, O · ${nome(p.f[p.q])}` });
+  exM({ id: 'mf4_escala', ano: [4], u: 4, nome: 'A escala do mapa', instr: (p) => `No mapa, 1 cm representa ${p.e} km. Calcula as distâncias reais.`,
+    gen(r) { return { e: pick(r, [5, 10, 20, 50]), l: dist(r, 3, 2, 9) }; }, alt: () => 200,
+    draw(p, B, sol) { let o = `<line x1="${B.x + 30}" x2="${B.x + 130}" y1="${B.y + 30}" y2="${B.y + 30}" stroke="#111" stroke-width="4"/>` + t(B.x + 80, B.y + 52, `1 cm = ${p.e} km`, 14, { w: 700 });
+      p.l.forEach((cm, i) => { const y = B.y + 90 + i * 40; o += t(B.x + 30, y, `${cm} cm no mapa →`, 18, { w: 700, a: 'start' }) + ln(B.x + 230, B.x + 340, y + 4) + t(B.x + 350, y, 'km', 16, { w: 700, a: 'start' }) + (sol ? t(B.x + 285, y - 2, String(cm * p.e), 17, { w: 800, fill: '#555' }) : ''); }); return o; },
+    resumo: (p) => p.l.map((cm) => cm * p.e + ' km').join(', ') });
+  const MAT = [['gelo', 0], ['pedra', 0], ['madeira', 0], ['sal', 0], ['água do rio', 1], ['leite', 1], ['sumo', 1], ['óleo', 1], ['vapor de água', 2], ['ar', 2], ['fumo', 2]];
+  exM({ id: 'mf4_materia', ano: [4], u: 9, nome: 'Sólido, líquido ou gasoso', ic: 'rodear', instr: () => 'Rodeia o estado de cada coisa: S (sólido), L (líquido) ou G (gasoso).',
+    gen(r) { return { l: take(r, MAT, 6) }; }, alt: () => 190,
+    draw(p, B, sol) { let o = ''; p.l.forEach(([w, k], i) => { const col = i % 2, row = Math.floor(i / 2), x = B.x + 30 + col * 340, y = B.y + 40 + row * 52; o += t(x, y, w, 19, { w: 700, a: 'start' }); ['S', 'L', 'G'].forEach((c, j) => { const xx = x + 180 + j * 44; o += t(xx, y, c, 18, { w: 800 }); if (sol && j === k) o += `<circle cx="${xx}" cy="${y - 6}" r="14" fill="none" stroke="#111" stroke-width="2.5"/>`; }); }); return o; },
+    resumo: (p) => p.l.map(([w, k]) => `${w}: ${'SLG'[k]}`).join(', ') });
+  exM({ id: 'mf4_ciclo_agua', ano: [4], u: 10, nome: 'O ciclo da água', instr: () => 'Escreve nos quadros: evaporação, condensação, precipitação.',
+    gen: () => ({}), alt: () => 270,
+    draw(p, B, sol, cx) { let o = `<path d="M${B.x + 20} ${B.y + 220} C${B.x + 120} ${B.y + 210} ${B.x + 220} ${B.y + 232} ${B.x + 330} ${B.y + 220} L${B.x + 330} ${B.y + 250} L${B.x + 20} ${B.y + 250} Z" fill="#eee" stroke="#111" stroke-width="2"/>` + t(B.x + 175, B.y + 242, 'mar / rio', 13, { w: 700 });
+      o += fig('sol', B.x + 60, B.y + 50, 70, cx) + fig('nuvem', B.x + 360, B.y + 50, 90, cx) + fig('chuva', B.x + 560, B.y + 80, 90, cx) + `<path d="M${B.x + 400} ${B.y + 250} L${B.x + 680} ${B.y + 250} L${B.x + 640} ${B.y + 170} L${B.x + 600} ${B.y + 210} L${B.x + 540} ${B.y + 150} Z" fill="#fff" stroke="#111" stroke-width="2"/>`;
+      const arr = (x1, y1, x2, y2) => `<path d="M${x1} ${y1} L${x2} ${y2}" stroke="#111" stroke-width="2.5" marker-end="url(#seta-agua)"/>`; o += `<defs><marker id="seta-agua" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#111"/></marker></defs>`;
+      o += arr(B.x + 170, B.y + 205, B.x + 300, B.y + 90) + arr(B.x + 420, B.y + 40, B.x + 520, B.y + 50) + arr(B.x + 560, B.y + 140, B.x + 460, B.y + 215);
+      [['evaporação', B.x + 70, B.y + 120], ['condensação', B.x + 300, B.y + 104], ['precipitação', B.x + 556, B.y + 112]].forEach(([w, x, y]) => { o += `<rect x="${x}" y="${y}" width="130" height="30" rx="6" fill="#fff" stroke="#111" stroke-width="2"/>` + (sol ? t(x + 65, y + 21, w, 15, { w: 800, fill: '#555' }) : ''); }); return o; },
+    resumo: () => 'evaporação → condensação → precipitação' });
+  const REC = [['sol', 0], ['vento', 0], ['água dos rios', 0], ['árvores (se plantarmos)', 0], ['peixe (se pescarmos com regra)', 0], ['petróleo', 1], ['gás', 1], ['carvão mineral', 1], ['ferro', 1]];
+  exM({ id: 'mf4_recursos', ano: [3, 4], u: 10, nome: 'Recursos renováveis e não renováveis', ic: 'rodear', instr: () => 'Rodeia R (renovável) ou N (não renovável).',
+    gen(r) { return { l: take(r, REC, 6) }; }, alt: () => 190,
+    draw(p, B, sol) { let o = ''; p.l.forEach(([w, k], i) => { const col = i % 2, row = Math.floor(i / 2), x = B.x + 24 + col * 346, y = B.y + 40 + row * 52; o += t(x, y, w, 16, { w: 700, a: 'start' }); ['R', 'N'].forEach((c, j) => { const xx = x + 270 + j * 40; o += t(xx, y, c, 18, { w: 800 }); if (sol && j === k) o += `<circle cx="${xx}" cy="${y - 6}" r="14" fill="none" stroke="#111" stroke-width="2.5"/>`; }); }); return o; },
+    resumo: (p) => p.l.map(([w, k]) => `${w}: ${'RN'[k]}`).join(', ') });
+  F.TIPO.mf4_recursos.u = 10;
+  const MAQ = [['tesoura', 'alavanca'], ['balde no poço, com corda', 'roldana'], ['rampa para subir o carro de mão', 'plano inclinado'], ['carro de mão', 'roda'], ['pilão', 'alavanca']];
+  exM({ id: 'mf3_maquinas', ano: [3], u: 11, nome: 'Máquinas simples', ic: 'ligar', instr: () => 'Liga cada objeto à máquina simples que usa.',
+    gen(r) { const pr = take(r, MAQ.filter((x, i, a) => a.findIndex((y) => y[1] === x[1]) === i), 4); return { pr, ord: mix(r, [0, 1, 2, 3]) }; }, alt: () => 270,
+    draw: (p, B, sol) => F.TIPO.mf_liga.draw(p, B, sol), resumo: (p) => p.pr.map(([a, b]) => `${a} – ${b}`).join(' · ') });
+  ligaDes('mf1_agua', [1], 8, 'Para que usamos a água', 'Liga cada uso da água ao desenho.', [['copo', 'beber'], ['lavar_maos', 'lavar'], ['panela', 'cozinhar'], ['planta', 'regar'], ['balde', 'tomar banho']]);
 
   /* ============================================================ montagem das folhas (com verso quando é preciso) */
   const disponiveis = (ano, disc, tri) => F.T.filter((q) => q.ciclo === 'EB' && q.ano.includes(ano) && q.disc === disc && q.u <= maxU(disc, tri) && (!q.manual || comManual()));
@@ -8895,6 +9019,9 @@ function toolRomanos() {
 
 /* ============================================================ CÓPIAS E ATUALIZAÇÕES */
 const NOVIDADES = [
+  { v: '1.27.0', d: '20/11/2026', itens: ['«Fichas com desenhos» ganha Meio Físico e Social, do 1.º ao 4.º ano, ligado às unidades dos manuais (1.º trimestre: unidades 1 a 4; 2.º: 5 a 8; 3.º: 9 a 12).',
+    'Do manual: ligações (por exemplo, cada sentido ao seu órgão), perguntas de verdadeiro ou falso e de completar e, no 3.º e no 4.º ano, a leitura do texto da unidade. O professor pode mudar tudo no passo «Ajustar».',
+    'Com desenhos: o corpo, a família, a casa, a escola, onde vivem os animais, domésticos e selvagens, alimentos, partes da planta, usos da água, lavar as mãos, certo ou errado, transportes, profissões, ciclos de vida, rosa dos ventos e mapa, digestão, cadeia alimentar, escala, estados da matéria, ciclo da água e recursos naturais.'] },
   { v: '1.26.0', d: '20/11/2026', itens: ['«Fichas com desenhos» chega ao 4.º ano: ficam completas a Matemática e a Língua Portuguesa do 1.º ao 4.º ano.',
     'Matemática: números até 10 000, contas em coluna com milhares, problemas de vários passos, multiplicar por 10 e por 100, multiplicação por dois algarismos (decompor), divisão e o sentido do resto, frações equivalentes, decimais, área, ângulos, triângulos e conversões de medidas e tempo.',
     'Língua Portuguesa: inferência, resumo, dicionário pela 2.ª e 3.ª letra, o verbo em todas as pessoas, futuro e condicional, pronomes, preposições, conjunções, frases simples e compostas, homófonas, pontuação, registo formal e informal, texto de opinião, entrevista e notícia guiados.',
