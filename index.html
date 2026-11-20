@@ -929,7 +929,9 @@ body.abr-cheio-b { overflow: hidden }
 .fch-aj:first-of-type { border-top: 0; padding-top: 0 }
 .fch-tr { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 8px }
 .fch-tr label { display: flex; flex-direction: column; gap: 3px; font-size: 12.5px; color: var(--ink-2) }
-.fch-tr select { width: 100% }
+.fch-tr select, .fch-tr .fch-ed { width: 100%; font: inherit; font-size: 14px; color: var(--ink) }
+.fch-tr textarea.fch-ed { min-height: 110px; resize: vertical }
+.fch-tr .fch-trl { grid-column: 1 / -1 }
 .fch-file { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none }
 .fch-mini { width: 64px; height: 64px; object-fit: cover; border-radius: 8px; border: 1px solid var(--line); filter: grayscale(1) }
 details > summary { cursor: pointer; margin: 4px 0 }
@@ -947,7 +949,7 @@ details > summary { cursor: pointer; margin: 4px 0 }
 <div id="toast" role="status" aria-live="polite"></div>
 <div id="print-root"></div>
 <div id="barra" class="barra" hidden></div>
-<script type="application/json" id="cel-config">{"versao": "1.23.0", "ano": "2026/2027", "chaveId": "1987a8c7", "verificador": "m+HQwwNueX1G3XlMCpRsYJOV0Tkds6FCJhmeHgobCN6OFobxkzA=", "dados": "dados.26347696d7.bin", "contactos": {"whatsapp": "245955252417", "email": "cel.vf.gb@gmail.com"}, "diasSemLigacao": 30, "sb": "https://ebwjnennfmwnhwdfxbuy.supabase.co", "anon": "sb_publishable_oLn3lkMEwu4sEOUTjRCLQA_4evc_ezB"}</script>
+<script type="application/json" id="cel-config">{"versao": "1.24.0", "ano": "2026/2027", "chaveId": "1987a8c7", "verificador": "m+HQwwNueX1G3XlMCpRsYJOV0Tkds6FCJhmeHgobCN6OFobxkzA=", "dados": "dados.26347696d7.bin", "contactos": {"whatsapp": "245955252417", "email": "cel.vf.gb@gmail.com"}, "diasSemLigacao": 30, "sb": "https://ebwjnennfmwnhwdfxbuy.supabase.co", "anon": "sb_publishable_oLn3lkMEwu4sEOUTjRCLQA_4evc_ezB"}</script>
 <script>/* Gerador mínimo de .docx (Word) no navegador — sem bibliotecas externas.
    Blocos: {t:'h', text, level} · {t:'p', text|runs, align, size, before, after, keep, border}
            {t:'list', items:[text|runs], ordered} · {t:'table', rows, widths, header, borders, minH}
@@ -5803,6 +5805,21 @@ const FICHAS_DES = (() => {
   f('mala', 'mala', 'escola', `<path d="M36 30 L36 18 C36 12 64 12 64 18 L64 30" ${N}/><rect x="8" y="30" width="84" height="60" rx="8"/><path d="M8 52 L92 52" ${L}/><rect x="44" y="46" width="12" height="12" ${P}/>`);
   f('faca', 'faca', 'cozinha', `<path d="M6 60 C30 52 60 44 74 40 L74 56 C56 60 30 64 6 60Z"/><rect x="74" y="38" width="22" height="20" rx="4" ${P}/>`);
 
+  /* ---------- 1.24: 2.º ano */
+  f('blusa', 'blusa', 'roupa', `<path d="M34 12 C40 20 60 20 66 12 L90 24 L82 44 L72 40 L72 92 L28 92 L28 40 L18 44 L10 24 Z"/><path d="M40 16 C44 28 56 28 60 16" ${L} ${N}/>`);
+  f('globo', 'globo', 'escola', `<circle cx="50" cy="42" r="32"/><path d="M18 42 L82 42 M50 10 C36 24 36 60 50 74 C64 60 64 24 50 10" ${L} ${N}/><path d="M50 74 L50 86 M30 90 L70 90 M86 30 C92 46 86 68 70 78" ${N}/>`);
+  f('grilo', 'grilo', 'animais animal', `<path d="M20 62 C24 44 56 40 76 48 C90 54 88 66 76 68 L28 70 C22 70 20 66 20 62Z"/><circle cx="18" cy="56" r="10"/><circle cx="14" cy="54" r="2.4" ${P}/><path d="M12 48 C6 30 10 14 18 8 M20 46 C22 30 30 16 40 12" ${L} ${N}/><path d="M50 50 L66 22 L84 62 M36 70 L28 88 M50 70 L48 90 M64 70 L70 90" ${N}/>`);
+  f('planta', 'planta', 'casa', `<path d="M30 70 L70 70 L64 96 L36 96 Z"/><path d="M50 70 L50 34"/><path d="M50 48 C34 50 22 40 22 26 C38 24 50 34 50 48Z M50 40 C64 42 78 32 78 18 C62 16 50 26 50 40Z M50 34 C44 22 46 10 52 4 C58 14 56 26 50 34Z"/>`);
+  f('lata', 'lata', 'cozinha', `<path d="M24 22 L24 84 C24 96 76 96 76 84 L76 22"/><ellipse cx="50" cy="22" rx="26" ry="10"/><path d="M24 40 C34 46 66 46 76 40 M24 70 C34 76 66 76 76 70" ${L} ${N}/>`);
+  f('chapeu_festa', 'chapéu de festa', 'escola', `<path d="M50 6 L82 86 C70 96 30 96 18 86 Z"/><circle cx="50" cy="6" r="6"/><path d="M34 46 L64 40 M26 66 L72 58" ${L}/><circle cx="44" cy="58" r="3" ${P}/><circle cx="58" cy="74" r="3" ${P}/>`);
+  const acao = (corpo) => `<circle cx="50" cy="18" r="11"/>${corpo}`;
+  f('comer', 'comer', 'acoes', acao(`<path d="M50 29 L50 64 M50 64 L40 94 M50 64 L60 94 M50 40 L36 52 L44 26 M50 40 L66 52"/><path d="M30 24 C30 18 46 18 46 24" ${L} ${N}/><ellipse cx="74" cy="58" rx="14" ry="5"/>`));
+  f('dormir', 'dormir', 'acoes', `<rect x="6" y="56" width="88" height="14" rx="3"/><path d="M6 46 L6 86 M94 56 L94 86" stroke-width="5"/><circle cx="22" cy="48" r="9"/><path d="M30 52 C50 44 70 44 92 52" ${N}/><path d="M60 14 L72 14 L60 26 L72 26 M76 4 L84 4 L76 12 L84 12" ${L} ${N}/>`);
+  f('ler', 'ler', 'acoes', acao(`<path d="M50 29 L50 64 M50 64 L40 94 M50 64 L60 94 M50 40 L34 54 M50 40 L66 54"/><path d="M30 52 L50 58 L70 52 L70 70 L50 76 L30 70 Z"/><path d="M50 58 L50 76" ${L}/>`));
+  f('correr', 'correr', 'acoes', acao(`<path d="M50 29 L44 62 M44 62 L28 74 L22 92 M44 62 L62 76 L60 94 M48 40 L30 34 M48 40 L68 52"/><path d="M8 50 L22 50 M4 62 L20 62 M10 74 L22 74" ${L} ${N}/>`));
+  f('nadar', 'nadar', 'acoes', `<circle cx="24" cy="44" r="10"/><path d="M34 48 L74 52 M50 50 L60 30 L80 24 M74 52 L92 46"/><path d="M4 62 C16 56 28 68 40 62 C52 56 64 68 76 62 C86 57 92 60 98 62 M4 78 C16 72 28 84 40 78 C52 72 64 84 76 78 C86 73 92 76 98 78" ${L} ${N}/>`);
+  f('cantar', 'cantar', 'acoes', acao(`<path d="M50 29 L50 64 M50 64 L40 94 M50 64 L60 94 M50 40 L34 54 M50 40 L66 54"/><ellipse cx="50" cy="22" rx="3" ry="4" ${P}/><path d="M70 10 L70 26 M70 10 L82 6 L82 22" ${L} ${N}/><circle cx="67" cy="27" r="3.5" ${P}/><circle cx="79" cy="23" r="3.5" ${P}/>`));
+
   /* ---------- letras e números de traço único (para traçar e escrever o nome)
      Caixa: largura própria × 80 de altura; mai úsculas de y 4 a 80; minúsculas de y 42 a 80 (hastes a y 4, pernas até y 104).
      [caminho, largura, [x, y] onde começa] */
@@ -6304,6 +6321,7 @@ const FICHAS = (() => {
 
   function vista(arg, X) {
     const { h, btn, toast, offerFile, Store } = X;
+    if (EBm() && EBm().setManuais && X.manuais) EBm().setManuais(X.manuais);
     if (!UI.F) { const d = LSg(DRAFT, null); UI.F = d && d.ex && (d.nv || d.ano) ? d : fichaNova(); if (!UI.F.ciclo) UI.F.ciclo = 'JI'; if (ehEB(UI.F) && !EBm()) UI.F = fichaNova(); }
     const F = UI.F;
     const guardaRascunho = () => { if (!LSs(DRAFT, F)) { const c = Object.assign({}, F, { foto: '' }); LSs(DRAFT, c); } };
@@ -6330,6 +6348,8 @@ const FICHAS = (() => {
     const muda = () => { guardaRascunho(); desenhaPassos(); desenhaPrev(); };
 
     function opcoes(tr) {
+      if (tr.edit) { const el = h(tr.longo ? 'textarea' : 'input', Object.assign({ 'aria-label': tr.rot, class: 'fch-ed' }, tr.longo ? { rows: '5' } : { type: 'text' })); el.value = tr.v == null ? '' : String(tr.v);
+        el.addEventListener('change', () => { tr.set(el.value.trim()); muda(); }); return el; }
       const ops = tr.op.slice();
       if (!tr.letra && !tr.num && !tr.txt && F.foto && !ops.includes('foto')) ops.push('foto');
       const rot = (v) => tr.txt ? tr.txt[v] : (tr.letra || tr.num) ? String(v) : v === 'foto' ? 'A minha fotografia' : nome(v);
@@ -6347,7 +6367,7 @@ const FICHAS = (() => {
           else { const nv = +v.slice(2); if (ehEB(F)) { const o = fichaNova(nv); Object.keys(F).forEach((k) => delete F[k]); Object.assign(F, o); } else { F.nv = nv; F.ex = F.ex.filter((x) => TIPO[x.t].niv.includes(nv)).slice(0, POR_FOLHA[nv]); if (!F.ex.length) F.ex = fichaNova(nv, F.area).ex; F.ex = F.ex.map((x) => novoEx(x.t, nv, F.ex.length, x.seed)); } }
           muda(); } },
         h('optgroup', { label: 'Jardim de Infância' }, [1, 2, 3].map((n) => h('option', { value: 'JI' + n, selected: nivelV === 'JI' + n }, `${NIV[n]} (${n + 2} anos)`))),
-        E ? h('optgroup', { label: 'Ensino Básico' }, [1].map((a) => h('option', { value: 'EB' + a, selected: nivelV === 'EB' + a }, E.ANO[a]))) : null);
+        E ? h('optgroup', { label: 'Ensino Básico' }, [1, 2].map((a) => h('option', { value: 'EB' + a, selected: nivelV === 'EB' + a }, E.ANO[a]))) : null);
       let campos;
       if (ehEB(F)) {
         const novoEB = (o) => { const n = fichaEB(o.ano ?? F.ano, o.disc ?? F.disc, o.tri ?? F.tri, o.doc ?? F.doc); n.ver = F.ver; if (F.doc === n.doc) n.dur = F.dur; n.foto = F.foto; Object.keys(F).forEach((k) => delete F[k]); Object.assign(F, n); muda(); };
@@ -6380,7 +6400,7 @@ const FICHAS = (() => {
             c.addEventListener('change', () => { const v = c.value.trim().replace(',', '.'); if (v === '' || !isFinite(+v)) delete e.cot; else e.cot = +v; muda(); }); cot = h('label', { class: 'fch-cotl' }, c, 'valores'); }
           return h('div', { class: 'fch-aj' }, h('div', { class: 'row' }, h('b', { class: 'grow' }, `${i + 1}. ${q.nome}`), cot,
             btn('Gerar outra', { sm: true, icon: 'refresh', onclick: () => { const c0 = e.cot; F.ex[i] = exNovo(F, e.t, F.ex.length); if (c0 != null) F.ex[i].cot = c0; muda(); } })),
-            tr.length ? h('div', { class: 'fch-tr' }, tr.map((x) => h('label', null, h('span', null, x.rot), opcoes(x)))) : h('p', { class: 'tiny' }, q.livre ? 'Exercício livre: não há desenhos para trocar.' : 'Use «Gerar outra» para mudar os números, as palavras ou os desenhos.')); })
+            tr.length ? h('div', { class: 'fch-tr' }, tr.map((x) => h('label', { class: x.longo ? 'fch-trl' : null }, h('span', null, x.rot), opcoes(x)))) : h('p', { class: 'tiny' }, q.livre ? 'Exercício livre: não há desenhos para trocar.' : 'Use «Gerar outra» para mudar os números, as palavras ou os desenhos.')); })
           : h('p', { class: 'tiny' }, 'Escolha os exercícios no passo 2.'),
         prova() ? h('p', { class: 'tiny' }, `Total: ${String(cots.reduce((a, b) => a + b, 0)).replace('.', ',')} valores. Escreva um valor para fixar a cotação de um exercício; os outros repartem o resto.`) : null);
       const fin = h('input', { type: 'file', accept: 'image/*', id: 'fch-foto', class: 'fch-file', onchange: async (e) => { const f = e.target.files && e.target.files[0]; if (!f) return;
@@ -6775,8 +6795,264 @@ const FICHAS_EB = (() => {
     draw(p, B, sol, cx) { let o = ''; p.h.forEach((q, i) => { const y = B.y + 10 + i * 122; q.o.forEach((k, j) => { const x = B.x + 30 + j * 230; o += `<rect x="${x}" y="${y}" width="210" height="112" rx="10" fill="none" stroke="#111" stroke-width="1.5"/>` + fig(q.h[k], x + 80, y + 56, 90, cx) + qd(x + 160, y + 34, 40) + (sol ? rs(x + 160, y + 34, k + 1, 40) : ''); }); }); return o; },
     resumo: (p) => p.h.map((q) => q.o.map((k) => k + 1).join('-')).join(' · ') });
 
+
+  /* ============================================================ 1.24.0: conteúdo do manual (só no aparelho, nunca no código público) */
+  let MANS = null;
+  const setManuais = (l) => { if (Array.isArray(l)) MANS = l; };
+  const unid = (ano, disc, n) => { const m = (MANS || []).find((x) => x.ciclo === 'EB' && +x.ano === +ano && x.disc === disc); return m && m.unidades ? m.unidades.find((u) => +u.n === +n) || null : null; };
+  const textoDe = (u) => { if (!u) return ''; const q = []; (u.aprender || []).forEach((p) => { const re = /'([^']{18,})'/g; let m; while ((m = re.exec(p))) q.push(m[1]); }); return q.join(' ').replace(/\s+/g, ' ').trim(); };
+  const itens = (ano, disc, u0, u1) => { const out = []; for (let n = u0; n <= u1; n++) { const u = unid(ano, disc, n); if (!u) continue; for (const e of (u.exercito || []).concat(u.avalio || [])) if (['vf', 'completa', 'pergunta'].includes(e.tipo) && e.texto && e.texto.length < 120 && !/^\s*(resposta livre|exemplo|resposta pessoal)/i.test(String(e.resposta || ''))) out.push({ t: e.tipo, x: e.texto, r: String(e.resposta || ''), u: n }); } return out; };
+  const comManual = () => !!(MANS && MANS.length);
+  // quebra um texto em linhas de até n caracteres
+  const linhas = (txt, n) => { const out = []; let l = ''; for (const w of String(txt).split(/\s+/)) { if ((l + ' ' + w).trim().length > n) { out.push(l.trim()); l = w; } else l += ' ' + w; } if (l.trim()) out.push(l.trim()); return out; };
+  const vfDe = (r) => (/^\s*v/i.test(r) ? 'V' : 'F');
+  function blocoItens(its, B, sol, y0) { let o = '', y = y0;
+    its.forEach((it, i) => { const ls = linhas((i + 1) + ') ' + it.x.replace(/_{2,}/g, '______'), 66); ls.forEach((l, k) => { o += t(B.x + 20, y + k * 24, l, 17, { w: 600, a: 'start' }); });
+      const yl = y + (ls.length - 1) * 24;
+      if (it.t === 'vf') { o += t(B.x + B.w - 90, yl, 'V', 20, { w: 800 }) + t(B.x + B.w - 46, yl, 'F', 20, { w: 800 }); if (sol) o += roda(vfDe(it.r) === 'V' ? B.x + B.w - 90 : B.x + B.w - 46, yl - 7, 16); y = yl + 34; }
+      else { o += ln(B.x + 40, B.x + B.w - 20, yl + 30); if (sol) o += t(B.x + 44, yl + 25, it.r.replace(/\s+/g, ' ').slice(0, 80), 15, { w: 700, fill: '#555', a: 'start' }); y = yl + 58; } });
+    return o; }
+  const altItens = (its, extra = 0) => its.reduce((a, it) => a + (linhas((it.x || '') + '1) ', 66).length - 1) * 24 + (it.t === 'vf' ? 34 : 58), 24 + extra);
+  ex({ id: 'e_manual', disc: 'mat', ano: [1, 2], u: 1, nome: 'Perguntas do manual (verdadeiro ou falso, completa, responde)', instr: () => 'Responde às perguntas.', manual: true, cot: 1.5,
+    gen(r, c) { const its = itens(c.ano, c.disc, 1, c.maxU), u0 = UNI[c.disc][c.tri][0]; const recentes = its.filter((i) => i.u >= u0), base2 = recentes.length >= 4 ? recentes : its;
+      const vf = take(r, base2.filter((i) => i.t === 'vf'), 2), cp = take(r, base2.filter((i) => i.t !== 'vf'), 2); return { i: mix(r, vf.concat(cp)) }; },
+    alt: (p) => altItens(p.i), draw(p, B, sol) { return p.i.length ? blocoItens(p.i, B, sol, B.y + 30) : t(B.x + B.w / 2, B.y + 40, 'Abra os manuais no Portal para usar as perguntas do manual.', 15, { w: 400, fill: '#555' }); },
+    resumo: (p) => p.i.map((it) => (it.t === 'vf' ? vfDe(it.r) : it.r.replace(/\.$/, '').slice(0, 24))).join(' · '),
+    troca: (p) => p.i.map((it, k) => ({ rot: `Pergunta ${k + 1}`, v: it.x, edit: true, set: (v) => { it.x = v; } })).concat(p.i.map((it, k) => ({ rot: `Resposta ${k + 1}`, v: it.r, edit: true, set: (v) => { it.r = v; } }))) });
+  F.regista(Object.assign({}, F.TIPO.e_manual, { id: 'e_manual_lp', disc: 'lp' }));
+
+  /* ===== Matemática, 2.º ano ===== */
+  const ex2 = (o) => ex(Object.assign({ ano: [2] }, o));
+  // largura (Arial negrito, por 1000) e texto com comprimento fixo: a posição das caixas e sublinhados não depende do tipo de letra instalado
+  const AW = { ' ': 278, a: 556, b: 611, c: 556, d: 611, e: 556, f: 333, g: 611, h: 611, i: 278, j: 278, k: 556, l: 278, m: 889, n: 611, o: 611, p: 611, q: 611, r: 389, s: 556, t: 333, u: 611, v: 556, w: 778, x: 556, y: 556, z: 500, '.': 278, ',': 278, '?': 611, '!': 333, ')': 333, '(': 333, '-': 333, ':': 333 };
+  const AWC = { A: 722, B: 722, C: 722, D: 722, E: 667, F: 611, G: 778, H: 722, I: 278, J: 556, K: 722, L: 611, M: 833, N: 722, O: 778, P: 667, Q: 778, R: 722, S: 667, T: 611, U: 722, V: 667, W: 944, X: 667, Y: 667, Z: 611 };
+  const wA = (s2, fs) => [...String(s2)].reduce((a, ch) => { const b = norm(ch); const v = AW[ch] || AWC[ch] || AW[b] || (AWC[b.toUpperCase()] && ch !== b ? AWC[b.toUpperCase()] : 0) || (/\d/.test(ch) ? 556 : 556); return a + v; }, 0) * fs / 1000;
+  const tL = (x, y, s2, fs, o = {}) => (s2 ? `<text x="${x.toFixed(1)}" y="${y.toFixed(1)}" font-family="${FONT}" font-size="${fs}" font-weight="${o.w || 700}" fill="${o.fill || '#111'}" textLength="${wA(s2, fs).toFixed(1)}" lengthAdjust="spacingAndGlyphs" xml:space="preserve" style="white-space:pre">${esc(s2)}</text>` : '');
+  const barra = (x, y, s = 1) => { let o = `<rect x="${x}" y="${y}" width="${14 * s}" height="${110 * s}" fill="#fff" stroke="#111" stroke-width="2"/>`; for (let k = 1; k < 10; k++) o += `<line x1="${x}" x2="${x + 14 * s}" y1="${y + k * 11 * s}" y2="${y + k * 11 * s}" stroke="#111" stroke-width="1"/>`; return o; };
+  const cubo = (x, y, s = 1) => `<rect x="${x}" y="${y}" width="${12 * s}" height="${12 * s}" fill="#fff" stroke="#111" stroke-width="2"/>`;
+  ex2({ id: 'm2_dezenas', disc: 'mat', u: 1, nome: 'Conta as dezenas e as unidades', instr: () => 'Conta as dezenas e as unidades e escreve o número.',
+    gen(r) { return { n: dist(r, 3, 11, 99).map((v) => [Math.floor(v / 10), v % 10]) }; }, alt: () => 190,
+    draw(p, B, sol) { let o = ''; p.n.forEach(([d, u], i) => { const x = B.x + 16 + i * 236, s = d > 6 ? 0.8 : 1; for (let k = 0; k < d; k++) o += barra(x + k * 20 * s, B.y + 16, s); for (let k = 0; k < u; k++) o += cubo(x + d * 20 * s + 8 + (k % 3) * 16, B.y + 50 + Math.floor(k / 3) * 16);
+      const yy = B.y + 146; o += qd(x, yy - 6, 34) + t(x + 44, yy + 20, 'D', 16, { w: 700, a: 'start' }) + qd(x + 62, yy - 6, 34) + t(x + 106, yy + 20, 'U', 16, { w: 700, a: 'start' }) + t(x + 132, yy + 20, '=', 22, { w: 800, a: 'start' }) + qd(x + 152, yy - 6, 40);
+      if (sol) o += rs(x, yy - 6, d, 34) + rs(x + 62, yy - 6, u, 34) + rs(x + 152, yy - 6, d * 10 + u, 40); }); return o; },
+    resumo: (p) => p.n.map(([d, u]) => d * 10 + u).join(' · ') });
+  ex2({ id: 'm2_decompoe', disc: 'mat', u: 2, nome: 'Decompõe em dezenas e unidades', instr: () => 'Decompõe o número em dezenas e unidades.',
+    gen(r) { return { n: dist(r, 4, 11, 99) }; }, alt: () => 130,
+    draw(p, B, sol) { let o = ''; p.n.forEach((n, i) => { const col = i % 2, row = Math.floor(i / 2), x = B.x + 24 + col * 350, y = B.y + 14 + row * 56;
+      o += t(x, y + 32, `${n} =`, 26, { w: 800, a: 'start' }) + qd(x + 66, y + 2, 40) + t(x + 112, y + 30, 'D +', 18, { w: 700, a: 'start' }) + qd(x + 152, y + 2, 40) + t(x + 198, y + 30, 'U', 18, { w: 700, a: 'start' });
+      if (sol) o += rs(x + 66, y + 2, Math.floor(n / 10), 40) + rs(x + 152, y + 2, n % 10, 40); }); return o; },
+    resumo: (p) => p.n.map((n) => `${Math.floor(n / 10)}D ${n % 10}U`).join(' · ') });
+  ex2({ id: 'm2_quadro', disc: 'mat', u: 1, nome: 'Completa o quadro dos números', instr: () => 'Completa o quadro dos números.',
+    gen(r) { const ini = 1 + 10 * Math.floor(r() * 7); const fal = take(r, Array.from({ length: 30 }, (_, k) => k), 9); return { ini, fal }; }, alt: () => 150,
+    draw(p, B, sol) { let o = ''; const cw = (B.w - 40) / 10; for (let k = 0; k < 30; k++) { const x = B.x + 20 + (k % 10) * cw, y = B.y + 12 + Math.floor(k / 10) * 42, v = p.ini + k;
+      o += `<rect x="${x.toFixed(1)}" y="${y}" width="${cw.toFixed(1)}" height="42" fill="#fff" stroke="#111" stroke-width="1.5"/>`; if (!p.fal.includes(k)) o += t(x + cw / 2, y + 29, String(v), 20, { w: 700 }); else if (sol) o += t(x + cw / 2, y + 29, String(v), 20, { w: 800, fill: '#555' }); } return o; },
+    resumo: (p) => p.fal.slice().sort((a, b) => a - b).map((k) => p.ini + k).join(' · ') });
+  ex2({ id: 'm2_compara', disc: 'mat', u: 4, nome: 'Maior, menor ou igual até 100', instr: () => 'Escreve >, < ou = no quadrado.',
+    gen(r) { return { p: [0, 1, 2, 3].map((i) => { const a = 10 + Math.floor(r() * 90); const b = i === 2 ? a : 10 + Math.floor(r() * 90); return [a, b]; }) }; }, alt: () => 92,
+    draw: F.TIPO.m1_compara.draw, resumo: F.TIPO.m1_compara.resumo });
+  ex2({ id: 'm2_ordena', disc: 'mat', u: 4, nome: 'Ordena do menor para o maior', instr: () => 'Escreve os números do menor para o maior.',
+    gen(r) { return { l: [0, 1].map(() => dist(r, 5, 10, 99)) }; }, alt: () => 190,
+    draw(p, B, sol) { let o = ''; p.l.forEach((ns, i) => { const y = B.y + 12 + i * 88; ns.forEach((n, k) => { o += t(B.x + 60 + k * 64, y + 30, String(n), 24, { w: 800 }); });
+      const so = ns.slice().sort((a, b) => a - b); so.forEach((n, k) => { const x = B.x + 380 + k * 64; o += qd(x, y + 42, 46) + (k < 4 ? t(x + 55, y + 72, '<', 18, { w: 800 }) : '') + (sol ? rs(x, y + 42, n, 46) : ''); }); }); return o; },
+    resumo: (p) => p.l.map((ns) => ns.slice().sort((a, b) => a - b).join('<')).join(' · ') });
+  ex2({ id: 'm2_reta', disc: 'mat', u: 4, nome: 'Reta numérica de 10 em 10', instr: () => 'Completa a reta numérica de 10 em 10.',
+    gen(r) { return { a: 0, st: 10, gaps: take(r, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 4) }; }, alt: () => 120,
+    draw(p, B, sol) { const x0 = B.x + 40, x1 = B.x + B.w - 40, y = B.y + 48, st = (x1 - x0) / 10; let o = `<path d="M${x0 - 16} ${y} L${x1 + 20} ${y} M${x1 + 10} ${y - 8} L${x1 + 22} ${y} L${x1 + 10} ${y + 8}" fill="none" stroke="#111" stroke-width="3" stroke-linecap="round"/>`;
+      for (let k = 0; k <= 10; k++) { const x = x0 + st * k; o += `<line x1="${x}" y1="${y - 10}" x2="${x}" y2="${y + 10}" stroke="#111" stroke-width="3"/>`;
+        if (p.gaps.includes(k)) o += qd(x - 24, y + 18, 48) + (sol ? rs(x - 24, y + 18, p.a + k * p.st, 48) : ''); else o += t(x, y + 46, String(p.a + k * p.st), 20, { w: 800 }); }
+      return o; },
+    resumo: (p) => p.gaps.slice().sort((a, b) => a - b).map((k) => k * p.st).join(' · ') });
+  ex2({ id: 'm2_coluna', disc: 'mat', u: 5, nome: 'Contas em coluna (D e U)', instr: () => 'Faz as contas em coluna.', cot: 1.5,
+    gen(r, c) { const vai = c.maxU >= 6, menos = c.maxU >= 7, emp = c.maxU >= 8; const out = [];
+      for (let i = 0; i < 4; i++) { const sub = menos && i >= 2; let a, b, k = 0;
+        do { a = 11 + Math.floor(r() * 88); b = 11 + Math.floor(r() * 88); if (sub && b > a) [a, b] = [b, a]; k++; }
+        while (k < 200 && (sub ? (a - b < 1 || (!emp && a % 10 < b % 10) || (emp && i === 3 && a % 10 >= b % 10)) : (a + b > 99 || (!vai && a % 10 + b % 10 >= 10) || (vai && i === 1 && a % 10 + b % 10 < 10))));
+        out.push([a, b, sub ? '−' : '+']); } return { c: out }; }, alt: () => 196,
+    draw(p, B, sol) { let o = ''; p.c.forEach(([a, b, op], i) => { const x = B.x + 34 + i * 172, yy = B.y + 16, r = op === '+' ? a + b : a - b, A = String(a).padStart(2, ' '), Bb = String(b).padStart(2, ' ');
+      o += t(x + 44, yy + 14, 'D', 14, { w: 700, fill: '#555' }) + t(x + 88, yy + 14, 'U', 14, { w: 700, fill: '#555' }) + `<rect x="${x + 92}" y="${yy + 20}" width="20" height="18" rx="3" fill="#fff" stroke="#999" stroke-width="1.5" stroke-dasharray="3 3"/>`;
+      o += t(x + 44, yy + 66, A[0].trim(), 30, { w: 700 }) + t(x + 88, yy + 66, A[1], 30, { w: 700 }) + t(x + 8, yy + 108, op, 30, { w: 800 }) + t(x + 44, yy + 108, Bb[0].trim(), 30, { w: 700 }) + t(x + 88, yy + 108, Bb[1], 30, { w: 700 });
+      o += `<line x1="${x}" x2="${x + 112}" y1="${yy + 120}" y2="${yy + 120}" stroke="#111" stroke-width="3"/>` + qd(x + 24, yy + 128, 40) + qd(x + 68, yy + 128, 40);
+      if (sol) { const s2 = String(r).padStart(2, ' '); o += rs(x + 24, yy + 128, s2[0].trim(), 40) + rs(x + 68, yy + 128, s2[1], 40); if (op === '+' && a % 10 + b % 10 >= 10) o += t(x + 102, yy + 34, '1', 13, { w: 800, fill: '#555' }); if (op === '−' && a % 10 < b % 10) o += t(x + 102, yy + 34, '10', 11, { w: 800, fill: '#555' }); } });
+      return o; },
+    resumo: (p) => p.c.map(([a, b, op]) => (op === '+' ? a + b : a - b)).join(' · ') });
+  ex2({ id: 'm2_contas', disc: 'mat', u: 5, nome: 'Contas em linha até 100', instr: () => 'Faz as contas.',
+    gen(r, c) { const menos = c.maxU >= 7; return { c: Array.from({ length: 6 }, (_, i) => { const sub = menos && i % 2; let a = 10 + Math.floor(r() * 80), b = 1 + Math.floor(r() * (sub ? a - 1 : 99 - a)); return sub ? [a, '−', b, a - b] : [a, '+', b, a + b]; }) }; }, alt: () => 170,
+    draw: F.TIPO.m1_contas.draw, resumo: F.TIPO.m1_contas.resumo });
+  ex2({ id: 'm2_problema', disc: 'mat', u: 5, nome: 'Problema do mercado', instr: () => 'Lê o problema, faz a conta e responde.', cot: 1.5,
+    gen(r, c) { const nm = pick(r, NOMES), f = pick(r, ['manga', 'caju', 'laranja', 'banana', 'coco', 'tomate', 'peixe']), sub = c.maxU >= 7 && r() < 0.6; const a = 20 + Math.floor(r() * 70), b = 5 + Math.floor(r() * (sub ? a - 10 : 99 - a - 5)); return { nm, f, sub, a, b }; }, alt: () => 200,
+    draw(p, B, sol, cx) { const pl = nome(p.f) + (/[rlz]$/.test(nome(p.f)) ? 'es' : 's'), fe = /a$/.test(nome(p.f)), art2 = FEMN.has(p.nm) ? 'da' : 'do';
+      const l1 = `Na banca ${art2} ${p.nm}, no mercado, havia ${p.a} ${pl}.`, l2 = p.sub ? `${FEMN.has(p.nm) ? 'Ela' : 'Ele'} vendeu ${p.b}. Quant${fe ? 'as' : 'os'} ${pl} ficaram?` : `Chegaram mais ${p.b}. Quant${fe ? 'as' : 'os'} ${pl} há agora?`;
+      let o = t(B.x + 20, B.y + 34, l1, 18, { w: 600, a: 'start' }) + t(B.x + 20, B.y + 60, l2, 18, { w: 600, a: 'start' }) + fig(p.f, B.x + B.w - 60, B.y + 50, 64, cx);
+      o += t(B.x + 20, B.y + 106, 'Conta:', 17, { w: 700, a: 'start' }) + `<rect x="${B.x + 90}" y="${B.y + 82}" width="220" height="100" rx="8" fill="none" stroke="#bbb" stroke-dasharray="5 5"/>` + t(B.x + 340, B.y + 150, 'Resposta:', 17, { w: 700, a: 'start' }) + ln(B.x + 430, B.x + B.w - 20, B.y + 154);
+      if (sol) { const res = p.sub ? p.a - p.b : p.a + p.b; o += t(B.x + 200, B.y + 140, `${p.a} ${p.sub ? '−' : '+'} ${p.b} = ${res}`, 22, { w: 800, fill: '#555' }) + t(B.x + 440, B.y + 148, `${p.sub ? 'Ficaram' : 'Há'} ${res} ${pl}.`, 17, { w: 700, fill: '#555', a: 'start' }); }
+      return o; },
+    resumo: (p) => String(p.sub ? p.a - p.b : p.a + p.b), troca: (p) => [{ rot: 'Produto', v: p.f, set: (v) => { p.f = v; }, op: ['manga', 'caju', 'laranja', 'banana', 'coco', 'tomate', 'peixe', 'ovo', 'cebola', 'milho'] }] });
+  const prato = (cx, cy, n, f, cx2) => { let s2 = `<ellipse cx="${cx}" cy="${cy + 18}" rx="58" ry="20" fill="#fff" stroke="#111" stroke-width="2.5"/>`; const pr2 = Math.min(4, n); for (let k = 0; k < n; k++) s2 += fig(f, cx - (Math.min(4, n - Math.floor(k / 4) * 4) - 1) * 14 + (k % 4) * 28, cy + 2 - Math.floor(k / 4) * 28, 34, cx2); return s2; };
+  ex2({ id: 'm2_grupos', disc: 'mat', u: 9, nome: 'Grupos iguais (multiplicação)', instr: (p) => `Quant${/a$/.test(nome(p.f)) ? 'as' : 'os'} ${nome(p.f)}s há? Escreve a multiplicação.`,
+    gen(r, c) { const T = c.maxU >= 10 ? [2, 5, 10, 3, 4] : [2, 3, 4]; return { g: 2 + Math.floor(r() * 3), n: pick(r, T.filter((x) => x <= 8)), f: pick(r, ['manga', 'caju', 'laranja', 'ovo', 'tomate']) }; }, alt: () => 170,
+    draw(p, B, sol, cx) { let o = ''; for (let i = 0; i < p.g; i++) o += prato(B.x + 80 + i * 132, B.y + 96, p.n, p.f, cx);
+      const x = B.x + 470; o += qd(x, B.y + 68, 40) + t(x + 56, B.y + 96, '×', 28, { w: 800 }) + qd(x + 74, B.y + 68, 40) + t(x + 134, B.y + 96, '=', 28, { w: 800 }) + qd(x + 154, B.y + 68, 40) + t(x + 100, B.y + 150, `${p.g} pratos com ${p.n} ${nome(p.f)}${p.n > 1 ? 's' : ''}`, 13, { w: 400, fill: '#555' });
+      if (sol) o += rs(x, B.y + 68, p.g, 40) + rs(x + 74, B.y + 68, p.n, 40) + rs(x + 154, B.y + 68, p.g * p.n, 40); return o; },
+    resumo: (p) => `${p.g} × ${p.n} = ${p.g * p.n}`, troca: (p) => [{ rot: 'Fruto', v: p.f, set: (v) => { p.f = v; }, op: ['manga', 'caju', 'laranja', 'ovo', 'tomate', 'banana', 'coco'] }] });
+  ex2({ id: 'm2_tabuada', disc: 'mat', u: 9, nome: 'Completa a tabuada', instr: (p) => `Completa a tabuada do ${p.n}.`,
+    gen(r, c) { return { n: pick(r, c.maxU >= 10 ? [2, 5, 10] : [2]), k: take(r, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 8).sort((a, b) => a - b) }; }, alt: () => 210,
+    draw(p, B, sol) { let o = ''; p.k.forEach((k, i) => { const col = i % 2, row = Math.floor(i / 2), x = B.x + 60 + col * 340, y = B.y + 14 + row * 48; o += t(x, y + 30, `${p.n} × ${k} =`, 24, { w: 700, a: 'start' }) + qd(x + 150, y - 3, 46) + (sol ? rs(x + 150, y - 3, p.n * k, 46) : ''); }); return o; },
+    resumo: (p) => p.k.map((k) => p.n * k).join(' · '), troca: (p) => [{ rot: 'Tabuada do', v: String(p.n), set: (v) => { p.n = +v; }, op: ['2', '5', '10'], letra: true }] });
+  ex2({ id: 'm2_saltos', disc: 'mat', u: 9, nome: 'Saltos na reta', instr: (p) => `O sapo salta de ${p.n} em ${p.n}. Escreve os números.`,
+    gen(r, c) { return { n: pick(r, c.maxU >= 10 ? [2, 5, 10] : [2]) }; }, alt: () => 140,
+    draw(p, B, sol, cx) { const x0 = B.x + 60, x1 = B.x + B.w - 40, y = B.y + 92, st = (x1 - x0) / 8; let o = `<line x1="${x0 - 10}" x2="${x1 + 10}" y1="${y}" y2="${y}" stroke="#111" stroke-width="3"/>` + fig('sapo', x0 - 20, y - 50, 44, cx);
+      for (let k = 0; k <= 8; k++) { const x = x0 + st * k; o += `<line x1="${x}" x2="${x}" y1="${y - 8}" y2="${y + 8}" stroke="#111" stroke-width="3"/>`; if (k < 8) o += `<path d="M${x} ${y - 10} C${x + st * 0.2} ${y - 46} ${x + st * 0.8} ${y - 46} ${x + st} ${y - 10}" fill="none" stroke="#111" stroke-width="1.5" stroke-dasharray="4 4"/>`;
+        if (k === 0) o += t(x, y + 34, '0', 20, { w: 800 }); else o += qd(x - 20, y + 12, 40) + (sol ? rs(x - 20, y + 12, k * p.n, 40) : ''); } return o; },
+    resumo: (p) => Array.from({ length: 8 }, (_, k) => (k + 1) * p.n).join(' · ') });
+  ex2({ id: 'm2_divide', disc: 'mat', u: 11, nome: 'Reparte em partes iguais', instr: (p) => `Reparte ${p.t} ${nome(p.f)}s por ${p.g} pratos. Desenha-os.`,
+    gen(r) { const g = pick(r, [2, 3, 4]), c = pick(r, [2, 3, 4, 5]); return { g, t: g * c, f: pick(r, ['caju', 'manga', 'ovo', 'laranja']) }; }, alt: () => 200,
+    draw(p, B, sol, cx) { let o = grupo(p.f, p.t, B.x + 16, B.y + 10, 680, 50, cx, 30).svg; const c = p.t / p.g;
+      for (let i = 0; i < p.g; i++) { const pcx = B.x + 90 + i * 150; o += sol ? prato(pcx, B.y + 110, c, p.f, cx) : `<ellipse cx="${pcx}" cy="${B.y + 128}" rx="58" ry="20" fill="#fff" stroke="#111" stroke-width="2.5"/>`; }
+      o += t(B.x + 20, B.y + 186, 'Cada prato fica com', 17, { w: 700, a: 'start' }) + qd(B.x + 200, B.y + 160, 36) + (sol ? rs(B.x + 200, B.y + 160, c, 36) : '') + t(B.x + 248, B.y + 186, `${p.t} : ${p.g} = ____`, 17, { w: 700, a: 'start' }) + (sol ? t(B.x + 330, B.y + 182, String(c), 17, { w: 800, fill: '#555', a: 'start' }) : ''); return o; },
+    resumo: (p) => `${p.t} : ${p.g} = ${p.t / p.g}` });
+  const SOL = { cubo: 'M20 36 L50 22 L80 36 L50 50 Z M20 36 L20 74 L50 88 L50 50 Z M80 36 L80 74 L50 88 L50 50 Z', esfera: '', cilindro: 'M22 26 L22 76 C22 90 78 90 78 76 L78 26', cone: 'M50 10 L80 76 C70 90 30 90 20 76 Z' };
+  const solido = (k, cx, cy, s) => { const sc = s / 100, g = (d) => `<g transform="translate(${cx - s / 2},${cy - s / 2}) scale(${sc})" fill="#fff" stroke="#111" stroke-width="${3 / sc * 0.9}" stroke-linejoin="round">${d}</g>`;
+    if (k === 'esfera') return g('<circle cx="50" cy="50" r="38"/><ellipse cx="50" cy="50" rx="38" ry="12" fill="none" stroke-dasharray="4 4"/>');
+    if (k === 'cilindro') return g(`<path d="${SOL.cilindro}"/><ellipse cx="50" cy="26" rx="28" ry="10"/>`);
+    if (k === 'cone') return g(`<path d="${SOL.cone}"/><path d="M20 76 C30 64 70 64 80 76" fill="none" stroke-dasharray="4 4"/>`);
+    return g(`<path d="${SOL.cubo}"/>`); };
+  const SOLN = { cubo: 'cubo', esfera: 'esfera', cilindro: 'cilindro', cone: 'cone' }, SOLO = { cubo: ['dado'], esfera: ['bola', 'laranja'], cilindro: ['lata', 'tambor'], cone: ['chapeu_festa'] };
+  ex2({ id: 'm2_solidos', disc: 'mat', u: 12, nome: 'Sólidos geométricos', ic: 'ligar', instr: () => 'Liga cada sólido ao objeto com a mesma forma.',
+    gen(r) { const k = ['cubo', 'esfera', 'cilindro', 'cone']; return { o: k.map((s2) => pick(r, SOLO[s2].filter((f) => FICHAS_DES.D[f]))), ord: mix(r, [0, 1, 2, 3]) }; }, alt: () => 260,
+    draw(p, B, sol, cx) { const K = ['cubo', 'esfera', 'cilindro', 'cone'], rh = (B.h - 10) / 4, yc = (i) => B.y + 5 + rh * (i + 0.5); let o = '';
+      K.forEach((k, i) => { o += solido(k, B.x + 70, yc(i), rh * 0.82) + t(B.x + 120, yc(i) + 7, SOLN[k], 20, { w: 700, a: 'start' }) + ponto(B.x + 250, yc(i)); });
+      p.ord.forEach((k, j) => { o += ponto(B.x + 480, yc(j)) + fig(p.o[k], B.x + 570, yc(j), rh * 0.8, cx); });
+      if (sol) K.forEach((_, i) => { o += linha(B.x + 250, yc(i), B.x + 480, yc(p.ord.indexOf(i))); }); return o; },
+    resumo: (p) => ['cubo', 'esfera', 'cilindro', 'cone'].map((k, i) => `${k}–${nome(p.o[i])}`).join(', ') });
+  const PRECOS = [['manga', 50], ['banana', 25], ['tomate', 100], ['ovo', 75], ['peixe', 500], ['pao', 150], ['laranja', 50], ['caju', 25], ['coco', 200], ['cebola', 100], ['arroz', 400]].filter(([f]) => FICHAS_DES.D[f]);
+  ex2({ id: 'm2_mercado', disc: 'mat', u: 13, nome: 'No mercado: preço e troco', instr: (p) => `${p.nm} compra isto e paga com ${fmtN(p.paga)} FCFA. Quanto custa? Qual é o troco?`, cot: 1.5,
+    gen(r) { const it = take(r, PRECOS, 2), tot = it.reduce((a, b) => a + b[1], 0); const paga = [500, 1000, 2000].find((v) => v > tot) || 5000; return { nm: pick(r, NOMES), it, paga }; }, alt: () => 210,
+    draw(p, B, sol, cx) { let o = `<rect x="${B.x + 20}" y="${B.y + 118}" width="340" height="14" fill="#fff" stroke="#111" stroke-width="2.5"/><path d="M${B.x + 34} ${B.y + 132} L${B.x + 34} ${B.y + 186} M${B.x + 346} ${B.y + 132} L${B.x + 346} ${B.y + 186}" stroke="#111" stroke-width="3"/>`;
+      p.it.forEach(([f, v], i) => { const x = B.x + 100 + i * 160; o += fig(f, x, B.y + 74, 80, cx) + `<rect x="${x - 40}" y="${B.y + 6}" width="80" height="26" rx="6" fill="#fff" stroke="#111" stroke-width="2"/>` + t(x, B.y + 25, `${v} FCFA`, 13, { w: 800 }); });
+      const tot = p.it.reduce((a, b) => a + b[1], 0); o += p.paga < 1000 ? moeda(B.x + 470, B.y + 46, p.paga, 34) : nota(B.x + 410, B.y + 14, p.paga, 120, 56);
+      o += t(B.x + 410, B.y + 118, 'Custa:', 17, { w: 700, a: 'start' }) + ln(B.x + 476, B.x + 620, B.y + 122) + t(B.x + 630, B.y + 118, 'FCFA', 15, { w: 600, a: 'start' }) + t(B.x + 410, B.y + 168, 'Troco:', 17, { w: 700, a: 'start' }) + ln(B.x + 476, B.x + 620, B.y + 172) + t(B.x + 630, B.y + 168, 'FCFA', 15, { w: 600, a: 'start' });
+      if (sol) o += t(B.x + 548, B.y + 114, fmtN(tot), 18, { w: 800, fill: '#555' }) + t(B.x + 548, B.y + 164, fmtN(p.paga - tot), 18, { w: 800, fill: '#555' }); return o; },
+    resumo: (p) => { const tot = p.it.reduce((a, b) => a + b[1], 0); return `${fmtN(tot)} e troco ${fmtN(p.paga - tot)} FCFA`; } });
+  const MED = [['regua', 'metro'], ['arroz', 'quilo'], ['pote', 'litro'], ['balde', 'litro'], ['batata', 'quilo'], ['blusa', 'metro']].filter(([f]) => FICHAS_DES.D[f]);
+  ex2({ id: 'm2_medidas', disc: 'mat', u: 13, nome: 'Metro, quilo ou litro?', ic: 'rodear', instr: () => 'Com que se mede? Rodeia metro, quilo ou litro.',
+    gen(r) { const by = (u) => MED.filter((m) => m[1] === u); return { l: mix(r, [pick(r, by('metro')), pick(r, by('quilo')), pick(r, by('litro'))]) }; }, alt: () => 170,
+    draw(p, B, sol, cx) { return cartoes(B, 3, 150, (x, y, w, h, i) => { const [f, u] = p.l[i]; let o = fig(f, x + w / 2, y + 52, 80, cx); ['metro', 'quilo', 'litro'].forEach((m, k) => { const xx = x + 40 + k * (w - 80) / 2; o += t(xx, y + 130, m, 16, { w: 700 }); if (sol && m === u) o += `<ellipse cx="${xx}" cy="${y + 124}" rx="34" ry="16" fill="none" stroke="#111" stroke-width="3"/>`; }); return o; }); },
+    resumo: (p) => p.l.map(([f, u]) => `${nome(f)}: ${u}`).join(', ') });
+  const relogio = (cx, cy, r, h, m, mostra = true) => { let o = `<circle cx="${cx}" cy="${cy}" r="${r}" fill="#fff" stroke="#111" stroke-width="3"/>`; for (let k = 1; k <= 12; k++) { const a = k * Math.PI / 6; o += t(cx + Math.sin(a) * r * 0.78, cy - Math.cos(a) * r * 0.78 + r * 0.07, String(k), (r * 0.2).toFixed(1), { w: 700 }); }
+    if (mostra) { const am = m / 60 * 2 * Math.PI, ah = ((h % 12) + m / 60) / 12 * 2 * Math.PI; o += `<line x1="${cx}" y1="${cy}" x2="${(cx + Math.sin(am) * r * 0.7).toFixed(1)}" y2="${(cy - Math.cos(am) * r * 0.7).toFixed(1)}" stroke="#111" stroke-width="3" stroke-linecap="round"/><line x1="${cx}" y1="${cy}" x2="${(cx + Math.sin(ah) * r * 0.45).toFixed(1)}" y2="${(cy - Math.cos(ah) * r * 0.45).toFixed(1)}" stroke="#111" stroke-width="5" stroke-linecap="round"/>`; }
+    return o + `<circle cx="${cx}" cy="${cy}" r="4" fill="#111"/>`; };
+  const horaTxt = (h, m) => (m ? `${h} e meia` : `${h} ${h === 1 ? 'hora' : 'horas'}`);
+  ex2({ id: 'm2_horas', disc: 'mat', u: 14, nome: 'Que horas são?', instr: () => 'Escreve as horas. Depois desenha os ponteiros.',
+    gen(r) { const hs = take(r, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], 4); return { l: hs.map((h, i) => [h, i % 2 ? 30 : 0]) }; }, alt: () => 210,
+    draw(p, B, sol) { return cartoes(B, 4, 190, (x, y, w, h, i) => { const [hh, mm] = p.l[i], ler = i < 2; let o = relogio(x + w / 2, y + 74, 58, hh, mm, ler || sol);
+      if (ler) o += ln(x + 16, x + w - 16, y + 172) + (sol ? t(x + w / 2, y + 166, horaTxt(hh, mm), 16, { w: 800, fill: '#555' }) : ''); else o += t(x + w / 2, y + 170, horaTxt(hh, mm), 17, { w: 800 }); return o; }); },
+    resumo: (p) => p.l.map(([h, m]) => horaTxt(h, m)).join(' · ') });
+  ex2({ id: 'm2_grafico', disc: 'mat', u: 14, nome: 'Gráfico de barras até 10', ic: 'pintar', instr: () => 'Conta os animais e pinta um quadrado por cada um.',
+    gen(r) { const fs = take(r, ['galinha', 'cabra', 'pato', 'porco', 'vaca'], 3); return { g: fs.map((f) => ({ f, n: 2 + Math.floor(r() * 8) })) }; }, alt: () => 330,
+    draw(p, B, sol, cx) { let o = ''; const pool = []; p.g.forEach((g) => { for (let k = 0; k < g.n; k++) pool.push(g.f); });
+      mix(rnd(p.g.map((g) => g.n).join('') * 13 + 1), pool).forEach((f, i) => { o += fig(f, B.x + 34 + (i % 7) * 46, B.y + 34 + Math.floor(i / 7) * 46, 40, cx); });
+      const gx = B.x + 410, gy = B.y + 14, cw = 70, chh = 25; for (let c = 0; c < 3; c++) { for (let k = 0; k < 10; k++) o += `<rect x="${gx + c * (cw + 20)}" y="${gy + (9 - k) * chh}" width="${cw}" height="${chh}" fill="${sol && k < p.g[c].n ? '#bbb' : '#fff'}" stroke="#111" stroke-width="1.5"/>`; o += fig(p.g[c].f, gx + c * (cw + 20) + cw / 2, gy + 10 * chh + 30, 44, cx); }
+      for (let k = 1; k <= 10; k++) o += t(gx - 14, gy + (10 - k) * chh + 18, String(k), 12, { w: 600 }); return o; },
+    resumo: (p) => p.g.map((g) => `${nome(g.f)} ${g.n}`).join(', ') });
+
+  /* ===== Língua Portuguesa, 2.º ano ===== */
+  const ABC = 'abcdefghijlmnopqrstuvxz'.split('');
+  ex2({ id: 'l2_alfabeto', disc: 'lp', u: 1, nome: 'Completa o alfabeto', instr: () => 'Escreve as letras que faltam no alfabeto.',
+    gen(r) { return { f: take(r, ABC.map((_, i) => i), 9) }; }, alt: () => 150,
+    draw(p, B, sol) { let o = ''; const cw = (B.w - 40) / 12; ABC.forEach((l, i) => { const x = B.x + 20 + (i % 12) * cw, y = B.y + 14 + Math.floor(i / 12) * 64;
+      o += `<rect x="${x.toFixed(1)}" y="${y}" width="${(cw - 6).toFixed(1)}" height="54" rx="8" fill="#fff" stroke="#111" stroke-width="1.5"/>`; if (!p.f.includes(i)) o += t(x + cw / 2 - 3, y + 38, l, 28, { w: 700 }); else if (sol) o += t(x + cw / 2 - 3, y + 38, l, 28, { w: 800, fill: '#555' }); }); return o; },
+    resumo: (p) => p.f.slice().sort((a, b) => a - b).map((i) => ABC[i]).join(' ') });
+  F.regista(Object.assign({}, F.TIPO.l1_silabas, { id: 'l2_silabas', ano: [2], u: 1, nome: 'Forma palavras com as sílabas' }));
+  const ENC2 = [['blusa', 'bl'], ['globo', 'gl'], ['grilo', 'gr'], ['planta', 'pl'], ['cabra', 'br'], ['prato', 'pr']].filter(([f]) => FICHAS_DES.D[f]);
+  const DIG = [['galinha', 'nh'], ['abelha', 'lh'], ['chapeu', 'ch'], ['coelho', 'lh'], ['folha', 'lh'], ['ninho', 'nh'], ['mochila', 'ch'], ['chinelos', 'ch'], ['pintainho', 'nh'], ['ovelha', 'lh']].filter(([f]) => FICHAS_DES.D[f]);
+  const reg2 = (base, o) => F.regista(Object.assign({}, F.TIPO[base], { ano: [2] }, o));
+  completaGrupo('l2_encontros', 2, 'Encontros bl, gl, gr, pl', ENC2.slice(0, 4).concat(ENC2.slice(4)), ['bl', 'gl', 'gr', 'pl', 'br', 'pr']); F.TIPO.l2_encontros.ano = [2];
+  completaGrupo('l2_digrafos', 3, 'Dígrafos nh, lh, ch', DIG, ['nh', 'lh', 'ch']); F.TIPO.l2_digrafos.ano = [2];
+  // sílaba tónica: acento gráfico ou a regra (palavras graves, salvo as terminadas em l, r, z, i, u, ão…)
+  const tonica = (q) => { const s2 = q.s; const ac = s2.findIndex((x) => /[áéíóúâêôã]/.test(x)); if (ac >= 0) return ac; if (s2.length === 1) return 0; return /([aeo]s?|em|ens)$/.test(norm(q.w)) ? s2.length - 2 : s2.length - 1; };
+  ex2({ id: 'l2_tonica', disc: 'lp', u: 4, nome: 'A sílaba tónica', ic: 'pintar', instr: () => 'Diz a palavra em voz alta e pinta a sílaba mais forte.',
+    gen(r) { return { p: take(r, PAL.filter((q) => q.s.length >= 2 && q.s.length <= 4), 4).map((q) => q.f) }; }, alt: () => 200,
+    draw(p, B, sol, cx) { return cartoes(B, 4, 180, (x, y, w, h, i) => { const q = PAL.find((z) => z.f === p.p[i]); let o = fig(q.f, x + w / 2, y + 56, 82, cx); const n = q.s.length, bw = Math.min(46, (w - 16) / n), x0 = x + w / 2 - n * bw / 2, k0 = tonica(q);
+      q.s.forEach((sl, k) => { o += `<rect x="${(x0 + k * bw).toFixed(1)}" y="${y + 126}" width="${(bw - 4).toFixed(1)}" height="40" rx="6" fill="${sol && k === k0 ? '#bbb' : '#fff'}" stroke="#111" stroke-width="2"/>` + t(x0 + k * bw + bw / 2 - 2, y + 152, sl, Math.min(17, bw * 0.42).toFixed(1), { w: 700 }); }); return o; }); },
+    resumo: (p) => p.p.map((f) => { const q = PAL.find((z) => z.f === f); return q.s[tonica(q)]; }).join(' · ') });
+  const leitura = (id, u, nm) => ex2({ id, disc: 'lp', u, nome: nm, instr: () => 'Lê o texto e responde.', manual: true, cot: 2,
+    gen(r, c) { const un = unid(c.ano, 'lp', u), tx = textoDe(un), its = itens(c.ano, 'lp', u, u).filter((i) => i.t !== 'pergunta'); const m = /\b([OoAa])\s+([A-ZÁÉÍÓÚ][a-zà-ú]+)(\s+e\s+[oa]\s+[A-ZÁÉÍÓÚ][a-zà-ú]+)?/.exec(tx || ''); const q = m ? [{ t: 'pergunta', x: m[3] ? 'Quem são as personagens do texto?' : 'Quem é a personagem do texto?', r: m[0][0].toUpperCase() + m[0].slice(1) + '.' }] : []; return { tx, i: q.concat(its).slice(0, 3) }; },
+    alt: (p) => 40 + linhas(p.tx, 66).length * 28 + altItens(p.i),
+    draw(p, B, sol) { if (!p.tx) return t(B.x + B.w / 2, B.y + 40, 'Abra os manuais no Portal para usar os textos do manual.', 15, { w: 400, fill: '#555' }); const ls = linhas(p.tx, 66); let o = `<rect x="${B.x + 16}" y="${B.y + 14}" width="${B.w - 32}" height="${ls.length * 28 + 16}" rx="10" fill="#f4f4f4" stroke="#111" stroke-width="1.2"/>`;
+      ls.forEach((l, k) => { o += t(B.x + 30, B.y + 40 + k * 28, l, 18, { w: 500, a: 'start' }); }); return o + blocoItens(p.i, B, sol, B.y + 56 + ls.length * 28); },
+    resumo: (p) => p.i.map((it) => (it.t === 'vf' ? vfDe(it.r) : it.r.replace(/\.$/, '').slice(0, 20))).join(' · '),
+    troca: (p) => [{ rot: 'Texto', v: p.tx, edit: true, longo: true, set: (v) => { p.tx = v; } }].concat(p.i.map((it, k) => ({ rot: `Pergunta ${k + 1}`, v: it.x, edit: true, set: (v) => { it.x = v; } })), p.i.map((it, k) => ({ rot: `Resposta ${k + 1}`, v: it.r, edit: true, set: (v) => { it.r = v; } }))) });
+  leitura('l2_leitura', 5, 'Leio pequenos textos (texto do manual)');
+  leitura('l2_historia', 15, 'Compreendo o que leio (história do manual)');
+  const GEN = [['galo', 'galinha'], ['menino', 'menina'], ['papa', 'mama']], GENW = [['o gato', 'a gata'], ['o pato', 'a pata'], ['o macaco', 'a macaca'], ['o porco', 'a porca'], ['o coelho', 'a coelha'], ['o tio', 'a tia']];
+  ex2({ id: 'l2_genero', disc: 'lp', u: 6, nome: 'Masculino e feminino', ic: 'ligar', instr: () => 'Liga o masculino ao feminino e escreve o feminino.',
+    gen(r) { return { ord: mix(r, [0, 1, 2]), w: take(r, GENW, 3) }; }, alt: () => 330,
+    draw(p, B, sol, cx) { let o = ''; const yc = (i) => B.y + 40 + i * 70;
+      GEN.forEach(([m], i) => { o += fig(m, B.x + 60, yc(i), 56, cx) + t(B.x + 110, yc(i) + 8, nome(m), 22, { w: 700, a: 'start' }) + ponto(B.x + 260, yc(i)); });
+      p.ord.forEach((k, j) => { const f = GEN[k][1]; o += ponto(B.x + 450, yc(j)) + t(B.x + 480, yc(j) + 8, nome(f), 22, { w: 700, a: 'start' }) + fig(f, B.x + B.w - 60, yc(j), 56, cx); });
+      if (sol) GEN.forEach((_, i) => { o += linha(B.x + 260, yc(i), B.x + 450, yc(p.ord.indexOf(i))); });
+      p.w.forEach(([m, f], i) => { const x = B.x + 24 + i * 232, y = B.y + 262, xl = x + wA(m + ' →', 20) + 8; o += tL(x, y + 22, m + ' →', 20) + ln(xl, x + 220, y + 26) + (sol ? t(xl + 6, y + 20, f, 18, { w: 800, fill: '#555', a: 'start' }) : ''); }); return o; },
+    resumo: (p) => p.w.map(([, f]) => f).join(', ') });
+  const PLU = [['pato', 'patos'], ['pao', 'pães'], ['mao', 'mãos'], ['limao', 'limões'], ['flor', 'flores'], ['aviao', 'aviões'], ['lapis', 'lápis'], ['bola', 'bolas'], ['cao', 'cães'], ['sol', 'sóis'], ['galinha', 'galinhas'], ['camiao', 'camiões']].filter(([f]) => FICHAS_DES.D[f]);
+  ex2({ id: 'l2_plural', disc: 'lp', u: 7, nome: 'Singular e plural', instr: () => 'Escreve o plural.',
+    gen(r, c) { const l = take(r, c.maxU >= 7 ? PLU : PLU.filter((x) => !/õ|ã/.test(x[1])), 4); return { l }; }, alt: () => 200,
+    draw(p, B, sol, cx) { return cartoes(B, 4, 180, (x, y, w, h, i) => { const [f, pl] = p.l[i]; let o = fig(f, x + w / 2 - 34, y + 50, 52, cx) + fig(f, x + w / 2 + 34, y + 50, 52, cx);
+      o += t(x + w / 2, y + 108, `um${art(f) === 'a' ? 'a' : ''} ${nome(f)}`, 17, { w: 700 }) + t(x + w / 2, y + 136, `dois${art(f) === 'a' ? '' : ''}`.replace('dois', art(f) === 'a' ? 'duas' : 'dois'), 15, { w: 600 }) + ln(x + 16, x + w - 16, y + 166) + (sol ? t(x + w / 2, y + 160, pl, 17, { w: 800, fill: '#555' }) : ''); return o; }); },
+    resumo: (p) => p.l.map(([, pl]) => pl).join(', ') });
+  const art = F.H.art;
+  const ADJ = [['O elefante é grande.', 'grande'], ['A formiga é pequena.', 'pequena'], ['A manga está doce.', 'doce'], ['O copo está cheio.', 'cheio'], ['A Aua tem uma blusa nova.', 'nova'], ['O rio é comprido.', 'comprido'], ['O sol está quente.', 'quente'], ['O Braima é alto.', 'alto'], ['A noite está escura.', 'escura'], ['O gato é preto.', 'preto']];
+  const VERB = [['A Djenabu come arroz.', 'come'], ['O Malam corre no recreio.', 'corre'], ['A galinha dorme na capoeira.', 'dorme'], ['O Iaia lê um livro.', 'lê'], ['As crianças cantam na escola.', 'cantam'], ['O peixe nada no rio.', 'nada'], ['A Binta lava as mãos.', 'lava'], ['O avô planta mandioca.', 'planta']];
+  const SUJ = [['A Aua lava as mãos.', 'A Aua'], ['O gato dorme na esteira.', 'O gato'], ['Os meninos jogam à bola.', 'Os meninos'], ['A professora lê uma história.', 'A professora'], ['O Braima come caju.', 'O Braima'], ['As galinhas comem milho.', 'As galinhas']];
+  const sublinha = (id, u, nm, instr2, lista, n) => ex2({ id, disc: 'lp', u, nome: nm, ic: 'tracar', instr: () => instr2,
+    gen(r) { return { l: take(r, lista, n) }; }, alt: () => 30 + n * 48,
+    draw(p, B, sol) { let o = ''; p.l.forEach(([fr, alvo], i) => { const y = B.y + 34 + i * 48, k = Math.max(0, fr.indexOf(alvo)), pre = `${i + 1}) ` + fr.slice(0, k), x0 = B.x + 30;
+      o += tL(x0, y + 8, pre, 22, { w: 700 }) + tL(x0 + wA(pre, 22), y + 8, alvo, 22, { w: 700 }) + tL(x0 + wA(pre + alvo, 22), y + 8, fr.slice(k + alvo.length), 22, { w: 700 });
+      if (sol) { const xa = x0 + wA(pre, 22); o += `<line x1="${xa.toFixed(1)}" x2="${(xa + wA(alvo, 22)).toFixed(1)}" y1="${y + 15}" y2="${y + 15}" stroke="#555" stroke-width="4"/>`; } }); return o; },
+    resumo: (p) => p.l.map(([, a]) => a).join(', ') });
+  sublinha('l2_adjetivo', 8, 'O adjetivo', 'Sublinha o adjetivo em cada frase.', ADJ, 5);
+  sublinha('l2_verbo', 9, 'O verbo na frase', 'Sublinha o verbo (a ação) em cada frase.', VERB, 5);
+  sublinha('l2_sujeito', 10, 'Sujeito e predicado', 'Sublinha o sujeito (quem faz a ação).', SUJ, 5);
+  const ACOES = ['comer', 'dormir', 'ler', 'correr', 'nadar', 'cantar'].filter((f) => FICHAS_DES.D[f]);
+  ex2({ id: 'l2_acoes', disc: 'lp', u: 9, nome: 'Liga a ação ao desenho', ic: 'ligar', instr: () => 'Liga cada ação ao desenho.',
+    gen(r) { const a = take(r, ACOES, 4); return { a, ord: mix(r, [0, 1, 2, 3]) }; }, alt: () => 320,
+    draw(p, B, sol, cx) { const rh = (B.h - 10) / 4, yc = (i) => B.y + 5 + rh * (i + 0.5); let o = '';
+      p.a.forEach((a, i) => { o += t(B.x + 120, yc(i) + 9, nome(a), 26, { w: 700 }) + ponto(B.x + 230, yc(i)); });
+      p.ord.forEach((k, j) => { o += ponto(B.x + 470, yc(j)) + fig(p.a[k], B.x + 580, yc(j), rh * 0.98, cx); });
+      if (sol) p.a.forEach((_, i) => { o += linha(B.x + 230, yc(i), B.x + 470, yc(p.ord.indexOf(i))); }); return o; } });
+  const ENUM = [['A Aua comprou', ['manga', 'caju', 'banana']], ['No rio há', ['peixes', 'patos', 'sapos']], ['Na mochila levo', ['o livro', 'o caderno', 'o lápis']], ['O Malam tem', ['uma cabra', 'um porco', 'duas galinhas']], ['Na horta há', ['tomate', 'cebola', 'mandioca']]];
+  ex2({ id: 'l2_virgula', disc: 'lp', u: 11, nome: 'A vírgula', instr: () => 'Escreve as vírgulas que faltam nos quadrados.',
+    gen(r) { return { l: take(r, ENUM, 3) }; }, alt: () => 180,
+    draw(p, B, sol) { let o = ''; p.l.forEach(([ini, its], i) => { const y = B.y + 40 + i * 50; let x = B.x + 24; const txt = (s2) => { o += tL(x, y, s2, 22, { w: 700 }); x += wA(s2, 22); };
+      txt(`${ini} ${its[0]}`); x += 6; o += qd(x, y - 22, 26) + (sol ? t(x + 13, y - 2, ',', 22, { w: 800, fill: '#555' }) : ''); x += 36; txt(its[1]); txt(' e ' + its[2] + '.'); }); return o; },
+    resumo: () => 'uma vírgula em cada frase' });
+  reg2('l1_pontuacao', { id: 'l2_pontuacao', u: 11, nome: 'O sinal certo no fim da frase' });
+  ex2({ id: 'l2_cursiva', disc: 'lp', u: 12, nome: 'Letra ligada (cursiva)', instr: () => 'Traça e copia em letra ligada.',
+    gen(r) { const ps = take(r, PAL.filter((q) => q.w.length <= 8 && !/\s/.test(q.w)), 2).map((q) => q.w); const fr = pick(r, ['A Aua lava as mãos.', 'O gato dorme.', 'Eu gosto de manga.', 'O sol brilha.', 'A canoa está no rio.']); return { l: ps.concat([fr]) }; }, alt: () => 300,
+    draw(p, B) { let o = ''; p.l.forEach((w, i) => { const base = B.y + 78 + i * 96; const fs = w.length > 9 ? 32 : 44; o += pautaM(B.x + 20, B.x + B.w - 20, base, fs * 0.39) + M(B.x + 30, base, w, fs, '#111'); o += M(B.x + B.w / 2, base, w, fs, '#c4c4c4'); }); return o; },
+    troca: (p) => p.l.map((w, i) => ({ rot: i < 2 ? `Palavra ${i + 1}` : 'Frase', v: w, edit: true, set: (v) => { p.l[i] = v; } })) });
+  ex2({ id: 'l2_ditado', disc: 'lp', u: 13, nome: 'O ditado', instr: () => 'Ditado: escreve o que a professora diz.', manual: true, cot: 2,
+    gen(r, c) { const un = unid(c.ano, 'lp', 13); let ws = []; (un ? (un.exercito || []).concat(un.avalio || []) : []).forEach((e) => { const m = /:\s*([^.:]+)\.?$/.exec(e.texto || ''); if (e.tipo === 'completa' && m) ws = ws.concat(m[1].split(/,\s*/).map((x) => x.trim()).filter((x) => x && x.length < 14)); });
+      const extra = take(r, DIG.map(([f]) => nome(f)).concat(ENC2.map(([f]) => nome(f))), 6); const fr = textoDe(unid(c.ano, 'lp', 5)).split(/(?<=\.)\s+/)[0] || 'A Quinta acorda cedo.'; return { w: [...new Set(ws.concat(extra))].slice(0, 6), fr }; }, alt: () => 330,
+    draw(p, B, sol) { let o = ''; for (let i = 0; i < 6; i++) { const col = i % 2, row = Math.floor(i / 2), x = B.x + 24 + col * 350, y = B.y + 50 + row * 62; o += t(x, y, `${i + 1}.`, 18, { w: 800, a: 'start' }) + ln(x + 30, x + 320, y + 4) + (sol ? t(x + 40, y - 2, p.w[i] || '', 18, { w: 800, fill: '#555', a: 'start' }) : ''); }
+      const y = B.y + 250; o += t(B.x + 24, y, '7.', 18, { w: 800, a: 'start' }) + ln(B.x + 54, B.x + B.w - 24, y + 4) + ln(B.x + 54, B.x + B.w - 24, y + 50) + (sol ? t(B.x + 64, y - 2, p.fr, 17, { w: 800, fill: '#555', a: 'start' }) : ''); return o; },
+    resumo: (p) => p.w.join(', ') + ' · ' + p.fr, troca: (p) => p.w.map((w, i) => ({ rot: `Palavra ${i + 1}`, v: w, edit: true, set: (v) => { p.w[i] = v; } })).concat([{ rot: 'Frase', v: p.fr, edit: true, set: (v) => { p.fr = v; } }]) });
+  const CENAS = [['tabanca', 'galinha', 'arvore'], ['canoa', 'rio', 'peixe'], ['escola', 'menino', 'menina'], ['mesa', 'arroz', 'familia']];
+  ex2({ id: 'l2_escreve', disc: 'lp', u: 14, nome: 'Escrevo pequenos textos', instr: () => 'Olha para o desenho e escreve duas ou três frases.', livre: true, orient: 'Resposta livre: frases com maiúscula, ponto final e ligadas ao desenho.',
+    gen(r) { return { c: pick(r, [['tabanca', 'galinha', 'arvore'], ['canoa', 'rio', 'peixe'], ['quadro', 'menino', 'menina'], ['mesa', 'arroz', 'mama']]) }; }, alt: () => 330,
+    draw(p, B, sol, cx) { let o = ''; p.c.forEach((f, i) => { o += fig(f, B.x + 90 + i * 120, B.y + 70, 100, cx); }); for (let k = 0; k < 4; k++) o += ln(B.x + 24, B.x + B.w - 24, B.y + 160 + k * 42); return o; },
+    troca: (p) => p.c.map((f, i) => ({ rot: `Desenho ${i + 1}`, v: f, set: (v) => { p.c[i] = v; }, op: Object.keys(FICHAS_DES.D) })) });
+  ex2({ id: 'l2_proverbios', disc: 'lp', u: 16, nome: 'Provérbios da Guiné-Bissau', ic: 'ligar', instr: () => 'Liga cada provérbio ao que nos ensina.', manual: true,
+    gen(r, c) { const un = unid(c.ano, 'lp', 16); let pr = []; (un ? (un.exercito || []).concat(un.avalio || []) : []).forEach((e) => { if (e.tipo === 'liga' && Array.isArray(e.pares)) pr = pr.concat(e.pares); }); pr = pr.filter((x, i, a) => a.findIndex((y) => y[0] === x[0]) === i).slice(0, 4).map(([a, b]) => [String(a).replace(/^\s*['"‘“]|['"’”]\s*$/g, '').replace(/^(.*)$/, '«$1»'), String(b)]); return { pr, ord: mix(r, pr.map((_, i) => i)) }; },
+    alt: (p) => 40 + Math.max(2, p.pr.length) * 60,
+    draw(p, B, sol) { if (!p.pr.length) return t(B.x + B.w / 2, B.y + 40, 'Abra os manuais no Portal para usar os provérbios do manual.', 15, { w: 400, fill: '#555' }); const yc = (i) => B.y + 40 + i * 60; let o = '';
+      p.pr.forEach(([a], i) => { o += t(B.x + 24, yc(i) + 7, a, 18, { w: 700, a: 'start' }) + ponto(B.x + 360, yc(i)); });
+      p.ord.forEach((k, j) => { o += ponto(B.x + 420, yc(j)) + t(B.x + 440, yc(j) + 7, p.pr[k][1], 17, { w: 600, a: 'start' }); });
+      if (sol) p.pr.forEach((_, i) => { o += linha(B.x + 360, yc(i), B.x + 420, yc(p.ord.indexOf(i))); }); return o; },
+    resumo: (p) => p.pr.map(([a, b]) => `${a} – ${b}`).join(' · ').slice(0, 80),
+    troca: (p) => p.pr.flatMap((par, i) => [{ rot: `Provérbio ${i + 1}`, v: par[0], edit: true, set: (v) => { par[0] = v; } }, { rot: `Significado ${i + 1}`, v: par[1], edit: true, set: (v) => { par[1] = v; } }]) });
+
   /* ============================================================ montagem das folhas (com verso quando é preciso) */
-  const disponiveis = (ano, disc, tri) => F.T.filter((q) => q.ciclo === 'EB' && q.ano.includes(ano) && q.disc === disc && q.u <= maxU(disc, tri));
+  const disponiveis = (ano, disc, tri) => F.T.filter((q) => q.ciclo === 'EB' && q.ano.includes(ano) && q.disc === disc && q.u <= maxU(disc, tri) && (!q.manual || comManual()));
   const ctx = (Fi) => ({ ano: Fi.ano, tri: Fi.tri, disc: Fi.disc, maxU: maxU(Fi.disc, Fi.tri) });
   const novo = (t, Fi, seed) => { const s = seed || Math.floor(Math.random() * 1e9); return { t, seed: s, p: F.TIPO[t].gen(rnd(s), ctx(Fi)) }; };
   // cotações: 20 valores repartidos pelo peso de cada exercício (meio valor de cada vez); as escritas pelo professor ficam
@@ -6830,7 +7106,7 @@ const FICHAS_EB = (() => {
     });
   }
   F.EB.paginas = paginas;
-  return { DISC, ANO, UNI, maxU, disponiveis, novo, cotacoes, ctx, paginas, NOMES };
+  return { DISC, ANO, UNI, maxU, disponiveis, novo, cotacoes, ctx, paginas, NOMES, setManuais };
 })();
 </script>
 <script>(() => {
@@ -8217,6 +8493,10 @@ function toolRomanos() {
 
 /* ============================================================ CÓPIAS E ATUALIZAÇÕES */
 const NOVIDADES = [
+  { v: '1.24.0', d: '19/11/2026', itens: ['«Fichas com desenhos» chega ao 2.º ano: Matemática e Língua Portuguesa, ligadas às unidades dos manuais do 2.º ano.',
+    'Matemática: dezenas e unidades, quadro dos números, comparar e ordenar até 100, contas em coluna com «vai um» e com empréstimo, problemas do mercado, multiplicação e tabuadas do 2, do 5 e do 10, divisão, sólidos, preço e troco em francos CFA, metro, quilo e litro, horas e gráficos.',
+    'Língua Portuguesa: alfabeto, encontros bl, gl, gr, pl, dígrafos nh, lh, ch, sílaba tónica, masculino e feminino, plural, adjetivo, verbo, sujeito, vírgula, letra ligada, ditado, escrita a partir de um desenho e provérbios.',
+    'Os textos, as perguntas e os provérbios vêm do manual, lidos no próprio aparelho. O professor pode mudá-los no passo 3 («Ajustar»).'] },
   { v: '1.23.0', d: '19/11/2026', itens: ['«Fichas com desenhos» chega ao 1.º ano: Matemática e Língua Portuguesa, ligadas às unidades dos manuais do CEL. Escolha o trimestre: contam como dadas as unidades previstas até lá.',
     'Ficha de trabalho ou Prova: na prova, a cotação de 20 valores reparte-se sozinha (pode mudá-la), há caixa de classificação e conceito, versões A e B e o gabarito à parte. Quando não cabe numa folha, segue no verso.',
     'Mais de 30 exercícios: contar, juntar e tirar, comparar, reta numérica, problemas com nomes da nossa terra, formas, medidas, dinheiro em francos CFA, dias e meses, gráficos; vogais, letras, sílabas, encontros, ditongos, nomes próprios, pontuação, rimas e histórias. Letra de imprensa para ler e letra manuscrita (Playwrite PT) para traçar e copiar.'] },
@@ -8806,7 +9086,7 @@ ICONS.back = '<path d="M19 12H5M11 6l-6 6 6 6"/>';
 const VIEWFN = { inicio: vInicio, biblioteca: vBiblioteca, planos: vPlanos, provas: vProvas, banco: vBanco, ferramentas: vFerramentas, calendario: vCalendario, documentos: vDocumentos, formacoes: vFormacoes, atualizacoes: vAtualizacoes,
   escrever: (arg) => ESCREVER.vista(arg, { h, put, btn, toast, offerFile, go, uid, autor: (PWA && (PWA.nome || PWA.n)) || '' }),
   abrir: (arg) => ABRIR.vista(arg, { h, btn, toast, go, uid, offerFile }),
-  fichas: (arg) => FICHAS.vista(arg, { h, btn, toast, offerFile, Store, go, icon, inViewer: IN_VIEWER }) };
+  fichas: (arg) => FICHAS.vista(arg, { h, btn, toast, offerFile, Store, go, icon, inViewer: IN_VIEWER, manuais: MANS }) };
 Store.init(); buildNav(); modeChip();
 Store.on(k => { if (k === '*') modeChip(); });
 window.addEventListener('hashchange', () => { freshNav(); render(); });
