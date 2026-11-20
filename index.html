@@ -949,7 +949,7 @@ details > summary { cursor: pointer; margin: 4px 0 }
 <div id="toast" role="status" aria-live="polite"></div>
 <div id="print-root"></div>
 <div id="barra" class="barra" hidden></div>
-<script type="application/json" id="cel-config">{"versao": "1.28.0", "ano": "2026/2027", "chaveId": "1987a8c7", "verificador": "m+HQwwNueX1G3XlMCpRsYJOV0Tkds6FCJhmeHgobCN6OFobxkzA=", "dados": "dados.26347696d7.bin", "contactos": {"whatsapp": "245955252417", "email": "cel.vf.gb@gmail.com"}, "diasSemLigacao": 30, "sb": "https://ebwjnennfmwnhwdfxbuy.supabase.co", "anon": "sb_publishable_oLn3lkMEwu4sEOUTjRCLQA_4evc_ezB"}</script>
+<script type="application/json" id="cel-config">{"versao": "1.29.0", "ano": "2026/2027", "chaveId": "1987a8c7", "verificador": "m+HQwwNueX1G3XlMCpRsYJOV0Tkds6FCJhmeHgobCN6OFobxkzA=", "dados": "dados.26347696d7.bin", "contactos": {"whatsapp": "245955252417", "email": "cel.vf.gb@gmail.com"}, "diasSemLigacao": 30, "sb": "https://ebwjnennfmwnhwdfxbuy.supabase.co", "anon": "sb_publishable_oLn3lkMEwu4sEOUTjRCLQA_4evc_ezB"}</script>
 <script>/* Gerador mínimo de .docx (Word) no navegador — sem bibliotecas externas.
    Blocos: {t:'h', text, level} · {t:'p', text|runs, align, size, before, after, keep, border}
            {t:'list', items:[text|runs], ordered} · {t:'table', rows, widths, header, borders, minH}
@@ -6520,10 +6520,10 @@ const FICHAS = (() => {
 const FICHAS_EB = (() => {
   const F = FICHAS, { fig, t, caixa, roda, marca, ponto, linha, palavra, largura, rnd, mix, pick, take, nome, esc, norm, ICON, FONT } = F.H;
   const MAN = "'CEL Manuscrita', 'Playwrite PT', cursive";
-  const DISC = { mat: 'Matemática', lp: 'Língua Portuguesa', mfs: 'Meio Físico e Social', exp: 'Expressões' };
+  const DISC = { mat: 'Matemática', lp: 'Língua Portuguesa', mfs: 'Meio Físico e Social', exp: 'Expressões', cid: 'Cidadania, Liderança e Valores' };
   const ANO = { 1: '1.º ano', 2: '2.º ano', 3: '3.º ano', 4: '4.º ano' };
   // unidades dos manuais repartidas pelos trimestres, pela ordem do manual (decisão do Coordenador)
-  const UNI = { mat: { 1: [1, 5], 2: [6, 10], 3: [11, 14] }, lp: { 1: [1, 6], 2: [7, 11], 3: [12, 16] }, mfs: { 1: [1, 4], 2: [5, 8], 3: [9, 12] }, exp: { 1: [1, 4], 2: [5, 8], 3: [9, 12] } };
+  const UNI = { mat: { 1: [1, 5], 2: [6, 10], 3: [11, 14] }, lp: { 1: [1, 6], 2: [7, 11], 3: [12, 16] }, mfs: { 1: [1, 4], 2: [5, 8], 3: [9, 12] }, exp: { 1: [1, 4], 2: [5, 8], 3: [9, 12] }, cid: { 1: [1, 2], 2: [3, 5], 3: [6, 7] } };
   const maxU = (d, tri) => UNI[d][tri][1];
   // nomes comuns na Guiné-Bissau, sempre de pessoas inventadas
   const NOMES = ['Aua', 'Braima', 'Djenabu', 'Malam', 'Fatumata', 'Iaia', 'Mamadu', 'Sadjo', 'Binta', 'Lassana', 'Adama', 'Cadi', 'Umaro', 'Mariama', 'Nhima', 'Quintino', 'Domingas', 'Seco'];
@@ -6825,6 +6825,7 @@ const FICHAS_EB = (() => {
   F.regista(Object.assign({}, F.TIPO.e_manual, { id: 'e_manual_lp', disc: 'lp' }));
   F.regista(Object.assign({}, F.TIPO.e_manual, { id: 'e_manual_mfs', disc: 'mfs' }));
   F.regista(Object.assign({}, F.TIPO.e_manual, { id: 'e_manual_exp', disc: 'exp' }));
+  F.regista(Object.assign({}, F.TIPO.e_manual, { id: 'e_manual_cid', disc: 'cid' }));
 
   /* ===== Matemática, 2.º ano ===== */
   const ex2 = (o) => ex(Object.assign({ ano: [2] }, o));
@@ -7466,7 +7467,7 @@ const FICHAS_EB = (() => {
     alt: (p) => 30 + Math.max(2, p.pr.length) * 58,
     draw(p, B, sol) { if (!p.pr.length) return t(B.x + B.w / 2, B.y + 40, 'Abra os manuais no Portal para usar as ligações do manual.', 15, { w: 400, fill: '#555' }); const yc = (i) => B.y + 36 + i * 58; let o = '';
       p.pr.forEach(([a], i) => { o += t(B.x + 24, yc(i) + 7, a, 18, { w: 700, a: 'start' }) + ponto(B.x + 300, yc(i)); });
-      p.ord.forEach((k, j) => { o += ponto(B.x + 380, yc(j)) + t(B.x + 400, yc(j) + 7, p.pr[k][1], 16, { w: 600, a: 'start' }); });
+      const fsR = Math.min(16, Math.max(11, 16 * 300 / Math.max(1, ...p.pr.map((q) => wA(q[1], 16))))); p.ord.forEach((k, j) => { o += ponto(B.x + 380, yc(j)) + t(B.x + 400, yc(j) + 6, p.pr[k][1], fsR.toFixed(1), { w: 600, a: 'start' }); });
       if (sol) p.pr.forEach((_, i) => { o += linha(B.x + 300, yc(i), B.x + 380, yc(p.ord.indexOf(i))); }); return o; },
     resumo: (p) => p.pr.map(([a, b]) => `${a} – ${b}`).join(' · ').slice(0, 90),
     troca: (p) => p.pr.flatMap((par, i) => [{ rot: `${i + 1}. Palavra`, v: par[0], edit: true, set: (v) => { par[0] = v; } }, { rot: `${i + 1}. Liga a`, v: par[1], edit: true, set: (v) => { par[1] = v; } }]) });
@@ -7659,6 +7660,63 @@ const FICHAS_EB = (() => {
   exE({ id: 'ex_ligagerais', ano: [1, 2, 3, 4], u: 1, nome: 'Liga: cores, instrumentos, movimento e teatro', ic: 'ligar', instr: () => 'Liga cada palavra ao que lhe corresponde.',
     gen(r, c) { const temas = c.ano <= 2 ? ['cores', 'instrumentos'] : ['cores', 'instrumentos', 'movimento', 'teatro']; const tm = pick(r, temas), pr = take(r, LGE[tm], 4).map((x) => x.slice()); return { tm, pr, ord: mix(r, pr.map((_, i) => i)) }; },
     alt: (p) => 30 + p.pr.length * 58, draw: (p, B, sol) => F.TIPO.mf_liga.draw(p, B, sol), resumo: F.TIPO.mf_liga.resumo, troca: F.TIPO.mf_liga.troca });
+
+
+  /* ============================================================ Cidadania, Liderança e Valores, 1.º ao 4.º ano (1.29.0) */
+  const exC = (o) => ex(Object.assign({ disc: 'cid' }, o));
+  F.regista(Object.assign({}, F.TIPO.mf_liga, { id: 'ci_liga', disc: 'cid' }));
+  const SIT = [['Um colega caiu no recreio e magoou-se.', ['Rio-me dele.', 'Ajudo-o a levantar e chamo a professora.', 'Continuo a brincar.'], 1], ['Alguém tirou o meu lápis sem pedir.', ['Bato-lhe.', 'Tiro-lhe outra coisa.', 'Peço-lhe com calma que mo devolva.'], 2],
+    ['Há um colega novo sozinho no recreio.', ['Convido-o para brincar connosco.', 'Não ligo.', 'Digo aos outros para não brincarem com ele.'], 0], ['Encontrei dinheiro no chão da sala.', ['Guardo-o para mim.', 'Entrego-o à professora.', 'Gasto-o na cantina.'], 1],
+    ['Dois amigos estão a discutir por causa da bola.', ['Grito com os dois.', 'Ajudo-os a combinar a vez de cada um.', 'Levo a bola para casa.'], 1], ['Fiquei muito zangado com um colega.', ['Respiro fundo e conto até dez antes de falar.', 'Insulto-o.', 'Parto as coisas dele.'], 0],
+    ['Um colega não percebeu a lição.', ['Digo que ele é burro.', 'Explico-lhe o que eu percebi.', 'Faço de conta que não vi.'], 1], ['Vejo lixo no chão da escola.', ['Deixo ficar.', 'Atiro mais lixo.', 'Apanho-o e ponho-o no cesto.'], 2]];
+  exC({ id: 'ci_situacao', ano: [1, 2, 3, 4], u: 1, nome: 'O que fazer? (situações do dia a dia)', ic: 'rodear', instr: () => 'Lê cada situação e rodeia a melhor resposta.',
+    gen(r) { return { l: take(r, SIT, 3).map((q) => [q[0], q[1].slice(), q[2]]) }; }, alt: () => 330,
+    draw(p, B, sol) { let o = ''; p.l.forEach(([sit, ops, k], i) => { const y = B.y + 30 + i * 104; o += t(B.x + 20, y, `${i + 1}) ${sit}`, 17, { w: 800, a: 'start' });
+      ops.forEach((op, j) => { const yy = y + 26 + j * 24; o += t(B.x + 50, yy, `${'abc'[j]}) ${op}`, 15, { w: 600, a: 'start' }); if (sol && j === k) o += `<rect x="${B.x + 42}" y="${yy - 17}" width="${wA(`${'abc'[j]}) ${op}`, 15) + 16}" height="23" rx="11" fill="none" stroke="#111" stroke-width="2.5"/>`; }); }); return o; },
+    resumo: (p) => p.l.map((q) => 'abc'[q[2]]).join(' · '),
+    troca: (p) => p.l.flatMap((q, i) => [{ rot: `${i + 1}. Situação`, v: q[0], edit: true, set: (v) => { q[0] = v; } }].concat(q[1].map((op, j) => ({ rot: `${i + 1}. Resposta ${'abc'[j]}${j === q[2] ? ' (certa)' : ''}`, v: op, edit: true, set: (v) => { q[1][j] = v; } })))) });
+  const DIR = [['Ir à escola e aprender.', 0], ['Brincar e descansar.', 0], ['Ter um nome e uma nacionalidade.', 0], ['Ser cuidado quando estou doente.', 0], ['Ter uma família que me proteja.', 0], ['Respeitar os colegas e os professores.', 1], ['Estudar e fazer os trabalhos.', 1], ['Ajudar nas tarefas de casa.', 1], ['Cuidar dos livros e do material.', 1], ['Chegar a horas às aulas.', 1]];
+  exC({ id: 'ci_direitos', ano: [1, 2, 3, 4], u: 1, nome: 'Direito ou dever?', ic: 'rodear', instr: () => 'Rodeia D (direito) ou Dv (dever).',
+    gen(r) { return { l: mix(r, take(r, DIR.filter((q) => !q[1]), 3).concat(take(r, DIR.filter((q) => q[1]), 3))) }; }, alt: () => 270,
+    draw(p, B, sol) { let o = ''; p.l.forEach(([fr, k], i) => { const y = B.y + 34 + i * 40; o += t(B.x + 24, y, `${i + 1}) ${fr}`, 17, { w: 600, a: 'start' }); ['D', 'Dv'].forEach((c, j) => { const xx = B.x + 580 + j * 64; o += t(xx, y, c, 18, { w: 800 }); if (sol && j === k) o += `<circle cx="${xx}" cy="${y - 7}" r="17" fill="none" stroke="#111" stroke-width="2.5"/>`; }); }); return o; },
+    resumo: (p) => p.l.map(([, k]) => (k ? 'Dv' : 'D')).join(' '), troca: editaL([[0, 'frase'], [1, '0 = direito, 1 = dever']]) });
+  const VAL = { 1: [['honestidade', 'devolver o que não é meu'], ['responsabilidade', 'fazer os trabalhos sem me mandarem'], ['coragem', 'falar a verdade mesmo sentindo receio'], ['amizade', 'ajudar um colega triste']],
+    2: [['justiça', 'dividir em partes iguais'], ['generosidade', 'partilhar o lanche com quem não tem'], ['perseverança', 'tentar outra vez sem desistir'], ['respeito', 'ouvir quem está a falar']],
+    3: [['empatia', 'imaginar como o outro se sente'], ['gratidão', 'agradecer a quem me ajudou'], ['trabalho em equipa', 'cada um faz a sua parte'], ['respeito', 'cumprimentar os mais velhos']],
+    4: [['iniciativa', 'dar uma ideia antes de alguém pedir'], ['resiliência', 'levantar-me depois de uma derrota'], ['integridade', 'fazer o certo mesmo quando ninguém vê'], ['liderança', 'dar o exemplo à turma']] };
+  exC({ id: 'ci_valores', ano: [1, 2, 3, 4], u: 3, nome: 'Os valores do líder virtuoso', ic: 'ligar', instr: () => 'Liga cada valor a um exemplo.',
+    gen(r, c) { const pr = mix(r, (VAL[c.ano] || VAL[1]).map((x) => x.slice())); return { pr, ord: mix(r, pr.map((_, i) => i)) }; }, alt: () => 270,
+    draw: (p, B, sol) => F.TIPO.mf_liga.draw(p, B, sol), resumo: F.TIPO.mf_liga.resumo, troca: F.TIPO.mf_liga.troca });
+  const CERTO_C = { 1: [['Partilhar os brinquedos.', 0], ['Gozar com um colega.', 1], ['Pedir desculpa quando erro.', 0], ['Empurrar na fila.', 1], ['Dizer «por favor» e «obrigado».', 0], ['Deixar um colega de fora do jogo.', 1], ['Cumprimentar os mais velhos.', 0], ['Rasgar o livro da escola.', 1]],
+    2: [['Ouvir a opinião de todos na turma.', 0], ['Rir de quem fala outra língua.', 1], ['Desligar a torneira depois de lavar as mãos.', 0], ['Queimar o lixo perto da escola.', 1], ['Respeitar a vez de cada um.', 0], ['Escolher só os amigos para delegado sem votar.', 1], ['Plantar uma árvore no recreio.', 0], ['Gastar água à toa.', 1]],
+    3: [['Defender um colega que está a ser gozado.', 0], ['Excluir quem tem uma deficiência.', 1], ['Ouvir os conselhos dos avós.', 0], ['Interromper os mais velhos.', 1], ['Ajudar a limpar o bairro.', 0], ['Deitar plástico no rio.', 1], ['Cumprir a minha tarefa na turma.', 0], ['Deixar o trabalho de grupo só para os outros.', 1]],
+    4: [['Confirmar uma notícia antes de a partilhar.', 0], ['Espalhar um boato sobre um colega.', 1], ['Guardar uma parte do dinheiro para poupar.', 0], ['Gastar tudo no primeiro dia.', 1], ['Votar no candidato com as melhores ideias.', 0], ['Vender o voto por um rebuçado.', 1], ['Respeitar todas as etnias e línguas.', 0], ['Fazer troça da língua de um colega.', 1]] };
+  exC({ id: 'ci_certo', ano: [1, 2, 3, 4], u: 3, nome: 'Certo ou errado?', ic: 'rodear', instr: () => 'Rodeia C (certo) ou E (errado).',
+    gen(r, c) { return { l: take(r, CERTO_C[c.ano] || CERTO_C[1], 6).map((q) => q.slice()) }; }, alt: () => 270,
+    draw(p, B, sol) { let o = ''; p.l.forEach(([fr, k], i) => { const y = B.y + 34 + i * 40; o += t(B.x + 24, y, `${i + 1}) ${fr}`, 17, { w: 600, a: 'start' }); ['C', 'E'].forEach((c2, j) => { const xx = B.x + 600 + j * 56; o += t(xx, y, c2, 19, { w: 800 }); if (sol && j === k) o += `<circle cx="${xx}" cy="${y - 7}" r="15" fill="none" stroke="#111" stroke-width="2.5"/>`; }); }); return o; },
+    resumo: (p) => p.l.map(([, k]) => 'CE'[k]).join(' '), troca: editaL([[0, 'frase'], [1, '0 = certo, 1 = errado']]) });
+  const risquinhos = (n, x, y) => { let o = ''; for (let g = 0; g < Math.ceil(n / 5); g++) { const m = Math.min(5, n - g * 5), gx = x + g * 50; for (let k = 0; k < Math.min(4, m); k++) o += `<line x1="${gx + k * 9}" x2="${gx + k * 9}" y1="${y - 12}" y2="${y + 12}" stroke="#111" stroke-width="2.5"/>`; if (m === 5) o += `<line x1="${gx - 5}" x2="${gx + 32}" y1="${y + 8}" y2="${y - 8}" stroke="#111" stroke-width="2.5"/>`; } return o; };
+  exC({ id: 'ci_eleicao', ano: [2, 4], u: 2, nome: 'Eleição do delegado de turma', instr: () => 'Conta os votos de cada candidato e escreve o número. Quem foi eleito?',
+    gen(r) { const ns = take(r, NOMES, 3), v = dist(r, 3, 3, 14); return { l: ns.map((n, i) => [n, v[i]]) }; }, alt: () => 230,
+    draw(p, B, sol) { let o = ''; p.l.forEach(([n, v], i) => { const y = B.y + 40 + i * 48; o += t(B.x + 30, y + 6, n, 19, { w: 700, a: 'start' }) + risquinhos(v, B.x + 180, y) + t(B.x + 520, y + 6, 'votos:', 15, { w: 700, a: 'start' }) + qd(B.x + 580, y - 16, 36) + (sol ? rs(B.x + 580, y - 16, v, 36) : ''); });
+      const w0 = p.l.slice().sort((a, b) => b[1] - a[1])[0][0]; o += t(B.x + 30, B.y + 200, 'Foi eleito(a):', 16, { w: 700, a: 'start' }) + ln(B.x + 150, B.x + 420, B.y + 204) + (sol ? t(B.x + 160, B.y + 198, w0, 17, { w: 800, fill: '#555', a: 'start' }) : ''); return o; },
+    resumo: (p) => p.l.map(([n, v]) => `${n} ${v}`).join(', ') });
+  const BOATO = [['Antes de partilhar uma notícia, pergunto: quem disse?', 0], ['Partilho logo, sem ler até ao fim.', 1], ['Procuro confirmar com um adulto de confiança.', 0], ['Acredito em tudo o que ouço no mercado.', 1], ['Se a notícia magoa alguém, não a espalho.', 0], ['Acrescento coisas para ficar mais interessante.', 1], ['Vejo se outras fontes dizem o mesmo.', 0], ['Espalho porque toda a gente está a falar nisso.', 1]];
+  exC({ id: 'ci_boato', ano: [4], u: 3, nome: 'Pensar antes de espalhar', ic: 'rodear', instr: () => 'Rodeia C (atitude certa) ou E (errada) perante uma notícia.',
+    gen(r) { return { l: take(r, BOATO, 6).map((q) => q.slice()) }; }, alt: () => 270, draw: (p, B, sol) => F.TIPO.ci_certo.draw(p, B, sol), resumo: F.TIPO.ci_certo.resumo, troca: F.TIPO.ci_certo.troca });
+  const NEC = [['arroz para o jantar', 0], ['cadernos para a escola', 0], ['remédio quando estou doente', 0], ['sabão para lavar as mãos', 0], ['rebuçados', 1], ['um segundo par de ténis novos', 1], ['um brinquedo da moda', 1], ['refrigerante todos os dias', 1]];
+  exC({ id: 'ci_poupar', ano: [4], u: 5, nome: 'Poupar: necessidade ou desejo', instr: (p) => `Rodeia N (necessidade) ou D (desejo). Depois faz as contas da poupança.`,
+    gen(r) { return { l: mix(r, take(r, NEC.filter((q) => !q[1]), 2).concat(take(r, NEC.filter((q) => q[1]), 2))), sem: pick(r, [25, 50, 100]), n: pick(r, [4, 6, 8, 10]), nm: pick(r, NOMES) }; }, alt: () => 300,
+    draw(p, B, sol) { let o = ''; p.l.forEach(([fr, k], i) => { const col = i % 2, row = Math.floor(i / 2), x = B.x + 24 + col * 346, y = B.y + 34 + row * 44; o += t(x, y, fr, 16, { w: 700, a: 'start' }); ['N', 'D'].forEach((c2, j) => { const xx = x + 270 + j * 40; o += t(xx, y, c2, 18, { w: 800 }); if (sol && j === k) o += `<circle cx="${xx}" cy="${y - 6}" r="14" fill="none" stroke="#111" stroke-width="2.5"/>`; }); });
+      const y = B.y + 150, A = FEMN.has(p.nm) ? 'A' : 'O'; o += t(B.x + 24, y, `${A} ${p.nm} poupa ${p.sem} francos por semana. Quanto tem ao fim de ${p.n} semanas?`, 16, { w: 600, a: 'start' }) + qd(B.x + 24, y + 14, 36).replace('width="36"', 'width="100"') + t(B.x + 134, y + 40, 'francos', 15, { w: 700, a: 'start' }) + (sol ? t(B.x + 74, y + 39, fmtN(p.sem * p.n), 17, { w: 800, fill: '#555' }) : '');
+      o += t(B.x + 24, y + 84, `Se quiser juntar ${fmtN(p.sem * p.n * 2)} francos, quantas semanas precisa?`, 16, { w: 600, a: 'start' }) + qd(B.x + 24, y + 96, 36).replace('width="36"', 'width="70"') + t(B.x + 104, y + 122, 'semanas', 15, { w: 700, a: 'start' }) + (sol ? t(B.x + 59, y + 121, String(p.n * 2), 17, { w: 800, fill: '#555' }) : ''); return o; },
+    resumo: (p) => `${p.l.map(([, k]) => 'ND'[k]).join(' ')} · ${p.sem * p.n} F · ${p.n * 2} semanas` });
+  exC({ id: 'ci_quemsou', ano: [1], u: 1, nome: 'Quem sou eu', instr: () => 'Completa sobre ti e faz o teu desenho.', livre: true, orient: 'Resposta livre e pessoal. Valorizar a escrita do nome e a apresentação de si mesmo.',
+    gen: () => ({}), alt: () => 360,
+    draw(p, B) { let o = `<rect x="${B.x + 470}" y="${B.y + 20}" width="220" height="290" rx="14" fill="none" stroke="#111" stroke-width="2" stroke-dasharray="8 6"/>` + t(B.x + 580, B.y + 300, 'Eu', 14, { w: 700, fill: '#555' });
+      ['O meu nome é', 'Gosto de', 'Sei fazer bem', 'Quero aprender', 'A minha cor preferida é'].forEach((l, i) => { const y = B.y + 50 + i * 58; o += t(B.x + 24, y, l, 16, { w: 700, a: 'start' }) + ln(B.x + 24, B.x + 440, y + 30); }); return o; } });
+  guiado('ci_compromisso', 5, 'O meu compromisso de líder', (tm) => `Escreve o teu compromisso: ${tm}`, [['O problema que vejo', 2], ['O que vou fazer', 2], ['Quem me pode ajudar', 1], ['Quando começo', 1]], 'Resposta livre: um problema real, uma ação concreta e possível, pessoas que ajudam e um prazo.', ['uma ação para a nossa turma', 'uma ação para a nossa tabanca ou bairro', 'uma ação para cuidar do ambiente', 'uma ação para ajudar quem precisa']);
+  F.TIPO.ci_compromisso.disc = 'cid'; F.TIPO.ci_compromisso.ano = [3, 4];
 
   /* ============================================================ montagem das folhas (com verso quando é preciso) */
   const disponiveis = (ano, disc, tri) => F.T.filter((q) => q.ciclo === 'EB' && q.ano.includes(ano) && q.disc === disc && q.u <= maxU(disc, tri) && (!q.manual || comManual()) && (!q.tem || q.tem(ano, disc, tri)));
@@ -9102,6 +9160,8 @@ function toolRomanos() {
 
 /* ============================================================ CÓPIAS E ATUALIZAÇÕES */
 const NOVIDADES = [
+  { v: '1.29.0', d: '20/11/2026', itens: ['«Fichas com desenhos» ganha Cidadania, Liderança e Valores, do 1.º ao 4.º ano (unidades 1 a 2, 3 a 5 e 6 a 7 por trimestre), com ficha e prova. Ficam completas as cinco disciplinas do Ensino Básico.',
+    'Do manual: ligações e perguntas. Gerais e editáveis: o que fazer em situações do dia a dia, direito ou dever, valores do líder virtuoso, certo ou errado, eleição do delegado de turma, pensar antes de espalhar, poupar, quem sou eu e o meu compromisso de líder.'] },
   { v: '1.28.0', d: '20/11/2026', itens: ['«Fichas com desenhos» ganha Expressões, do 1.º ao 4.º ano (unidades 1 a 4, 5 a 8 e 9 a 12 por trimestre), com ficha e prova.',
     'Artes: continuar padrões e frisos, simetria em quadrícula, pintar seguindo a legenda e desenho com tema. Música: ler ritmos (tá, ti-ti, tá-a e pausa), compassos de 4 tempos e, no 4.º ano, escrever o próprio ritmo.',
     'Movimento: ordem de chegada de uma corrida e tabela de resultados de um torneio. Teatro: emoções em cena e guião guiado. Ligações do manual (1.º ano) e ligações gerais sobre cores, instrumentos, movimento e teatro, editáveis.'] },
