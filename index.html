@@ -504,6 +504,15 @@ body:not(.ready) > .top, body:not(.ready) > .layout { display: none }
 @font-face{font-family:"CEL Doc Sans C";font-style:normal;font-weight:700;font-display:swap;src:local("Calibri Bold"),local("Calibri-Bold"),url(fonts/cel-letra-calibri-700.woff) format("woff")}
 @font-face{font-family:"CEL Doc Sans C";font-style:italic;font-weight:400;font-display:swap;src:local("Calibri Italic"),local("Calibri-Italic"),url(fonts/cel-letra-calibri-400i.woff) format("woff")}
 @font-face{font-family:"CEL Doc Sans C";font-style:italic;font-weight:700;font-display:swap;src:local("Calibri Bold Italic"),local("Calibri-BoldItalic"),url(fonts/cel-letra-calibri-700i.woff) format("woff")}
+/* 1.30.0: Cambria (Caladea) e Courier New (Liberation Mono), para a lista «Letra»; a manuscrita escolar (Playwrite PT) vem de fichas.css */
+@font-face{font-family:"CEL Doc Serif C";font-style:normal;font-weight:400;font-display:swap;src:local("Cambria"),url(fonts/cel-letra-cambria-400.woff) format("woff")}
+@font-face{font-family:"CEL Doc Serif C";font-style:normal;font-weight:700;font-display:swap;src:local("Cambria Bold"),local("Cambria-Bold"),url(fonts/cel-letra-cambria-700.woff) format("woff")}
+@font-face{font-family:"CEL Doc Serif C";font-style:italic;font-weight:400;font-display:swap;src:local("Cambria Italic"),local("Cambria-Italic"),url(fonts/cel-letra-cambria-400i.woff) format("woff")}
+@font-face{font-family:"CEL Doc Serif C";font-style:italic;font-weight:700;font-display:swap;src:local("Cambria Bold Italic"),local("Cambria-BoldItalic"),url(fonts/cel-letra-cambria-700i.woff) format("woff")}
+@font-face{font-family:"CEL Doc Mono";font-style:normal;font-weight:400;font-display:swap;src:local("Courier New"),local("CourierNewPSMT"),url(fonts/cel-letra-mono-400.woff) format("woff")}
+@font-face{font-family:"CEL Doc Mono";font-style:normal;font-weight:700;font-display:swap;src:local("Courier New Bold"),local("CourierNewPS-BoldMT"),url(fonts/cel-letra-mono-700.woff) format("woff")}
+@font-face{font-family:"CEL Doc Mono";font-style:italic;font-weight:400;font-display:swap;src:local("Courier New Italic"),local("CourierNewPS-ItalicMT"),url(fonts/cel-letra-mono-400i.woff) format("woff")}
+@font-face{font-family:"CEL Doc Mono";font-style:italic;font-weight:700;font-display:swap;src:local("Courier New Bold Italic"),local("CourierNewPS-BoldItalicMT"),url(fonts/cel-letra-mono-700i.woff) format("woff")}
 
 .esc-modelos { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px }
 .esc-modelo { text-align: left; display: flex; flex-direction: column; gap: 4px; padding: 14px; border: 1px solid var(--line); border-radius: var(--r); background: var(--surface); color: var(--ink); cursor: pointer; font: inherit }
@@ -555,6 +564,20 @@ body:not(.ready) > .top, body:not(.ready) > .layout { display: none }
 :is(.esc-folha, .esc-pg, .esc-medir)[data-letra="serif"] { font-family: "CEL Doc Serif", "Times New Roman", "Liberation Serif", Tinos, serif }
 :is(.esc-folha, .esc-pg, .esc-medir)[data-letra="sans"] { font-family: "CEL Doc Sans", Arial, "Liberation Sans", Arimo, sans-serif }
 :is(.esc-folha, .esc-pg, .esc-medir)[data-letra="calibri"] { font-family: "CEL Doc Sans C", Calibri, Carlito, sans-serif }
+:is(.esc-folha, .esc-pg, .esc-medir)[data-letra="cambria"] { font-family: "CEL Doc Serif C", Cambria, Caladea, serif }
+:is(.esc-folha, .esc-pg, .esc-medir)[data-letra="mono"] { font-family: "CEL Doc Mono", "Courier New", "Liberation Mono", monospace }
+:is(.esc-folha, .esc-pg, .esc-medir)[data-letra="manuscrita"] { font-family: "CEL Manuscrita", "Playwrite PT", cursive }
+/* 1.30.0: letra e tamanho só num bocado de texto. Como no Word, a linha cresce com a letra maior que tiver */
+:is(.esc-texto, .esc-pag, .esc-medir) span:is([style*="font-size"], [style*="font-family"]) { --esc-lf: var(--esc-simples, 1.15); line-height: calc(var(--esc-mult, 1) * var(--esc-lf) * 1em) }
+:is(.esc-texto, .esc-pag, .esc-medir) span[style*='"CEL Doc Serif"'] { --esc-lf: 1.15 }
+:is(.esc-texto, .esc-pag, .esc-medir) span[style*='"CEL Doc Sans"'] { --esc-lf: 1.15 }
+:is(.esc-texto, .esc-pag, .esc-medir) span[style*='"CEL Doc Sans C"'] { --esc-lf: 1.2207 }
+:is(.esc-texto, .esc-pag, .esc-medir) span[style*='"CEL Doc Serif C"'] { --esc-lf: 1.1724 }
+:is(.esc-texto, .esc-pag, .esc-medir) span[style*='"CEL Doc Mono"'] { --esc-lf: 1.1328 }
+:is(.esc-texto, .esc-pag, .esc-medir) span[style*='"CEL Manuscrita"'] { --esc-lf: 2.18 }
+.esc-sel { height: 34px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); color: var(--ink); font-family: inherit; font-size: 13.5px; font-weight: 600; padding: 0 6px; cursor: pointer; max-width: 100% }
+.esc-sel:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px }
+.esc-sel-letra { width: 156px } .esc-sel-tam { width: 64px; text-align: center }
 
 /* tipografia igual à dos estilos do ficheiro Word (Normal, Título 1-3, Citação, Parágrafo de Lista, Índice, Texto de Nota de Rodapé):
    - entrelinha = espaçamento escolhido × «simples» do tipo de letra; espaço depois dos parágrafos 6 pt;
@@ -949,7 +972,7 @@ details > summary { cursor: pointer; margin: 4px 0 }
 <div id="toast" role="status" aria-live="polite"></div>
 <div id="print-root"></div>
 <div id="barra" class="barra" hidden></div>
-<script type="application/json" id="cel-config">{"versao": "1.29.0", "ano": "2026/2027", "chaveId": "1987a8c7", "verificador": "m+HQwwNueX1G3XlMCpRsYJOV0Tkds6FCJhmeHgobCN6OFobxkzA=", "dados": "dados.26347696d7.bin", "contactos": {"whatsapp": "245955252417", "email": "cel.vf.gb@gmail.com"}, "diasSemLigacao": 30, "sb": "https://ebwjnennfmwnhwdfxbuy.supabase.co", "anon": "sb_publishable_oLn3lkMEwu4sEOUTjRCLQA_4evc_ezB"}</script>
+<script type="application/json" id="cel-config">{"versao": "1.30.0", "ano": "2026/2027", "chaveId": "1987a8c7", "verificador": "m+HQwwNueX1G3XlMCpRsYJOV0Tkds6FCJhmeHgobCN6OFobxkzA=", "dados": "dados.26347696d7.bin", "contactos": {"whatsapp": "245955252417", "email": "cel.vf.gb@gmail.com"}, "diasSemLigacao": 30, "sb": "https://ebwjnennfmwnhwdfxbuy.supabase.co", "anon": "sb_publishable_oLn3lkMEwu4sEOUTjRCLQA_4evc_ezB"}</script>
 <script>/* Gerador mínimo de .docx (Word) no navegador — sem bibliotecas externas.
    Blocos: {t:'h', text, level} · {t:'p', text|runs, align, size, before, after, keep, border}
            {t:'list', items:[text|runs], ordered} · {t:'table', rows, widths, header, borders, minH}
@@ -1088,8 +1111,8 @@ if (typeof module !== 'undefined') module.exports = DOCX;
 const PAGINAS = (() => {
   'use strict';
   const CM = 96 / 2.54, PT = 96 / 72;
-  const SIMPLES = { serif: 1.15, sans: 1.15, calibri: 1.2207 };            // «espaçamento simples» do Word, para cada tipo de letra
-  const FAMILIA = { serif: 'CEL Doc Serif', sans: 'CEL Doc Sans', calibri: 'CEL Doc Sans C' };
+  const SIMPLES = { serif: 1.15, sans: 1.15, calibri: 1.2207, cambria: 1.1724, mono: 1.1328, manuscrita: 2.18 };            // «espaçamento simples» do Word, para cada tipo de letra
+  const FAMILIA = { serif: 'CEL Doc Serif', sans: 'CEL Doc Sans', calibri: 'CEL Doc Sans C', cambria: 'CEL Doc Serif C', mono: 'CEL Doc Mono', manuscrita: 'CEL Manuscrita' };
   const BLOCO = /^(P|H1|H2|H3|H4|H5|H6|BLOCKQUOTE|UL|OL|LI|TABLE|HR|DIV|PRE|FIGURE|FIGCAPTION)$/;
   const eBloco = (n) => n && n.nodeType === 1 && BLOCO.test(n.tagName);
 
@@ -1132,7 +1155,7 @@ const PAGINAS = (() => {
   // Altura de cada linha, feita como no Word (e no LibreOffice quando abre um .docx): a linha «simples» do tipo de letra
   // (subida + descida + entrelinha da fonte) em vigésimos de ponto, arredondada; depois × espaçamento, sem as casas a mais.
   // Em píxeis, já com o acerto do Chrome, que guarda as alturas em 1/64 de píxel (e cortava 0,01 px por linha).
-  const METRICA = { serif: (1825 + 443 + 87) / 2048, sans: (1854 + 434 + 67) / 2048, calibri: (1950 + 550) / 2048 };
+  const METRICA = { serif: (1825 + 443 + 87) / 2048, sans: (1854 + 434 + 67) / 2048, calibri: (1950 + 550) / 2048, cambria: (1946 + 455) / 2048, mono: (1705 + 615) / 2048, manuscrita: (1576 + 604) / 1000 };
   function linhaPx(tam, esp, letra) {
     const simples = Math.round(tam * (METRICA[letra] || METRICA.serif) * 20);
     const px = Math.floor(simples * esp + 1e-6) / 20 * PT;
@@ -1141,7 +1164,7 @@ const PAGINAS = (() => {
   function aplicaTipo(el, c) {
     const s = SIMPLES[c.letra] || 1.15, L = (t, e) => linhaPx(t, e, c.letra).toFixed(5) + 'px';
     el.dataset.letra = c.letra; el.classList.toggle('esc-just', !!c.just);
-    el.style.setProperty('--esc-tam', c.tam + 'pt'); el.style.setProperty('--esc-simples', String(s)); el.style.setProperty('--esc-espaco', String(+(c.espaco * s).toFixed(4)));
+    el.style.setProperty('--esc-tam', c.tam + 'pt'); el.style.setProperty('--esc-simples', String(s)); el.style.setProperty('--esc-mult', String(+c.espaco || 1)); el.style.setProperty('--esc-espaco', String(+(c.espaco * s).toFixed(4)));
     el.style.setProperty('--esc-lh', L(c.tam, c.espaco)); el.style.setProperty('--esc-lh-1', L(c.tam, 1));
     // citações longas: recuo, tamanho e espaço entre linhas da norma (por omissão 4 cm, 2 pt menos, simples)
     const ci = c.cit || { recuo: 4, tam: c.tam - 2, esp: 1 };
@@ -1580,6 +1603,22 @@ const ABRIRWORD = (() => {
   const REALCE_HEX = { yellow: 'FFFF00', green: '00FF00', cyan: '00FFFF', magenta: 'FF00FF', blue: '0000FF', red: 'FF0000', darkBlue: '000080', darkCyan: '008080', darkGreen: '008000',
     darkMagenta: '800080', darkRed: '800000', darkYellow: '808000', darkGray: '808080', lightGray: 'C0C0C0', black: '000000' };
   const falha = (m) => new Error(m);
+  // 1.30.0: tipo de letra do Word → um dos seis do Portal (exato: com as mesmas medidas)
+  const FAMILIA = { serif: 'CEL Doc Serif', sans: 'CEL Doc Sans', calibri: 'CEL Doc Sans C', cambria: 'CEL Doc Serif C', mono: 'CEL Doc Mono', manuscrita: 'CEL Manuscrita' };
+  function letraDe(nome) {
+    const f = String(nome || '').toLowerCase();
+    if (/cambria|caladea/.test(f)) return { k: 'cambria', exato: true };
+    if (/calibri|carlito/.test(f)) return { k: 'calibri', exato: true };
+    if (/courier|liberation mono|cousine/.test(f)) return { k: 'mono', exato: true };
+    if (/playwrite|cel manuscrita/.test(f)) return { k: 'manuscrita', exato: true };
+    if (/^(arial|helvetica|liberation sans|arimo)/.test(f)) return { k: 'sans', exato: true };
+    if (/times|liberation serif|tinos/.test(f)) return { k: 'serif', exato: true };
+    if (/consolas|lucida console|mono/.test(f)) return { k: 'mono', exato: false };
+    if (/aptos|candara|corbel/.test(f)) return { k: 'calibri', exato: false };
+    if (/verdana|tahoma|segoe|trebuchet|century gothic|gill sans|open sans|roboto|lato|sans/.test(f)) return { k: 'sans', exato: false };
+    if (/comic|script|hand|caveat|kalam/.test(f)) return { k: 'manuscrita', exato: false };
+    return { k: 'serif', exato: false };
+  }
 
   /* ------------------------------------------------------------ ZIP (o .docx é um ZIP) */
   const u16 = (d, o) => d[o] | (d[o + 1] << 8);
@@ -1865,6 +1904,10 @@ const ABRIRWORD = (() => {
     }
 
     const szBase = doEstilo(normalId, 'rPr', 'sz') || (defR && filho(defR, 'sz')), tamBase = szBase ? (+aw(szBase, 'val') || 20) / 2 : 10;
+    // nome do tipo de letra de um w:rFonts (também os «do tema»)
+    const nomeFonte = (rf) => { let n = rf ? (aw(rf, 'ascii') || aw(rf, 'hAnsi') || '') : ''; if (!n && rf) { const tm = aw(rf, 'asciiTheme') || aw(rf, 'hAnsiTheme') || ''; if (tm) n = /^major/.test(tm) ? fontesTema.major : fontesTema.minor; } return n; };
+    const fonteBase = nomeFonte(doEstilo(normalId, 'rPr', 'rFonts') || (defR && filho(defR, 'rFonts'))) || fontesTema.minor || 'Times New Roman';
+    const letraBase = letraDe(fonteBase).k;
 
     /* --- converter o corpo */
     const saida = document.createElement('div');
@@ -1929,14 +1972,21 @@ const ABRIRWORD = (() => {
         const hv = hl ? REALCE_HEX[aw(hl, 'val')] : null;
         if (hv) f.fundo = hv;
         else if (sh) { const fv = String(aw(sh, 'fill') || '').toUpperCase(); if (/^[0-9A-F]{6}$/.test(fv) && fv !== 'FFFFFF') f.fundo = fv; }
-        const z = filho(rp, 'sz'); if (z && Math.abs(+aw(z, 'val') / 2 - tamBase) > 0.6) aviso('tamanhos');
+        // 1.30.0: tamanho e tipo de letra deste bocado, quando são outros
+        const z = filho(rp, 'sz'); if (z) { const v = (+aw(z, 'val') || 0) / 2; if (v >= 6 && v <= 96 && Math.abs(v - tamBase) > 0.6) f.tam = Math.round(v * 2) / 2; }
+        const rf = filho(rp, 'rFonts'), nm = rf ? nomeFonte(rf) : '';
+        if (nm) { const L = letraDe(nm); if (L.k !== letraBase) { f.letra = L.k; if (!L.exato) aviso('letra:' + nm); } }
       }
       if (rp && filho(rp, 'caps')) f.caps = liga(filho(rp, 'caps'));
       return f;
     }
     function embrulha(no, f) {
       let n = no;
-      if (f.cor || f.fundo) { const s = document.createElement('span'); s.setAttribute('style', [f.cor ? `color: #${f.cor}` : '', f.fundo ? `background-color: #${f.fundo}` : ''].filter(Boolean).join('; ') + ';'); s.append(n); n = s; }
+      if (f.cor || f.fundo || f.letra || f.tam) {
+        const s = document.createElement('span');
+        s.setAttribute('style', [f.cor ? `color: #${f.cor}` : '', f.fundo ? `background-color: #${f.fundo}` : '', f.letra ? `font-family: "${FAMILIA[f.letra]}"` : '', f.tam ? `font-size: ${f.tam}pt` : ''].filter(Boolean).join('; ') + ';');
+        s.append(n); n = s;
+      }
       for (const [k, tag] of [['sup', 'sup'], ['sub', 'sub'], ['s', 's'], ['u', 'u'], ['i', 'i'], ['b', 'b']]) if (f[k]) { const e = document.createElement(tag); e.append(n); n = e; }
       return n;
     }
@@ -2187,10 +2237,7 @@ const ABRIRWORD = (() => {
     let fonte = rf ? (aw(rf, 'ascii') || aw(rf, 'hAnsi') || '') : '';
     if (!fonte && rf) { const tm = aw(rf, 'asciiTheme') || aw(rf, 'hAnsiTheme') || ''; fonte = /^major/.test(tm) ? fontesTema.major : fontesTema.minor; }
     if (!fonte) fonte = fontesTema.minor || 'Times New Roman';
-    const f0 = fonte.toLowerCase();
-    if (/calibri|carlito|aptos|candara|corbel/.test(f0)) { conf.letra = 'calibri'; if (!/calibri|carlito/.test(f0)) aviso('letra:' + fonte); }
-    else if (/arial|helvetica|liberation sans|arimo|verdana|tahoma|segoe|trebuchet|century gothic|gill sans|open sans|roboto|lato|noto sans/.test(f0)) { conf.letra = 'sans'; if (!/arial|helvetica|liberation sans|arimo/.test(f0)) aviso('letra:' + fonte); }
-    else { conf.letra = 'serif'; if (!/times|liberation serif|tinos/.test(f0)) aviso('letra:' + fonte); }
+    { const L = letraDe(fonte); conf.letra = L.k; if (!L.exato) aviso('letra:' + fonte); }      // 1.30.0: seis tipos de letra
     // tamanho
     const sz = normalR('sz'); conf.tam = sz ? Math.max(8, Math.min(28, (+aw(sz, 'val') || 24) / 2)) : 10;
     // espaço entre linhas e depois dos parágrafos
@@ -2553,6 +2600,23 @@ const ESCREVER = (() => {
     return NOMES_COR[s] || null;
   }
   const propEstilo = (st, nome) => { const m = new RegExp('(?:^|;)\\s*' + nome + '\\s*:\\s*([^;]+)', 'i').exec(String(st || '')); return m ? m[1].trim() : ''; };
+  // 1.30.0: tipo de letra de um bocado de texto → chave do Portal ('' se não for nenhum dos seis da lista «Letra»)
+  function chaveLetra(v) {
+    const f = String(v || '').split(',')[0].replace(/["']/g, '').trim().toLowerCase(); if (!f) return '';
+    if (/^(cel doc serif c|cambria|caladea)$/.test(f)) return 'cambria';
+    if (/^(cel doc sans c|calibri|carlito)$/.test(f)) return 'calibri';
+    if (/^(cel doc mono|courier new|courier|liberation mono|cousine|consolas|monospace)$/.test(f)) return 'mono';
+    if (/^(cel manuscrita|playwrite)/.test(f)) return 'manuscrita';
+    if (/^(cel doc sans|arial|helvetica|liberation sans|arimo)$/.test(f)) return 'sans';
+    if (/^(cel doc serif|times new roman|times|liberation serif|tinos)$/.test(f)) return 'serif';
+    return '';
+  }
+  // tamanho de letra em pontos (de 6 a 96, de meio em meio ponto); px só no que vem do próprio Portal
+  function tamPt(v, soPt) {
+    const m = /^([\d.]+)\s*(pt|px)$/i.exec(String(v || '').trim()); if (!m) return 0;
+    let n = +m[1]; if (m[2].toLowerCase() === 'px') { if (soPt) return 0; n *= 0.75; }
+    return n >= 6 && n <= 96 ? Math.round(n * 2) / 2 : 0;
+  }
   const CORES_LETRA = [['C00000', 'Vermelho escuro'], ['FF0000', 'Vermelho'], ['E36C09', 'Laranja'], ['00B050', 'Verde'], ['0070C0', 'Azul'], ['002060', 'Azul-escuro'], ['7030A0', 'Roxo'], ['7F7F7F', 'Cinzento']];
   const CORES_REALCE = [['FFFF00', 'Amarelo'], ['00FF00', 'Verde-claro'], ['00FFFF', 'Azul-claro'], ['FF00FF', 'Rosa'], ['C0C0C0', 'Cinzento']];
   const CORES_CELULA = [['E9EDF4', 'Azul-acinzentado'], ['DEEAF6', 'Azul-claro'], ['E2EFD9', 'Verde-claro'], ['FFF2CC', 'Amarelo-claro'], ['FBE4D5', 'Laranja-claro'], ['EDEDED', 'Cinzento-claro'], ['D9D9D9', 'Cinzento']];
@@ -2594,6 +2658,7 @@ const ESCREVER = (() => {
     folhas: '<rect x="3.5" y="3" width="11" height="14.5" rx="1.2"/><path d="M8.5 21h10a2 2 0 0 0 2-2V7.5"/><path d="M6.5 7.5h5M6.5 10.5h5M6.5 13.5h3"/>',
     continuo: '<path d="M5 3v18M19 3v18"/><path d="M8 6h8M8 9.5h8M8 13h5"/><path d="M5 17h14" stroke-dasharray="2 2"/>',
     word: '<path d="M6 2h9l5 5v15H6z"/><path d="M15 2v5h5"/><path d="M8.5 11.5l1.6 6 1.9-4.6 1.9 4.6 1.6-6"/>',
+    inword: '<path d="M6 2h9l5 5v15H6z"/><path d="M15 2v5h5"/><path d="M12 9.5v8M8.8 14.3l3.2 3.2 3.2-3.2"/>',
     pdf: '<path d="M6 9V3h12v6"/><rect x="3" y="9" width="18" height="8" rx="1.5"/><path d="M6 14h12v7H6z"/>',
     numera: '<path d="M6 3h9l4 4v14H6z"/><path d="M15 3v4h4"/><path d="M10.6 12.6l2-1.4V18"/>',
     nav: '<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M9 4v16"/><path d="M12.5 9h5M12.5 13h5M12.5 17h3"/>',
@@ -2613,7 +2678,7 @@ const ESCREVER = (() => {
   const CONF0 = { norma: 'livre', letra: 'serif', tam: 12, espaco: 1.5, papel: 'a4', orient: 'vertical', margens: 'normal', justificar: false, recuo: 0, depois: 6, titulos: 'normal', capNova: false,
     numeros: true, numLugar: 'fim-centro', numInicio: 1, capa: false, numModo: 'simples', numTam: 0, lingua: 'pt-PT', verificar: false,
     citRecuo: 4, citTam: -2, citEsp: 'simples', hf: {} };
-  const LETRAS = { serif: 'Times New Roman', sans: 'Arial', calibri: 'Calibri' };
+  const LETRAS = { serif: 'Times New Roman', sans: 'Arial', calibri: 'Calibri', cambria: 'Cambria', mono: 'Courier New', manuscrita: 'Playwrite PT' };
   // papel: cm na vertical (largura × altura) e as medidas do Word (twips)
   const PAPEIS = {
     a4: { nome: 'A4 (21 × 29,7 cm)', w: 21, h: 29.7, tw: [11906, 16838] },
@@ -2723,14 +2788,19 @@ const ESCREVER = (() => {
         if (['SCRIPT', 'STYLE', 'META', 'LINK', 'TITLE', 'IFRAME', 'OBJECT', 'NOSCRIPT', 'SVG', 'CANVAS', 'VIDEO', 'AUDIO'].includes(t)) { c.remove(); continue; }
         if (c.classList.contains('esc-salto')) { c.remove(); continue; }          // separador da vista de páginas
         if (t === 'H4' || t === 'H5' || t === 'H6') { const n = document.createElement('h3'); n.append(...c.childNodes); c.replaceWith(n); anda(n); limpaAttr(n); continue; }
-        if (t === 'SPAN' || t === 'FONT') {          // cor da letra e realce (o resto da formatação destes elementos sai)
+        if (t === 'SPAN' || t === 'FONT') {          // cor da letra, realce, tipo e tamanho de letra (o resto da formatação destes elementos sai)
           anda(c);
           const st = c.getAttribute('style') || '';
           const cor = normCor(t === 'FONT' ? (c.getAttribute('color') || propEstilo(st, 'color')) : propEstilo(st, 'color'));
           const fundo = normCor(propEstilo(st, 'background-color'));
           const corOk = !!cor && cor !== '000000' && (!op.colar || PALETA_L.has(cor)), fundoOk = !!fundo && fundo !== 'FFFFFF' && (!op.colar || PALETA_R.has(fundo));
-          if (!corOk && !fundoOk) { c.replaceWith(...c.childNodes); continue; }
-          const n = document.createElement('span'); n.setAttribute('style', [corOk ? `color: #${cor}` : '', fundoOk ? `background-color: #${fundo}` : ''].filter(Boolean).join('; ') + ';');
+          // letra e tamanho: ao colar de fora (páginas da internet, outros programas) saem, como as outras formatações; do próprio Portal ficam
+          const deFora = op.colar && !op.interno;
+          const lk = deFora ? '' : chaveLetra(t === 'FONT' ? (c.getAttribute('face') || propEstilo(st, 'font-family')) : propEstilo(st, 'font-family'));
+          const tm = deFora ? 0 : tamPt(propEstilo(st, 'font-size'), op.colar);
+          if (!corOk && !fundoOk && !lk && !tm) { c.replaceWith(...c.childNodes); continue; }
+          const n = document.createElement('span'); n.setAttribute('style', [corOk ? `color: #${cor}` : '', fundoOk ? `background-color: #${fundo}` : '',
+            lk ? `font-family: "${PAGINAS.FAMILIA[lk]}"` : '', tm ? `font-size: ${tm}pt` : ''].filter(Boolean).join('; ') + ';');
           n.append(...c.childNodes); c.replaceWith(n); continue;
         }
         if (!PERMITIDAS.has(t)) { anda(c); c.replaceWith(...c.childNodes); continue; }
@@ -2894,14 +2964,19 @@ const ESCREVER = (() => {
     if (t === 'SPAN' || t === 'FONT') {
       const cor = normCor(t === 'FONT' ? no.getAttribute('color') : propEstilo(st, 'color')); if (cor && cor !== '000000') g.cor = cor;
       const fu = normCor(propEstilo(st, 'background-color')); if (fu && fu !== 'FFFFFF') g.fundo = fu;
+      const lk = chaveLetra(t === 'FONT' ? no.getAttribute('face') : propEstilo(st, 'font-family')); if (lk) g.letra = lk;
+      const tm = tamPt(propEstilo(st, 'font-size'), true); if (tm) g.tam = tm;
     }
     for (const c of no.childNodes) pedacos(c, g, E, out);
     return out;
   }
   function runXml(p) {
     const f = p.f || {};
-    // pela ordem do Word: b, i, strike, color, highlight, u, shd, vertAlign
-    const pr = (f.b ? '<w:b/><w:bCs/>' : '') + (f.i ? '<w:i/><w:iCs/>' : '') + (f.s ? '<w:strike/>' : '') + (f.cor ? `<w:color w:val="${f.cor}"/>` : '') +
+    // pela ordem do Word: rFonts, b, i, strike, color, sz, highlight, u, shd, vertAlign
+    const fn = f.letra && LETRAS[f.letra] ? LETRAS[f.letra] : '';
+    const pr = (fn ? `<w:rFonts w:ascii="${fn}" w:hAnsi="${fn}" w:cs="${fn}"/>` : '') +
+      (f.b ? '<w:b/><w:bCs/>' : '') + (f.i ? '<w:i/><w:iCs/>' : '') + (f.s ? '<w:strike/>' : '') + (f.cor ? `<w:color w:val="${f.cor}"/>` : '') +
+      (f.tam ? `<w:sz w:val="${Math.round(f.tam * 2)}"/><w:szCs w:val="${Math.round(f.tam * 2)}"/>` : '') +
       (f.fundo && REALCE_WORD[f.fundo] ? `<w:highlight w:val="${REALCE_WORD[f.fundo]}"/>` : '') + (f.u ? '<w:u w:val="single"/>' : '') +
       (f.fundo && !REALCE_WORD[f.fundo] ? `<w:shd w:val="clear" w:color="auto" w:fill="${f.fundo}"/>` : '') +
       (f.sup ? '<w:vertAlign w:val="superscript"/>' : f.sub ? '<w:vertAlign w:val="subscript"/>' : '');
@@ -3945,6 +4020,42 @@ const ESCREVER = (() => {
     }
 
     // ----- imagens
+    // ----- 1.30.0: inserir um documento Word no sítio do cursor (o ficheiro original não muda)
+    const escolheWord = h('input', { type: 'file', style: 'display:none', 'aria-label': 'Escolher um documento Word para inserir',
+      accept: '.docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document', onchange: (e) => { const f = e.target.files[0]; e.target.value = ''; if (f) insereWord(f); } });
+    async function insereWord(f) {
+      const espera = h('dialog', { class: 'esc-dlg' }, h('h3', null, 'A inserir o documento Word…'), h('p', { class: 'muted' }, `«${f.name}». Pode demorar um pouco se tiver muitas imagens.`));
+      document.body.append(espera); espera.addEventListener('cancel', (ev) => ev.preventDefault()); espera.showModal();
+      let r = null;
+      try {
+        if (typeof ABRIRWORD === 'undefined') throw new Error('O Portal não conseguiu preparar a leitura de ficheiros Word. Atualize o Portal e tente outra vez.');
+        r = await ABRIRWORD.ler(f);
+      } catch (e) {
+        espera.close(); espera.remove();
+        console.warn('Os meus documentos: inserir documento Word', e);
+        const msg = e && e.message && !/^[a-z-]+$/.test(e.message) && !/is not|undefined|null|Cannot|Failed/i.test(e.message) ? e.message : 'Não foi possível ler este ficheiro. Confirme que é um documento do Word (.docx) e tente outra vez.';
+        janela(h, 'Não foi possível inserir', h('p', null, msg)); return;
+      }
+      espera.close(); espera.remove();
+      const raiz = inerte(r.html || ''); limpa(raiz);
+      // a letra e o tamanho do texto do ficheiro ficam, quando são outros (os títulos seguem os deste documento)
+      const c0 = confN(doc.conf), cw = r.conf || {};
+      const lk = PAGINAS.FAMILIA[cw.letra] && cw.letra !== c0.letra ? cw.letra : '', tm = +cw.tam && Math.abs(+cw.tam - c0.tam) > 0.01 ? +cw.tam : 0;
+      if (lk || tm) for (const b of raiz.querySelectorAll('p, li, td, th, blockquote')) {
+        if (b.querySelector('p, li, td, th, blockquote, table, ul, ol') || !b.textContent.replace(/[\s​]/g, '')) continue;
+        const sp = document.createElement('span'); if (lk) sp.style.fontFamily = `"${PAGINAS.FAMILIA[lk]}"`; if (tm) sp.style.fontSize = tm + 'pt';
+        sp.append(...b.childNodes); b.append(sp);
+      }
+      if (texto.querySelector('.esc-indice')) raiz.querySelectorAll('.esc-indice').forEach((x) => x.remove());      // um só índice
+      if (!raiz.textContent.replace(/[\s​]/g, '') && !raiz.querySelector('img, table')) { toast('O ficheiro não tem nada para inserir.'); return; }
+      insereBloco(raiz.innerHTML);
+      const rel = r.relatorio || { passou: [], avisos: [] };
+      janela(h, 'Documento Word inserido',
+        h('p', null, `O conteúdo de «${f.name}» entrou neste documento, a seguir ao cursor. O ficheiro original não mudou.`),
+        rel.passou && rel.passou.length ? h('p', null, h('b', null, 'Passou: '), rel.passou.join(', ') + '.') : null,
+        rel.avisos && rel.avisos.length ? h('div', null, h('p', { style: 'margin:10px 0 0' }, h('b', null, 'Atenção:')), h('ul', null, rel.avisos.map((a2) => h('li', null, a2)))) : null,
+        h('p', { class: 'muted', style: 'margin-top:10px' }, 'A página (papel, margens, cabeçalho e rodapé) continua a deste documento. Pode desfazer com Ctrl+Z.'));
+    }
     const escolheImg = h('input', { type: 'file', accept: 'image/*', style: 'display:none', onchange: async (e) => {
       const f = e.target.files[0]; e.target.value = ''; if (!f) return;
       try { const src = await leImagem(f); const im = document.createElement('img'); im.className = 'esc-img'; im.src = src; im.setAttribute('data-l', '100'); im.style.width = '100%'; im.alt = ''; insereNo(im); toast('Imagem acrescentada. Toque nela para mudar o tamanho.'); }
@@ -4050,7 +4161,77 @@ const ESCREVER = (() => {
       bb('', 'Separar as células unidas', separaCelula, { letra: 'Separar', cls: 'txt' }), bCorCel,
       bb('', 'Tirar a tabela', () => { const c = celulaAtual(); if (c && confirm('Tirar a tabela inteira?')) { guardaEstado('tabela'); c.closest('table').remove(); depois(); } }, { letra: 'Tirar tabela', cls: 'txt perigo' }));
 
+    // ----- 1.30.0: tipo e tamanho de letra de um bocado de texto (como no Word)
+    const TAMANHOS = [8, 9, 10, 10.5, 11, 12, 14, 16, 18, 20, 22, 24, 26, 28, 36, 48, 72];
+    const NOMES_LETRA = [['serif', 'Times New Roman'], ['sans', 'Arial'], ['calibri', 'Calibri'], ['cambria', 'Cambria'], ['mono', 'Courier New'], ['manuscrita', 'Manuscrita (escolar)']];
+    let tamPendente = 0;
+    const comCss = (f) => { try { document.execCommand('styleWithCSS', false, true); } catch (e) { /* segue */ } try { f(); } finally { try { document.execCommand('styleWithCSS', false, false); } catch (e) { /* segue */ } } };
+    function noSel() {
+      const s = getSelection(); if (!s || !s.rangeCount || !dentro(s.anchorNode)) return null;
+      const r = s.getRangeAt(0); let n = r.startContainer;
+      if (n.nodeType === 1 && n.childNodes[r.startOffset] && n.childNodes[r.startOffset].nodeType === 1 && !s.isCollapsed) n = n.childNodes[r.startOffset];
+      if (n.nodeType !== 1) n = n.parentNode;
+      return n && texto.contains(n) ? n : null;
+    }
+    function letraAtual(n) { return chaveLetra(getComputedStyle(n).fontFamily) || confN(doc.conf).letra; }
+    function tamAtual(n) {
+      const base = confN(doc.conf).tam; if (!n) return base;
+      const a = parseFloat(getComputedStyle(n).fontSize), b = parseFloat(getComputedStyle(texto).fontSize);
+      return a > 0 && b > 0 ? Math.round(base * a / b * 2) / 2 : base;
+    }
+    // cursor sem nada escolhido: um bocado vazio com a letra ou o tamanho, e o cursor lá dentro (o que se escrever a seguir fica assim)
+    function marcaVazia(prop, val) {
+      const s = getSelection(); if (!s.rangeCount) return false;
+      const r = s.getRangeAt(0); if (!r.collapsed || !dentro(r.startContainer)) return false;
+      const sp = document.createElement('span'); sp.style[prop] = val; sp.append(document.createTextNode('\u200B'));
+      r.insertNode(sp);
+      const r2 = document.createRange(); r2.setStart(sp.firstChild, 1); r2.collapse(true); s.removeAllRanges(); s.addRange(r2); guardaSel();
+      return true;
+    }
+    function aplicaLetra(k) {
+      if (!PAGINAS.FAMILIA[k]) return;
+      repoeSel(); guardaEstado('formato');
+      if (!marcaVazia('fontFamily', `"${PAGINAS.FAMILIA[k]}"`)) comCss(() => document.execCommand('fontName', false, PAGINAS.FAMILIA[k]));
+      depois();
+    }
+    // o navegador só conhece 7 tamanhos: pede-se o 7 e troca-se logo pelo tamanho em pontos
+    function corrigeTam(pt) {
+      for (const el of texto.querySelectorAll('[style*="xxx-large"], font[size="7"]')) {
+        if (el.tagName === 'FONT') { const sp = document.createElement('span'); sp.style.fontSize = pt + 'pt'; sp.append(...el.childNodes); el.replaceWith(sp); }
+        else el.style.fontSize = pt + 'pt';
+      }
+    }
+    function aplicaTam(pt) {
+      pt = Math.max(6, Math.min(96, Math.round(pt * 2) / 2));
+      repoeSel(); guardaEstado('formato'); tamPendente = pt;
+      if (!marcaVazia('fontSize', pt + 'pt')) { comCss(() => document.execCommand('fontSize', false, '7')); corrigeTam(pt); }
+      depois();
+    }
+    function passoTam(d) {
+      const t = tamAtual(noSel());
+      const n = d > 0 ? (TAMANHOS.find((x) => x > t + 0.01) || Math.min(96, t + 4)) : ([...TAMANHOS].reverse().find((x) => x < t - 0.01) || Math.max(6, t - 1));
+      aplicaTam(n);
+    }
+    const selLetra = h('select', { class: 'esc-sel esc-sel-letra', title: 'Tipo de letra', 'aria-label': 'Tipo de letra' },
+      NOMES_LETRA.map(([k, nome]) => h('option', { value: k, style: `font-family: "${PAGINAS.FAMILIA[k]}"` }, nome)));
+    const optTamX = h('option', { value: '' }, ''); optTamX.hidden = true;
+    const selTam = h('select', { class: 'esc-sel esc-sel-tam', title: 'Tamanho da letra (Ctrl+] e Ctrl+[)', 'aria-label': 'Tamanho da letra' },
+      optTamX, TAMANHOS.map((t) => h('option', { value: String(t) }, String(t).replace('.', ','))));
+    for (const sl of [selLetra, selTam]) { sl.addEventListener('pointerdown', guardaSel); sl.addEventListener('keydown', guardaSel); }
+    selLetra.addEventListener('change', () => aplicaLetra(selLetra.value));
+    selTam.addEventListener('change', () => { if (+selTam.value) aplicaTam(+selTam.value); });
+    texto.addEventListener('input', () => { if (texto.querySelector('[style*="xxx-large"], font[size="7"]')) corrigeTam(tamPendente || confN(doc.conf).tam); });
+    function pintaLetra() {
+      if (document.activeElement === selLetra || document.activeElement === selTam) return;
+      const n = noSel(); if (!n && !doc) return;
+      selLetra.value = n ? letraAtual(n) : confN(doc.conf).letra;          // sem cursor no texto: a letra e o tamanho do documento
+      const t = n ? tamAtual(n) : confN(doc.conf).tam, tx = String(t);
+      if (!TAMANHOS.includes(t)) { optTamX.value = tx; optTamX.textContent = tx.replace('.', ','); }
+      selTam.value = tx;
+    }
+
     function atualizaBarras() {
+      try { pintaLetra(); } catch (e) { /* segue */ }
       barraImg.hidden = !(imgSel && texto.contains(imgSel));
       barraTab.hidden = !celulaAtual();
       // estado dos botões de formatação
@@ -4081,10 +4262,11 @@ const ESCREVER = (() => {
     const barra = h('div', { class: 'esc-barra', role: 'toolbar', 'aria-label': 'Formatação' },
       bNav, sep(), bb('desf', 'Desfazer (Ctrl+Z)', desfaz), bb('ref', 'Refazer (Ctrl+Y)', refaz), sep(),
       blocoB('p', 'Texto normal', 'Texto', 'Control+Alt+0'), blocoB('h1', 'Título 1', 'T1', 'Control+Alt+1'), blocoB('h2', 'Título 2', 'T2', 'Control+Alt+2'), blocoB('h3', 'Título 3', 'T3', 'Control+Alt+3'), blocoB('blockquote', 'Citação longa', '❝'), sep(),
+      selLetra, selTam, ...extra(bb('', 'Aumentar a letra (Ctrl+])', () => passoTam(1), { letra: 'A+', cls: 'txt' }), bb('', 'Diminuir a letra (Ctrl+[)', () => passoTam(-1), { letra: 'A−', cls: 'txt' })), sep(),
       estadoB('bold', 'Negrito', 'N', 'neg'), estadoB('italic', 'Itálico', 'I', 'ita'), estadoB('underline', 'Sublinhado', 'S', 'sub'), ...extra(bCor, bRealce), sep(),
       bb('ul', 'Lista com marcas', () => cmd('insertUnorderedList')), bb('ol', 'Lista numerada', () => cmd('insertOrderedList')),
       ...extra(sep(), bb('esq', 'Alinhar à esquerda', () => cmd('justifyLeft')), bb('cen', 'Centrar', () => cmd('justifyCenter')), bb('dir', 'Alinhar à direita', () => cmd('justifyRight')), bb('just', 'Justificar', () => cmd('justifyFull')), sep(),
-        bb('img', 'Inserir imagem', () => { guardaSel(); escolheImg.click(); }), bb('tab', 'Inserir tabela', novaTabela), bb('nota', 'Nota de rodapé', novaNota),
+        bb('img', 'Inserir imagem', () => { guardaSel(); escolheImg.click(); }), bb('inword', 'Inserir documento Word', () => { guardaSel(); escolheWord.click(); }), bb('tab', 'Inserir tabela', novaTabela), bb('nota', 'Nota de rodapé', novaNota),
         bb('indice', 'Índice automático', () => {
           const ja = texto.querySelector('.esc-indice'); if (ja) { ja.scrollIntoView({ block: 'center', behavior: 'smooth' }); toast('O documento já tem índice.'); return; }
           insereBloco('<div class="esc-indice" contenteditable="false"></div><p><br></p>'); }),
@@ -4150,7 +4332,7 @@ const ESCREVER = (() => {
       const opNormas = () => Object.entries(NORMAS).map(([k, v]) => [k, v.nome]).concat(mods.map((m, i) => ['u:' + i, '★ ' + m.nome]));
       const norma = sel(opNormas(), n0.norma);
       const dica = h('p', { class: 'esc-dica' }, (NORMAS[n0.norma] || NORMAS.livre).dica);
-      const letra = sel([['serif', 'Times New Roman'], ['sans', 'Arial'], ['calibri', 'Calibri']], n0.letra);
+      const letra = sel([['serif', 'Times New Roman'], ['sans', 'Arial'], ['calibri', 'Calibri'], ['cambria', 'Cambria'], ['mono', 'Courier New'], ['manuscrita', 'Manuscrita (escolar)']], n0.letra);
       const tam = sel([10, 11, 12, 14].map((t) => [t, String(t)]), n0.tam); opcao(tam, n0.tam);
       const esp = sel([[1, 'Simples'], [1.15, '1,15'], [1.5, '1,5'], [2, 'Duplo']], n0.espaco); opcao(esp, n0.espaco);
       const recuo = sel([[0, 'Sem recuo'], [1.25, '1,25 cm'], [1.27, '1,27 cm (APA)'], [1.5, '1,5 cm']], n0.recuo); opcao(recuo, n0.recuo, cmTxt(n0.recuo) + ' cm');
@@ -4636,6 +4818,7 @@ const ESCREVER = (() => {
         e.preventDefault(); cmd('formatBlock', ['p', 'h1', 'h2', 'h3'][+e.key]); return;
       }
       if (ctrl && k === 's') { e.preventDefault(); sujo = true; guarda(); }
+      if (ctrl && !e.altKey && /^[\]\[<>]$/.test(e.key)) { e.preventDefault(); passoTam(e.key === ']' || e.key === '>' ? 1 : -1); return; }      // tamanho da letra, como no Word
       if (ctrl && !e.altKey && ((k === 'z' && !e.shiftKey) || k === 'y' || (k === 'z' && e.shiftKey))) { e.preventDefault(); if (k === 'z' && !e.shiftKey) desfaz(); else refaz(); return; }
       if (e.key === 'Tab' && celulaAtual()) {   // Tab passa para a célula seguinte
         e.preventDefault(); const c = celulaAtual(), todas = [...c.closest('table').querySelectorAll('td, th')].filter((y) => !y.closest('.esc-salto')), i = todas.indexOf(c), alvo = todas[i + (e.shiftKey ? -1 : 1)];
@@ -4647,7 +4830,7 @@ const ESCREVER = (() => {
       const d = e.clipboardData; if (!d) return;
       const html = d.getData('text/html'), txt = d.getData('text/plain');
       e.preventDefault(); guardaEstado('colar');
-      if (html) { const r = inerte(html); limpa(r, { colar: true }); document.execCommand('insertHTML', false, r.innerHTML); }
+      if (html) { const r = inerte(html); limpa(r, { colar: true, interno: /<!--cel-doc-->/.test(html) }); document.execCommand('insertHTML', false, r.innerHTML); }
       else if (txt) document.execCommand('insertHTML', false, txt.split(/\r?\n\r?\n/).map((p) => `<p>${esc(p).replace(/\r?\n/g, '<br>')}</p>`).join(''));
       depois();
     });
@@ -4655,9 +4838,10 @@ const ESCREVER = (() => {
     function aoCopiar(e, cortar) {
       const s = getSelection(); if (!s.rangeCount || s.isCollapsed || !dentro(s.anchorNode) || !e.clipboardData) return;
       const frag = s.getRangeAt(0).cloneContents();
-      if (!frag.querySelector('.esc-salto, [data-esc-salto]')) return;        // o navegador faz bem o resto
+      // o navegador faz bem o resto; com letra ou tamanho mudados (1.30.0), o HTML vai daqui, com uma marca, para ficarem quando se cola no Portal
+      if (!frag.querySelector('.esc-salto, [data-esc-salto], span[style*="font-"]')) return;
       const d = document.createElement('div'); d.append(frag); PAGINAS.tiraSaltos(d);
-      e.clipboardData.setData('text/html', d.innerHTML); e.clipboardData.setData('text/plain', s.toString()); e.preventDefault();
+      e.clipboardData.setData('text/html', '<!--cel-doc-->' + d.innerHTML); e.clipboardData.setData('text/plain', s.toString()); e.preventDefault();
       if (cortar) { guardaEstado('apagar'); document.execCommand('delete'); depois(); }
     }
     texto.addEventListener('copy', (e) => aoCopiar(e, false)); texto.addEventListener('cut', (e) => aoCopiar(e, true));
@@ -4712,7 +4896,7 @@ const ESCREVER = (() => {
         h('button', { type: 'button', class: 'btn sm', onclick: guardarComo, 'aria-label': 'Guardar como', title: 'Guardar como: cópia, ficheiro, Word ou PDF' }, svg('guardar'), rotM('Guardar como')),
         h('button', { type: 'button', class: 'btn sm', onclick: pdf, 'aria-label': 'PDF', title: 'PDF (imprimir)' }, svg('pdf'), rotM('PDF')),
         h('button', { type: 'button', class: 'btn primary sm', onclick: word }, svg('word'), 'Word'), bEcra));
-    const rodape = h('div', { class: 'esc-rodape' }, hBar, indicador, conta, h('div', { class: 'esc-vistas' }, h('span', { class: 'esc-zooms' }, bMenos, zoomSel, bMais)), escolheImg);
+    const rodape = h('div', { class: 'esc-rodape' }, hBar, indicador, conta, h('div', { class: 'esc-vistas' }, h('span', { class: 'esc-zooms' }, bMenos, zoomSel, bMais)), escolheImg, escolheWord);
     fixo = h('div', { class: 'esc-fixo' }, cab, titulo, barras);
     const el = h('div', { class: 'view esc-vista' }, fixo, corpoEd, rodape);
     el.addEventListener('wheel', aoRodar, { passive: false });
@@ -7688,7 +7872,7 @@ const FICHAS_EB = (() => {
     gen(r, c) { const pr = mix(r, (VAL[c.ano] || VAL[1]).map((x) => x.slice())); return { pr, ord: mix(r, pr.map((_, i) => i)) }; }, alt: () => 270,
     draw: (p, B, sol) => F.TIPO.mf_liga.draw(p, B, sol), resumo: F.TIPO.mf_liga.resumo, troca: F.TIPO.mf_liga.troca });
   const CERTO_C = { 1: [['Partilhar os brinquedos.', 0], ['Gozar com um colega.', 1], ['Pedir desculpa quando erro.', 0], ['Empurrar na fila.', 1], ['Dizer «por favor» e «obrigado».', 0], ['Deixar um colega de fora do jogo.', 1], ['Cumprimentar os mais velhos.', 0], ['Rasgar o livro da escola.', 1]],
-    2: [['Ouvir a opinião de todos na turma.', 0], ['Rir de quem fala outra língua.', 1], ['Desligar a torneira depois de lavar as mãos.', 0], ['Queimar o lixo perto da escola.', 1], ['Respeitar a vez de cada um.', 0], ['Escolher só os amigos para delegado sem votar.', 1], ['Plantar uma árvore no recreio.', 0], ['Gastar água à toa.', 1]],
+    2: [['Ouvir a opinião de todos na turma.', 0], ['Troçar de um colega por causa da sua língua.', 1], ['Desligar a torneira depois de lavar as mãos.', 0], ['Queimar o lixo perto da escola.', 1], ['Respeitar a vez de cada um.', 0], ['Escolher só os amigos para delegado sem votar.', 1], ['Plantar uma árvore no recreio.', 0], ['Gastar água à toa.', 1]],
     3: [['Defender um colega que está a ser gozado.', 0], ['Excluir quem tem uma deficiência.', 1], ['Ouvir os conselhos dos avós.', 0], ['Interromper os mais velhos.', 1], ['Ajudar a limpar o bairro.', 0], ['Deitar plástico no rio.', 1], ['Cumprir a minha tarefa na turma.', 0], ['Deixar o trabalho de grupo só para os outros.', 1]],
     4: [['Confirmar uma notícia antes de a partilhar.', 0], ['Espalhar um boato sobre um colega.', 1], ['Guardar uma parte do dinheiro para poupar.', 0], ['Gastar tudo no primeiro dia.', 1], ['Votar no candidato com as melhores ideias.', 0], ['Vender o voto por um rebuçado.', 1], ['Respeitar todas as etnias e línguas.', 0], ['Fazer troça da língua de um colega.', 1]] };
   exC({ id: 'ci_certo', ano: [1, 2, 3, 4], u: 3, nome: 'Certo ou errado?', ic: 'rodear', instr: () => 'Rodeia C (certo) ou E (errado).',
@@ -9160,6 +9344,9 @@ function toolRomanos() {
 
 /* ============================================================ CÓPIAS E ATUALIZAÇÕES */
 const NOVIDADES = [
+  { v: '1.30.0', d: '20/11/2026', itens: ['«Os meus documentos»: novas listas «Letra» e «Tamanho» na barra, como no Word, para mudar só o texto escolhido. Seis tipos de letra, também sem internet: Times New Roman, Arial, Calibri, Cambria, Courier New e a manuscrita escolar. Tamanhos de 8 a 72, com os botões A+ e A− (Ctrl+] e Ctrl+[).',
+    'Novo botão «Inserir documento Word»: junta o conteúdo de um ficheiro .docx no sítio do cursor, sem apagar o que já está escrito. Passam os títulos, as listas, as tabelas, as imagens, as notas de rodapé e também a letra e o tamanho do texto. O ficheiro original não muda.',
+    'A letra e o tamanho escolhidos passam para o Word e para o PDF, e os ficheiros Word abertos no Portal já trazem a letra e o tamanho de cada bocado de texto.'] },
   { v: '1.29.0', d: '20/11/2026', itens: ['«Fichas com desenhos» ganha Cidadania, Liderança e Valores, do 1.º ao 4.º ano (unidades 1 a 2, 3 a 5 e 6 a 7 por trimestre), com ficha e prova. Ficam completas as cinco disciplinas do Ensino Básico.',
     'Do manual: ligações e perguntas. Gerais e editáveis: o que fazer em situações do dia a dia, direito ou dever, valores do líder virtuoso, certo ou errado, eleição do delegado de turma, pensar antes de espalhar, poupar, quem sou eu e o meu compromisso de líder.'] },
   { v: '1.28.0', d: '20/11/2026', itens: ['«Fichas com desenhos» ganha Expressões, do 1.º ao 4.º ano (unidades 1 a 4, 5 a 8 e 9 a 12 por trimestre), com ficha e prova.',
