@@ -949,7 +949,7 @@ details > summary { cursor: pointer; margin: 4px 0 }
 <div id="toast" role="status" aria-live="polite"></div>
 <div id="print-root"></div>
 <div id="barra" class="barra" hidden></div>
-<script type="application/json" id="cel-config">{"versao": "1.25.0", "ano": "2026/2027", "chaveId": "1987a8c7", "verificador": "m+HQwwNueX1G3XlMCpRsYJOV0Tkds6FCJhmeHgobCN6OFobxkzA=", "dados": "dados.26347696d7.bin", "contactos": {"whatsapp": "245955252417", "email": "cel.vf.gb@gmail.com"}, "diasSemLigacao": 30, "sb": "https://ebwjnennfmwnhwdfxbuy.supabase.co", "anon": "sb_publishable_oLn3lkMEwu4sEOUTjRCLQA_4evc_ezB"}</script>
+<script type="application/json" id="cel-config">{"versao": "1.26.0", "ano": "2026/2027", "chaveId": "1987a8c7", "verificador": "m+HQwwNueX1G3XlMCpRsYJOV0Tkds6FCJhmeHgobCN6OFobxkzA=", "dados": "dados.26347696d7.bin", "contactos": {"whatsapp": "245955252417", "email": "cel.vf.gb@gmail.com"}, "diasSemLigacao": 30, "sb": "https://ebwjnennfmwnhwdfxbuy.supabase.co", "anon": "sb_publishable_oLn3lkMEwu4sEOUTjRCLQA_4evc_ezB"}</script>
 <script>/* Gerador mínimo de .docx (Word) no navegador — sem bibliotecas externas.
    Blocos: {t:'h', text, level} · {t:'p', text|runs, align, size, before, after, keep, border}
            {t:'list', items:[text|runs], ordered} · {t:'table', rows, widths, header, borders, minH}
@@ -6369,7 +6369,7 @@ const FICHAS = (() => {
           else { const nv = +v.slice(2); if (ehEB(F)) { const o = fichaNova(nv); Object.keys(F).forEach((k) => delete F[k]); Object.assign(F, o); } else { F.nv = nv; F.ex = F.ex.filter((x) => TIPO[x.t].niv.includes(nv)).slice(0, POR_FOLHA[nv]); if (!F.ex.length) F.ex = fichaNova(nv, F.area).ex; F.ex = F.ex.map((x) => novoEx(x.t, nv, F.ex.length, x.seed)); } }
           muda(); } },
         h('optgroup', { label: 'Jardim de Infância' }, [1, 2, 3].map((n) => h('option', { value: 'JI' + n, selected: nivelV === 'JI' + n }, `${NIV[n]} (${n + 2} anos)`))),
-        E ? h('optgroup', { label: 'Ensino Básico' }, [1, 2, 3].map((a) => h('option', { value: 'EB' + a, selected: nivelV === 'EB' + a }, E.ANO[a]))) : null);
+        E ? h('optgroup', { label: 'Ensino Básico' }, [1, 2, 3, 4].map((a) => h('option', { value: 'EB' + a, selected: nivelV === 'EB' + a }, E.ANO[a]))) : null);
       let campos;
       if (ehEB(F)) {
         const novoEB = (o) => { const n = fichaEB(o.ano ?? F.ano, o.disc ?? F.disc, o.tri ?? F.tri, o.doc ?? F.doc); n.ver = F.ver; if (F.doc === n.doc) n.dur = F.dur; n.foto = F.foto; Object.keys(F).forEach((k) => delete F[k]); Object.assign(F, n); muda(); };
@@ -6816,7 +6816,7 @@ const FICHAS_EB = (() => {
       else { o += ln(B.x + 40, B.x + B.w - 20, yl + 30); if (sol) o += t(B.x + 44, yl + 25, it.r.replace(/\s+/g, ' ').slice(0, 80), 15, { w: 700, fill: '#555', a: 'start' }); y = yl + 58; } });
     return o; }
   const altItens = (its, extra = 0) => its.reduce((a, it) => a + (linhas((it.x || '') + '1) ', 66).length - 1) * 24 + (it.t === 'vf' ? 34 : 58), 24 + extra);
-  ex({ id: 'e_manual', disc: 'mat', ano: [1, 2, 3], u: 1, nome: 'Perguntas do manual (verdadeiro ou falso, completa, responde)', instr: () => 'Responde às perguntas.', manual: true, cot: 1.5,
+  ex({ id: 'e_manual', disc: 'mat', ano: [1, 2, 3, 4], u: 1, nome: 'Perguntas do manual (verdadeiro ou falso, completa, responde)', instr: () => 'Responde às perguntas.', manual: true, cot: 1.5,
     gen(r, c) { const its = itens(c.ano, c.disc, 1, c.maxU), u0 = UNI[c.disc][c.tri][0]; const recentes = its.filter((i) => i.u >= u0), base2 = recentes.length >= 4 ? recentes : its;
       const vf = take(r, base2.filter((i) => i.t === 'vf'), 2), cp = take(r, base2.filter((i) => i.t !== 'vf'), 2); return { i: mix(r, vf.concat(cp)) }; },
     alt: (p) => altItens(p.i), draw(p, B, sol) { return p.i.length ? blocoItens(p.i, B, sol, B.y + 30) : t(B.x + B.w / 2, B.y + 40, 'Abra os manuais no Portal para usar as perguntas do manual.', 15, { w: 400, fill: '#555' }); },
@@ -7241,7 +7241,7 @@ const FICHAS_EB = (() => {
     gen(r) { const k = Math.floor(r() * PARAG.length); return { k, ord: mix(r, [0, 1, 2]) }; }, alt: () => 260,
     draw(p, B, sol) { let o = '', y = B.y + 20; p.ord.forEach((j) => { const ls = linhas(PARAG[p.k][j], 60); o += qd(B.x + 20, y, 36) + (sol ? rs(B.x + 20, y, j + 1, 36) : ''); ls.forEach((l, q) => { o += t(B.x + 76, y + 22 + q * 25, l, 17, { w: 500, a: 'start' }); }); y += Math.max(50, ls.length * 25 + 26); }); return o; },
     resumo: (p) => p.ord.map((j) => j + 1).join(' · '), troca: (p) => [{ rot: 'Texto', v: String(p.k), set: (v) => { p.k = +v; }, op: PARAG.map((_, i) => String(i)), txt: { 0: 'Um dia na escola', 1: 'Na machamba com o avô' } }] });
-  const TEMAS = ['Um dia na machamba', 'A festa da minha tabanca', 'O animal de que mais gosto', 'Um passeio ao rio', 'A minha escola', 'Um dia de chuva'];
+  const TEMAS = ['Um dia de trabalho na horta', 'A festa da minha tabanca', 'O animal de que mais gosto', 'Um passeio ao rio', 'A minha escola', 'Um dia de chuva'];
   ex3({ id: 'l3_composicao', disc: 'lp', u: 11, nome: 'Composição: início, meio e fim', instr: (p) => `Escreve uma composição sobre «${p.tema}».`, livre: true, cot: 2, orient: 'Resposta livre. Início: apresenta o tema. Meio: conta o que aconteceu, com pormenores. Fim: conclusão ou sentimento. Maiúsculas, pontuação e parágrafos.',
     gen(r) { return { tema: pick(r, TEMAS) }; }, alt: () => 420,
     draw(p, B) { let o = '', y = B.y + 20; [['Início', 2], ['Meio', 4], ['Fim', 2]].forEach(([l, n]) => { o += `<rect x="${B.x + 16}" y="${y}" width="70" height="26" rx="6" fill="#eee" stroke="#111" stroke-width="1.2"/>` + t(B.x + 51, y + 18, l, 14, { w: 800 }); for (let k = 0; k < n; k++) o += ln(B.x + 100, B.x + B.w - 20, y + 22 + k * 40); y += n * 40 + 14; }); return o; },
@@ -7262,10 +7262,196 @@ const FICHAS_EB = (() => {
     gen(r) { return { l: take(r, REV, 3) }; }, alt: () => 230,
     draw(p, B, sol) { let o = ''; p.l.forEach(([e, c], i) => { const y = B.y + 30 + i * 70; o += t(B.x + 24, y, `${i + 1}) ${e}`, 20, { w: 600, a: 'start' }) + ln(B.x + 48, B.x + B.w - 24, y + 40) + (sol ? t(B.x + 54, y + 34, c, 18, { w: 800, fill: '#555', a: 'start' }) : ''); }); return o; },
     resumo: (p) => p.l.map(([, c]) => c).join(' · ') });
-  ex3({ id: 'l3_cursiva', disc: 'lp', u: 12, nome: 'Letra ligada: copia a frase', instr: () => 'Lê a frase em letra ligada e copia-a na linha de baixo.',
+  ex3({ id: 'l3_cursiva', ano: [3, 4], disc: 'lp', u: 12, nome: 'Letra ligada: copia a frase', instr: () => 'Lê a frase em letra ligada e copia-a na linha de baixo.',
     gen(r) { return { l: take(r, ['A Siaca foi ao mercado.', 'O sol nasce cedo na tabanca.', 'Na machamba há milho.', 'Bissau é uma cidade bonita.', 'O Infali joga à bola.'], 2) }; }, alt: () => 330,
     draw(p, B) { let o = ''; p.l.forEach((w, i) => { const base = B.y + 70 + i * 150; o += pautaM(B.x + 20, B.x + B.w - 20, base, 13) + M(B.x + 30, base, w, 34, '#111') + pautaM(B.x + 20, B.x + B.w - 20, base + 70, 13); }); return o; },
     troca: (p) => p.l.map((w, i) => ({ rot: `Frase ${i + 1}`, v: w, edit: true, set: (v) => { p.l[i] = v; } })) });
+
+
+  /* ============================================================ 4.º ano (1.26.0) */
+  const ex4 = (o) => ex(Object.assign({ ano: [4] }, o));
+  // o professor pode reescrever as frases inventadas (cada item da lista, nas posições indicadas)
+  const editaL = (slots) => (p) => p.l.flatMap((it, i) => slots.map(([k, rot]) => ({ rot: `${i + 1}. ${rot}`, v: String(it[k] ?? ''), edit: true, set: (v) => { it[k] = v; } })));
+  const mcdu = (n) => String(n).padStart(4, '0').split('').map(Number);
+  function colunaN(a, b, op, x, yy, sol, nd = 4) { const r0 = op === '+' ? a + b : a - b, P = (v) => String(v).padStart(nd, ' '), A = P(a), Bb = P(b), R = P(r0), cw = 32, cx = Array.from({ length: nd }, (_, k) => x + 34 + k * cw), L = ['M', 'C', 'D', 'U'].slice(4 - nd);
+    let o = L.map((l, k) => t(cx[k], yy + 14, l, 12, { w: 700, fill: '#555' })).join('');
+    for (let k = 0; k < nd - 1; k++) o += `<rect x="${cx[k] + 8}" y="${yy + 20}" width="18" height="16" rx="3" fill="#fff" stroke="#999" stroke-width="1.4" stroke-dasharray="3 3"/>`;
+    for (let k = 0; k < nd; k++) o += t(cx[k], yy + 62, A[k].trim(), 26, { w: 700 }) + t(cx[k], yy + 100, Bb[k].trim(), 26, { w: 700 });
+    o += t(x + 8, yy + 100, op, 26, { w: 800 }) + `<line x1="${x}" x2="${x + 40 + nd * cw}" y1="${yy + 112}" y2="${yy + 112}" stroke="#111" stroke-width="3"/>`; for (let k = 0; k < nd; k++) o += qd(cx[k] - 16, yy + 120, 32);
+    if (sol) { for (let k = 0; k < nd; k++) o += rs(cx[k] - 16, yy + 120, R[k].trim(), 32); const da = String(a).padStart(nd, '0').split('').map(Number), db = String(b).padStart(nd, '0').split('').map(Number); let c = 0;
+      for (let k = nd - 1; k > 0; k--) { if (op === '+') { c = da[k] + db[k] + c >= 10 ? 1 : 0; if (c) o += t(cx[k - 1] + 17, yy + 32, '1', 12, { w: 800, fill: '#555' }); } else { c = da[k] - c < db[k] ? 1 : 0; if (c) o += t(cx[k - 1] + 17, yy + 32, '−1', 10, { w: 800, fill: '#555' }); } } }
+    return o; }
+  ex4({ id: 'm4_sequencia', disc: 'mat', u: 1, nome: 'Sequências até 10 000', instr: () => 'Continua as sequências.',
+    gen(r) { return { l: take(r, [1000, 100, 500, 10], 3).map((s2) => ({ a: s2 === 1000 ? 1000 : s2 * Math.floor(r() * 8) + 1000 * (1 + Math.floor(r() * 5)), s: s2, f: take(r, [2, 3, 4, 5, 6], 3) })) }; }, alt: () => 190,
+    draw(p, B, sol) { let o = ''; p.l.forEach((q, i) => { const y = B.y + 14 + i * 58; for (let k = 0; k < 7; k++) { const x = B.x + 16 + k * 98, v = q.a + k * q.s;
+      if (q.f.includes(k)) o += qd(x, y, 44).replace('width="44"', 'width="84"') + (sol ? t(x + 42, y + 30, fmtN(v), 18, { w: 800, fill: '#555' }) : ''); else o += t(x + 42, y + 30, fmtN(v), 19, { w: 800 }); if (k < 6) o += t(x + 91, y + 30, ',', 18, { w: 700 }); } }); return o; },
+    resumo: (p) => p.l.map((q) => q.f.slice().sort().map((k) => q.a + k * q.s).join(',')).join(' · ') });
+  ex4({ id: 'm4_decompoe', disc: 'mat', u: 2, nome: 'Decompõe (M, C, D, U)', instr: () => 'Decompõe o número.',
+    gen(r) { return { n: dist(r, 3, 1001, 9999) }; }, alt: () => 190,
+    draw(p, B, sol) { let o = ''; p.n.forEach((n, i) => { const y = B.y + 14 + i * 58, x = B.x + 16, d = mcdu(n);
+      o += t(x, y + 30, `${fmtN(n)} =`, 22, { w: 800, a: 'start' }); ['M +', 'C +', 'D +', 'U ='].forEach((l, k) => { const dx = 88 + k * 84; o += qd(x + dx, y + 4, 36) + t(x + dx + 40, y + 28, l, 15, { w: 700, a: 'start' }) + (sol ? rs(x + dx, y + 4, d[k], 36) : ''); });
+      o += ln(x + 430, x + 690, y + 36) + (sol ? t(x + 436, y + 30, `${d[0] * 1000} + ${d[1] * 100} + ${d[2] * 10} + ${d[3]}`, 16, { w: 800, fill: '#555', a: 'start' }) : ''); }); return o; },
+    resumo: (p) => p.n.map((n) => mcdu(n).join('')).join(' · ') });
+  ex4({ id: 'm4_compara', disc: 'mat', u: 3, nome: 'Maior, menor ou igual até 10 000', instr: () => 'Escreve >, < ou = no quadrado.',
+    gen(r) { return { p: [0, 1, 2, 3].map((i) => { const a = 1000 + Math.floor(r() * 9000); const b = i === 2 ? a : i === 1 ? Math.floor(a / 1000) * 1000 + Math.floor(r() * 1000) : 1000 + Math.floor(r() * 9000); return [a, b]; }) }; }, alt: () => 92,
+    draw(p, B, sol) { return cartoes(B, 4, 72, (x, y, w, h, i) => { const [a, b] = p.p[i]; return t(x + w * 0.2, y + 45, fmtN(a), 19, { w: 800 }) + qd(x + w / 2 - 18, y + 18, 36) + t(x + w * 0.8, y + 45, fmtN(b), 19, { w: 800 }) + (sol ? rs(x + w / 2 - 18, y + 18, a > b ? '>' : a < b ? '<' : '=', 36) : ''); }); },
+    resumo: F.TIPO.m1_compara.resumo });
+  ex4({ id: 'm4_ordena', disc: 'mat', u: 3, nome: 'Ordena até 10 000', instr: () => 'Escreve os números do menor para o maior.',
+    gen(r) { return { l: [0, 1].map(() => dist(r, 4, 1000, 9999)) }; }, alt: () => 190,
+    draw(p, B, sol) { let o = ''; p.l.forEach((ns, i) => { const y = B.y + 12 + i * 88; ns.forEach((n, k) => { o += t(B.x + 70 + k * 90, y + 30, fmtN(n), 20, { w: 800 }); });
+      ns.slice().sort((a, b) => a - b).forEach((n, k) => { const x = B.x + 400 + k * 76; o += qd(x, y + 42, 40).replace('width="40"', 'width="64"') + (k < 3 ? t(x + 70, y + 70, '<', 16, { w: 800 }) : '') + (sol ? t(x + 32, y + 69, fmtN(n), 16, { w: 800, fill: '#555' }) : ''); }); }); return o; },
+    resumo: (p) => p.l.map((ns) => ns.slice().sort((a, b) => a - b).join('<')).join(' · ') });
+  ex4({ id: 'm4_reta', disc: 'mat', u: 1, nome: 'Reta numérica de 1000 em 1000', instr: () => 'Completa a reta numérica de 1000 em 1000.',
+    gen(r) { return { a: 0, st: 1000, gaps: take(r, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 4) }; }, alt: () => 120, draw: F.TIPO.m2_reta.draw, resumo: F.TIPO.m2_reta.resumo });
+  ex4({ id: 'm4_coluna', disc: 'mat', u: 4, nome: 'Adição e subtração em coluna (M, C, D, U)', instr: () => 'Faz as contas em coluna.', cot: 1.5,
+    gen(r, c) { const menos = c.maxU >= 5; const out = []; for (let i = 0; i < 4; i++) { const sub = menos && i >= 2; let a, b, k = 0;
+      do { a = 1000 + Math.floor(r() * 8000); b = 100 + Math.floor(r() * 7000); if (sub && b > a) [a, b] = [b, a]; k++; } while (k < 300 && (sub ? a - b < 100 : a + b > 9999)); out.push([a, b, sub ? '−' : '+']); } return { c: out }; }, alt: () => 190,
+    draw(p, B, sol) { return p.c.map(([a, b, op], i) => colunaN(a, b, op, B.x + 6 + i * 174, B.y + 14, sol)).join(''); },
+    resumo: (p) => p.c.map(([a, b, op]) => (op === '+' ? a + b : a - b)).join(' · ') });
+  ex4({ id: 'm4_problema', disc: 'mat', u: 6, nome: 'Problema de vários passos', instr: () => 'Lê o problema, faz as contas e responde.', cot: 2,
+    gen(r) { const nm = pick(r, NOMES), q = 2 + Math.floor(r() * 3), pr = 50 * (5 + Math.floor(r() * 6)), pe = 250 * (3 + Math.floor(r() * 4)), tot = q * pr + pe, nota2 = [2000, 5000, 10000].find((v) => v > tot); return { nm, q, pr, pe, nota: nota2 }; }, alt: () => 230,
+    draw(p, B, sol, cx) { const A = FEMN.has(p.nm) ? 'A' : 'O'; let o = t(B.x + 20, B.y + 30, `${A} ${p.nm} comprou ${p.q} quilos de arroz a ${fmtN(p.pr)} francos o quilo e um peixe`, 16, { w: 600, a: 'start' }) + t(B.x + 20, B.y + 54, `de ${fmtN(p.pe)} francos. Pagou com ${fmtN(p.nota)} francos. Quanto recebeu de troco?`, 16, { w: 600, a: 'start' }) + fig('arroz', B.x + B.w - 40, B.y + 40, 44, cx);
+      ['1.º passo', '2.º passo', '3.º passo'].forEach((l, k) => { const x = B.x + 16 + k * 230; o += t(x, B.y + 96, l + ':', 14, { w: 700, a: 'start' }) + `<rect x="${x}" y="${B.y + 104}" width="214" height="54" rx="8" fill="none" stroke="#bbb" stroke-dasharray="5 5"/>`; });
+      o += t(B.x + 20, B.y + 200, 'Resposta:', 17, { w: 700, a: 'start' }) + ln(B.x + 110, B.x + B.w - 20, B.y + 204);
+      if (sol) { const a1 = p.q * p.pr, a2 = a1 + p.pe, a3 = p.nota - a2; [`${p.q} × ${p.pr} = ${a1}`, `${a1} + ${p.pe} = ${a2}`, `${p.nota} − ${a2} = ${a3}`].forEach((tx, k) => { o += t(B.x + 123 + k * 230, B.y + 137, tx, 15, { w: 800, fill: '#555' }); }); o += t(B.x + 120, B.y + 198, `Recebeu ${fmtN(a3)} francos de troco.`, 16, { w: 700, fill: '#555', a: 'start' }); }
+      return o; },
+    resumo: (p) => `${fmtN(p.nota - p.q * p.pr - p.pe)} francos` });
+  ex4({ id: 'm4_x10', disc: 'mat', u: 7, nome: 'Multiplicar por 10 e por 100', instr: () => 'Calcula.',
+    gen(r) { return { l: Array.from({ length: 8 }, (_, i) => i < 3 ? [2 + Math.floor(r() * 97), 10] : i < 5 ? [2 + Math.floor(r() * 98), 100] : [2 + Math.floor(r() * 8), 2 + Math.floor(r() * 8)]) }; }, alt: () => 210,
+    draw(p, B, sol) { let o = ''; p.l.forEach(([a, b], i) => { const col = i % 2, row = Math.floor(i / 2), x = B.x + 40 + col * 340, y = B.y + 14 + row * 48; o += t(x, y + 28, `${a} × ${b} =`, 22, { w: 700, a: 'start' }) + qd(x + 150, y, 40).replace('width="40"', 'width="84"') + (sol ? t(x + 192, y + 28, fmtN(a * b), 20, { w: 800, fill: '#555' }) : ''); }); return o; },
+    resumo: (p) => p.l.map(([a, b]) => a * b).join(' · ') });
+  ex4({ id: 'm4_multdec', disc: 'mat', u: 8, nome: 'Multiplicar por dois algarismos (decompor)', instr: () => 'Decompõe e multiplica, como no exemplo do manual.', cot: 1.5,
+    gen(r) { return { l: [0, 1, 2].map(() => [12 + Math.floor(r() * 60), 11 + Math.floor(r() * 18)]) }; }, alt: () => 210,
+    draw(p, B, sol) { let o = ''; p.l.forEach(([a, b], i) => { const y = B.y + 16 + i * 64, x = B.x + 16, d = Math.floor(b / 10) * 10, u = b % 10, bx = (xx, v, w2 = 64) => qd(xx, y, 40).replace('width="40"', `width="${w2}"`) + (sol ? t(xx + w2 / 2, y + 28, fmtN(v), 18, { w: 800, fill: '#555' }) : '');
+      o += t(x, y + 28, `${a} × ${b} = ${a} × ${d} + ${a} × ${u} =`, 19, { w: 700, a: 'start' }) + bx(x + 330, a * d) + t(x + 404, y + 28, '+', 20, { w: 800 }) + bx(x + 416, a * u) + t(x + 492, y + 28, '=', 20, { w: 800 }) + bx(x + 506, a * b, 80); }); return o; },
+    resumo: (p) => p.l.map(([a, b]) => a * b).join(' · ') });
+  ex4({ id: 'm4_divide', disc: 'mat', u: 9, nome: 'Divisão e o sentido do resto', instr: () => 'Lê, faz a conta e responde.', cot: 1.5,
+    gen(r) { const g = pick(r, [3, 4, 5, 6]), q = 11 + Math.floor(r() * 9), rr = 1 + Math.floor(r() * (g - 1)), g2 = pick(r, [4, 5, 6]), q2 = 8 + Math.floor(r() * 9), r2 = 1 + Math.floor(r() * (g2 - 1)); return { g, t: g * q + rr, g2, t2: g2 * q2 + r2, f: pick(r, ['cajus', 'mangas', 'laranjas']) }; }, alt: () => 250,
+    draw(p, B, sol) { let o = ''; const c1 = Math.floor(p.t / p.g), r1 = p.t % p.g, c2 = Math.ceil(p.t2 / p.g2);
+      o += t(B.x + 20, B.y + 30, `1) Há ${p.t} ${p.f} para repartir por ${p.g} colegas, em partes iguais.`, 16, { w: 600, a: 'start' }) + `<rect x="${B.x + 20}" y="${B.y + 42}" width="220" height="56" rx="8" fill="none" stroke="#bbb" stroke-dasharray="5 5"/>` + t(B.x + 256, B.y + 76, 'Cada um recebe', 16, { w: 700, a: 'start' }) + qd(B.x + 386, B.y + 52, 36).replace('width="36"', 'width="50"') + t(B.x + 446, B.y + 76, 'e sobram', 16, { w: 700, a: 'start' }) + qd(B.x + 524, B.y + 52, 36);
+      o += t(B.x + 20, B.y + 140, `2) Vão viajar ${p.t2} alunos em carrinhas de ${p.g2} lugares.`, 16, { w: 600, a: 'start' }) + t(B.x + 20, B.y + 164, 'Quantas carrinhas são precisas para levar todos?', 16, { w: 600, a: 'start' }) + `<rect x="${B.x + 20}" y="${B.y + 176}" width="220" height="56" rx="8" fill="none" stroke="#bbb" stroke-dasharray="5 5"/>` + t(B.x + 256, B.y + 210, 'Resposta:', 16, { w: 700, a: 'start' }) + ln(B.x + 340, B.x + B.w - 20, B.y + 214);
+      if (sol) o += t(B.x + 130, B.y + 76, `${p.t} : ${p.g} = ${c1} resto ${r1}`, 15, { w: 800, fill: '#555' }) + rs(B.x + 386, B.y + 52, c1, 36).replace(/x="([\d.]+)"/, (m0, v) => `x="${(+v + 7).toFixed(1)}"`) + rs(B.x + 524, B.y + 52, r1, 36) + t(B.x + 130, B.y + 210, `${p.t2} : ${p.g2} = ${Math.floor(p.t2 / p.g2)} resto ${p.t2 % p.g2}`, 15, { w: 800, fill: '#555' }) + t(B.x + 348, B.y + 208, `São precisas ${c2} carrinhas.`, 14, { w: 700, fill: '#555', a: 'start' });
+      return o; },
+    resumo: (p) => `${Math.floor(p.t / p.g)} resto ${p.t % p.g} · ${Math.ceil(p.t2 / p.g2)} carrinhas` });
+  const barraF = (x, y, w, n, k, h = 30, sol = true) => { let o = ''; for (let i = 0; i < n; i++) o += `<rect x="${(x + i * w / n).toFixed(1)}" y="${y}" width="${(w / n).toFixed(1)}" height="${h}" fill="${sol && i < k ? '#bbb' : '#fff'}" stroke="#111" stroke-width="2"/>`; return o; };
+  ex4({ id: 'm4_fracoes', disc: 'mat', u: 10, nome: 'Frações equivalentes e comparar frações', instr: () => 'Pinta e completa as frações equivalentes. Depois compara.',
+    gen(r) { const eq = take(r, [[1, 2, 2, 4], [1, 2, 3, 6], [1, 3, 2, 6], [1, 4, 2, 8], [3, 4, 6, 8], [2, 3, 4, 6]], 2), cmp = take(r, [[1, 2, 1, 4], [1, 3, 1, 5], [2, 5, 3, 5], [3, 4, 1, 4], [1, 6, 1, 3], [2, 4, 1, 2]], 3); return { eq, cmp }; }, alt: () => 250,
+    draw(p, B, sol) { let o = ''; p.eq.forEach(([a, b, c, d], i) => { const x = B.x + 20 + i * 350, y = B.y + 16; o += barraF(x, y, 300, b, a) + barraF(x, y + 44, 300, d, c, 30, sol);
+      o += t(x, y + 108, `${a}/${b} =`, 22, { w: 800, a: 'start' }) + qd(x + 70, y + 84, 34) + t(x + 112, y + 108, `/ ${d}`, 22, { w: 800, a: 'start' }) + (sol ? rs(x + 70, y + 84, c, 34) : ''); });
+      p.cmp.forEach(([a, b, c, d], i) => { const x = B.x + 30 + i * 230, y = B.y + 170; o += t(x, y + 32, `${a}/${b}`, 24, { w: 800, a: 'start' }) + qd(x + 56, y + 6, 38) + t(x + 108, y + 32, `${c}/${d}`, 24, { w: 800, a: 'start' }) + (sol ? rs(x + 56, y + 6, a / b > c / d ? '>' : a / b < c / d ? '<' : '=', 38) : ''); }); return o; },
+    resumo: (p) => p.eq.map(([a, b, c, d]) => `${a}/${b}=${c}/${d}`).join(' · ') });
+  ex4({ id: 'm4_decimais', disc: 'mat', u: 11, nome: 'Números decimais: décimas e centésimas', instr: () => 'Escreve a parte pintada em fração e em número decimal.',
+    gen(r) { return { d: 1 + Math.floor(r() * 9), c: 11 + Math.floor(r() * 88), m: [1 + Math.floor(r() * 4), 5 * (1 + Math.floor(r() * 19))] }; }, alt: () => 250,
+    draw(p, B, sol) { let o = barraF(B.x + 20, B.y + 20, 300, 10, p.d, 40); o += t(B.x + 20, B.y + 100, 'Fração:', 15, { w: 700, a: 'start' }) + qd(B.x + 84, B.y + 76, 34) + t(B.x + 126, B.y + 100, '/ 10', 18, { w: 800, a: 'start' }) + t(B.x + 186, B.y + 100, 'Decimal:', 15, { w: 700, a: 'start' }) + qd(B.x + 258, B.y + 76, 34).replace('width="34"', 'width="62"');
+      if (sol) o += rs(B.x + 84, B.y + 76, p.d, 34) + t(B.x + 289, B.y + 100, `0,${p.d}`, 18, { w: 800, fill: '#555' });
+      const gx = B.x + 380, gy = B.y + 16, c2 = 13; for (let k = 0; k < 100; k++) o += `<rect x="${gx + (k % 10) * c2}" y="${gy + Math.floor(k / 10) * c2}" width="${c2}" height="${c2}" fill="${k < p.c ? '#ccc' : '#fff'}" stroke="#111" stroke-width=".8"/>`;
+      o += t(gx + 150, gy + 40, 'Fração:', 15, { w: 700, a: 'start' }) + qd(gx + 214, gy + 16, 34).replace('width="34"', 'width="46"') + t(gx + 266, gy + 40, '/ 100', 16, { w: 800, a: 'start' }) + t(gx + 150, gy + 96, 'Decimal:', 15, { w: 700, a: 'start' }) + qd(gx + 222, gy + 72, 34).replace('width="34"', 'width="70"');
+      if (sol) o += t(gx + 237, gy + 40, String(p.c), 17, { w: 800, fill: '#555' }) + t(gx + 257, gy + 96, `0,${String(p.c).padStart(2, '0')}`, 17, { w: 800, fill: '#555' });
+      const mm = `${p.m[0]} m e ${p.m[1]} cm`; o += t(B.x + 20, B.y + 190, `${mm} =`, 20, { w: 700, a: 'start' }) + qd(B.x + 210, B.y + 166, 34).replace('width="34"', 'width="80"') + t(B.x + 300, B.y + 190, 'm', 18, { w: 700, a: 'start' }) + (sol ? t(B.x + 250, B.y + 190, `${p.m[0]},${String(p.m[1]).padStart(2, '0')}`, 18, { w: 800, fill: '#555' }) : '');
+      return o; },
+    resumo: (p) => `0,${p.d} · 0,${String(p.c).padStart(2, '0')} · ${p.m[0]},${String(p.m[1]).padStart(2, '0')} m` });
+  ex4({ id: 'm4_area', disc: 'mat', u: 12, nome: 'A área', instr: () => 'Calcula a área de cada figura.',
+    gen(r) { return { g: [3 + Math.floor(r() * 4), 2 + Math.floor(r() * 3)], d: [4 + Math.floor(r() * 7), 2 + Math.floor(r() * 6)] }; }, alt: () => 230,
+    draw(p, B, sol) { const c2 = 26, [w1, h1] = p.g, x0 = B.x + 20, y0 = B.y + 18; let o = ''; for (let i = 0; i < w1; i++) for (let j = 0; j < h1; j++) o += `<rect x="${x0 + i * c2}" y="${y0 + j * c2}" width="${c2}" height="${c2}" fill="#fff" stroke="#111" stroke-width="1.5"/>`;
+      o += t(x0, y0 + h1 * c2 + 34, 'Área =', 16, { w: 700, a: 'start' }) + qd(x0 + 62, y0 + h1 * c2 + 12, 32) + t(x0 + 102, y0 + h1 * c2 + 34, 'quadradinhos', 15, { w: 600, a: 'start' }) + (sol ? rs(x0 + 62, y0 + h1 * c2 + 12, w1 * h1, 32) : '');
+      const [a, b] = p.d, rx = B.x + 380, ry = B.y + 30; o += `<rect x="${rx}" y="${ry}" width="${a * 26}" height="${b * 18}" fill="#fff" stroke="#111" stroke-width="3"/>` + t(rx + a * 13, ry - 8, `${a} m`, 15, { w: 700 }) + t(rx + a * 26 + 26, ry + b * 9 + 5, `${b} m`, 15, { w: 700 });
+      o += t(rx, ry + b * 18 + 44, `Área = ${a} × ${b} =`, 18, { w: 700, a: 'start' }) + qd(rx + 160, ry + b * 18 + 20, 34).replace('width="34"', 'width="50"') + t(rx + 216, ry + b * 18 + 44, 'm²', 17, { w: 700, a: 'start' }) + (sol ? t(rx + 185, ry + b * 18 + 44, String(a * b), 18, { w: 800, fill: '#555' }) : '');
+      return o; },
+    resumo: (p) => `${p.g[0] * p.g[1]} quadradinhos · ${p.d[0] * p.d[1]} m²` });
+  const angulo = (cx, cy, g, L = 60) => { const a = g * Math.PI / 180; return `<path d="M${cx + L} ${cy} L${cx} ${cy} L${(cx + L * Math.cos(a)).toFixed(1)} ${(cy - L * Math.sin(a)).toFixed(1)}" fill="none" stroke="#111" stroke-width="3" stroke-linejoin="round"/>` + (g === 90 ? `<path d="M${cx + 12} ${cy} L${cx + 12} ${cy - 12} L${cx} ${cy - 12}" fill="none" stroke="#111" stroke-width="1.5"/>` : `<path d="M${cx + 16} ${cy} A16 16 0 0 0 ${(cx + 16 * Math.cos(a)).toFixed(1)} ${(cy - 16 * Math.sin(a)).toFixed(1)}" fill="none" stroke="#111" stroke-width="1.5"/>`); };
+  const TANG = (g) => (g === 90 ? 'reto' : g < 90 ? 'agudo' : 'obtuso');
+  ex4({ id: 'm4_angulos', disc: 'mat', u: 13, nome: 'Ângulos: reto, agudo, obtuso', ic: 'rodear', instr: () => 'Rodeia o nome de cada ângulo.',
+    gen(r) { return { g: mix(r, [90, pick(r, [30, 45, 60]), pick(r, [120, 135, 150]), pick(r, [40, 70, 110, 140, 90])]) }; }, alt: () => 190,
+    draw(p, B, sol) { return cartoes(B, 4, 170, (x, y, w, h, i) => { const g = p.g[i]; let o = angulo(x + w / 2 - 20, y + 96, g, 64); ['reto', 'agudo', 'obtuso'].forEach((n, k) => { const xx = x + 32 + k * (w - 64) / 2; o += t(xx, y + 150, n, 13, { w: 700 }); if (sol && n === TANG(g)) o += `<ellipse cx="${xx}" cy="${y + 145}" rx="26" ry="13" fill="none" stroke="#111" stroke-width="2.5"/>`; }); return o; }); },
+    resumo: (p) => p.g.map(TANG).join(', ') });
+  const TRI = [['equilátero', [5, 5, 5], [[50, 10], [92, 84], [8, 84]]], ['isósceles', [6, 6, 4], [[50, 6], [76, 88], [24, 88]]], ['escaleno', [3, 5, 6], [[30, 12], [94, 88], [6, 70]]]];
+  ex4({ id: 'm4_triangulos', disc: 'mat', u: 13, nome: 'Classificar triângulos pelos lados', ic: 'ligar', instr: () => 'Olha para as medidas dos lados e escreve o nome do triângulo.',
+    gen(r) { return { o: mix(r, [0, 1, 2]) }; }, alt: () => 220,
+    draw(p, B, sol) { return cartoes(B, 3, 200, (x, y, w, h, i) => { const [nm, ls, pts] = TRI[p.o[i]], cx = x + w / 2, cy = y + 80, P = pts.map(([px, py]) => [cx + (px - 50) * 1.3, cy + (py - 50) * 1.2]); let o = `<polygon points="${P.map((q) => q.map((v) => v.toFixed(1)).join(',')).join(' ')}" fill="#fff" stroke="#111" stroke-width="3"/>`;
+      const lens = P.map((a, j) => Math.hypot(P[(j + 1) % 3][0] - a[0], P[(j + 1) % 3][1] - a[1])), ord2 = lens.map((_, j) => j).sort((a, b) => lens[a] - lens[b]), lsS = ls.slice().sort((a, b) => a - b), lab = []; ord2.forEach((j, r2) => { lab[j] = lsS[r2]; });
+      P.forEach((a, j) => { const b2 = P[(j + 1) % 3], mx = (a[0] + b2[0]) / 2, my = (a[1] + b2[1]) / 2, dx = mx - cx, dy = my - cy, dd = Math.hypot(dx, dy) || 1; o += t(mx + dx / dd * 20, my + dy / dd * 16 + 5, `${lab[j]} cm`, 13, { w: 700 }); });
+      o += ln(x + 20, x + w - 20, y + 184) + (sol ? t(cx, y + 178, nm, 17, { w: 800, fill: '#555' }) : ''); return o; }); },
+    resumo: (p) => p.o.map((k) => TRI[k][0]).join(', ') });
+  const CONV4 = [['2 km', 2000, 'm'], ['5 km', 5000, 'm'], ['3000 m', 3, 'km'], ['4 kg', 4000, 'g'], ['2500 g', '2,5', 'kg'], ['3 l', 3000, 'ml'], ['1 hora', 60, 'minutos'], ['2 horas', 120, 'minutos'], ['meia hora', 30, 'minutos'], ['90 minutos', '1,5', 'horas'], ['1 dia', 24, 'horas'], ['1 semana', 7, 'dias']];
+  ex4({ id: 'm4_conversoes', disc: 'mat', u: 14, nome: 'Medidas e tempo: converter', instr: () => 'Completa.',
+    gen(r) { return { l: take(r, CONV4, 6) }; }, alt: () => 190, draw: F.TIPO.m3_medidas.draw, resumo: F.TIPO.m3_medidas.resumo });
+  F.regista(Object.assign({}, F.TIPO.m2_grafico, { id: 'm4_grafico', ano: [4], u: 14, nome: 'Tabela e gráfico de barras' }));
+
+  /* ----- Língua Portuguesa, 4.º ano */
+  leitura('l4_leitura', 1, 'Leio e compreendo com inferência (texto do manual)', 4);
+  leitura('l4_historia', 16, 'A história final (texto do manual)', 4);
+  const RES = [{ tx: ['Na tabanca do Malam, a água vinha de um poço muito longe. As mulheres e as crianças caminhavam muito todos os dias.', 'Um dia, os pais juntaram-se e decidiram abrir um poço novo perto da escola. Todos ajudaram: uns cavaram, outros levaram pedras e água para os trabalhadores.', 'Agora, a água está perto. As crianças chegam à escola a horas e têm mais tempo para estudar.'], op: ['A tabanca uniu-se para abrir um poço perto da escola.', 'O Malam gosta muito de água fresca.', 'As pedras são pesadas.'], k: 0 },
+    { tx: ['A Fatumata tinha medo de falar diante da turma. Quando a professora lhe fazia uma pergunta, ficava calada.', 'A avó disse-lhe para treinar em casa: todas as noites, a Fatumata lia em voz alta para os irmãos.', 'No fim do ano, a Fatumata apresentou um trabalho sobre os mangais e todos bateram palmas.'], op: ['A Fatumata tem muitos irmãos.', 'A Fatumata venceu o medo de falar, com treino e ajuda da avó.', 'Os mangais são bonitos.'], k: 1 }];
+  ex4({ id: 'l4_resumo', disc: 'lp', u: 2, nome: 'Resumo um texto', instr: () => 'Lê o texto. Rodeia a ideia principal e escreve um resumo em duas frases.', cot: 2,
+    gen(r) { const k = Math.floor(r() * RES.length); return { k, R: JSON.parse(JSON.stringify(RES[k])) }; }, alt: (p) => 40 + (p.R || RES[p.k]).tx.reduce((a, x) => a + linhas(x, 70).length * 24 + 8, 0) + 3 * 30 + 110,
+    draw(p, B, sol) { const R = p.R || RES[p.k]; let y = B.y + 26, o = ''; const ls = R.tx.flatMap((x) => linhas(x, 70).concat([''])); const hT = ls.reduce((a2, l) => a2 + (l ? 24 : 8), 0); o += `<rect x="${B.x + 16}" y="${B.y + 8}" width="${B.w - 32}" height="${hT + 6}" rx="10" fill="#f4f4f4" stroke="#111" stroke-width="1.2"/>`;
+      ls.forEach((l) => { if (l) o += t(B.x + 30, y + 4, l, 16, { w: 500, a: 'start' }); y += l ? 24 : 8; }); y += 4;
+      R.op.forEach((q, i) => { o += t(B.x + 30, y + 22, `${'abc'[i]}) ${q}`, 16, { w: 600, a: 'start' }); if (sol && i === R.k) o += `<rect x="${B.x + 22}" y="${y + 4}" width="${wA(`${'abc'[i]}) ${q}`, 16) + 16}" height="26" rx="12" fill="none" stroke="#111" stroke-width="2.5"/>`; y += 30; });
+      o += ln(B.x + 30, B.x + B.w - 20, y + 30) + ln(B.x + 30, B.x + B.w - 20, y + 70); return o; },
+    resumo: (p) => { const R = p.R || RES[p.k]; return R.op[R.k]; }, troca: (p) => { const R = p.R || (p.R = JSON.parse(JSON.stringify(RES[p.k]))); return [{ rot: 'Texto modelo', v: String(p.k), set: (v) => { p.k = +v; p.R = JSON.parse(JSON.stringify(RES[p.k])); }, op: RES.map((_, i) => String(i)), txt: { 0: 'O poço novo', 1: 'O medo da Fatumata' } }]
+      .concat(R.tx.map((x, i) => ({ rot: `Parágrafo ${i + 1}`, v: x, edit: true, longo: true, set: (v) => { R.tx[i] = v; } })), R.op.map((x, i) => ({ rot: `Opção ${'abc'[i]}${i === R.k ? ' (certa)' : ''}`, v: x, edit: true, set: (v) => { R.op[i] = v; } }))); } });
+  const DIC4 = [['bola', 'bode', 'boca', 'bolo'], ['cama', 'casa', 'caju', 'cabra'], ['mala', 'manga', 'mapa', 'macaco'], ['pato', 'papel', 'pano', 'pai'], ['sal', 'sapo', 'saco', 'saia']];
+  ex4({ id: 'l4_dicionario', disc: 'lp', u: 3, nome: 'Ordem alfabética pela 2.ª e 3.ª letra', instr: () => 'As palavras começam pela mesma letra. Escreve-as por ordem alfabética.',
+    gen(r) { return { l: take(r, DIC4, 2).map((ws) => mix(r, ws)) }; }, alt: () => 220, draw: F.TIPO.l3_alfabetica.draw, resumo: F.TIPO.l3_alfabetica.resumo });
+  const VAR4 = ['estudar', 'cantar', 'brincar', 'falar', 'trabalhar', 'ajudar', 'lavar', 'saltar'], PES = ['eu', 'tu', 'ele/ela', 'nós', 'vós', 'eles/elas'], TERM = ['o', 'as', 'a', 'amos', 'ais', 'am'];
+  ex4({ id: 'l4_pessoas', disc: 'lp', u: 4, nome: 'O verbo em todas as pessoas', instr: (p) => `Completa o verbo «${p.v}» no presente.`,
+    gen(r) { return { v: pick(r, VAR4), f: take(r, [0, 1, 2, 3, 4, 5], 2) }; }, alt: () => 200,
+    draw(p, B, sol) { let o = ''; const rz = p.v.slice(0, -2); PES.forEach((pe, i) => { const col = i % 2, row = Math.floor(i / 2), x = B.x + 30 + col * 340, y = B.y + 18 + row * 58, f = rz + TERM[i];
+      o += t(x, y + 26, pe, 19, { w: 700, a: 'start' }); if (p.f.includes(i)) o += t(x + 110, y + 26, f, 19, { w: 700, a: 'start' }); else o += ln(x + 108, x + 300, y + 30) + (sol ? t(x + 114, y + 24, f, 18, { w: 800, fill: '#555', a: 'start' }) : ''); }); return o; },
+    resumo: (p) => TERM.map((x) => p.v.slice(0, -2) + x).join(', '), troca: (p) => [{ rot: 'Verbo', v: p.v, set: (v) => { p.v = v; }, op: VAR4, txt: Object.fromEntries(VAR4.map((v) => [v, v])) }] });
+  const FCOND = ['eu', 'tu', 'ele', 'nós', 'vós', 'eles'], TF = ['ei', 'ás', 'á', 'emos', 'eis', 'ão'], TC = ['ia', 'ias', 'ia', 'íamos', 'íeis', 'iam'];
+  ex4({ id: 'l4_futcond', disc: 'lp', u: 5, nome: 'O futuro e o condicional', instr: () => 'Completa com o verbo no futuro e no condicional.',
+    gen(r) { return { l: take(r, VAR4, 3).map((v) => [v, Math.floor(r() * 6)]) }; }, alt: () => 210,
+    draw(p, B, sol) { const x0 = B.x + 20, cw = [150, 120, 200, 200]; let o = ''; ['Verbo', 'Pessoa', 'Futuro', 'Condicional'].forEach((h, k) => { const x = x0 + cw.slice(0, k).reduce((a, b) => a + b, 0); o += `<rect x="${x}" y="${B.y + 10}" width="${cw[k]}" height="34" fill="#eee" stroke="#111" stroke-width="1.5"/>` + t(x + cw[k] / 2, B.y + 33, h, 14, { w: 800 }); });
+      p.l.forEach(([v, k0], i) => { const y = B.y + 44 + i * 50; [v, FCOND[k0], v + TF[k0], v + TC[k0]].forEach((tx, k) => { const x = x0 + cw.slice(0, k).reduce((a, b) => a + b, 0); o += `<rect x="${x}" y="${y}" width="${cw[k]}" height="50" fill="#fff" stroke="#111" stroke-width="1.5"/>`;
+        if (k < 2) o += t(x + cw[k] / 2, y + 31, tx, 17, { w: 700 }); else o += ln(x + 12, x + cw[k] - 12, y + 36) + (sol ? t(x + 18, y + 31, tx, 16, { w: 800, fill: '#555', a: 'start' }) : ''); }); }); return o; },
+    resumo: (p) => p.l.map(([v, k]) => `${v + TF[k]}/${v + TC[k]}`).join(' · ') });
+  const PRON = [['A Aua lava a roupa.', 'a roupa', 'A Aua lava-a.'], ['O Braima come o caju.', 'o caju', 'O Braima come-o.'], ['A mãe chama as crianças.', 'as crianças', 'A mãe chama-as.'], ['O avô deu um presente ao Malam.', 'ao Malam', 'O avô deu-lhe um presente.'], ['A professora explicou a lição aos alunos.', 'aos alunos', 'A professora explicou-lhes a lição.'], ['O Iaia limpa os sapatos.', 'os sapatos', 'O Iaia limpa-os.']];
+  ex4({ id: 'l4_pronomes', disc: 'lp', u: 6, nome: 'Pronomes: o, a, os, as, lhe, lhes', instr: () => 'Substitui a parte sublinhada por um pronome e escreve a frase.',
+    gen(r) { return { l: take(r, PRON, 3) }; }, alt: () => 230,
+    draw(p, B, sol) { let o = ''; p.l.forEach(([fr, alvo, cor], i) => { const y = B.y + 30 + i * 70, k = fr.indexOf(alvo), pre = `${i + 1}) ` + fr.slice(0, k), x0 = B.x + 24;
+      o += tL(x0, y, pre, 19) + tL(x0 + wA(pre, 19), y, alvo, 19) + tL(x0 + wA(pre + alvo, 19), y, fr.slice(k + alvo.length), 19) + `<line x1="${(x0 + wA(pre, 19)).toFixed(1)}" x2="${(x0 + wA(pre + alvo, 19)).toFixed(1)}" y1="${y + 6}" y2="${y + 6}" stroke="#111" stroke-width="2"/>`;
+      o += ln(B.x + 48, B.x + B.w - 24, y + 40) + (sol ? t(B.x + 54, y + 34, cor, 17, { w: 800, fill: '#555', a: 'start' }) : ''); }); return o; },
+    resumo: (p) => p.l.map((q) => q[2]).join(' · '), troca: editaL([[0, 'frase'], [1, 'parte sublinhada'], [2, 'resposta']]) });
+  const PREP2 = [['O livro está', 'sobre', 'a mesa.'], ['Vou', 'para', 'Bafatá de carro.'], ['A Binta saiu', 'de', 'casa cedo.'], ['O Iaia foi ao rio', 'com', 'o avô.'], ['Este presente é', 'para', 'a professora.'], ['Os meninos jogam', 'sem', 'sapatos.'], ['A Aua mora', 'em', 'Cacheu.']];
+  ex4({ id: 'l4_preposicoes', disc: 'lp', u: 7, nome: 'As preposições', instr: () => 'Completa com a preposição certa: de, em, com, para, sobre, sem.',
+    gen(r) { return { l: take(r, PREP2, 5) }; }, alt: () => 260,
+    draw(p, B, sol) { let o = t(B.x + B.w / 2, B.y + 28, 'de    em    com    para    sobre    sem', 18, { w: 800 }); p.l.forEach(([a, pr, b], i) => { const y = B.y + 70 + i * 40; let x = B.x + 24; o += tL(x, y, `${i + 1}) ${a}`, 19); x += wA(`${i + 1}) ${a}`, 19) + 8; o += ln(x, x + 80, y + 4) + (sol ? t(x + 40, y - 2, pr, 17, { w: 800, fill: '#555' }) : ''); x += 90; o += tL(x, y, b, 19); }); return o; },
+    resumo: (p) => p.l.map(([, pr]) => pr).join(', '), troca: editaL([[0, 'início'], [1, 'preposição'], [2, 'fim']]) });
+  const CONJ = [['O Malam estudou muito', 'por isso passou no teste.', ['e', 'mas', 'por isso'], 2], ['Queria ir à praia', 'choveu o dia todo.', ['e', 'mas', 'porque'], 1], ['A Aua ficou em casa', 'estava doente.', ['porque', 'mas', 'e'], 0], ['O Braima lava a loiça', 'a irmã varre a casa.', ['e', 'porque', 'mas'], 0], ['Fomos ao rio', 'o sol nasceu.', ['quando', 'mas', 'porque'], 0], ['A canoa é pequena', 'leva cinco pessoas.', ['porque', 'mas', 'e'], 1]];
+  ex4({ id: 'l4_conjuncoes', disc: 'lp', u: 8, nome: 'As conjunções', ic: 'rodear', instr: () => 'Rodeia a conjunção que liga melhor as duas partes.',
+    gen(r) { return { l: take(r, CONJ.map((c) => [c[0], c[1].replace(/^por isso /, ''), c[2], c[3]]), 4) }; }, alt: () => 250,
+    draw(p, B, sol) { let o = ''; p.l.forEach(([a, b, ops, k], i) => { const y = B.y + 26 + i * 56; o += t(B.x + 24, y + 6, `${i + 1}) ${a}`, 18, { w: 700, a: 'start' }) + t(B.x + 60, y + 34, `… ${b}`, 18, { w: 600, a: 'start' });
+      ops.forEach((c, j) => { const xx = B.x + 470 + j * 82; o += t(xx, y + 20, c, 16, { w: 700 }); if (sol && j === k) o += `<ellipse cx="${xx}" cy="${y + 14}" rx="${c.length > 4 ? 42 : 30}" ry="15" fill="none" stroke="#111" stroke-width="2.5"/>`; }); }); return o; },
+    resumo: (p) => p.l.map((q) => q[2][q[3]]).join(', '), troca: editaL([[0, '1.ª parte'], [1, '2.ª parte']]) });
+  const FRS = [['A Inês lê um livro.', 'S'], ['O Malam come e depois vai brincar.', 'C'], ['As galinhas dormem na capoeira.', 'S'], ['Choveu muito, mas fomos à escola.', 'C'], ['O avô conta histórias.', 'S'], ['A Aua canta enquanto a mãe cozinha.', 'C'], ['Os pescadores voltaram cedo.', 'S'], ['O sol nasceu e os pássaros cantaram.', 'C']];
+  ex4({ id: 'l4_frases', disc: 'lp', u: 9, nome: 'Frase simples ou composta', ic: 'rodear', instr: () => 'Conta os verbos. Rodeia S (simples, um verbo) ou C (composta, mais de um verbo).',
+    gen(r) { return { l: take(r, FRS, 6) }; }, alt: () => 270,
+    draw(p, B, sol) { let o = ''; p.l.forEach(([fr, k], i) => { const y = B.y + 32 + i * 40; o += t(B.x + 24, y, `${i + 1}) ${fr}`, 18, { w: 600, a: 'start' }); ['S', 'C'].forEach((c, j) => { const xx = B.x + 560 + j * 60; o += t(xx, y, c, 19, { w: 800 }); if (sol && c === k) o += `<circle cx="${xx}" cy="${y - 7}" r="15" fill="none" stroke="#111" stroke-width="2.5"/>`; }); }); return o; },
+    resumo: (p) => p.l.map(([, k]) => k).join(' '), troca: editaL([[0, 'frase'], [1, 'S ou C']]) });
+  const HOM = [['O músico deu um', 'concerto', 'conserto', 0, 'na praça.'], ['O mecânico fez o', 'concerto', 'conserto', 1, 'do carro.'], ['Comprei', 'cem', 'sem', 0, 'gramas de sal.'], ['Saí de casa', 'cem', 'sem', 1, 'chapéu.'], ['A avó vai', 'coser', 'cozer', 0, 'a camisa rasgada.'], ['A mãe vai', 'coser', 'cozer', 1, 'o arroz.'], ['Senta-te neste', 'acento', 'assento', 1, '.'], ['A palavra «café» tem', 'acento', 'assento', 0, 'agudo.']];
+  ex4({ id: 'l4_homofonas', disc: 'lp', u: 10, nome: 'Palavras homófonas', ic: 'rodear', instr: () => 'Rodeia a palavra certa.',
+    gen(r) { return { l: take(r, HOM, 5) }; }, alt: () => 260,
+    draw(p, B, sol) { let o = ''; p.l.forEach(([a, w1, w2, k, b], i) => { const y = B.y + 34 + i * 46; o += tL(B.x + 24, y, `${i + 1}) ${a}`, 18); [w1, w2].forEach((wd, j) => { const xx = B.x + 380 + j * 120; o += t(xx, y, wd, 18, { w: 700 }); if (sol && j === k) o += `<ellipse cx="${xx}" cy="${y - 6}" rx="52" ry="16" fill="none" stroke="#111" stroke-width="2.5"/>`; }); o += t(B.x + 440, y, '/', 18, { w: 400 }) + tL(B.x + 570, y, b, 16); }); return o; },
+    resumo: (p) => p.l.map((q) => q[1 + q[3]]).join(', '), troca: editaL([[0, 'início'], [4, 'fim']]) });
+  const PON4 = [['Que lindo pôr do sol', '!'], ['Ai, que susto', '!'], ['Estava a pensar em ir… mas', '…'], ['Era uma vez', '…'], ['Já fizeste os trabalhos de casa', '?'], ['Onde está o meu caderno', '?'], ['Que bom, ganhámos o jogo', '!']];
+  ex4({ id: 'l4_pontuacao', disc: 'lp', u: 11, nome: 'Exclamação, reticências e interrogação', instr: () => 'Escreve no quadrado o sinal certo: ! ou … ou ?',
+    gen(r) { return { l: mix(r, take(r, PON4.filter((q) => q[1] === '!'), 2).concat(take(r, PON4.filter((q) => q[1] === '…'), 1), take(r, PON4.filter((q) => q[1] === '?'), 1))) }; }, alt: () => 210,
+    draw(p, B, sol) { let o = ''; p.l.forEach(([fr, sg], i) => { const y = B.y + 38 + i * 44; o += tL(B.x + 24, y, `${i + 1}) ${fr}`, 19); const x = B.x + 30 + wA(`${i + 1}) ${fr}`, 19); o += qd(x, y - 22, 28) + (sol ? t(x + 14, y - 2, sg, 18, { w: 800, fill: '#555' }) : ''); }); return o; },
+    resumo: (p) => p.l.map(([, s2]) => s2).join(' '), troca: editaL([[0, 'frase'], [1, 'sinal']]) });
+  const REG = [['Olá, professor! Tudo bem?', 'I', 'Bom dia, senhor professor. Como está?'], ['Exmo. Senhor Diretor, venho pedir uma reunião.', 'F', ''], ['Ei, passa-me o lápis!', 'I', 'Por favor, pode passar-me o lápis?'], ['Agradeço a sua atenção.', 'F', ''], ['Fixe! Vemo-nos amanhã.', 'I', 'Obrigado. Até amanhã.'], ['Com os melhores cumprimentos.', 'F', '']];
+  ex4({ id: 'l4_registo', disc: 'lp', u: 12, nome: 'Registo formal e informal', ic: 'rodear', instr: () => 'Rodeia F (formal) ou I (informal). Depois escreve a frase informal em registo formal.',
+    gen(r) { const inf = take(r, REG.filter((q) => q[1] === 'I'), 2), fo = take(r, REG.filter((q) => q[1] === 'F'), 2); return { l: mix(r, inf.concat(fo)), tr: inf[0] }; }, alt: () => 270,
+    draw(p, B, sol) { let o = ''; p.l.forEach(([fr, k], i) => { const y = B.y + 32 + i * 40; o += t(B.x + 24, y, `${i + 1}) ${fr}`, 18, { w: 600, a: 'start' }); ['F', 'I'].forEach((c, j) => { const xx = B.x + 580 + j * 56; o += t(xx, y, c, 19, { w: 800 }); if (sol && c === k) o += `<circle cx="${xx}" cy="${y - 7}" r="15" fill="none" stroke="#111" stroke-width="2.5"/>`; }); });
+      const y = B.y + 200; o += t(B.x + 24, y, `«${p.tr[0]}» →`, 17, { w: 700, a: 'start' }) + ln(B.x + 24, B.x + B.w - 24, y + 40) + (sol ? t(B.x + 30, y + 34, p.tr[2], 16, { w: 800, fill: '#555', a: 'start' }) : ''); return o; },
+    resumo: (p) => p.l.map(([, k]) => k).join(' '), troca: (p) => editaL([[0, 'frase'], [1, 'F ou I']])(p).concat([{ rot: 'Frase a transformar', v: p.tr[0], edit: true, set: (v) => { p.tr = [v, 'I', p.tr[2]]; } }, { rot: 'Resposta formal', v: p.tr[2], edit: true, set: (v) => { p.tr = [p.tr[0], 'I', v]; } }]) });
+  const guiado = (id, u, nm, instr2, partes, orient, temas) => ex4({ id, disc: 'lp', u, nome: nm, instr: (p) => instr2(p.tema), livre: true, cot: 2, orient,
+    gen(r) { return { tema: pick(r, temas) }; }, alt: () => 30 + partes.reduce((a, [, n]) => a + n * 38 + 16, 0),
+    draw(p, B) { let o = '', y = B.y + 18; partes.forEach(([l, n]) => { const w2 = Math.max(70, wA(l, 13) + 20); o += `<rect x="${B.x + 16}" y="${y}" width="${w2}" height="24" rx="6" fill="#eee" stroke="#111" stroke-width="1.2"/>` + t(B.x + 16 + w2 / 2, y + 17, l, 13, { w: 800 }); for (let k = 0; k < n; k++) o += ln(B.x + 24 + (k === 0 ? w2 : 0), B.x + B.w - 20, y + 22 + k * 38); y += n * 38 + 16; }); return o; },
+    troca: (p) => [{ rot: 'Tema', v: p.tema, edit: true, set: (v) => { p.tema = v; } }] });
+  guiado('l4_opiniao', 13, 'Texto de opinião', (tm) => `Escreve a tua opinião: ${tm}`, [['A minha opinião', 2], ['1.ª razão', 2], ['2.ª razão', 2], ['Conclusão', 1]], 'Resposta livre. Opinião clara, duas razões com exemplos e conclusão. Usar «Eu acho que», «porque», «por isso».', ['Devemos plantar árvores na escola?', 'O recreio devia ser mais longo?', 'É importante ajudar nas tarefas de casa?', 'Os alunos deviam ter uma horta na escola?']);
+  guiado('l4_entrevista', 14, 'Escrevo uma entrevista', (tm) => `Prepara uma entrevista ${tm}. Escreve as perguntas (P) e as respostas (R).`, [['Pessoa e tema', 1], ['P1', 1], ['R1', 1], ['P2', 1], ['R2', 1], ['P3', 1], ['R3', 1]], 'Resposta livre. Perguntas claras com ponto de interrogação; respostas da pessoa entrevistada; tema escolhido.', ['a um pescador sobre o seu trabalho', 'à cozinheira da escola', 'a um avô sobre a escola no tempo dele', 'a uma enfermeira do centro de saúde']);
+  guiado('l4_noticia', 15, 'Escrevo uma notícia', (tm) => `Escreve uma notícia sobre ${tm}.`, [['Título', 1], ['O quê? Quem?', 1], ['Quando? Onde?', 1], ['Como? Porquê?', 1], ['Texto da notícia', 3]], 'Resposta livre. Título que chama a atenção; responde a: o quê, quem, quando, onde, como e porquê; frases curtas e verdadeiras.', ['a festa do fim do ano na escola', 'o jogo de futebol entre duas turmas', 'a limpeza da tabanca', 'a chegada da chuva']);
 
   /* ============================================================ montagem das folhas (com verso quando é preciso) */
   const disponiveis = (ano, disc, tri) => F.T.filter((q) => q.ciclo === 'EB' && q.ano.includes(ano) && q.disc === disc && q.u <= maxU(disc, tri) && (!q.manual || comManual()));
@@ -8709,6 +8895,10 @@ function toolRomanos() {
 
 /* ============================================================ CÓPIAS E ATUALIZAÇÕES */
 const NOVIDADES = [
+  { v: '1.26.0', d: '20/11/2026', itens: ['«Fichas com desenhos» chega ao 4.º ano: ficam completas a Matemática e a Língua Portuguesa do 1.º ao 4.º ano.',
+    'Matemática: números até 10 000, contas em coluna com milhares, problemas de vários passos, multiplicar por 10 e por 100, multiplicação por dois algarismos (decompor), divisão e o sentido do resto, frações equivalentes, decimais, área, ângulos, triângulos e conversões de medidas e tempo.',
+    'Língua Portuguesa: inferência, resumo, dicionário pela 2.ª e 3.ª letra, o verbo em todas as pessoas, futuro e condicional, pronomes, preposições, conjunções, frases simples e compostas, homófonas, pontuação, registo formal e informal, texto de opinião, entrevista e notícia guiados.',
+    'No 4.º ano, o professor pode também reescrever as frases e o texto de resumo no passo «Ajustar».'] },
   { v: '1.25.0', d: '20/11/2026', itens: ['«Fichas com desenhos» chega ao 3.º ano: Matemática e Língua Portuguesa, ligadas às unidades dos manuais do 3.º ano.',
     'Matemática: números até 1000 com placas, barras e cubos, decompor, comparar e ordenar, contas em coluna com centenas, dezenas e unidades, problemas de dois passos, tabuadas do 3 ao 9, multiplicação em coluna, divisão com resto, frações, figuras e perímetro, medidas, horas com quartos, calendário e gráficos.',
     'Língua Portuguesa: ordem alfabética e dicionário, sinónimos e antónimos, o verbo no passado, presente e futuro, advérbios, acentos, concordância, dois pontos e travessão, parágrafos, composição e carta com as partes marcadas, ditado de frases, revisão do texto e letra ligada.',
