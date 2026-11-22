@@ -4616,7 +4616,7 @@
   // ---------- partilhar para outras apps (WhatsApp, Instagram, Facebook…) ----------
   // ---------- marca "CEL Conecta" no que sai para outras apps (publicidade do app) ----------
   // endereço do app (o próprio sítio onde está publicado; serve em qualquer alojamento)
-  const LINK_PUBLICO = location.protocol === 'https:' ? new URL('./', location.href).href : 'https://cel0520.github.io/recurso-professor/conecta/';   // com o caminho: o app está numa pasta do Portal
+  const LINK_PUBLICO = location.protocol === 'https:' ? new URL('./', location.href).href : 'https://cel0520.github.io/portal-cel/conecta/';   // com o caminho: o app está numa pasta do Portal
   const HOST_PUBLICO = LINK_PUBLICO.replace(/^https?:\/\//, '').replace(/\/$/, '');
   function rodapeMarca(oque, quem) {
     return `\n\n📲 ${oque} de ${quem}, publicado na app *CEL Conecta* — Centro Educativo Líder – Visão do Futuro (Bissau)\n👉 ${LINK_PUBLICO}`;
@@ -4690,7 +4690,7 @@
   }
 
   let partilhaPronta = null;   // ficheiro já descarregado (se o telemóvel pedir um segundo toque)
-  // marca = linha da faixa (ex.: "Estado de Fátima · cel0520.github.io/recurso-professor/conecta"): as fotos levam a faixa CEL Conecta
+  // marca = linha da faixa (ex.: "Estado de Fátima · cel0520.github.io/portal-cel/conecta"): as fotos levam a faixa CEL Conecta
   // cartao = { texto, cor }: um estado só de texto vira uma imagem bonita com a faixa
   async function partilharFora(url, nome, mime, texto, marca, cartao) {
     if (cartao && navigator.share) {

@@ -972,7 +972,7 @@ details > summary { cursor: pointer; margin: 4px 0 }
 <div id="toast" role="status" aria-live="polite"></div>
 <div id="print-root"></div>
 <div id="barra" class="barra" hidden></div>
-<script type="application/json" id="cel-config">{"versao": "1.32.2", "ano": "2026/2027", "chaveId": "1987a8c7", "verificador": "m+HQwwNueX1G3XlMCpRsYJOV0Tkds6FCJhmeHgobCN6OFobxkzA=", "dados": "dados.26347696d7.bin", "contactos": {"whatsapp": "245955252417", "email": "cel.vf.gb@gmail.com"}, "diasSemLigacao": 30, "sb": "https://ebwjnennfmwnhwdfxbuy.supabase.co", "anon": "sb_publishable_oLn3lkMEwu4sEOUTjRCLQA_4evc_ezB"}</script>
+<script type="application/json" id="cel-config">{"versao": "1.33.0", "ano": "2026/2027", "chaveId": "1987a8c7", "verificador": "m+HQwwNueX1G3XlMCpRsYJOV0Tkds6FCJhmeHgobCN6OFobxkzA=", "dados": "dados.26347696d7.bin", "contactos": {"whatsapp": "245955252417", "email": "cel.vf.gb@gmail.com"}, "diasSemLigacao": 30, "sb": "https://ebwjnennfmwnhwdfxbuy.supabase.co", "anon": "sb_publishable_oLn3lkMEwu4sEOUTjRCLQA_4evc_ezB"}</script>
 <script>/* Gerador mínimo de .docx (Word) no navegador — sem bibliotecas externas.
    Blocos: {t:'h', text, level} · {t:'p', text|runs, align, size, before, after, keep, border}
            {t:'list', items:[text|runs], ordered} · {t:'table', rows, widths, header, borders, minH}
@@ -9344,6 +9344,7 @@ function toolRomanos() {
 
 /* ============================================================ CÓPIAS E ATUALIZAÇÕES */
 const NOVIDADES = [
+  { v: '1.33.0', d: '21/11/2026', itens: ['Novo endereço: cel0520.github.io/portal-cel/ (o antigo reencaminha para o novo; as contas e os dados do aparelho mantêm-se).', 'Ecrã de entrada: «Encarregado(a) de educação · CEL Conecta» em primeiro; o Portal lembra-se da escolha e abre logo o CEL Conecta da próxima vez.'] },
   { v: '1.32.2', d: '21/11/2026', itens: ['Matrículas abre com o ano letivo, «+ Nova matrícula» e a lista; o formulário só aparece ao carregar em «Nova matrícula» ou «Editar» (e fecha-se em «Fechar»).', 'Anos anteriores: a lista mostra o professor e a situação no fim do ano; a matrícula tem os campos «Professor(a)/Educador(a)» e «Situação no fim do ano letivo».', 'O histórico cria as turmas de cada ano (letra, classes, turno e titular) e regista os professores desses anos no Pessoal, como inativos. Para o que já foi importado: «Atualizar os anos anteriores (ordem, turmas e professores)».'] },
   { v: '1.32.1', d: '21/11/2026', itens: ['Matrículas: «Ano letivo» passa a ser uma lista para escolher (com «Outro ano…»).', 'Anos anteriores a 2026/2027: sem o campo «Plano» (PICEL/PECEL), que deixa de ser pedido ao guardar.', 'Ordem de matrícula dos anos anteriores pela data de matrícula (no mesmo dia: primeiro quem renovou, por ordem alfabética; depois os novos, pelo NUA), com o botão «Refazer a ordem de matrícula dos anos anteriores».'] },
   { v: '1.32.0', d: '21/11/2026', itens: ['Gestão → Matrículas: «Importar o histórico dos alunos (vários anos letivos)». Junta a Ficha Digital do Aluno (Excel, uma linha por ano) e o Cadastro Geral do Microsoft Lists: uma ficha por aluno, a matrícula de cada ano anterior, os dados permanentes completados, as divergências e os anos em falta, tudo revisto antes de gravar.'] },
@@ -10180,9 +10181,10 @@ function telaEntrada() {
     h('h1', null, 'Portal CEL'),
     h('p', { class: 'muted' }, 'O Portal reúne os Recursos do Professor, a gestão escolar e o CEL Conecta. Escolha o seu ambiente.'),
     h('div', { class: 'g-escolha' },
+      op('conecta', 'Encarregado(a) de educação · CEL Conecta', 'Conversas, mural e avisos da escola. Também para professores e funcionários.', () => { LS.set(KP.escolha, 'conecta'); location.href = 'conecta/'; }),
       op('livro', 'Professor(a)', 'Manuais, planos de aula, provas, calendário e formações', () => { LS.set(KP.escolha, 'prof'); telaRegisto(); }),
-      op('pasta', 'Direção, secretaria e finanças', 'Gestão escolar: matrículas, recibos, pessoal e documentos', () => { location.href = 'gestao.html'; }),
-      op('conecta', 'CEL Conecta', 'Conversas, mural e avisos da escola, para toda a comunidade, também os encarregados', () => { location.href = 'conecta/'; })),
+      op('pasta', 'Direção, secretaria e finanças', 'Gestão escolar: matrículas, recibos, pessoal e documentos', () => { LS.del(KP.escolha); location.href = 'gestao.html'; })),
+    h('p', { class: 'muted', style: 'margin-top:10px' }, 'Neste aparelho, o Portal lembra-se da escolha: da próxima vez abre logo o ambiente escolhido. Para voltar a este ecrã, junte ?entrada ao endereço.'),
     ligCoord());
   const b = $('.g-top b'); if (b) b.textContent = 'Portal CEL';
 }
@@ -10407,6 +10409,8 @@ async function inicio() {
   if (!act) {
     if (estado === 'retirado') { telaBloqueio('retirado'); return; }
     if (pedidosDoAparelho().length) { telaAtivar(); return; }
+    if (/[?&]entrada\b/.test(location.search)) { LS.del(KP.escolha); telaEntrada(); return; }   // 1.33.0: voltar ao ecrã de escolha
+    if (LS.get(KP.escolha, '') === 'conecta' && !LS.get(KP.gestao, null)) { location.replace('conecta/'); return; }   // 1.33.0: encarregados: o Portal abre logo o CEL Conecta
     const prof = /[?&]professor\b/.test(location.search) || LS.get(KP.escolha, '') === 'prof';
     if (!prof && LS.get(KP.gestao, null)) { location.replace('gestao.html'); return; }   // aparelho da direção ou da secretaria
     if (prof) telaRegisto(); else telaEntrada();
